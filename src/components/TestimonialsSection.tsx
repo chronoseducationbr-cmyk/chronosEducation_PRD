@@ -29,7 +29,7 @@ const TestimonialsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="text-sm font-semibold text-secondary uppercase tracking-widest">
+          <span className="text-sm font-semibold text-secondary-contrast uppercase tracking-widest">
             Depoimentos
           </span>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3">
@@ -47,7 +47,7 @@ const TestimonialsSection = () => {
               transition={{ delay: i * 0.15 }}
               className="bg-card rounded-2xl p-8 shadow-card border border-border relative"
             >
-              <Quote size={32} className="text-secondary/30 mb-4" />
+              <Quote size={32} className="text-secondary-contrast/30 mb-4" />
               <p className="text-foreground/80 text-sm leading-relaxed mb-6">
                 "{t.text}"
               </p>

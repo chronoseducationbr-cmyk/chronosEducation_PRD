@@ -22,7 +22,7 @@ const ProgramSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="text-sm font-semibold text-secondary uppercase tracking-widest">
+          <span className="text-sm font-semibold text-secondary-contrast uppercase tracking-widest">
             Programa de Estudos
           </span>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3 mb-4">
@@ -47,8 +47,8 @@ const ProgramSection = () => {
             <ul className="space-y-3">
               {subjects.map((subject) => (
                 <li key={subject} className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-secondary/20 flex items-center justify-center mt-0.5">
-                    <Check size={12} className="text-secondary" />
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-secondary-contrast/20 flex items-center justify-center mt-0.5">
+                    <Check size={12} className="text-secondary-contrast" />
                   </div>
                   <span className="text-sm text-foreground">{subject}</span>
                 </li>

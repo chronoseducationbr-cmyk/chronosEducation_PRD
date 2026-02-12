@@ -13,7 +13,7 @@ const WhatIsSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-sm font-semibold text-secondary uppercase tracking-widest">
+            <span className="text-sm font-semibold text-secondary-contrast uppercase tracking-widest">
               O que é
             </span>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3 mb-6">
@@ -33,8 +33,8 @@ const WhatIsSection = () => {
                 { icon: Award, title: "Certificação Oficial", desc: "Diploma emitido por escola americana credenciada" },
               ].map((item) => (
                 <div key={item.title} className="flex gap-4 items-start">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-secondary/15 flex items-center justify-center">
-                    <item.icon size={20} className="text-secondary" />
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-secondary-contrast/15 flex items-center justify-center">
+                    <item.icon size={20} className="text-secondary-contrast" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground text-sm">{item.title}</h4>

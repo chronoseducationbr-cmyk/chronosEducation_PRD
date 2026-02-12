@@ -43,7 +43,7 @@ const FAQSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="text-sm font-semibold text-secondary uppercase tracking-widest">
+          <span className="text-sm font-semibold text-secondary-contrast uppercase tracking-widest">
             Perguntas Frequentes
           </span>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3">
@@ -63,7 +63,7 @@ const FAQSection = () => {
                 value={`faq-${i}`}
                 className="bg-card rounded-xl border border-border px-6 shadow-card"
               >
-                <AccordionTrigger className="text-left font-semibold text-foreground hover:text-secondary transition-colors">
+                <AccordionTrigger className="text-left font-semibold text-foreground hover:text-secondary-contrast transition-colors">
                   {faq.q}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground leading-relaxed">
