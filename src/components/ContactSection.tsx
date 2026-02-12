@@ -1,0 +1,152 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Send, Mail, Phone, MapPin } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
+const ContactSection = () => {
+  const { toast } = useToast();
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Simulate send — in production this would connect to a backend
+    setTimeout(() => {
+      setLoading(false);
+      toast({
+        title: "Mensagem enviada!",
+        description: "Entraremos em contato em breve.",
+      });
+      setForm({ name: "", email: "", phone: "", message: "" });
+    }, 1000);
+  };
+
+  return (
+    <section id="contato" className="section-padding bg-primary">
+      <div className="container-narrow">
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-sm font-semibold text-secondary uppercase tracking-widest">
+              Contato
+            </span>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary-foreground mt-3 mb-6">
+              Agende uma reunião gratuita
+            </h2>
+            <p className="text-primary-foreground/70 leading-relaxed mb-10">
+              Tire suas dúvidas com nossa equipe e descubra como o Dual Diploma pode transformar o futuro do seu filho.
+            </p>
+
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-lg bg-secondary/15 flex items-center justify-center flex-shrink-0">
+                  <Mail size={18} className="text-secondary" />
+                </div>
+                <div>
+                  <div className="text-xs text-primary-foreground/50 uppercase tracking-wide">Email</div>
+                  <a href="mailto:contato@ponteacademica.com.br" className="text-primary-foreground hover:text-secondary transition-colors text-sm">
+                    contato@ponteacademica.com.br
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-lg bg-secondary/15 flex items-center justify-center flex-shrink-0">
+                  <Phone size={18} className="text-secondary" />
+                </div>
+                <div>
+                  <div className="text-xs text-primary-foreground/50 uppercase tracking-wide">Telefone</div>
+                  <a href="tel:+5511999999999" className="text-primary-foreground hover:text-secondary transition-colors text-sm">
+                    +55 (11) 99999-9999
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-lg bg-secondary/15 flex items-center justify-center flex-shrink-0">
+                  <MapPin size={18} className="text-secondary" />
+                </div>
+                <div>
+                  <div className="text-xs text-primary-foreground/50 uppercase tracking-wide">Localização</div>
+                  <span className="text-primary-foreground text-sm">São Paulo, SP — Brasil</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.form
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            onSubmit={handleSubmit}
+            className="bg-card rounded-2xl p-8 shadow-elevated space-y-5"
+          >
+            <div>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Nome completo</label>
+              <input
+                type="text"
+                required
+                maxLength={100}
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition"
+                placeholder="Seu nome"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Email</label>
+              <input
+                type="email"
+                required
+                maxLength={255}
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition"
+                placeholder="seu@email.com"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Telefone</label>
+              <input
+                type="tel"
+                maxLength={20}
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition"
+                placeholder="(11) 99999-9999"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Mensagem</label>
+              <textarea
+                required
+                maxLength={1000}
+                rows={4}
+                value={form.message}
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition resize-none"
+                placeholder="Como podemos ajudar?"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-gradient-lime text-primary font-semibold py-3.5 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
+            >
+              {loading ? "Enviando..." : "Enviar Mensagem"}
+              <Send size={16} />
+            </button>
+          </motion.form>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ContactSection;
