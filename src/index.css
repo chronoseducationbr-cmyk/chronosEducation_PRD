@@ -18,7 +18,7 @@
     --primary: 201 90% 14%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 153 100% 39%;
+    --secondary: 76 100% 50%;
     --secondary-foreground: 201 90% 14%;
 
     --muted: 200 10% 92%;
@@ -38,18 +38,18 @@
 
     --sidebar-background: 201 90% 14%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 153 100% 39%;
+    --sidebar-primary: 76 100% 50%;
     --sidebar-primary-foreground: 201 90% 14%;
     --sidebar-accent: 201 60% 22%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 201 60% 22%;
-    --sidebar-ring: 153 100% 39%;
+    --sidebar-ring: 76 100% 50%;
 
     --font-heading: 'Playfair Display', serif;
     --font-body: 'DM Sans', sans-serif;
 
     --gradient-hero: linear-gradient(135deg, hsl(201, 90%, 14%) 0%, hsl(201, 70%, 22%) 100%);
-    --gradient-lime: linear-gradient(135deg, hsl(153, 100%, 39%) 0%, hsl(153, 90%, 34%) 100%);
+    --gradient-lime: linear-gradient(135deg, hsl(76, 100%, 50%) 0%, hsl(76, 90%, 45%) 100%);
     --gradient-gold: linear-gradient(135deg, hsl(41, 95%, 55%) 0%, hsl(35, 95%, 50%) 100%);
     --shadow-card: 0 4px 24px -4px hsl(201 90% 14% / 0.08);
     --shadow-elevated: 0 12px 40px -8px hsl(201 90% 14% / 0.15);
@@ -62,7 +62,7 @@
     --card-foreground: 200 6% 97%;
     --popover: 201 80% 12%;
     --popover-foreground: 200 6% 97%;
-    --primary: 153 100% 39%;
+    --primary: 76 100% 50%;
     --primary-foreground: 201 90% 14%;
     --secondary: 201 60% 22%;
     --secondary-foreground: 200 6% 97%;
@@ -74,7 +74,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 201 50% 20%;
     --input: 201 50% 20%;
-    --ring: 153 100% 39%;
+    --ring: 76 100% 50%;
   }
 }
 
