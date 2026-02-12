@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Menu, X, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { label: "O que é", href: "#o-que-e" },
@@ -12,6 +14,7 @@ const navItems = [
 ];
 
 const Header = () => {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -38,6 +41,13 @@ const Header = () => {
           >
             Agendar Reunião
           </a>
+          <Link
+            to={user ? "/dashboard" : "/login"}
+            className="flex items-center gap-1.5 text-sm font-medium text-primary-foreground/80 hover:text-secondary transition-colors"
+          >
+            <User size={16} />
+            {user ? "Minha Área" : "Entrar"}
+          </Link>
         </nav>
 
         {/* Mobile toggle */}
@@ -77,6 +87,14 @@ const Header = () => {
               >
                 Agendar Reunião
               </a>
+              <Link
+                to={user ? "/dashboard" : "/login"}
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-1.5 text-sm font-medium text-primary-foreground/80 hover:text-secondary transition-colors py-2"
+              >
+                <User size={16} />
+                {user ? "Minha Área" : "Entrar"}
+              </Link>
             </nav>
           </motion.div>
         )}
