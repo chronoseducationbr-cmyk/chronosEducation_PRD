@@ -151,6 +151,13 @@ const DashboardPage = () => {
             <span className="text-sm text-primary-foreground/70 hidden sm:block">
               {profile?.full_name || user?.email}
             </span>
+            <Link
+              to="/profile"
+              className="text-primary-foreground/70 hover:text-secondary transition-colors"
+              title="Editar perfil"
+            >
+              <User size={20} />
+            </Link>
             <button
               onClick={signOut}
               className="text-primary-foreground/70 hover:text-secondary transition-colors"
