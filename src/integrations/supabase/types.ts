@@ -113,33 +113,51 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          email: string | null
           full_name: string
           id: string
           phone: string | null
+          student_address: string | null
           student_age: number | null
+          student_birth_date: string | null
+          student_email: string | null
+          student_graduation_year: number | null
           student_name: string | null
+          student_photo_url: string | null
           student_school: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
+          email?: string | null
           full_name?: string
           id?: string
           phone?: string | null
+          student_address?: string | null
           student_age?: number | null
+          student_birth_date?: string | null
+          student_email?: string | null
+          student_graduation_year?: number | null
           student_name?: string | null
+          student_photo_url?: string | null
           student_school?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
+          email?: string | null
           full_name?: string
           id?: string
           phone?: string | null
+          student_address?: string | null
           student_age?: number | null
+          student_birth_date?: string | null
+          student_email?: string | null
+          student_graduation_year?: number | null
           student_name?: string | null
+          student_photo_url?: string | null
           student_school?: string | null
           updated_at?: string
           user_id?: string
