@@ -51,7 +51,7 @@ const HowItWorksSection = () => {
           viewport={{ once: true }}
           className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-16"
         >
-          <div className="overflow-hidden rounded-2xl border border-primary-foreground/20 text-center">
+          <div className="overflow-hidden rounded-2xl border border-primary-foreground/20 text-center w-48">
             <div className="relative h-20">
               <img src={flagBrazil} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30" />
             </div>
@@ -63,7 +63,7 @@ const HowItWorksSection = () => {
 
           <Plus size={28} className="text-primary-foreground/50" />
 
-          <div className="overflow-hidden rounded-2xl border border-primary-foreground/20 text-center">
+          <div className="overflow-hidden rounded-2xl border border-primary-foreground/20 text-center w-48">
             <div className="relative h-20">
               <img src={flagUSA} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30" />
             </div>
@@ -75,7 +75,7 @@ const HowItWorksSection = () => {
 
           <Equal size={28} className="text-primary-foreground/50" />
 
-          <div className="overflow-hidden rounded-2xl text-center">
+          <div className="overflow-hidden rounded-2xl text-center w-48">
             <div className="relative h-20 flex">
               <img src={flagBrazil} alt="" className="w-1/2 h-full object-cover opacity-30" />
               <img src={flagUSA} alt="" className="w-1/2 h-full object-cover opacity-30" />
