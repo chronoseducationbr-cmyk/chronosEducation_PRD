@@ -70,7 +70,7 @@ const HowItWorksSection = () => {
             </div>
             <div className="px-6 py-3 bg-background flex-1 flex flex-col items-center justify-center">
               <div className="text-4xl font-heading font-bold text-[#F9B91D]">5</div>
-              <div className="text-sm font-bold text-primary/80 mt-1">Créditos programa Chronos</div>
+              <div className="text-sm font-bold text-primary/80 mt-1">Créditos Programa Chronos Education</div>
             </div>
           </div>
 
