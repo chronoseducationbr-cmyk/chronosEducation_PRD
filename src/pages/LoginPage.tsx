@@ -91,7 +91,7 @@ const LoginPage = () => {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition"
-                    placeholder="Seu nome completo"
+                    placeholder="Seu nome"
                   />
                 </div>
               </div>
