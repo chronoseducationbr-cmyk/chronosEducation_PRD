@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Plus, Equal } from "lucide-react";
+import flagBrazil from "@/assets/flag-brazil.png";
+import flagUSA from "@/assets/flag-usa.png";
 
 const steps = [
   {
@@ -49,22 +51,34 @@ const HowItWorksSection = () => {
           viewport={{ once: true }}
           className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-16"
         >
-          <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-2xl px-8 py-6 text-center">
-            <div className="text-4xl font-heading font-bold text-[#F9B91D]">18</div>
-            <div className="text-sm text-primary-foreground/80 mt-1">Créditos Brasil</div>
+          <div className="relative overflow-hidden rounded-2xl px-8 py-6 text-center border border-primary-foreground/20">
+            <img src={flagBrazil} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" />
+            <div className="relative z-10">
+              <div className="text-4xl font-heading font-bold text-[#F9B91D]">18</div>
+              <div className="text-sm text-primary-foreground/80 mt-1">Créditos Brasil</div>
+            </div>
           </div>
 
           <Plus size={28} className="text-primary-foreground/50" />
 
-          <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-2xl px-8 py-6 text-center">
-            <div className="text-4xl font-heading font-bold text-[#F9B91D]">5</div>
-            <div className="text-sm text-primary-foreground/80 mt-1">Créditos programa Chronos</div>
+          <div className="relative overflow-hidden rounded-2xl px-8 py-6 text-center border border-primary-foreground/20">
+            <img src={flagUSA} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" />
+            <div className="relative z-10">
+              <div className="text-4xl font-heading font-bold text-[#F9B91D]">5</div>
+              <div className="text-sm text-primary-foreground/80 mt-1">Créditos programa Chronos</div>
+            </div>
           </div>
 
           <Equal size={28} className="text-primary-foreground/50" />
 
-          <div className="bg-gradient-gold rounded-2xl px-8 py-6 text-center">
-            <div className="text-lg font-heading font-bold text-primary">Diploma Americano</div>
+          <div className="relative overflow-hidden rounded-2xl px-8 py-6 text-center">
+            <div className="absolute inset-0 flex">
+              <img src={flagBrazil} alt="" className="w-1/2 h-full object-cover opacity-25" />
+              <img src={flagUSA} alt="" className="w-1/2 h-full object-cover opacity-25" />
+            </div>
+            <div className="relative z-10">
+              <div className="text-lg font-heading font-bold text-primary">Diploma Americano</div>
+            </div>
           </div>
         </motion.div>
 
