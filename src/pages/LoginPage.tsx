@@ -75,13 +75,13 @@ const LoginPage = () => {
             {isLogin ? "Entrar" : "Criar conta"}
           </h2>
           <p className="text-muted-foreground mb-8">
-            {isLogin ? "Acesse a sua área privada" : "Crie sua conta para começar"}
+            {isLogin ? "Acesse a sua área privada" : "Crie a sua conta para começar"}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
               <div>
-                <label className="text-sm font-medium text-foreground block mb-1.5">Nome completo</label>
+                <label className="text-sm font-medium text-foreground block mb-1.5">Nome</label>
                 <div className="relative">
                   <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <input
