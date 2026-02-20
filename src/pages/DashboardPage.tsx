@@ -45,7 +45,7 @@ const DashboardPage = () => {
 
       <div className="container-narrow px-4 md:px-8 py-8">
         <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Pagamentos</h1>
-        <p className="text-muted-foreground mb-8">Escolha a forma de pagamento</p>
+        <p className="text-muted-foreground mb-8">Compre o Dual Diploma de forma fácil e segura.</p>
 
         <div className="max-w-lg">
           <h2 className="font-heading text-lg font-semibold text-foreground mb-3">Forma de pagamento</h2>
