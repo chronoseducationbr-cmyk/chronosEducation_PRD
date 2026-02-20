@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Lock, User, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import chronosLogoHeader from "@/assets/chronos-logo-header.png";
 
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -55,11 +56,9 @@ const LoginPage = () => {
       {/* Left panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-hero items-center justify-center p-12 relative">
         <div className="max-w-md">
-          <h1 className="font-heading text-4xl font-bold text-primary-foreground mb-4">
-            Ponte <span className="text-secondary">Acadêmica</span>
-          </h1>
+          <img src={chronosLogoHeader} alt="Chronos" className="h-12 mb-6" />
           <p className="text-primary-foreground/70 text-lg leading-relaxed">
-            Acesse sua área exclusiva para acompanhar seu progresso no programa Dual Diploma.
+            Acesse a sua área privada para escolher o seu plano
           </p>
         </div>
       </div>
@@ -76,7 +75,7 @@ const LoginPage = () => {
             {isLogin ? "Entrar" : "Criar conta"}
           </h2>
           <p className="text-muted-foreground mb-8">
-            {isLogin ? "Acesse sua área privada" : "Crie sua conta para começar"}
+            {isLogin ? "Acesse a sua área privada" : "Crie sua conta para começar"}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
