@@ -17,7 +17,7 @@ const faqs = [
   },
   {
     q: "As aulas são em inglês?",
-    a: "Sim, o conteúdo é em inglês. Recomendamos nível intermediário, mas oferecemos suporte para alunos que ainda estão desenvolvendo o idioma.",
+    a: "Sim, o conteúdo é em inglês. Recomendamos nível intermediário, mas oferecemos suporte para alunos que ainda estão aprendendo o idioma.",
   },
   {
     q: "Quanto tempo dura o programa?",
