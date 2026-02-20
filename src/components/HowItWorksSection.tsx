@@ -40,7 +40,7 @@ const HowItWorksSection = () => {
             Como funciona
           </span>
           <p className="font-heading text-2xl md:text-3xl font-bold text-primary-foreground mt-3 max-w-3xl mx-auto leading-snug">
-            Os convênios internacionais alcançados por Chronos permitem a máxima validação possível: Apenas são necessários obter 5 créditos, o restante são validados com os resultados escolares no Brasil.
+            Os convênios internacionais alcançados por Chronos permitem a máxima validação possível:
           </p>
         </motion.div>
 
