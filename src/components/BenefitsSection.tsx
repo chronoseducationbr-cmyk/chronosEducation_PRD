@@ -47,7 +47,7 @@ const BenefitsSection = () => {
           <span className="text-sm font-semibold text-secondary-contrast uppercase tracking-widest">
             Vantagens
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3">
+          <h2 className="font-heading text-4xl md:text-5xl font-bold text-foreground mt-3">
             Benefícios do Dual Diploma
           </h2>
         </motion.div>
