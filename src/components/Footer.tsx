@@ -1,12 +1,12 @@
+import chronosLogo from "@/assets/chronos-logo.png";
+
 const Footer = () => {
   return (
     <footer className="bg-primary border-t border-primary-foreground/10 py-10 px-4 md:px-8">
       <div className="container-narrow">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <span className="font-heading text-lg font-bold text-primary-foreground">
-              Ponte <span className="text-secondary">Acadêmica</span>
-            </span>
+            <img src={chronosLogo} alt="Chronos" className="h-8" />
             <p className="text-xs text-primary-foreground/50 mt-1">
               Dual Diploma — Brasil & EUA
             </p>
@@ -25,7 +25,7 @@ const Footer = () => {
           </nav>
 
           <p className="text-xs text-primary-foreground/40">
-            © {new Date().getFullYear()} Ponte Acadêmica. Todos os direitos reservados.
+            © {new Date().getFullYear()} Chronos. Todos os direitos reservados.
           </p>
         </div>
       </div>
