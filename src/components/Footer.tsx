@@ -15,7 +15,7 @@ const Footer = () => {
               { label: "Programa", href: "#programa" },
               { label: "Benefícios", href: "#beneficios" },
               { label: "Depoimentos", href: "#depoimentos" },
-              { label: "FAQ", href: "#faq" },
+              { label: "FAQs", href: "#faq" },
               
               { label: "Termos e Condições", href: "/termos" },
             ].map((item) => (
