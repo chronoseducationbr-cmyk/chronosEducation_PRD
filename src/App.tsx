@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
+import TermsPage from "./pages/TermsPage";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route path="/termos" element={<TermsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
