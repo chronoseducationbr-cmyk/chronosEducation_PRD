@@ -32,7 +32,7 @@ const TestimonialsSection = () => {
           <span className="text-sm font-semibold text-secondary uppercase tracking-widest">
             Depoimentos
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary-foreground mt-3">
+          <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary-foreground mt-3">
             O que dizem os nossos alunos
           </h2>
         </motion.div>
