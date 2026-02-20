@@ -128,7 +128,7 @@ const ProfilePage = () => {
 
       <div className="container-narrow px-4 md:px-8 py-8 max-w-2xl mx-auto">
         <Link
-          to="/dashboard"
+          to="/pagamentos"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
         >
           <ArrowLeft size={16} />
