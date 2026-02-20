@@ -93,7 +93,7 @@ const TermsPage = () => {
             </p>
             <p>
               Solicitações de cancelamento devem ser realizadas por escrito através do email
-              contato@ponteacademica.com.br.
+              contato@chronoseducation.com.
             </p>
           </section>
 
@@ -137,8 +137,8 @@ const TermsPage = () => {
             <p className="text-muted-foreground text-sm">
               Em caso de dúvidas sobre estes Termos e Condições, entre em contacto connosco através do
               email{" "}
-              <a href="mailto:contato@ponteacademica.com.br" className="text-secondary-contrast hover:underline">
-                contato@ponteacademica.com.br
+              <a href="mailto:contato@chronoseducation.com" className="text-secondary-contrast hover:underline">
+                contato@chronoseducation.com
               </a>.
             </p>
           </section>
