@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
-import sportsImg from "@/assets/sports.jpg";
+import scienceLabImg from "@/assets/science-lab.jpg";
 import graduationImg from "@/assets/graduation.jpg";
 
 const subjects = [
-  "English Language Arts",
+  "English",
   "U.S. History",
-  "U.S. Government & Economics",
-  "Mathematics",
-  "Science",
-  "Electives (Art, Technology, etc.)",
+  "Media Art",
+  "Economics",
+  "Robotics",
+  "Anatomy and Physiology",
 ];
 
 const ProgramSection = () => {
@@ -26,10 +26,10 @@ const ProgramSection = () => {
             Programa de Estudos
           </span>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3 mb-4">
-            Currículo americano completo
+            Currículo Americano
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            O aluno cursa disciplinas obrigatórias do currículo americano, com possibilidade de escolher eletivas de acordo com seus interesses.
+            O aluno cursa disciplinas obrigatórias do currículo americano, complementando com disciplinas opcionais de acordo com os seus interesses.
           </p>
         </motion.div>
 
@@ -65,15 +65,15 @@ const ProgramSection = () => {
             className="rounded-2xl overflow-hidden shadow-card relative group"
           >
             <img
-              src={sportsImg}
-              alt="Instalações desportivas americanas"
+              src={scienceLabImg}
+              alt="Laboratório de ciências"
               className="w-full h-full object-cover min-h-[300px] group-hover:scale-105 transition-transform duration-500"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent" />
             <div className="absolute bottom-6 left-6">
               <span className="bg-accent text-accent-foreground text-sm font-semibold px-4 py-2 rounded-lg">
-                Infraestrutura de Excelência
+                Laboratório de Ciências
               </span>
             </div>
           </motion.div>

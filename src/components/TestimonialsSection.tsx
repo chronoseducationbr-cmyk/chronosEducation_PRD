@@ -5,17 +5,17 @@ const testimonials = [
   {
     name: "Maria Clara, 17 anos",
     role: "Aluna do Dual Diploma",
-    text: "O programa mudou completamente minha visão de futuro. Hoje me sinto preparada para universidades internacionais e tenho um diferencial enorme no currículo.",
+    text: "O programa mudou completamente a minha visão de futuro. Hoje me sinto preparada para concorrer a universidades internacionais e tenho um diferencial enorme no currículo.",
   },
   {
     name: "Roberto Almeida",
     role: "Pai de aluno",
-    text: "A segurança e o acompanhamento da Ponte Acadêmica nos deram total tranquilidade. Meu filho conseguiu conciliar com o colégio no Brasil sem dificuldade.",
+    text: "A segurança e o acompanhamento do programa nos deram total tranquilidade. O meu filho conseguiu conciliar com os estudos no Brasil, sem dificuldade.",
   },
   {
     name: "Ana Beatriz, 16 anos",
     role: "Aluna do Dual Diploma",
-    text: "Poder estudar no meu ritmo, com professores que realmente se importam, fez toda a diferença. A plataforma é muito intuitiva e os conteúdos são incríveis.",
+    text: "Poder estudar no meu ritmo, com professores que me ajudam no meu nivel de inglês, faz toda a diferença. A plataforma é muito intuitiva e os conteúdos são incríveis.",
   },
 ];
 
@@ -33,7 +33,7 @@ const TestimonialsSection = () => {
             Depoimentos
           </span>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3">
-            O que dizem nossos alunos
+            O que dizem os nossos alunos
           </h2>
         </motion.div>
 

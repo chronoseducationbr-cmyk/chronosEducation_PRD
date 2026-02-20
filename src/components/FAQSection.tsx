@@ -9,11 +9,11 @@ import {
 const faqs = [
   {
     q: "O diploma americano é reconhecido no Brasil?",
-    a: "Sim, o diploma é emitido por uma escola americana credenciada e reconhecido tanto nos EUA quanto internacionalmente. Ele não substitui o diploma brasileiro, mas complementa com um diferencial acadêmico valioso.",
+    a: "Sim, o diploma é emitido por uma escola americana credenciada e reconhecido tanto nos EUA quanto internacionalmente. Não substitui o diploma brasileiro, mas complementa com um diferencial acadêmico valioso.",
   },
   {
     q: "Qual a idade mínima para participar?",
-    a: "O programa é indicado para estudantes a partir dos 13 anos, cursando do 9º ano do Ensino Fundamental ao 3º ano do Ensino Médio.",
+    a: "O programa é recomendado para estudantes a partir dos 13 anos, cursando do 9º ano do Ensino Fundamental ao 3º ano do Ensino Médio.",
   },
   {
     q: "As aulas são em inglês?",
@@ -21,15 +21,15 @@ const faqs = [
   },
   {
     q: "Quanto tempo dura o programa?",
-    a: "O programa pode ser concluído em 2 a 3 anos, dependendo da série em que o aluno inicia. Cada caso é avaliado individualmente.",
+    a: "O programa pode ser concluído em até 4 anos. Contudo a duração média dos nossos alunos é em torno a 2 anos.",
   },
   {
     q: "Como funciona o acompanhamento pedagógico?",
-    a: "Oferecemos tutoria individualizada, reuniões periódicas com os pais e suporte técnico na plataforma. O aluno nunca está sozinho.",
+    a: "Oferecemos tutoria individualizada, relatório periódicos para os pais e suporte técnico na plataforma. O aluno nunca está sozinho.",
   },
   {
     q: "O programa interfere nos estudos no Brasil?",
-    a: "Não. O programa foi desenhado para ser compatível com a rotina escolar brasileira. O aluno dedica em média 5 a 7 horas por semana.",
+    a: "Não. O programa foi desenhado para ser compatível com a rotina escolar brasileira. O aluno dedica em média de 1 a 3 horas por semana.",
   },
 ];
 
@@ -47,7 +47,7 @@ const FAQSection = () => {
             Perguntas Frequentes
           </span>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3">
-            Tire suas dúvidas
+            Tire as suas dúvidas
           </h2>
         </motion.div>
 

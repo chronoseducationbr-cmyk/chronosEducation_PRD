@@ -8,7 +8,7 @@ import chronosLogo from "@/assets/chronos-logo.png";
 const navItems = [
   { label: "Dual Diploma", href: "#o-que-e" },
   { label: "Programa", href: "#programa" },
-  { label: "Benefícios", href: "#como-funciona" },
+  { label: "Benefícios", href: "#beneficios" },
   { label: "Depoimentos", href: "#depoimentos" },
   { label: "FAQ", href: "#faq" },
 ];

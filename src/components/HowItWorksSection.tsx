@@ -1,25 +1,26 @@
 import { motion } from "framer-motion";
+import { Plus, Equal } from "lucide-react";
 
 const steps = [
   {
-    number: "01",
+    number: "1",
     title: "Matrícula",
-    description: "Faça sua inscrição e receba acesso à plataforma americana de ensino com suporte completo.",
+    description: "Faça a sua inscrição e receba acesso à plataforma americana de ensino com suporte completo.",
   },
   {
-    number: "02",
+    number: "2",
     title: "Estudo Online",
     description: "Curse as disciplinas americanas online, com flexibilidade de horário e acompanhamento pedagógico.",
   },
   {
-    number: "03",
+    number: "3",
     title: "Avaliações",
     description: "Realize as avaliações e projetos com orientação de tutores especializados.",
   },
   {
-    number: "04",
+    number: "4",
     title: "Formatura",
-    description: "Receba seu diploma americano junto com o brasileiro e abra portas para o mundo.",
+    description: "Participe na formatura na escola americana e abra as portas para o mundo.",
   },
 ];
 
@@ -37,9 +38,45 @@ const HowItWorksSection = () => {
             Como funciona
           </span>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary-foreground mt-3">
-            Quatro passos para o futuro internacional
+            Como funciona
           </h2>
         </motion.div>
+
+        {/* Credits visual */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-16"
+        >
+          <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-2xl px-8 py-6 text-center">
+            <div className="text-4xl font-heading font-bold text-[#F9B91D]">18</div>
+            <div className="text-sm text-primary-foreground/80 mt-1">Créditos Brasil</div>
+          </div>
+
+          <Plus size={28} className="text-primary-foreground/50" />
+
+          <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-2xl px-8 py-6 text-center">
+            <div className="text-4xl font-heading font-bold text-[#F9B91D]">5</div>
+            <div className="text-sm text-primary-foreground/80 mt-1">Créditos programa Chronos</div>
+          </div>
+
+          <Equal size={28} className="text-primary-foreground/50" />
+
+          <div className="bg-gradient-gold rounded-2xl px-8 py-6 text-center">
+            <div className="text-lg font-heading font-bold text-primary">Diploma Americano</div>
+          </div>
+        </motion.div>
+
+        {/* Steps title */}
+        <motion.h3
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="font-heading text-2xl md:text-3xl font-bold text-primary-foreground text-center mb-12"
+        >
+          4 passos para o seu futuro internacional
+        </motion.h3>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, i) => (
@@ -51,7 +88,7 @@ const HowItWorksSection = () => {
               transition={{ delay: i * 0.15, duration: 0.5 }}
               className="relative"
             >
-              <div className="text-5xl font-heading font-bold text-secondary/20 mb-3">
+              <div className="text-5xl font-heading font-bold text-[#F9B91D] mb-3">
                 {step.number}
               </div>
               <h3 className="font-heading text-xl font-bold text-primary-foreground mb-2">
