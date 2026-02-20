@@ -7,9 +7,6 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <img src={chronosLogo} alt="Chronos" className="h-8" />
-            <p className="text-xs text-primary-foreground/50 mt-1">
-              Dual Diploma — Brasil e Estados Unidos
-            </p>
           </div>
 
           <nav className="flex flex-wrap gap-6 justify-center">
@@ -22,6 +19,12 @@ const Footer = () => {
                 {item}
               </a>
             ))}
+            <a
+              href="/termos"
+              className="text-xs text-primary-foreground/60 hover:text-secondary transition-colors"
+            >
+              Termos e Condições
+            </a>
           </nav>
 
           <p className="text-xs text-primary-foreground/40">
