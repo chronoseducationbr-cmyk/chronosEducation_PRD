@@ -19,11 +19,11 @@ const WhatIsSection = () => {
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3 mb-6">
               Um diploma americano sem sair do Brasil
             </h2>
-            <p className="text-muted-foreground leading-relaxed mb-6">
+            <p className="text-muted-foreground leading-relaxed mb-6 text-justify">
               O Dual Diploma é um programa acadêmico que permite ao estudante brasileiro cursar o High School americano de forma online, simultaneamente ao ensino médio no Brasil. Ao final, o aluno recebe dois diplomas reconhecidos: o brasileiro e o americano.
             </p>
-            <p className="text-muted-foreground leading-relaxed mb-8">
-              Com a <strong className="text-foreground">Ponte Acadêmica</strong>, seu filho terá acompanhamento pedagógico personalizado, acesso a uma plataforma de ensino de excelência e suporte completo durante toda a jornada.
+            <p className="text-muted-foreground leading-relaxed mb-8 text-justify">
+              Com a <strong className="text-foreground">Chronos</strong>, seu filho terá acompanhamento pedagógico personalizado, acesso a uma plataforma de ensino de excelência e suporte completo durante toda a jornada.
             </p>
 
             <div className="grid gap-4">
