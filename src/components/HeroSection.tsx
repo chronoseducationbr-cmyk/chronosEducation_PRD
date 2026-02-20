@@ -55,7 +55,7 @@ const HeroSection = () => {
             transition={{ delay: 0.5, duration: 0.6 }}
             className="text-lg md:text-xl text-primary-foreground/80 mb-10 max-w-xl leading-relaxed"
           >
-            Um reconhecido programa acadêmico que abre portas para universidades de todo o mundo, sem sair do Brasil.
+            Um reconhecido programa acadêmico que abre portas para universidades em todo o mundo
           </motion.p>
 
           <motion.div
