@@ -80,7 +80,7 @@ const HeroSection = () => {
           >
             {[
               { value: "100%", label: "Aulas Online" },
-              { value: "summer camp", label: "Estados Unidos" },
+              { value: "Summer camp", label: "Estados Unidos" },
               { value: "2 anos", label: "de programa" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
