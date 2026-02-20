@@ -27,7 +27,7 @@ const HeroSection = () => {
           >
             <GraduationCap className="text-secondary" size={20} />
             <span className="text-sm font-semibold text-secondary uppercase tracking-widest">
-              Dual Diploma — Brasil & EUA
+              Dual Diploma — Brasil e Estados Unidos
             </span>
           </motion.div>
 

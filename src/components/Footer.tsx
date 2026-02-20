@@ -8,7 +8,7 @@ const Footer = () => {
           <div>
             <img src={chronosLogo} alt="Chronos" className="h-8" />
             <p className="text-xs text-primary-foreground/50 mt-1">
-              Dual Diploma — Brasil & EUA
+              Dual Diploma — Brasil e Estados Unidos
             </p>
           </div>
 
