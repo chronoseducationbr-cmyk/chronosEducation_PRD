@@ -81,7 +81,7 @@ const HowItWorksSection = () => {
               <img src={flagUSA} alt="" className="w-1/2 h-full object-cover opacity-75" />
             </div>
             <div className="px-6 py-3 bg-gradient-gold flex-1 flex flex-col items-center justify-center">
-              <div className="text-xl font-heading font-bold text-primary tracking-wide">Diploma Americano</div>
+              <div className="text-xl font-heading font-bold text-primary">Diploma Americano</div>
             </div>
           </div>
         </motion.div>
