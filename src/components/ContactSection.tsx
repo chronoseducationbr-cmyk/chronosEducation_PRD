@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, Mail, Phone, MapPin } from "lucide-react";
+import { Send, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const ContactSection = () => {
@@ -12,15 +12,18 @@ const ContactSection = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate send — in production this would connect to a backend
-    setTimeout(() => {
-      setLoading(false);
-      toast({
-        title: "Mensagem enviada!",
-        description: "Entraremos em contato em breve.",
-      });
-      setForm({ name: "", email: "", phone: "", message: "" });
-    }, 1000);
+    const mailtoLink = `mailto:miguel.ggr.sa@gmail.com?subject=Contato Chronos - ${encodeURIComponent(form.name)}&body=${encodeURIComponent(
+      `Nome: ${form.name}\nEmail: ${form.email}\nTelefone: ${form.phone}\n\nMensagem:\n${form.message}`
+    )}`;
+    
+    window.open(mailtoLink, "_blank");
+    
+    setLoading(false);
+    toast({
+      title: "Redirecionado para o email!",
+      description: "Complete o envio no seu cliente de email.",
+    });
+    setForm({ name: "", email: "", phone: "", message: "" });
   };
 
   return (
@@ -36,10 +39,10 @@ const ContactSection = () => {
               Contato
             </span>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary-foreground mt-3 mb-6">
-              Agende uma reunião gratuita
+              Agende uma reunião:
             </h2>
             <p className="text-primary-foreground/70 leading-relaxed mb-10">
-              Tire suas dúvidas com nossa equipe e descubra como o Dual Diploma pode transformar o futuro do seu filho.
+              Tire as suas dúvidas com a nossa equipe e descubra como o Dual Diploma pode transformar o seu futuro.
             </p>
 
             <div className="space-y-6">
@@ -54,28 +57,6 @@ const ContactSection = () => {
                   </a>
                 </div>
               </div>
-
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-lg bg-secondary/15 flex items-center justify-center flex-shrink-0">
-                  <Phone size={18} className="text-secondary" />
-                </div>
-                <div>
-                  <div className="text-xs text-primary-foreground/50 uppercase tracking-wide">Telefone</div>
-                  <a href="tel:+5511999999999" className="text-primary-foreground hover:text-secondary transition-colors text-sm">
-                    +55 (11) 99999-9999
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-lg bg-secondary/15 flex items-center justify-center flex-shrink-0">
-                  <MapPin size={18} className="text-secondary" />
-                </div>
-                <div>
-                  <div className="text-xs text-primary-foreground/50 uppercase tracking-wide">Localização</div>
-                  <span className="text-primary-foreground text-sm">São Paulo, SP — Brasil</span>
-                </div>
-              </div>
             </div>
           </motion.div>
 
@@ -88,7 +69,7 @@ const ContactSection = () => {
             className="bg-card rounded-2xl p-8 shadow-elevated space-y-5"
           >
             <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Nome completo</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Nome</label>
               <input
                 type="text"
                 required
