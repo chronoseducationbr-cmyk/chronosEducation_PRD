@@ -13,7 +13,7 @@ const WhatIsSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-sm font-semibold text-secondary-contrast uppercase tracking-widest">
+            <span className="text-base font-semibold text-secondary-contrast uppercase tracking-widest">
               O que é
             </span>
             <h2 className="font-heading text-5xl md:text-6xl font-bold text-foreground mt-3 mb-6">

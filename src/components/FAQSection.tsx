@@ -43,7 +43,7 @@ const FAQSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="text-sm font-semibold text-secondary-contrast uppercase tracking-widest">
+          <span className="text-base font-semibold text-secondary-contrast uppercase tracking-widest">
             Perguntas Frequentes
           </span>
           <h2 className="font-heading text-5xl md:text-6xl font-bold text-foreground mt-3">
