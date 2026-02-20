@@ -3,23 +3,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, User, CreditCard, QrCode, FileText, Building2 } from "lucide-react";
 import chronosLogo from "@/assets/chronos-logo.png";
 
-const plans = [
-  {
-    id: "enrollment",
-    name: "Matrícula Dual Diploma",
-    description: "Taxa única de inscrição no programa",
-    price: "R$ 2.999,00",
-    type: "Matrícula",
-  },
-  {
-    id: "monthly",
-    name: "Mensalidade Dual Diploma",
-    description: "Pagamento mensal do programa",
-    price: "R$ 899,00",
-    type: "Mensal",
-  },
-];
-
 const paymentMethods = [
   { id: "credit", icon: CreditCard, label: "Cartão de Crédito", description: "Visa, Mastercard, Amex" },
   { id: "pix", icon: QrCode, label: "PIX", description: "Pagamento instantâneo" },
@@ -62,67 +45,38 @@ const DashboardPage = () => {
 
       <div className="container-narrow px-4 md:px-8 py-8">
         <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Pagamentos</h1>
-        <p className="text-muted-foreground mb-8">Escolha o plano e a forma de pagamento</p>
+        <p className="text-muted-foreground mb-8">Escolha a forma de pagamento</p>
 
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Plans */}
-          <div className="space-y-4">
-            <h2 className="font-heading text-lg font-semibold text-foreground mb-3">Selecione o plano</h2>
-            {plans.map((plan) => (
+        <div className="max-w-lg">
+          <h2 className="font-heading text-lg font-semibold text-foreground mb-3">Forma de pagamento</h2>
+          <div className="bg-card rounded-xl border border-border shadow-card overflow-hidden">
+            {paymentMethods.map((method, index) => (
               <button
-                key={plan.id}
-                className="w-full bg-card rounded-xl border-2 border-border hover:border-secondary p-6 text-left transition-colors shadow-card group"
+                key={method.id}
+                className={`w-full flex items-center gap-4 p-5 text-left hover:bg-muted/50 transition-colors ${
+                  index > 0 ? "border-t border-border" : ""
+                }`}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded ${
-                      plan.type === "Matrícula" ? "bg-accent text-accent-foreground" : "bg-secondary/20 text-secondary"
-                    }`}>
-                      {plan.type}
-                    </span>
-                    <h3 className="font-semibold text-foreground mt-2">{plan.name}</h3>
-                    <p className="text-sm text-muted-foreground">{plan.description}</p>
-                  </div>
-                  <span className="text-xl font-heading font-bold text-foreground whitespace-nowrap">
-                    {plan.price}
-                  </span>
+                <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                  <method.icon size={20} />
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">{method.label}</p>
+                  <p className="text-sm text-muted-foreground">{method.description}</p>
                 </div>
               </button>
             ))}
           </div>
 
-          {/* Payment Methods */}
-          <div className="space-y-4">
-            <h2 className="font-heading text-lg font-semibold text-foreground mb-3">Forma de pagamento</h2>
-            <div className="bg-card rounded-xl border border-border shadow-card overflow-hidden">
-              {paymentMethods.map((method, index) => (
-                <button
-                  key={method.id}
-                  className={`w-full flex items-center gap-4 p-5 text-left hover:bg-muted/50 transition-colors ${
-                    index > 0 ? "border-t border-border" : ""
-                  }`}
-                >
-                  <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
-                    <method.icon size={20} />
-                  </div>
-                  <div>
-                    <p className="font-medium text-foreground">{method.label}</p>
-                    <p className="text-sm text-muted-foreground">{method.description}</p>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            <button
-              disabled
-              className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg opacity-50 cursor-not-allowed mt-4"
-            >
-              Pagar — Simulação
-            </button>
-            <p className="text-xs text-muted-foreground text-center">
-              Integração com gateway de pagamento em breve
-            </p>
-          </div>
+          <button
+            disabled
+            className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg opacity-50 cursor-not-allowed mt-4"
+          >
+            Pagar — Simulação
+          </button>
+          <p className="text-xs text-muted-foreground text-center mt-2">
+            Integração com gateway de pagamento em breve
+          </p>
         </div>
       </div>
     </div>
