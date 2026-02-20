@@ -39,7 +39,7 @@ const ContactSection = () => {
               Contato
             </span>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary-foreground mt-3 mb-6">
-              Agende uma reunião:
+              Agende uma reunião
             </h2>
             <p className="text-primary-foreground/70 leading-relaxed mb-10">
               Tire as suas dúvidas com a nossa equipe e descubra como o Dual Diploma pode transformar o seu futuro.
