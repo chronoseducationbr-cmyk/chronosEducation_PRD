@@ -62,12 +62,12 @@ const BenefitsSection = () => {
               transition={{ delay: i * 0.1 }}
               className="bg-card rounded-2xl p-8 shadow-card border border-border"
             >
-              <div className="mb-5 flex justify-center">
-                <benefit.icon size={32} className="text-secondary-contrast" />
+              <div className="mb-5 flex items-center justify-center gap-3">
+                <benefit.icon size={32} className="text-secondary-contrast shrink-0" />
+                <h3 className="font-heading text-lg font-bold text-foreground">
+                  {benefit.title}
+                </h3>
               </div>
-              <h3 className="font-heading text-lg font-bold text-foreground mb-3 text-center">
-                {benefit.title}
-              </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {benefit.description}
               </p>
