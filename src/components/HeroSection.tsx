@@ -37,12 +37,17 @@ const HeroSection = () => {
             transition={{ delay: 0.3, duration: 0.7 }}
             className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6"
           >
-            Seu filho com diploma
-            <br />
-            <span className="text-accent">americano e brasileiro</span>
-            <br />
-            ao mesmo tempo.
+            Dois diplomas, um futuro internacional
           </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="text-lg md:text-xl text-primary-foreground/80 mb-4 max-w-xl leading-relaxed"
+          >
+            Diploma <span className="text-accent">americano e brasileiro</span> ao mesmo tempo
+          </motion.p>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -50,7 +55,7 @@ const HeroSection = () => {
             transition={{ delay: 0.5, duration: 0.6 }}
             className="text-lg md:text-xl text-primary-foreground/80 mb-10 max-w-xl leading-relaxed"
           >
-            Um programa acadêmico reconhecido que abre portas para universidades do mundo inteiro — sem sair do Brasil.
+            Um reconhecido programa acadêmico que abre portas para universidades de todo o mundo, sem sair do Brasil.
           </motion.p>
 
           <motion.div
