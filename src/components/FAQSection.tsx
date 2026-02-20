@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     q: "O programa interfere nos estudos no Brasil?",
-    a: "Não. O programa foi desenhado para ser compatível com a rotina escolar brasileira. O aluno dedica em média de 1 a 3 horas por semana.",
+    a: "Não. O programa foi desenhado para ser compatível com a rotina escolar brasileira. O aluno dedica em média entre 1 e 2 horas por semana.",
   },
 ];
 
