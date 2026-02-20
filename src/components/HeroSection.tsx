@@ -66,10 +66,9 @@ const HeroSection = () => {
           >
             <a
               href="#contato"
-              className="inline-flex items-center justify-center gap-2 bg-gradient-lime text-primary font-semibold px-8 py-4 rounded-lg text-base hover:opacity-90 transition-opacity"
+              className="inline-flex items-center justify-center bg-gradient-lime text-primary font-semibold px-8 py-4 rounded-lg text-base hover:opacity-90 transition-opacity"
             >
-              Agendar Reunião Gratuita
-              <ArrowRight size={18} />
+              Agendar Reunião
             </a>
             <a
               href="#o-que-e"
