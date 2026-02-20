@@ -48,12 +48,12 @@ const TestimonialsSection = () => {
               className="bg-primary-foreground/10 rounded-2xl p-8 shadow-card border border-primary-foreground/10 relative"
             >
               <Quote size={32} className="text-secondary/30 mb-4" />
-              <p className="text-primary-foreground text-sm leading-relaxed mb-6">
+              <p className="text-primary-foreground/80 text-sm leading-relaxed mb-6">
                 "{t.text}"
               </p>
               <div>
                 <div className="font-semibold text-primary-foreground text-sm">{t.name}</div>
-                <div className="text-xs text-primary-foreground/70">{t.role}</div>
+                <div className="text-xs text-primary-foreground/50">{t.role}</div>
               </div>
             </motion.div>
           ))}
