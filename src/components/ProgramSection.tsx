@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
-import schoolInfraImg from "@/assets/school-infrastructure.jpg";
+import onlineClassesImg from "@/assets/online-classes.jpg";
 import graduationImg from "@/assets/graduation.jpg";
 
 const subjects = [
@@ -65,15 +65,15 @@ const ProgramSection = () => {
             className="rounded-2xl overflow-hidden shadow-card relative group"
           >
             <img
-              src={schoolInfraImg}
-              alt="Infraestruturas da escola"
+              src={onlineClassesImg}
+              alt="Aulas online"
               className="w-full h-full object-cover min-h-[300px] group-hover:scale-105 transition-transform duration-500"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent" />
             <div className="absolute bottom-6 left-6">
               <span className="bg-accent text-accent-foreground text-sm font-semibold px-4 py-2 rounded-lg">
-                Infraestruturas
+                Aulas Online
               </span>
             </div>
           </motion.div>
