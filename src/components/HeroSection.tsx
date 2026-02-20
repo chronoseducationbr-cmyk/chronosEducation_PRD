@@ -31,23 +31,23 @@ const HeroSection = () => {
             </span>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.7 }}
-            className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6"
-          >
-            Dois diplomas, um futuro internacional
-          </motion.h1>
-
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
             className="text-lg md:text-xl text-primary-foreground/80 mb-4 max-w-xl leading-relaxed"
           >
             Diploma <span className="text-accent">americano e brasileiro</span> ao mesmo tempo
           </motion.p>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.7 }}
+            className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6"
+          >
+            Dois diplomas, um futuro internacional
+          </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
