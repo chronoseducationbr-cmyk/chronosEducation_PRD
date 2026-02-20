@@ -10,21 +10,23 @@ const Footer = () => {
           </div>
 
           <nav className="flex flex-wrap gap-6 justify-center">
-            {["O que é", "Como funciona", "Programa", "FAQ", "Contato"].map((item) => (
+            {[
+              { label: "Dual Diploma", href: "#o-que-e" },
+              { label: "Programa", href: "#programa" },
+              { label: "Benefícios", href: "#beneficios" },
+              { label: "Depoimentos", href: "#depoimentos" },
+              { label: "FAQ", href: "#faq" },
+              { label: "Contato", href: "#contato" },
+              { label: "Termos e Condições", href: "/termos" },
+            ].map((item) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase().replace(/\s/g, "-").replace("é", "e")}`}
+                key={item.href}
+                href={item.href}
                 className="text-xs text-primary-foreground/60 hover:text-secondary transition-colors"
               >
-                {item}
+                {item.label}
               </a>
             ))}
-            <a
-              href="/termos"
-              className="text-xs text-primary-foreground/60 hover:text-secondary transition-colors"
-            >
-              Termos e Condições
-            </a>
           </nav>
 
           <p className="text-xs text-primary-foreground/40">
