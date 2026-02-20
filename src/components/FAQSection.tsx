@@ -46,7 +46,7 @@ const FAQSection = () => {
           <span className="text-base font-semibold text-secondary-contrast uppercase tracking-widest">
             Perguntas Frequentes
           </span>
-          <h2 className="font-heading text-5xl md:text-6xl font-bold text-foreground mt-3">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3">
             Tire as suas dúvidas
           </h2>
         </motion.div>
