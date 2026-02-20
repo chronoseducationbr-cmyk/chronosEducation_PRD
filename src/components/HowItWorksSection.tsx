@@ -115,9 +115,6 @@ const HowItWorksSection = () => {
               <p className="text-primary-foreground/70 text-sm leading-relaxed">
                 {step.description}
               </p>
-              {i < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-8 right-0 w-8 h-0.5 bg-secondary/30 translate-x-4" />
-              )}
             </motion.div>
           ))}
         </div>
