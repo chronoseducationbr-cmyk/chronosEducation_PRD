@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
-import scienceLabImg from "@/assets/science-lab.jpg";
+import schoolInfraImg from "@/assets/school-infrastructure.jpg";
 import graduationImg from "@/assets/graduation.jpg";
 
 const subjects = [
@@ -65,8 +65,8 @@ const ProgramSection = () => {
             className="rounded-2xl overflow-hidden shadow-card relative group"
           >
             <img
-              src={scienceLabImg}
-              alt="Laboratório de ciências"
+              src={schoolInfraImg}
+              alt="Infraestruturas da escola"
               className="w-full h-full object-cover min-h-[300px] group-hover:scale-105 transition-transform duration-500"
               loading="lazy"
             />
