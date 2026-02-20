@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Menu, X, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import chronosLogo from "@/assets/chronos-logo.png";
+import chronosLogo from "@/assets/chronos-logo-header.png";
 
 const navItems = [
   { label: "Dual Diploma", href: "#o-que-e" },
