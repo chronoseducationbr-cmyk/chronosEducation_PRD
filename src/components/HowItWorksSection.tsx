@@ -61,7 +61,7 @@ const HowItWorksSection = () => {
             </div>
           </div>
 
-          <Plus size={28} className="text-primary-foreground/50 shrink-0 self-center" />
+          <Plus size={32} className="text-secondary shrink-0 self-center" strokeWidth={3} />
 
           <div className="overflow-hidden rounded-2xl border border-primary-foreground/20 text-center w-48 flex flex-col">
             <div className="relative h-20">
@@ -73,7 +73,7 @@ const HowItWorksSection = () => {
             </div>
           </div>
 
-          <Equal size={28} className="text-primary-foreground/50 shrink-0 self-center" />
+          <Equal size={32} className="text-secondary shrink-0 self-center" strokeWidth={3} />
 
           <div className="overflow-hidden rounded-2xl text-center w-48 flex flex-col">
             <div className="relative h-20 flex">
