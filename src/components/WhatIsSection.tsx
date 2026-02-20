@@ -28,7 +28,7 @@ const WhatIsSection = () => {
 
             <div className="grid gap-4">
               {[
-                { icon: Globe, title: "Reconhecimento Internacional", desc: "Diploma aceito por universidades no mundo inteiro" },
+                { icon: Globe, title: "Reconhecimento Internacional", desc: "Diploma válido para Universidades em todo o mundo" },
                 { icon: BookOpen, title: "100% Online", desc: "Estude de qualquer lugar, no seu ritmo" },
                 { icon: Award, title: "Certificação Oficial", desc: "Diploma emitido por escola americana credenciada" },
               ].map((item) => (
