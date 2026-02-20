@@ -6,12 +6,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import chronosLogo from "@/assets/chronos-logo.png";
 
 const navItems = [
-  { label: "O que é", href: "#o-que-e" },
-  { label: "Como funciona", href: "#como-funciona" },
+  { label: "Dual Diploma", href: "#o-que-e" },
   { label: "Programa", href: "#programa" },
+  { label: "Benefícios", href: "#como-funciona" },
   { label: "Depoimentos", href: "#depoimentos" },
   { label: "FAQ", href: "#faq" },
-  { label: "Contato", href: "#contato" },
 ];
 
 const Header = () => {
