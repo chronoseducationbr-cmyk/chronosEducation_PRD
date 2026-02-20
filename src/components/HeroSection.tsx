@@ -79,9 +79,9 @@ const HeroSection = () => {
             className="mt-16 flex flex-wrap gap-8 md:gap-12"
           >
             {[
-              { value: "100%", label: "Online" },
+              { value: "100%", label: "Aulas Online" },
+              { value: "Summer Camp", label: "Estados Unidos" },
               { value: "2 anos", label: "de programa" },
-              { value: "+500", label: "alunos formados" },
             ].map((stat) => (
               <div key={stat.label}>
                 <div className="text-2xl md:text-3xl font-heading font-bold text-secondary">
