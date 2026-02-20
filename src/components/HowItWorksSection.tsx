@@ -39,10 +39,7 @@ const HowItWorksSection = () => {
           <span className="text-sm font-semibold text-secondary uppercase tracking-widest">
             Como funciona
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary-foreground mt-3">
-            Como funciona
-          </h2>
-          <p className="text-primary-foreground/80 mt-4 max-w-2xl mx-auto text-base leading-relaxed">
+          <p className="font-heading text-2xl md:text-3xl font-bold text-primary-foreground mt-3 max-w-3xl mx-auto leading-snug">
             Os convênios internacionais alcançados por Chronos permitem a máxima validação possível: Apenas são necessários obter 5 créditos, o restante são validados com os resultados escolares no Brasil.
           </p>
         </motion.div>
