@@ -13,7 +13,7 @@ const testimonials = [
     text: "A segurança e o acompanhamento do programa nos deram total tranquilidade. O meu filho conseguiu conciliar com os estudos no Brasil, sem dificuldade.",
   },
   {
-    name: "Ana Beatriz, 16 anos",
+    name: "Ana Beatriz, 14 anos",
     role: "Aluna do Dual Diploma",
     text: "Poder estudar no meu ritmo, com professores que me ajudam no meu nivel de inglês, faz toda a diferença. A plataforma é muito intuitiva e os conteúdos são incríveis.",
   },
