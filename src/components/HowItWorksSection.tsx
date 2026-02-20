@@ -40,7 +40,7 @@ const HowItWorksSection = () => {
             Como funciona
           </span>
           <p className="font-heading text-2xl md:text-3xl font-bold text-primary-foreground mt-3 max-w-3xl mx-auto leading-snug">
-            Convênios internacionais permitem a máxima validação
+            Máxima validação com convênios internacionais
           </p>
         </motion.div>
 
