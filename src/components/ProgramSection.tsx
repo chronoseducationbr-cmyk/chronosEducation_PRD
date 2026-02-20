@@ -47,8 +47,8 @@ const ProgramSection = () => {
             <ul className="space-y-3">
               {subjects.map((subject) => (
                 <li key={subject} className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-secondary-contrast/20 flex items-center justify-center mt-0.5">
-                    <Check size={12} className="text-secondary-contrast" />
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#ABFE0E] flex items-center justify-center mt-0.5">
+                    <Check size={12} className="text-white" />
                   </div>
                   <span className="text-sm text-foreground">{subject}</span>
                 </li>
