@@ -76,9 +76,8 @@ const HowItWorksSection = () => {
           <Equal size={32} className="text-secondary shrink-0 self-center" strokeWidth={3} />
 
           <div className="overflow-hidden rounded-2xl text-center w-48 flex flex-col">
-            <div className="relative h-20 flex">
-              <img src={flagBrazil} alt="" className="w-1/2 h-full object-cover opacity-75" />
-              <img src={flagUSA} alt="" className="w-1/2 h-full object-cover opacity-75" />
+            <div className="relative h-20">
+              <img src={flagUSA} alt="" className="absolute inset-0 w-full h-full object-cover opacity-75" />
             </div>
             <div className="px-6 py-3 bg-gradient-gold flex-1 flex flex-col items-center justify-center">
               <div className="text-xl font-heading font-bold text-primary">Diploma Americano</div>
