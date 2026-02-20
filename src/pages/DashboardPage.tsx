@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, User, CreditCard, QrCode, FileText, Building2 } from "lucide-react";
-import chronosLogo from "@/assets/chronos-logo.png";
+import chronosLogo from "@/assets/chronos-logo-header.png";
 
 const paymentMethods = [
   { id: "credit", icon: CreditCard, label: "Cartão de Crédito", description: "Visa, Mastercard, Amex" },
