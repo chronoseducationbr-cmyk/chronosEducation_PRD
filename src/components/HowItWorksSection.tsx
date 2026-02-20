@@ -93,7 +93,7 @@ const HowItWorksSection = () => {
           viewport={{ once: true }}
           className="font-heading text-2xl md:text-3xl font-bold text-primary-foreground text-center mb-12"
         >
-          4 passos para o seu futuro internacional
+          <span className="text-5xl md:text-6xl text-secondary">4</span> passos para o seu futuro internacional
         </motion.h3>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
