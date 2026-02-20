@@ -1,4 +1,4 @@
-import chronosLogo from "@/assets/chronos-logo.png";
+import chronosLogo from "@/assets/chronos-logo-header.png";
 
 const Footer = () => {
   return (
