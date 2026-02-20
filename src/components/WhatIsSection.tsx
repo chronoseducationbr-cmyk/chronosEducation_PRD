@@ -16,7 +16,7 @@ const WhatIsSection = () => {
             <span className="text-base font-semibold text-secondary-contrast uppercase tracking-widest">
               O que é
             </span>
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3 mb-6">
+            <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-3 mb-6">
               Um diploma americano sem sair do Brasil
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-6 text-justify">

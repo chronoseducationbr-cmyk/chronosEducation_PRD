@@ -25,7 +25,7 @@ const ProgramSection = () => {
           <span className="text-base font-semibold text-secondary-contrast uppercase tracking-widest">
             Programa de Estudos
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mt-3 mb-4">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mt-3 mb-4">
             Currículo Americano
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
