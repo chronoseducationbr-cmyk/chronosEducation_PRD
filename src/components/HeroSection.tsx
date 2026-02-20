@@ -37,7 +37,7 @@ const HeroSection = () => {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="text-lg md:text-xl text-primary-foreground/80 mb-4 max-w-xl leading-relaxed"
           >
-            Diploma <span className="text-accent">americano e brasileiro</span> ao mesmo tempo
+            Dois diplomas, um futuro internacional
           </motion.p>
 
           <motion.h1
@@ -46,7 +46,7 @@ const HeroSection = () => {
             transition={{ delay: 0.4, duration: 0.7 }}
             className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6"
           >
-            Dois diplomas, um futuro internacional
+            Diploma <span className="text-accent">americano e brasileiro</span> ao mesmo tempo
           </motion.h1>
 
           <motion.p
