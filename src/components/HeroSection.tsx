@@ -70,12 +70,6 @@ const HeroSection = () => {
             >
               Agendar Reunião
             </a>
-            <a
-              href="#o-que-e"
-              className="inline-flex items-center justify-center gap-2 border-2 border-primary-foreground/30 text-primary-foreground font-medium px-8 py-4 rounded-lg text-base hover:border-secondary hover:text-secondary transition-colors"
-            >
-              Saiba Mais
-            </a>
           </motion.div>
 
           <motion.div
