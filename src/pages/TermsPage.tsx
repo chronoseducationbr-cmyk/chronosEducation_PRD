@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import chronosLogo from "@/assets/chronos-logo.png";
+import chronosLogo from "@/assets/chronos-logo-header.png";
 
 const TermsPage = () => {
   return (
