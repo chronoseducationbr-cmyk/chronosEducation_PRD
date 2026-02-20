@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container-narrow">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <img src={chronosLogo} alt="Chronos" className="h-8" />
+            <img src={chronosLogo} alt="Chronos Education" className="h-8" />
           </div>
 
           <nav className="flex flex-wrap gap-6 justify-center">
@@ -30,7 +30,7 @@ const Footer = () => {
           </nav>
 
           <p className="text-xs text-primary-foreground/40">
-            © {new Date().getFullYear()} Chronos. Todos os direitos reservados.
+            © {new Date().getFullYear()} Chronos Education. Todos os direitos reservados.
           </p>
         </div>
       </div>

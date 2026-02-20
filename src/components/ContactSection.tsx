@@ -12,7 +12,7 @@ const ContactSection = () => {
     e.preventDefault();
     setLoading(true);
 
-    const mailtoLink = `mailto:miguel.ggr.sa@gmail.com?subject=Contato Chronos - ${encodeURIComponent(form.name)}&body=${encodeURIComponent(
+    const mailtoLink = `mailto:miguel.ggr.sa@gmail.com?subject=Contato Chronos Education - ${encodeURIComponent(form.name)}&body=${encodeURIComponent(
       `Nome: ${form.name}\nEmail: ${form.email}\nTelefone: ${form.phone}\n\nMensagem:\n${form.message}`
     )}`;
     

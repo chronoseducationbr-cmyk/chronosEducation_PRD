@@ -23,7 +23,7 @@ const WhatIsSection = () => {
               O Dual Diploma é um programa acadêmico que permite ao estudante brasileiro cursar o High School americano de forma online, simultaneamente ao ensino médio no Brasil. Ao final, o aluno recebe dois diplomas: o brasileiro e o americano.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-8 text-justify">
-              Com o <strong className="text-foreground">Chronos</strong>, o aluno terá acompanhamento pedagógico personalizado, acesso a uma plataforma de ensino de excelência com professores nativos e suporte completo durante toda a jornada.
+              Com o <strong className="text-foreground">Chronos Education</strong>, o aluno terá acompanhamento pedagógico personalizado, acesso a uma plataforma de ensino de excelência com professores nativos e suporte completo durante toda a jornada.
             </p>
 
             <div className="grid gap-4">

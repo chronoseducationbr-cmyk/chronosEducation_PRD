@@ -8,7 +8,7 @@ const TermsPage = () => {
       <header className="bg-primary border-b border-primary-foreground/10 py-4 px-4 md:px-8">
         <div className="container-narrow flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <img src={chronosLogo} alt="Chronos" className="h-8" />
+            <img src={chronosLogo} alt="Chronos Education" className="h-8" />
           </Link>
           <Link
             to="/"
@@ -33,7 +33,7 @@ const TermsPage = () => {
           <section className="space-y-3">
             <h2 className="font-heading text-xl font-semibold text-foreground">1. Objeto</h2>
             <p>
-              Os presentes Termos e Condições regulam a utilização dos serviços educacionais oferecidos pela Chronos
+              Os presentes Termos e Condições regulam a utilização dos serviços educacionais oferecidos pela Chronos Education
               no âmbito do programa Dual Diploma, que permite aos alunos brasileiros obter simultaneamente o diploma
               de ensino médio brasileiro e o High School Diploma norte-americano.
             </p>
@@ -42,7 +42,7 @@ const TermsPage = () => {
           <section className="space-y-3">
             <h2 className="font-heading text-xl font-semibold text-foreground">2. Inscrição e Matrícula</h2>
             <p>
-              A inscrição no programa está sujeita à análise e aprovação da equipa pedagógica da Chronos.
+              A inscrição no programa está sujeita à análise e aprovação da equipa pedagógica da Chronos Education.
               A matrícula é formalizada mediante o pagamento da taxa de inscrição e a assinatura do contrato
               de prestação de serviços educacionais.
             </p>
@@ -79,7 +79,7 @@ const TermsPage = () => {
             <h2 className="font-heading text-xl font-semibold text-foreground">5. Propriedade Intelectual</h2>
             <p>
               Todo o conteúdo disponibilizado na plataforma, incluindo textos, vídeos, imagens e materiais
-              didáticos, é de propriedade exclusiva da Chronos ou dos seus parceiros, sendo proibida a
+              didáticos, é de propriedade exclusiva da Chronos Education ou dos seus parceiros, sendo proibida a
               reprodução, distribuição ou comercialização sem autorização prévia por escrito.
             </p>
           </section>
@@ -100,7 +100,7 @@ const TermsPage = () => {
           <section className="space-y-3">
             <h2 className="font-heading text-xl font-semibold text-foreground">7. Proteção de Dados</h2>
             <p>
-              A Chronos compromete-se a tratar os dados pessoais dos alunos e responsáveis em conformidade
+              A Chronos Education compromete-se a tratar os dados pessoais dos alunos e responsáveis em conformidade
               com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018). Os dados recolhidos serão
               utilizados exclusivamente para fins educacionais e administrativos.
             </p>
@@ -109,7 +109,7 @@ const TermsPage = () => {
           <section className="space-y-3">
             <h2 className="font-heading text-xl font-semibold text-foreground">8. Limitação de Responsabilidade</h2>
             <p>
-              A Chronos não se responsabiliza por interrupções no serviço causadas por fatores externos,
+              A Chronos Education não se responsabiliza por interrupções no serviço causadas por fatores externos,
               incluindo falhas de internet, problemas técnicos de terceiros ou eventos de força maior.
               A empresa envidará todos os esforços para garantir a continuidade e qualidade do serviço.
             </p>
@@ -118,7 +118,7 @@ const TermsPage = () => {
           <section className="space-y-3">
             <h2 className="font-heading text-xl font-semibold text-foreground">9. Alterações aos Termos</h2>
             <p>
-              A Chronos reserva-se o direito de alterar estes Termos e Condições a qualquer momento,
+              A Chronos Education reserva-se o direito de alterar estes Termos e Condições a qualquer momento,
               mediante comunicação prévia aos utilizadores. A continuidade na utilização dos serviços
               após a notificação constitui aceitação das alterações.
             </p>

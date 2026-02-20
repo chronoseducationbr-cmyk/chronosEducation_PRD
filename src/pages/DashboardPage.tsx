@@ -19,7 +19,7 @@ const DashboardPage = () => {
       <header className="bg-primary border-b border-primary-foreground/10">
         <div className="container-narrow flex items-center justify-between h-16 px-4 md:px-8">
           <Link to="/" className="flex items-center">
-            <img src={chronosLogo} alt="Chronos" className="h-8" />
+            <img src={chronosLogo} alt="Chronos Education" className="h-8" />
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-sm text-primary-foreground/70 hidden sm:block">
