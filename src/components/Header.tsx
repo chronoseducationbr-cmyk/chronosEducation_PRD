@@ -21,7 +21,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-primary-foreground/10">
       <div className="container-narrow flex items-center justify-between h-16 px-4 md:px-8">
         <a href="#" className="flex items-center">
-          <img src={chronosLogo} alt="Chronos Education" className="h-8" />
+          <img src={chronosLogo} alt="Chronos Education" className="h-12" />
         </a>
 
         {/* Desktop nav */}
