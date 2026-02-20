@@ -60,9 +60,6 @@ const WhatIsSection = () => {
                 loading="lazy"
               />
             </div>
-            <div className="absolute -bottom-4 -left-4 bg-accent text-accent-foreground font-heading font-bold text-lg px-6 py-3 rounded-xl shadow-card">
-              Desde 2018
-            </div>
           </motion.div>
         </div>
       </div>
