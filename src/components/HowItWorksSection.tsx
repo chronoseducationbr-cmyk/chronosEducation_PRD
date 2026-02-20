@@ -36,7 +36,7 @@ const HowItWorksSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="text-sm font-semibold text-secondary uppercase tracking-widest">
+          <span className="text-base font-semibold text-secondary uppercase tracking-widest">
             Como funciona
           </span>
           <p className="font-heading text-2xl md:text-3xl font-bold text-primary-foreground mt-3 max-w-3xl mx-auto leading-snug">

@@ -29,7 +29,7 @@ const TestimonialsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="text-sm font-semibold text-secondary uppercase tracking-widest">
+          <span className="text-base font-semibold text-secondary uppercase tracking-widest">
             Depoimentos
           </span>
           <h2 className="font-heading text-5xl md:text-6xl font-bold text-primary-foreground mt-3">

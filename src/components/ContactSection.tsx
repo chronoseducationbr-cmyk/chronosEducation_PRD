@@ -35,7 +35,7 @@ const ContactSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-sm font-semibold text-secondary uppercase tracking-widest">
+            <span className="text-base font-semibold text-secondary uppercase tracking-widest">
               Contato
             </span>
             <h2 className="font-heading text-5xl md:text-6xl font-bold text-primary-foreground mt-3 mb-6">
