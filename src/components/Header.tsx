@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Menu, X, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import chronosLogo from "@/assets/chronos-logo.png";
 
 const navItems = [
   { label: "O que é", href: "#o-que-e" },
@@ -20,8 +21,8 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-primary-foreground/10">
       <div className="container-narrow flex items-center justify-between h-16 px-4 md:px-8">
-        <a href="#" className="font-heading text-xl font-bold text-primary-foreground tracking-tight">
-          Ponte <span className="text-secondary">Acadêmica</span>
+        <a href="#" className="flex items-center">
+          <img src={chronosLogo} alt="Chronos" className="h-8" />
         </a>
 
         {/* Desktop nav */}
