@@ -56,7 +56,7 @@ const LoginPage = () => {
       {/* Left panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-hero items-center justify-center p-12 relative">
         <div className="max-w-md">
-          <img src={chronosLogoHeader} alt="Chronos" className="h-12 mb-6" />
+          <img src={chronosLogoHeader} alt="Chronos Education" className="h-12 mb-6" />
           <p className="text-primary-foreground/70 text-lg leading-relaxed">
             Acesse a sua área privada para escolher o seu plano
           </p>
