@@ -25,7 +25,7 @@ const faqs = [
   },
   {
     q: "Como funciona o acompanhamento pedagógico?",
-    a: "Oferecemos tutoria individualizada, relatório periódicos para os pais e suporte técnico na plataforma. O aluno nunca está sozinho.",
+    a: "Oferecemos tutoria individualizada, relatório periódico para os pais e suporte técnico na plataforma. O aluno nunca está sozinho.",
   },
   {
     q: "O programa interfere nos estudos no Brasil?",
