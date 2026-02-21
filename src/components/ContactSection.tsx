@@ -2,28 +2,39 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const ContactSection = () => {
   const { toast } = useToast();
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const mailtoLink = `mailto:miguel.ggr.sa@gmail.com?subject=Contato Chronos Education - ${encodeURIComponent(form.name)}&body=${encodeURIComponent(
-      `Nome: ${form.name}\nEmail: ${form.email}\nTelefone: ${form.phone}\n\nMensagem:\n${form.message}`
-    )}`;
-    
-    window.open(mailtoLink, "_blank");
-    
-    setLoading(false);
-    toast({
-      title: "Redirecionado para o email!",
-      description: "Complete o envio no seu cliente de email.",
-    });
-    setForm({ name: "", email: "", phone: "", message: "" });
+    try {
+      const { data, error } = await supabase.functions.invoke("send-email", {
+        body: form,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Mensagem enviada!",
+        description: "Entraremos em contato em breve.",
+      });
+      setForm({ name: "", email: "", phone: "", message: "" });
+    } catch (error: any) {
+      console.error("Error sending email:", error);
+      toast({
+        title: "Erro ao enviar",
+        description: "Tente novamente mais tarde.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
