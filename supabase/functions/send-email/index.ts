@@ -65,7 +65,7 @@ serve(async (req) => {
           <p><strong>Mensagem:</strong></p>
           <p>${message}</p>
         `,
-        reply_to: email,
+        reply_to: "marlene.c.matos@gmail.com",
       }),
     });
 
