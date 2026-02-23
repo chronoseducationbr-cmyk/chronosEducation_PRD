@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, User, CreditCard, QrCode, FileText, Building2 } from "lucide-react";
 import chronosLogo from "@/assets/chronos-logo-header.png";
+import SEOHead from "@/components/SEOHead";
 
 const paymentMethods = [
   { id: "credit", icon: CreditCard, label: "Cartão de Crédito", description: "Visa, Mastercard, Amex" },
@@ -15,6 +16,11 @@ const DashboardPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Pagamentos — Chronos Education"
+        description="Gerencie os seus pagamentos do programa Dual Diploma."
+        canonical="/pagamentos"
+      />
       {/* Top bar */}
       <header className="bg-primary border-b border-primary-foreground/10">
         <div className="container-narrow flex items-center justify-between h-16 px-4 md:px-8">

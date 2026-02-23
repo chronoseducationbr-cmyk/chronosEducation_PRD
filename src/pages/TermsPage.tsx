@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import chronosLogo from "@/assets/chronos-logo-header.png";
+import SEOHead from "@/components/SEOHead";
 
 const TermsPage = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Termos e Condições — Chronos Education"
+        description="Consulte os termos e condições do programa Dual Diploma da Chronos Education."
+        canonical="/termos"
+      />
       <header className="bg-primary border-b border-primary-foreground/10 py-4 px-4 md:px-8">
         <div className="container-narrow flex items-center justify-between">
           <Link to="/" className="flex items-center">

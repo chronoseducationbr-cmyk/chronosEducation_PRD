@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Save, User, GraduationCap, Phone, Mail, MapPin, Calendar, Camera } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import SEOHead from "@/components/SEOHead";
 
 const ProfilePage = () => {
   const { user } = useAuth();
@@ -118,6 +119,11 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Meu Perfil — Chronos Education"
+        description="Atualize as suas informações pessoais e do aluno no programa Dual Diploma."
+        canonical="/profile"
+      />
       <header className="bg-primary border-b border-primary-foreground/10">
         <div className="container-narrow flex items-center justify-between h-16 px-4 md:px-8">
           <Link to="/" className="font-heading text-xl font-bold text-primary-foreground">
