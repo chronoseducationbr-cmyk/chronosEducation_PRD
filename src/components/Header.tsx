@@ -41,13 +41,7 @@ const Header = () => {
           >
             Agendar Reunião
           </a>
-          <Link
-            to={user ? "/pagamentos" : "/login"}
-            className="flex items-center gap-1.5 text-sm font-medium text-primary-foreground/80 hover:text-secondary transition-colors"
-          >
-            <User size={16} />
-            {user ? "Minha Área" : "Entrar"}
-          </Link>
+          {/* Link "Minha Área" / "Entrar" oculto temporariamente */}
         </nav>
 
         {/* Mobile toggle */}
@@ -87,14 +81,7 @@ const Header = () => {
               >
                 Agendar Reunião
               </a>
-              <Link
-                to={user ? "/pagamentos" : "/login"}
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-1.5 text-sm font-medium text-primary-foreground/80 hover:text-secondary transition-colors py-2"
-              >
-                <User size={16} />
-                {user ? "Minha Área" : "Entrar"}
-              </Link>
+              {/* Link "Minha Área" / "Entrar" oculto temporariamente */}
             </nav>
           </motion.div>
         )}
