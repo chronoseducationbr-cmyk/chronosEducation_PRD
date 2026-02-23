@@ -5,6 +5,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Lock, User, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import chronosLogoHeader from "@/assets/chronos-logo-header.png";
+import SEOHead from "@/components/SEOHead";
 
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -50,9 +51,14 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-
   return (
-    <div className="min-h-screen bg-background flex">
+    <>
+      <SEOHead
+        title="Entrar — Chronos Education"
+        description="Acesse a sua área privada do programa Dual Diploma da Chronos Education."
+        canonical="/login"
+      />
+      <div className="min-h-screen bg-background flex">
       {/* Left panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-hero items-center justify-center p-12 relative">
         <div className="max-w-md">
@@ -182,6 +188,7 @@ const LoginPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
