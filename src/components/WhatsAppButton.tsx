@@ -1,7 +1,7 @@
 import { MessageCircle } from "lucide-react";
 
 const WhatsAppButton = () => {
-  const phoneNumber = "5511999999999";
+  const phoneNumber = "5511999491067";
   const message = encodeURIComponent("Olá! Gostaria de saber mais sobre o programa Dual Diploma da Ponte Acadêmica.");
   const url = `https://wa.me/${phoneNumber}?text=${message}`;
 

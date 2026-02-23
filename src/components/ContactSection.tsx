@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, Mail } from "lucide-react";
+import { Send, Mail, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -65,6 +65,17 @@ const ContactSection = () => {
                   <div className="text-xs text-primary-foreground/50 uppercase tracking-wide">Email</div>
                   <a href="mailto:contato@chronoseducation.com" className="text-primary-foreground hover:text-secondary transition-colors text-sm">
                     contato@chronoseducation.com
+                  </a>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-lg bg-secondary/15 flex items-center justify-center flex-shrink-0">
+                  <Phone size={18} className="text-secondary" />
+                </div>
+                <div>
+                  <div className="text-xs text-primary-foreground/50 uppercase tracking-wide">Telefone</div>
+                  <a href="tel:+5511999491067" className="text-primary-foreground hover:text-secondary transition-colors text-sm">
+                    (11) 99949-1067
                   </a>
                 </div>
               </div>
