@@ -73,7 +73,7 @@ const ProgramSection = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent" />
             <div className="absolute bottom-6 left-6">
               <span className="bg-accent text-accent-foreground text-sm font-semibold px-4 py-2 rounded-lg">
-                Aulas Online
+                Online
               </span>
             </div>
           </motion.div>
