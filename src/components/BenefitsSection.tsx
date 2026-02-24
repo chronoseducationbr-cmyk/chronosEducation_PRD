@@ -15,7 +15,7 @@ const benefits = [
   {
     icon: Brain,
     title: "Desenvolvimento Pessoal",
-    description: "Desenvolvimento pessoal, favorecendo a autonomia, a responsabilidade e a maturidade, quer na auto-gestão do ritmo de aprendizagem, quer no Summer Camp nas férias de julho",
+    description: "Desenvolvimento da autonomia, responsabilidade e maturidade, quer na auto-gestão do ritmo de aprendizagem, quer no Summer Camp nas férias de julho",
   },
   {
     icon: BookOpen,
