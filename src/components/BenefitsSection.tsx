@@ -10,7 +10,7 @@ const benefits = [
   {
     icon: Monitor,
     title: "Domínio da Tecnologia",
-    description: "Domínio da tecnologia, em um ambiente 100% Online, permitindo aos alunos aprender e desenvolver-se num ambiente totalmente digital",
+    description: "Aulas 100% online, permitindo aos alunos aprender e desenvolver-se num ambiente totalmente digital",
   },
   {
     icon: Brain,
