@@ -5,7 +5,7 @@ const benefits = [
   {
     icon: Languages,
     title: "Fluência em Inglês",
-    description: "Melhoria da fluência em inglês, com conhecimento da cultura e estilo de vida dos Estados Unidos",
+    description: "Melhoria do idioma inglês, com conhecimento da cultura e estilo de vida dos Estados Unidos",
   },
   {
     icon: Monitor,
