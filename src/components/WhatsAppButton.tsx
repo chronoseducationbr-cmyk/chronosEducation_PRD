@@ -3,7 +3,7 @@ import { MessageCircle } from "lucide-react";
 const WhatsAppButton = () => {
   const phoneNumber = "5511999491067";
   const message = encodeURIComponent("Olá! Gostaria de saber mais sobre o programa Dual Diploma da Ponte Acadêmica.");
-  const url = `https://wa.me/${phoneNumber}?text=${message}`;
+  const url = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${message}`;
 
   return (
     <a
