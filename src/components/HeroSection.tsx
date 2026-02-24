@@ -79,7 +79,7 @@ const HeroSection = () => {
             className="mt-16 flex flex-wrap gap-8 md:gap-12"
           >
             {[
-              { value: "100%", label: "Aulas Online" },
+              { value: "100%", label: "Online" },
               { value: "Summer camp", label: "Estados Unidos" },
               { value: "2 anos", label: "de programa" },
             ].map((stat) => (
