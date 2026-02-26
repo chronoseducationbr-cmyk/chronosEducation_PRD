@@ -24,8 +24,8 @@ const paymentMethods = [
 const buildPreviewHtml = (userName: string) => `
 <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;">
   <div style="background:linear-gradient(135deg,#062a45 0%,#0d3d5e 100%);padding:32px 40px;border-radius:16px 16px 0 0;text-align:center;">
-    <h1 style="margin:0;font-size:24px;font-weight:700;color:#ffffff;font-family:Georgia,serif;letter-spacing:0.5px;">Chronos Education</h1>
-    <p style="margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;">Dual Diploma Program</p>
+    <img src="/chronos-logo-header.png" alt="Chronos Education" style="height:40px;margin-bottom:12px;" />
+    <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;">Dual Diploma Program</p>
   </div>
   <div style="background:linear-gradient(135deg,#80ff00 0%,#6de600 100%);height:4px;"></div>
   <div style="background-color:#f7f8f9;padding:40px;border-radius:0 0 16px 16px;">
