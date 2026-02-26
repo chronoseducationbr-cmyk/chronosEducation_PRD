@@ -54,7 +54,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: "Chronos Education <onboarding@resend.dev>",
-        to: ["marlene.c.matos@gmail.com"],
+        to: ["chronoseducationbr@gmail.com"],
         subject: `Contato Chronos Education - ${name}`,
         html: `
           <h2>Novo contato pelo site</h2>
@@ -65,7 +65,7 @@ serve(async (req) => {
           <p><strong>Mensagem:</strong></p>
           <p>${message}</p>
         `,
-        reply_to: "marlene.c.matos@gmail.com",
+        reply_to: "chronoseducationbr@gmail.com",
       }),
     });
 
