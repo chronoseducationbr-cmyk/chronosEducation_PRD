@@ -73,18 +73,6 @@ const buildEmailHtml = (userName: string) => `
                 </tr>
               </table>
 
-              <!-- CTA Button -->
-              <table width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td align="center">
-                    <a href="https://chronoseducation.com.br"
-                       style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#80ff00,#6de600);color:#062a45;font-size:14px;font-weight:700;text-decoration:none;border-radius:8px;letter-spacing:0.3px;">
-                      Aceder à Minha Área
-                    </a>
-                  </td>
-                </tr>
-              </table>
-
               <!-- Divider -->
               <hr style="border:none;border-top:1px solid #e8ecef;margin:32px 0 24px;" />
 
