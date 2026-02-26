@@ -23,10 +23,8 @@ const buildEmailHtml = (userName: string) => `
           <!-- Header -->
           <tr>
             <td style="background:linear-gradient(135deg,#062a45 0%,#0d3d5e 100%);padding:32px 40px;border-radius:16px 16px 0 0;text-align:center;">
-              <h1 style="margin:0;font-size:24px;font-weight:700;color:#ffffff;font-family:Georgia,'Times New Roman',serif;letter-spacing:0.5px;">
-                Chronos Education
-              </h1>
-              <p style="margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;">
+              <img src="https://id-preview--7dbf840a-6321-4069-8c9e-133584e3a12c.lovable.app/chronos-logo-header.png" alt="Chronos Education" style="height:40px;margin-bottom:12px;" />
+              <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;">
                 Dual Diploma Program
               </p>
             </td>
