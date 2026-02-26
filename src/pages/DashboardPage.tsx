@@ -39,9 +39,7 @@ const buildPreviewHtml = (userName: string) => `
       <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">A partir de agora, a nossa equipa irá entrar em contacto consigo com os próximos passos para iniciar a sua jornada rumo ao diploma americano.</p>
       <p style="margin:0;font-size:15px;color:#333;line-height:1.7;">Se tiver alguma dúvida, não hesite em contactar-nos.</p>
     </div>
-    <div style="text-align:center;">
-      <span style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#80ff00,#6de600);color:#062a45;font-size:14px;font-weight:700;border-radius:8px;letter-spacing:0.3px;">Aceder à Minha Área</span>
-    </div>
+    <hr style="border:none;border-top:1px solid #e8ecef;margin:32px 0 24px;" />
     <hr style="border:none;border-top:1px solid #e8ecef;margin:32px 0 24px;" />
     <div style="text-align:center;">
       <p style="margin:0 0 4px;font-size:13px;color:#5a6a78;">📧 chronoseducationbr@gmail.com</p>
