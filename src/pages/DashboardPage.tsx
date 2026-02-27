@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, User, CreditCard, QrCode, FileText, Building2, Mail, Eye } from "lucide-react";
@@ -56,8 +56,58 @@ const DashboardPage = () => {
   const { toast } = useToast();
   const [sendingTest, setSendingTest] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+  const [paying, setPaying] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
 
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Aluno";
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("full_name, email, phone, student_name, student_email, student_birth_date, student_address, student_school, student_graduation_year")
+        .maybeSingle();
+      if (data) setProfile(data);
+    };
+    fetchProfile();
+  }, []);
+
+  const handlePayment = async () => {
+    if (!selectedMethod || !profile) {
+      toast({ title: "Preencha os dados", description: "Selecione um método de pagamento e preencha os dados do aluno.", variant: "destructive" });
+      return;
+    }
+    setPaying(true);
+    try {
+      const methodLabel = paymentMethods.find(m => m.id === selectedMethod)?.label || selectedMethod;
+      const { error } = await supabase.functions.invoke("send-purchase-notification", {
+        body: {
+          guardian: {
+            full_name: profile.full_name || "",
+            email: profile.email || user?.email || "",
+            phone: profile.phone || "",
+          },
+          student: {
+            student_name: profile.student_name || "",
+            student_email: profile.student_email || "",
+            student_birth_date: profile.student_birth_date || "",
+            student_address: profile.student_address || "",
+            student_school: profile.student_school || "",
+            student_graduation_year: profile.student_graduation_year?.toString() || "",
+          },
+          payment_method: methodLabel,
+        },
+      });
+      if (error) throw error;
+      toast({ title: "Inscrição enviada!", description: "A equipa Chronos foi notificada e entrará em contacto em breve." });
+    } catch (err: any) {
+      console.error(err);
+      toast({ title: "Erro ao processar", description: err.message || "Tente novamente.", variant: "destructive" });
+    } finally {
+      setPaying(false);
+    }
+  };
 
   const handleSendTestEmail = async () => {
     if (!user?.email) return;
@@ -131,9 +181,10 @@ const DashboardPage = () => {
             {paymentMethods.map((method, index) => (
               <button
                 key={method.id}
-                className={`w-full flex items-center gap-4 p-5 text-left hover:bg-muted/50 transition-colors ${
+                onClick={() => setSelectedMethod(method.id)}
+                className={`w-full flex items-center gap-4 p-5 text-left transition-colors ${
                   index > 0 ? "border-t border-border" : ""
-                }`}
+                } ${selectedMethod === method.id ? "bg-secondary/10 ring-2 ring-secondary ring-inset" : "hover:bg-muted/50"}`}
               >
                 <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
                   <method.icon size={20} />
@@ -147,14 +198,12 @@ const DashboardPage = () => {
           </div>
 
           <button
-            disabled
-            className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg opacity-50 cursor-not-allowed mt-4"
+            onClick={handlePayment}
+            disabled={!selectedMethod || paying}
+            className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed mt-4"
           >
-            Pagar — Simulação
+            {paying ? "Processando..." : "Confirmar Inscrição"}
           </button>
-          <p className="text-xs text-muted-foreground text-center mt-2">
-            Integração com gateway de pagamento em breve
-          </p>
 
           {/* Test email section */}
           <div className="mt-8 p-5 bg-card rounded-xl border border-border shadow-card">
