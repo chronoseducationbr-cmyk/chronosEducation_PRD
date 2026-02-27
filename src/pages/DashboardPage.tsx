@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, User, CreditCard, QrCode, FileText, Building2, Mail, Eye } from "lucide-react";
+import StudentDataSection from "@/components/StudentDataSection";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -122,6 +123,9 @@ const DashboardPage = () => {
         <p className="text-muted-foreground mb-8">Compre o Dual Diploma de forma fácil e segura.</p>
 
         <div className="max-w-lg">
+          <StudentDataSection />
+
+          <div className="mt-8">
           <h2 className="font-heading text-lg font-semibold text-foreground mb-3">Forma de pagamento</h2>
           <div className="bg-card rounded-xl border border-border shadow-card overflow-hidden">
             {paymentMethods.map((method, index) => (
@@ -177,6 +181,7 @@ const DashboardPage = () => {
                 {sendingTest ? "Enviando..." : "Enviar para mim"}
               </button>
             </div>
+          </div>
           </div>
         </div>
       </div>
