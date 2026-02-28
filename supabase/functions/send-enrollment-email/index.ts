@@ -133,7 +133,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: "Chronos Education <onboarding@resend.dev>",
-        to: ["chronoseducationbr@gmail.com"],
+        to: [email, "chronoseducationbr@gmail.com"],
         subject: "Inscrição Confirmada — Dual Diploma | Chronos Education",
         html: buildEmailHtml(name),
         reply_to: "chronoseducationbr@gmail.com",
