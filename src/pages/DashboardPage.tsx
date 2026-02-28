@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, User, CreditCard, QrCode, FileText, Building2, Mail, Eye } from "lucide-react";
+import GuardianDataSection from "@/components/GuardianDataSection";
 import StudentDataSection from "@/components/StudentDataSection";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
@@ -173,7 +174,11 @@ const DashboardPage = () => {
         <p className="text-muted-foreground mb-8">Compre o Dual Diploma de forma fácil e segura.</p>
 
         <div className="max-w-lg">
-          <StudentDataSection />
+          <GuardianDataSection />
+
+          <div className="mt-8">
+            <StudentDataSection />
+          </div>
 
           <div className="mt-8">
           <h2 className="font-heading text-lg font-semibold text-foreground mb-3">Forma de pagamento</h2>
