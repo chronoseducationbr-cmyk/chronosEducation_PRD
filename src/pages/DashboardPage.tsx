@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { LogOut, User, CreditCard, QrCode, FileText, Building2, Mail, Eye } from "lucide-react";
+import { LogOut, User, CreditCard, QrCode, FileText, Building2, Mail, Eye, Send } from "lucide-react";
 import GuardianDataSection from "@/components/GuardianDataSection";
 import StudentDataSection from "@/components/StudentDataSection";
 import chronosLogo from "@/assets/chronos-logo-header.png";
@@ -56,6 +56,7 @@ const DashboardPage = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const [sendingTest, setSendingTest] = useState(false);
+  const [sendingChronosTest, setSendingChronosTest] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
@@ -131,6 +132,44 @@ const DashboardPage = () => {
       });
     } finally {
       setSendingTest(false);
+    }
+  };
+
+  const handleSendChronosTestEmail = async () => {
+    if (!profile) {
+      toast({ title: "Preencha os dados", description: "Salve os dados do responsável e do aluno primeiro.", variant: "destructive" });
+      return;
+    }
+    setSendingChronosTest(true);
+    try {
+      const methodLabel = selectedMethod
+        ? paymentMethods.find(m => m.id === selectedMethod)?.label || selectedMethod
+        : "Não selecionado (teste)";
+      const { error } = await supabase.functions.invoke("send-purchase-notification", {
+        body: {
+          guardian: {
+            full_name: profile.full_name || "",
+            email: profile.email || user?.email || "",
+            phone: profile.phone || "",
+          },
+          student: {
+            student_name: profile.student_name || "",
+            student_email: profile.student_email || "",
+            student_birth_date: profile.student_birth_date || "",
+            student_address: profile.student_address || "",
+            student_school: profile.student_school || "",
+            student_graduation_year: profile.student_graduation_year?.toString() || "",
+          },
+          payment_method: methodLabel,
+        },
+      });
+      if (error) throw error;
+      toast({ title: "Email de teste enviado!", description: "Verifique a caixa de entrada de chronoseducationbr@gmail.com" });
+    } catch (err: any) {
+      console.error(err);
+      toast({ title: "Erro ao enviar", description: err.message || "Tente novamente.", variant: "destructive" });
+    } finally {
+      setSendingChronosTest(false);
     }
   };
 
@@ -235,6 +274,24 @@ const DashboardPage = () => {
                 {sendingTest ? "Enviando..." : "Enviar para mim"}
               </button>
             </div>
+          </div>
+
+          {/* Test Chronos notification email */}
+          <div className="mt-4 p-5 bg-card rounded-xl border border-border shadow-card">
+            <h3 className="font-heading text-base font-semibold text-foreground mb-1">
+              📩 Email de notificação Chronos (teste)
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Simule o envio do email que a Chronos receberá com todos os dados do responsável, aluno e método de pagamento.
+            </p>
+            <button
+              onClick={handleSendChronosTestEmail}
+              disabled={sendingChronosTest}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+            >
+              <Send size={16} />
+              {sendingChronosTest ? "Enviando..." : "Enviar notificação de teste para Chronos"}
+            </button>
           </div>
           </div>
         </div>
