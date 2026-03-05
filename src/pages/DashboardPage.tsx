@@ -70,27 +70,46 @@ const DashboardPage = () => {
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Aluno";
 
   const handlePayment = async () => {
-    if (!selectedMethod || !profile) {
-      toast({ title: "Preencha os dados", description: "Selecione um método de pagamento e preencha os dados do aluno.", variant: "destructive" });
+    const g = guardianRef.current;
+    const s = studentRef.current;
+    if (!selectedMethod) {
+      toast({ title: "Selecione um método de pagamento", variant: "destructive" });
       return;
     }
+    if (!user) return;
     setPaying(true);
     try {
+      // Save profile data automatically
+      await supabase
+        .from("profiles")
+        .update({
+          full_name: g.fullName.trim(),
+          email: g.email.trim(),
+          phone: g.phone.trim(),
+          student_name: s.studentName.trim(),
+          student_email: s.studentEmail.trim(),
+          student_birth_date: s.studentBirthDate || null,
+          student_address: s.studentAddress.trim(),
+          student_school: s.studentSchool.trim(),
+          student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
+        } as any)
+        .eq("user_id", user.id);
+
       const methodLabel = paymentMethods.find(m => m.id === selectedMethod)?.label || selectedMethod;
       const { error } = await supabase.functions.invoke("send-purchase-notification", {
         body: {
           guardian: {
-            full_name: profile.full_name || "",
-            email: profile.email || user?.email || "",
-            phone: profile.phone || "",
+            full_name: g.fullName,
+            email: g.email || user?.email || "",
+            phone: g.phone,
           },
           student: {
-            student_name: profile.student_name || "",
-            student_email: profile.student_email || "",
-            student_birth_date: profile.student_birth_date || "",
-            student_address: profile.student_address || "",
-            student_school: profile.student_school || "",
-            student_graduation_year: profile.student_graduation_year?.toString() || "",
+            student_name: s.studentName,
+            student_email: s.studentEmail,
+            student_birth_date: s.studentBirthDate,
+            student_address: s.studentAddress,
+            student_school: s.studentSchool,
+            student_graduation_year: s.studentGraduationYear,
           },
           payment_method: methodLabel,
         },
