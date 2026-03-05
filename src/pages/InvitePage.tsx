@@ -192,9 +192,18 @@ const InvitePage = () => {
               )}
 
               {verified === false && (
-                <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
-                  <XCircle size={18} />
-                  <span>Convite inválido ou expirado. Verifique os dados.</span>
+                <div className="p-4 rounded-lg bg-destructive/10 text-sm space-y-2">
+                  <div className="flex items-center gap-2 text-destructive font-medium">
+                    <XCircle size={18} />
+                    <span>Convite inválido ou expirado</span>
+                  </div>
+                  <p className="text-muted-foreground pl-[26px]">
+                    Verifique na sua conta de email o convite recebido da Chronos Education. 
+                    O código de convite encontra-se no link do botão "Aceitar Convite".
+                  </p>
+                  <p className="text-muted-foreground pl-[26px]">
+                    💡 Caso não encontre o email, verifique a pasta de <strong>spam</strong> ou <strong>lixo eletrônico</strong>.
+                  </p>
                 </div>
               )}
 
