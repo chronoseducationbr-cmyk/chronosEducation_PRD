@@ -20,12 +20,14 @@ interface InviteEmailProps {
   siteName: string
   siteUrl: string
   confirmationUrl: string
+  inviteCode?: string
 }
 
 export const InviteEmail = ({
   siteName,
   siteUrl,
   confirmationUrl,
+  inviteCode,
 }: InviteEmailProps) => (
   <Html lang="pt-BR" dir="ltr">
     <Head />
@@ -43,7 +45,18 @@ export const InviteEmail = ({
             <Link href={siteUrl} style={link}>
               <strong>Chronos Education</strong>
             </Link>
-            . Clique no botão abaixo para aceitar o convite e criar a sua conta.
+            .
+          </Text>
+          {inviteCode && (
+            <>
+              <Text style={{ ...text, marginBottom: '8px' }}>O seu código de convite:</Text>
+              <Section style={codeBox}>
+                <Text style={codeText}>{inviteCode}</Text>
+              </Section>
+            </>
+          )}
+          <Text style={text}>
+            Clique no botão abaixo para aceitar o convite e criar a sua conta.
           </Text>
           <Button style={button} href={confirmationUrl}>
             Aceitar Convite
