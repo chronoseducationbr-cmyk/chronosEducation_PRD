@@ -11,6 +11,7 @@ interface PurchaseData {
     full_name: string;
     email: string;
     phone: string;
+    cpf?: string;
   };
   student: {
     student_name: string;
@@ -22,6 +23,23 @@ interface PurchaseData {
   };
   payment_method: string;
 }
+
+const formatDate = () => {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const year = now.getFullYear();
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  return `${day}/${month}/${year} às ${hours}:${minutes}`;
+};
+
+const row = (label: string, value: string) => `
+  <tr>
+    <td style="padding:8px 0;font-size:14px;color:#5a6a78;width:160px;vertical-align:top;border-bottom:1px solid #f0f2f4;">${label}</td>
+    <td style="padding:8px 0;font-size:14px;color:#1a2b3c;font-weight:600;border-bottom:1px solid #f0f2f4;">${value || "—"}</td>
+  </tr>
+`;
 
 const buildNotificationHtml = (data: PurchaseData) => `
 <!DOCTYPE html>
@@ -39,13 +57,24 @@ const buildNotificationHtml = (data: PurchaseData) => `
 
           <!-- Header -->
           <tr>
-            <td style="background:linear-gradient(135deg,#062a45 0%,#0d3d5e 100%);padding:32px 40px;border-radius:16px 16px 0 0;text-align:center;">
-              <h1 style="margin:0;font-size:22px;font-weight:700;color:#ffffff;font-family:Georgia,'Times New Roman',serif;">
-                📋 Nova Inscrição Recebida
-              </h1>
-              <p style="margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;">
-                Dual Diploma Program
-              </p>
+            <td style="background:linear-gradient(135deg,#062a45 0%,#0d3d5e 100%);padding:32px 40px;border-radius:16px 16px 0 0;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>
+                    <h1 style="margin:0;font-size:22px;font-weight:700;color:#ffffff;font-family:Georgia,'Times New Roman',serif;">
+                      📋 Nova Inscrição Recebida
+                    </h1>
+                    <p style="margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;">
+                      Dual Diploma Program
+                    </p>
+                  </td>
+                  <td style="text-align:right;vertical-align:top;">
+                    <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.8);font-weight:600;">
+                      📅 ${formatDate()}
+                    </p>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
 
@@ -59,7 +88,7 @@ const buildNotificationHtml = (data: PurchaseData) => `
             <td style="background-color:#f7f8f9;padding:40px;border-radius:0 0 16px 16px;">
 
               <p style="margin:0 0 24px;font-size:15px;color:#5a6a78;line-height:1.6;">
-                Uma nova inscrição foi submetida através da plataforma. Seguem os detalhes:
+                Uma nova inscrição foi submetida através da plataforma. Seguem todos os detalhes:
               </p>
 
               <!-- Guardian Section -->
@@ -72,18 +101,10 @@ const buildNotificationHtml = (data: PurchaseData) => `
                 <tr>
                   <td style="padding:8px 24px 20px;">
                     <table width="100%" cellpadding="0" cellspacing="0">
-                      <tr>
-                        <td style="padding:6px 0;font-size:14px;color:#5a6a78;width:140px;vertical-align:top;">Nome:</td>
-                        <td style="padding:6px 0;font-size:14px;color:#333;font-weight:600;">${data.guardian.full_name || "—"}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:6px 0;font-size:14px;color:#5a6a78;vertical-align:top;">Email:</td>
-                        <td style="padding:6px 0;font-size:14px;color:#333;font-weight:600;">${data.guardian.email || "—"}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:6px 0;font-size:14px;color:#5a6a78;vertical-align:top;">Telefone:</td>
-                        <td style="padding:6px 0;font-size:14px;color:#333;font-weight:600;">${data.guardian.phone || "—"}</td>
-                      </tr>
+                      ${row("Nome completo", data.guardian.full_name)}
+                      ${row("Email", data.guardian.email)}
+                      ${row("Telefone", data.guardian.phone)}
+                      ${row("CPF", data.guardian.cpf || "")}
                     </table>
                   </td>
                 </tr>
@@ -99,30 +120,12 @@ const buildNotificationHtml = (data: PurchaseData) => `
                 <tr>
                   <td style="padding:8px 24px 20px;">
                     <table width="100%" cellpadding="0" cellspacing="0">
-                      <tr>
-                        <td style="padding:6px 0;font-size:14px;color:#5a6a78;width:140px;vertical-align:top;">Nome:</td>
-                        <td style="padding:6px 0;font-size:14px;color:#333;font-weight:600;">${data.student.student_name || "—"}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:6px 0;font-size:14px;color:#5a6a78;vertical-align:top;">Email:</td>
-                        <td style="padding:6px 0;font-size:14px;color:#333;font-weight:600;">${data.student.student_email || "—"}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:6px 0;font-size:14px;color:#5a6a78;vertical-align:top;">Data nasc.:</td>
-                        <td style="padding:6px 0;font-size:14px;color:#333;font-weight:600;">${data.student.student_birth_date || "—"}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:6px 0;font-size:14px;color:#5a6a78;vertical-align:top;">Morada:</td>
-                        <td style="padding:6px 0;font-size:14px;color:#333;font-weight:600;">${data.student.student_address || "—"}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:6px 0;font-size:14px;color:#5a6a78;vertical-align:top;">Escola:</td>
-                        <td style="padding:6px 0;font-size:14px;color:#333;font-weight:600;">${data.student.student_school || "—"}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:6px 0;font-size:14px;color:#5a6a78;vertical-align:top;">Ano conclusão:</td>
-                        <td style="padding:6px 0;font-size:14px;color:#333;font-weight:600;">${data.student.student_graduation_year || "—"}</td>
-                      </tr>
+                      ${row("Nome completo", data.student.student_name)}
+                      ${row("Email", data.student.student_email)}
+                      ${row("Data de nascimento", data.student.student_birth_date)}
+                      ${row("Morada", data.student.student_address)}
+                      ${row("Escola", data.student.student_school)}
+                      ${row("Ano de conclusão", data.student.student_graduation_year)}
                     </table>
                   </td>
                 </tr>
@@ -133,7 +136,7 @@ const buildNotificationHtml = (data: PurchaseData) => `
                 <tr>
                   <td style="padding:20px 24px;">
                     <h3 style="margin:0 0 8px;font-size:16px;font-weight:700;color:#062a45;">💳 Método de Pagamento</h3>
-                    <p style="margin:0;font-size:15px;color:#333;font-weight:600;">${data.payment_method}</p>
+                    <p style="margin:0;font-size:15px;color:#1a2b3c;font-weight:600;">${data.payment_method}</p>
                   </td>
                 </tr>
               </table>
