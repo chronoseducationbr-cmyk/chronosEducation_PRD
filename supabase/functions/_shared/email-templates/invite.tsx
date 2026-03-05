@@ -20,7 +20,6 @@ interface InviteEmailProps {
   siteName: string
   siteUrl: string
   confirmationUrl: string
-  inviteCode?: string
 }
 
 export const InviteEmail = ({
