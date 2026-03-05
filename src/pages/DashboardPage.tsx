@@ -52,11 +52,57 @@ const buildPreviewHtml = (userName: string) => `
 </div>
 `;
 
+const buildChronosPreviewHtml = (guardian: { fullName: string; email: string; phone: string; cpf: string }, student: { studentName: string; studentEmail: string; studentBirthDate: string; studentAddress: string; studentSchool: string; studentGraduationYear: string }, paymentMethod: string) => {
+  const now = new Date();
+  const date = `${String(now.getDate()).padStart(2,"0")}/${String(now.getMonth()+1).padStart(2,"0")}/${now.getFullYear()} às ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+  const row = (label: string, value: string) => `<tr><td style="padding:8px 0;font-size:14px;color:#5a6a78;width:160px;vertical-align:top;border-bottom:1px solid #f0f2f4;">${label}</td><td style="padding:8px 0;font-size:14px;color:#1a2b3c;font-weight:600;border-bottom:1px solid #f0f2f4;">${value || "—"}</td></tr>`;
+  return `
+<div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;">
+  <div style="background:linear-gradient(135deg,#062a45 0%,#0d3d5e 100%);padding:32px 40px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:flex-start;">
+    <div>
+      <h2 style="margin:0;font-size:22px;font-weight:700;color:#ffffff;font-family:Georgia,serif;">📋 Nova Inscrição Recebida</h2>
+      <p style="margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;">Dual Diploma Program</p>
+    </div>
+    <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.8);font-weight:600;">📅 ${date}</p>
+  </div>
+  <div style="background:linear-gradient(135deg,#80ff00 0%,#6de600 100%);height:4px;"></div>
+  <div style="background-color:#f7f8f9;padding:40px;border-radius:0 0 16px 16px;">
+    <p style="margin:0 0 24px;font-size:15px;color:#5a6a78;line-height:1.6;">Uma nova inscrição foi submetida através da plataforma. Seguem todos os detalhes:</p>
+    <div style="background-color:#ffffff;border-radius:12px;border:1px solid #e8ecef;margin-bottom:20px;padding:20px 24px;">
+      <h3 style="margin:0 0 12px;font-size:16px;font-weight:700;color:#062a45;">👤 Encarregado de Educação</h3>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        ${row("Nome completo", guardian.fullName)}
+        ${row("Email", guardian.email)}
+        ${row("Telefone", guardian.phone)}
+        ${row("CPF", guardian.cpf)}
+      </table>
+    </div>
+    <div style="background-color:#ffffff;border-radius:12px;border:1px solid #e8ecef;margin-bottom:20px;padding:20px 24px;">
+      <h3 style="margin:0 0 12px;font-size:16px;font-weight:700;color:#062a45;">🎓 Dados do Aluno</h3>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        ${row("Nome completo", student.studentName)}
+        ${row("Email", student.studentEmail)}
+        ${row("Data de nascimento", student.studentBirthDate)}
+        ${row("Morada", student.studentAddress)}
+        ${row("Escola", student.studentSchool)}
+        ${row("Ano de conclusão", student.studentGraduationYear)}
+      </table>
+    </div>
+    <div style="background-color:#ffffff;border-radius:12px;border:1px solid #e8ecef;margin-bottom:24px;padding:20px 24px;">
+      <h3 style="margin:0 0 8px;font-size:16px;font-weight:700;color:#062a45;">💳 Método de Pagamento</h3>
+      <p style="margin:0;font-size:15px;color:#1a2b3c;font-weight:600;">${paymentMethod}</p>
+    </div>
+    <hr style="border:none;border-top:1px solid #e8ecef;margin:24px 0;" />
+    <p style="margin:0;font-size:12px;color:#9aa8b5;text-align:center;">© ${new Date().getFullYear()} Chronos Education. Email gerado automaticamente.</p>
+  </div>
+</div>`;
+};
 const DashboardPage = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const [sendingTest, setSendingTest] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [showChronosPreview, setShowChronosPreview] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
 
@@ -262,40 +308,67 @@ const DashboardPage = () => {
             <p className="text-sm text-muted-foreground mb-4">
               Simule o envio dos dois emails: confirmação para o responsável e notificação para a Chronos.
             </p>
-            <div className="flex gap-3">
+            <div className="flex gap-3 mb-3">
               <button
                 onClick={() => setShowPreview(true)}
                 className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-border text-foreground font-medium hover:bg-muted/50 transition-colors text-sm"
               >
                 <Eye size={16} />
-                Pré-visualizar
+                Email Responsável
               </button>
               <button
-                onClick={handleSendTestEmails}
-                disabled={sendingTest}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg bg-secondary text-secondary-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+                onClick={() => setShowChronosPreview(true)}
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-border text-foreground font-medium hover:bg-muted/50 transition-colors text-sm"
               >
-                <Send size={16} />
-                {sendingTest ? "Enviando..." : "Enviar para teste"}
+                <Eye size={16} />
+                Email Chronos
               </button>
             </div>
+            <button
+              onClick={handleSendTestEmails}
+              disabled={sendingTest}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-secondary text-secondary-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+            >
+              <Send size={16} />
+              {sendingTest ? "Enviando..." : "Enviar para teste"}
+            </button>
           </div>
           </div>
         </div>
       </div>
 
-      {/* Email preview dialog */}
+      {/* Email preview dialog - Responsável */}
       <Dialog open={showPreview} onOpenChange={setShowPreview}>
         <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Pré-visualização do Email</DialogTitle>
+            <DialogTitle>Email para o Responsável</DialogTitle>
             <DialogDescription>
-              Este é o email que o aluno receberá após a confirmação do pagamento.
+              Este é o email que o responsável receberá após a confirmação do pagamento.
             </DialogDescription>
           </DialogHeader>
           <div
             className="mt-4 rounded-lg overflow-hidden border border-border"
             dangerouslySetInnerHTML={{ __html: buildPreviewHtml(userName) }}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Email preview dialog - Chronos */}
+      <Dialog open={showChronosPreview} onOpenChange={setShowChronosPreview}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Email para a Chronos</DialogTitle>
+            <DialogDescription>
+              Este é o email de notificação que a Chronos receberá com todos os dados da inscrição.
+            </DialogDescription>
+          </DialogHeader>
+          <div
+            className="mt-4 rounded-lg overflow-hidden border border-border"
+            dangerouslySetInnerHTML={{ __html: buildChronosPreviewHtml(
+              guardianRef.current,
+              studentRef.current,
+              selectedMethod ? paymentMethods.find(m => m.id === selectedMethod)?.label || selectedMethod : "Não selecionado"
+            ) }}
           />
         </DialogContent>
       </Dialog>
