@@ -123,7 +123,7 @@ const DashboardPage = () => {
     }
   };
 
-  const handleSendTestEmail = async () => {
+  const handleSendTestEmails = async () => {
     const guardianEmail = guardianRef.current.email?.trim();
     const targetEmail = guardianEmail || user?.email;
     if (!targetEmail) {
@@ -131,61 +131,48 @@ const DashboardPage = () => {
       return;
     }
     const guardianName = guardianRef.current.fullName?.trim() || userName;
-    setSendingTest(true);
-    try {
-      const { error } = await supabase.functions.invoke("send-enrollment-email", {
-        body: { email: targetEmail, name: guardianName },
-      });
-      if (error) throw error;
-      toast({
-        title: "Email de teste enviado!",
-        description: `Verifique a caixa de entrada de ${targetEmail}`,
-      });
-    } catch (err: any) {
-      console.error(err);
-      toast({
-        title: "Erro ao enviar email",
-        description: err.message || "Tente novamente.",
-        variant: "destructive",
-      });
-    } finally {
-      setSendingTest(false);
-    }
-  };
-
-  const handleSendChronosTestEmail = async () => {
     const g = guardianRef.current;
     const s = studentRef.current;
-    setSendingChronosTest(true);
+    const methodLabel = selectedMethod
+      ? paymentMethods.find(m => m.id === selectedMethod)?.label || selectedMethod
+      : "Não selecionado (teste)";
+
+    setSendingTest(true);
     try {
-      const methodLabel = selectedMethod
-        ? paymentMethods.find(m => m.id === selectedMethod)?.label || selectedMethod
-        : "Não selecionado (teste)";
-      const { error } = await supabase.functions.invoke("send-purchase-notification", {
-        body: {
-          guardian: {
-            full_name: g.fullName,
-            email: g.email || user?.email || "",
-            phone: g.phone,
+      const [enrollmentResult, notificationResult] = await Promise.all([
+        supabase.functions.invoke("send-enrollment-email", {
+          body: { email: targetEmail, name: guardianName },
+        }),
+        supabase.functions.invoke("send-purchase-notification", {
+          body: {
+            guardian: {
+              full_name: g.fullName,
+              email: g.email || user?.email || "",
+              phone: g.phone,
+            },
+            student: {
+              student_name: s.studentName,
+              student_email: s.studentEmail,
+              student_birth_date: s.studentBirthDate,
+              student_address: s.studentAddress,
+              student_school: s.studentSchool,
+              student_graduation_year: s.studentGraduationYear,
+            },
+            payment_method: methodLabel,
           },
-          student: {
-            student_name: s.studentName,
-            student_email: s.studentEmail,
-            student_birth_date: s.studentBirthDate,
-            student_address: s.studentAddress,
-            student_school: s.studentSchool,
-            student_graduation_year: s.studentGraduationYear,
-          },
-          payment_method: methodLabel,
-        },
+        }),
+      ]);
+      if (enrollmentResult.error) throw enrollmentResult.error;
+      if (notificationResult.error) throw notificationResult.error;
+      toast({
+        title: "Emails de teste enviados!",
+        description: `Confirmação → ${targetEmail} | Notificação → contato@chronoseducation.com`,
       });
-      if (error) throw error;
-      toast({ title: "Email de teste enviado!", description: "Verifique a caixa de entrada de contato@chronoseducation.com" });
     } catch (err: any) {
       console.error(err);
       toast({ title: "Erro ao enviar", description: err.message || "Tente novamente.", variant: "destructive" });
     } finally {
-      setSendingChronosTest(false);
+      setSendingTest(false);
     }
   };
 
