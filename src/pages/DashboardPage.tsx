@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, User, CreditCard, QrCode, FileText, Building2, Mail, Eye, Send } from "lucide-react";
-import GuardianDataSection from "@/components/GuardianDataSection";
-import StudentDataSection from "@/components/StudentDataSection";
+import GuardianDataSection, { type GuardianData } from "@/components/GuardianDataSection";
+import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -60,43 +60,56 @@ const DashboardPage = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
-  const [profile, setProfile] = useState<any>(null);
+
+  const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
+  const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "" });
+
+  const handleGuardianChange = useCallback((data: GuardianData) => { guardianRef.current = data; }, []);
+  const handleStudentChange = useCallback((data: StudentData) => { studentRef.current = data; }, []);
 
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Aluno";
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("full_name, email, phone, student_name, student_email, student_birth_date, student_address, student_school, student_graduation_year")
-        .maybeSingle();
-      if (data) setProfile(data);
-    };
-    fetchProfile();
-  }, []);
-
   const handlePayment = async () => {
-    if (!selectedMethod || !profile) {
-      toast({ title: "Preencha os dados", description: "Selecione um método de pagamento e preencha os dados do aluno.", variant: "destructive" });
+    const g = guardianRef.current;
+    const s = studentRef.current;
+    if (!selectedMethod) {
+      toast({ title: "Selecione um método de pagamento", variant: "destructive" });
       return;
     }
+    if (!user) return;
     setPaying(true);
     try {
+      // Save profile data automatically
+      await supabase
+        .from("profiles")
+        .update({
+          full_name: g.fullName.trim(),
+          email: g.email.trim(),
+          phone: g.phone.trim(),
+          student_name: s.studentName.trim(),
+          student_email: s.studentEmail.trim(),
+          student_birth_date: s.studentBirthDate || null,
+          student_address: s.studentAddress.trim(),
+          student_school: s.studentSchool.trim(),
+          student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
+        } as any)
+        .eq("user_id", user.id);
+
       const methodLabel = paymentMethods.find(m => m.id === selectedMethod)?.label || selectedMethod;
       const { error } = await supabase.functions.invoke("send-purchase-notification", {
         body: {
           guardian: {
-            full_name: profile.full_name || "",
-            email: profile.email || user?.email || "",
-            phone: profile.phone || "",
+            full_name: g.fullName,
+            email: g.email || user?.email || "",
+            phone: g.phone,
           },
           student: {
-            student_name: profile.student_name || "",
-            student_email: profile.student_email || "",
-            student_birth_date: profile.student_birth_date || "",
-            student_address: profile.student_address || "",
-            student_school: profile.student_school || "",
-            student_graduation_year: profile.student_graduation_year?.toString() || "",
+            student_name: s.studentName,
+            student_email: s.studentEmail,
+            student_birth_date: s.studentBirthDate,
+            student_address: s.studentAddress,
+            student_school: s.studentSchool,
+            student_graduation_year: s.studentGraduationYear,
           },
           payment_method: methodLabel,
         },
@@ -136,10 +149,8 @@ const DashboardPage = () => {
   };
 
   const handleSendChronosTestEmail = async () => {
-    if (!profile) {
-      toast({ title: "Preencha os dados", description: "Salve os dados do responsável e do aluno primeiro.", variant: "destructive" });
-      return;
-    }
+    const g = guardianRef.current;
+    const s = studentRef.current;
     setSendingChronosTest(true);
     try {
       const methodLabel = selectedMethod
@@ -148,17 +159,17 @@ const DashboardPage = () => {
       const { error } = await supabase.functions.invoke("send-purchase-notification", {
         body: {
           guardian: {
-            full_name: profile.full_name || "",
-            email: profile.email || user?.email || "",
-            phone: profile.phone || "",
+            full_name: g.fullName,
+            email: g.email || user?.email || "",
+            phone: g.phone,
           },
           student: {
-            student_name: profile.student_name || "",
-            student_email: profile.student_email || "",
-            student_birth_date: profile.student_birth_date || "",
-            student_address: profile.student_address || "",
-            student_school: profile.student_school || "",
-            student_graduation_year: profile.student_graduation_year?.toString() || "",
+            student_name: s.studentName,
+            student_email: s.studentEmail,
+            student_birth_date: s.studentBirthDate,
+            student_address: s.studentAddress,
+            student_school: s.studentSchool,
+            student_graduation_year: s.studentGraduationYear,
           },
           payment_method: methodLabel,
         },
@@ -213,10 +224,10 @@ const DashboardPage = () => {
         <p className="text-muted-foreground mb-8">Compre o Dual Diploma de forma fácil e segura.</p>
 
         <div className="max-w-lg">
-          <GuardianDataSection />
+          <GuardianDataSection onChange={handleGuardianChange} />
 
           <div className="mt-8">
-            <StudentDataSection />
+            <StudentDataSection onChange={handleStudentChange} />
           </div>
 
           <div className="mt-8">
