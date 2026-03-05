@@ -217,14 +217,47 @@ async function handleWebhook(req: Request): Promise<Response> {
   }
 
   // Build template props from payload.data (HookData structure)
+  let inviteCode: string | undefined
+  
+  // For invite emails, generate a unique code and store it in the invitations table
+  if (emailType === 'invite') {
+    const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2')
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
+    
+    // Generate a random invite code (12 char hex)
+    const array = new Uint8Array(6)
+    crypto.getRandomValues(array)
+    inviteCode = Array.from(array, b => b.toString(16).padStart(2, '0')).join('')
+    
+    const { error: insertError } = await supabaseAdmin
+      .from('invitations')
+      .insert({
+        email: payload.data.email,
+        invite_code: inviteCode,
+        status: 'pending',
+      })
+    
+    if (insertError) {
+      console.error('Failed to store invitation code', { error: insertError.message, run_id })
+    }
+  }
+
+  // For invites, build a custom confirmation URL with the invite code
+  const confirmationUrl = emailType === 'invite' && inviteCode
+    ? `https://${ROOT_DOMAIN}/convite?code=${inviteCode}`
+    : payload.data.url
+
   const templateProps = {
     siteName: SITE_NAME,
     siteUrl: `https://${ROOT_DOMAIN}`,
     recipient: payload.data.email,
-    confirmationUrl: payload.data.url,
+    confirmationUrl,
     token: payload.data.token,
     email: payload.data.email,
     newEmail: payload.data.new_email,
+    inviteCode,
   }
 
   // Render React Email to HTML and plain text
