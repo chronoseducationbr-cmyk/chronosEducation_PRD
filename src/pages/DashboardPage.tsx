@@ -56,7 +56,6 @@ const DashboardPage = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const [sendingTest, setSendingTest] = useState(false);
-  const [sendingChronosTest, setSendingChronosTest] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
