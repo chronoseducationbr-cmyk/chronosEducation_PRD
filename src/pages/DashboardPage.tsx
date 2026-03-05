@@ -181,7 +181,7 @@ const DashboardPage = () => {
         },
       });
       if (error) throw error;
-      toast({ title: "Email de teste enviado!", description: "Verifique a caixa de entrada de chronoseducationbr@gmail.com" });
+      toast({ title: "Email de teste enviado!", description: "Verifique a caixa de entrada de contato@chronoseducation.com" });
     } catch (err: any) {
       console.error(err);
       toast({ title: "Erro ao enviar", description: err.message || "Tente novamente.", variant: "destructive" });
