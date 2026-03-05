@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      invitations: {
+        Row: {
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invite_code: string
+          invited_by: string | null
+          status: string
+          used_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invite_code: string
+          invited_by?: string | null
+          status?: string
+          used_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invite_code?: string
+          invited_by?: string | null
+          status?: string
+          used_at?: string | null
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           id: string
