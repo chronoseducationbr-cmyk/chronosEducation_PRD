@@ -252,13 +252,13 @@ const DashboardPage = () => {
             {paying ? "Processando..." : "Confirmar Inscrição"}
           </button>
 
-          {/* Test email section */}
+          {/* Test emails section */}
           <div className="mt-8 p-5 bg-card rounded-xl border border-border shadow-card">
             <h3 className="font-heading text-base font-semibold text-foreground mb-1">
-              📧 Email de confirmação (teste)
+              📧 Emails de teste
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Simule o envio do email que o aluno receberá após o pagamento ser confirmado.
+              Simule o envio dos dois emails: confirmação para o responsável e notificação para a Chronos.
             </p>
             <div className="flex gap-3">
               <button
@@ -269,32 +269,14 @@ const DashboardPage = () => {
                 Pré-visualizar
               </button>
               <button
-                onClick={handleSendTestEmail}
+                onClick={handleSendTestEmails}
                 disabled={sendingTest}
                 className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg bg-secondary text-secondary-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
               >
-                <Mail size={16} />
-                {sendingTest ? "Enviando..." : "Enviar para mim"}
+                <Send size={16} />
+                {sendingTest ? "Enviando..." : "Enviar para teste"}
               </button>
             </div>
-          </div>
-
-          {/* Test Chronos notification email */}
-          <div className="mt-4 p-5 bg-card rounded-xl border border-border shadow-card">
-            <h3 className="font-heading text-base font-semibold text-foreground mb-1">
-              📩 Email de notificação Chronos (teste)
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Simule o envio do email que a Chronos receberá com todos os dados do responsável, aluno e método de pagamento.
-            </p>
-            <button
-              onClick={handleSendChronosTestEmail}
-              disabled={sendingChronosTest}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
-            >
-              <Send size={16} />
-              {sendingChronosTest ? "Enviando..." : "Enviar notificação de teste para Chronos"}
-            </button>
           </div>
           </div>
         </div>
