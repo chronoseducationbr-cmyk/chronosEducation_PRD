@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, User, CreditCard, QrCode, FileText, Building2, Mail, Eye, Send } from "lucide-react";
-import GuardianDataSection from "@/components/GuardianDataSection";
-import StudentDataSection from "@/components/StudentDataSection";
+import GuardianDataSection, { type GuardianData } from "@/components/GuardianDataSection";
+import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
