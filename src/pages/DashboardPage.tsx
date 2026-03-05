@@ -149,10 +149,8 @@ const DashboardPage = () => {
   };
 
   const handleSendChronosTestEmail = async () => {
-    if (!profile) {
-      toast({ title: "Preencha os dados", description: "Salve os dados do responsável e do aluno primeiro.", variant: "destructive" });
-      return;
-    }
+    const g = guardianRef.current;
+    const s = studentRef.current;
     setSendingChronosTest(true);
     try {
       const methodLabel = selectedMethod
@@ -161,17 +159,17 @@ const DashboardPage = () => {
       const { error } = await supabase.functions.invoke("send-purchase-notification", {
         body: {
           guardian: {
-            full_name: profile.full_name || "",
-            email: profile.email || user?.email || "",
-            phone: profile.phone || "",
+            full_name: g.fullName,
+            email: g.email || user?.email || "",
+            phone: g.phone,
           },
           student: {
-            student_name: profile.student_name || "",
-            student_email: profile.student_email || "",
-            student_birth_date: profile.student_birth_date || "",
-            student_address: profile.student_address || "",
-            student_school: profile.student_school || "",
-            student_graduation_year: profile.student_graduation_year?.toString() || "",
+            student_name: s.studentName,
+            student_email: s.studentEmail,
+            student_birth_date: s.studentBirthDate,
+            student_address: s.studentAddress,
+            student_school: s.studentSchool,
+            student_graduation_year: s.studentGraduationYear,
           },
           payment_method: methodLabel,
         },
