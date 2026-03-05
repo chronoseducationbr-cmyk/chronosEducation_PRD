@@ -83,7 +83,7 @@ const GuardianDataSection = () => {
       </h2>
       <div className="bg-card rounded-xl border border-border shadow-card p-5">
         <div className="grid sm:grid-cols-2 gap-5">
-          <div>
+          <div className="sm:col-span-2">
             <label className="text-sm font-medium text-foreground block mb-1.5">Nome completo</label>
             <input
               type="text"
@@ -94,7 +94,7 @@ const GuardianDataSection = () => {
               placeholder="Nome completo do responsável"
             />
           </div>
-          <div>
+          <div className="sm:col-span-2">
             <label className="text-sm font-medium text-foreground block mb-1.5">Email</label>
             <div className="relative">
               <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
