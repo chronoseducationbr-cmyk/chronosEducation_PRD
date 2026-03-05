@@ -172,10 +172,8 @@ const InvitePage = () => {
                     type="text"
                     required
                     value={inviteCode}
-                    onChange={(e) => { setInviteCode(e.target.value); setVerified(null); }}
-                    disabled={verified === true}
-                    className="w-full pl-10 pr-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition font-mono tracking-widest disabled:opacity-60"
-                    placeholder="abc123def456"
+                    readOnly
+                    className="w-full pl-10 pr-4 py-3 rounded-lg border border-border bg-muted text-foreground text-sm outline-none transition font-mono tracking-widest cursor-not-allowed opacity-70"
                   />
                 </div>
               </div>
@@ -257,12 +255,6 @@ const InvitePage = () => {
               </form>
             )}
 
-            <p className="text-sm text-center text-muted-foreground mt-6">
-              Já tem uma conta?{" "}
-              <Link to="/login" className="text-secondary font-semibold hover:underline">
-                Entrar
-              </Link>
-            </p>
           </div>
         </div>
       </div>
