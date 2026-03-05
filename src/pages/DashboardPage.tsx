@@ -102,6 +102,7 @@ const DashboardPage = () => {
   const { toast } = useToast();
   const [sendingTest, setSendingTest] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [showChronosPreview, setShowChronosPreview] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
 
