@@ -224,10 +224,10 @@ const DashboardPage = () => {
         <p className="text-muted-foreground mb-8">Compre o Dual Diploma de forma fácil e segura.</p>
 
         <div className="max-w-lg">
-          <GuardianDataSection />
+          <GuardianDataSection onChange={handleGuardianChange} />
 
           <div className="mt-8">
-            <StudentDataSection />
+            <StudentDataSection onChange={handleStudentChange} />
           </div>
 
           <div className="mt-8">
