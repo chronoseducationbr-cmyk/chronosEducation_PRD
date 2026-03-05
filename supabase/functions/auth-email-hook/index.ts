@@ -16,12 +16,12 @@ const corsHeaders = {
 }
 
 const EMAIL_SUBJECTS: Record<string, string> = {
-  signup: 'Confirm your email',
-  invite: "You've been invited",
-  magiclink: 'Your login link',
-  recovery: 'Reset your password',
-  email_change: 'Confirm your new email',
-  reauthentication: 'Your verification code',
+  signup: 'Confirme o seu email',
+  invite: 'Foi convidado para a Chronos Education',
+  magiclink: 'O seu link de acesso',
+  recovery: 'Redefinir a sua senha',
+  email_change: 'Confirme o seu novo email',
+  reauthentication: 'O seu código de verificação',
 }
 
 // Template mapping
@@ -35,7 +35,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "ponte-academica-global"
+const SITE_NAME = "Chronos Education"
 const SENDER_DOMAIN = "notify.info.chronoseducation.com"
 const ROOT_DOMAIN = "info.chronoseducation.com"
 const FROM_DOMAIN = "info.chronoseducation.com" // Domain shown in From address (may be root or sender subdomain)
