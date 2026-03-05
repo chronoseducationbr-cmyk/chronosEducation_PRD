@@ -165,6 +165,7 @@ const InvitePage = () => {
                 </div>
               </div>
 
+              {verified !== true && (
               <div>
                 <label className="text-sm font-medium text-foreground block mb-1.5">Código de Convite</label>
                 <div className="relative">
@@ -174,12 +175,12 @@ const InvitePage = () => {
                     required
                     value={inviteCode}
                     onChange={(e) => { setInviteCode(e.target.value); setVerified(null); }}
-                    disabled={verified === true}
-                    className="w-full pl-10 pr-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition font-mono tracking-widest disabled:opacity-60"
+                    className="w-full pl-10 pr-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition font-mono tracking-widest"
                     placeholder="código de convite"
                   />
                 </div>
               </div>
+              )}
 
               {verified === null && (
                 <button
