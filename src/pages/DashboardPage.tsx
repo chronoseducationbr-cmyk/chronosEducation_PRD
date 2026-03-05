@@ -101,6 +101,7 @@ const DashboardPage = () => {
             full_name: g.fullName,
             email: g.email || user?.email || "",
             phone: g.phone,
+            cpf: g.cpf,
           },
           student: {
             student_name: s.studentName,
@@ -149,6 +150,7 @@ const DashboardPage = () => {
               full_name: g.fullName,
               email: g.email || user?.email || "",
               phone: g.phone,
+              cpf: g.cpf,
             },
             student: {
               student_name: s.studentName,
