@@ -308,40 +308,64 @@ const DashboardPage = () => {
             <p className="text-sm text-muted-foreground mb-4">
               Simule o envio dos dois emails: confirmação para o responsável e notificação para a Chronos.
             </p>
-            <div className="flex gap-3">
+            <div className="flex gap-3 mb-3">
               <button
                 onClick={() => setShowPreview(true)}
                 className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-border text-foreground font-medium hover:bg-muted/50 transition-colors text-sm"
               >
                 <Eye size={16} />
-                Pré-visualizar
+                Email Responsável
               </button>
               <button
-                onClick={handleSendTestEmails}
-                disabled={sendingTest}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg bg-secondary text-secondary-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+                onClick={() => setShowChronosPreview(true)}
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-border text-foreground font-medium hover:bg-muted/50 transition-colors text-sm"
               >
-                <Send size={16} />
-                {sendingTest ? "Enviando..." : "Enviar para teste"}
+                <Eye size={16} />
+                Email Chronos
               </button>
             </div>
+            <button
+              onClick={handleSendTestEmails}
+              disabled={sendingTest}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-secondary text-secondary-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+            >
+              <Send size={16} />
+              {sendingTest ? "Enviando..." : "Enviar para teste"}
+            </button>
           </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Email preview dialog */}
+      {/* Email preview dialog - Responsável */}
       <Dialog open={showPreview} onOpenChange={setShowPreview}>
         <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Pré-visualização do Email</DialogTitle>
+            <DialogTitle>Email para o Responsável</DialogTitle>
             <DialogDescription>
-              Este é o email que o aluno receberá após a confirmação do pagamento.
+              Este é o email que o responsável receberá após a confirmação do pagamento.
             </DialogDescription>
           </DialogHeader>
           <div
             className="mt-4 rounded-lg overflow-hidden border border-border"
             dangerouslySetInnerHTML={{ __html: buildPreviewHtml(userName) }}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Email preview dialog - Chronos */}
+      <Dialog open={showChronosPreview} onOpenChange={setShowChronosPreview}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Email para a Chronos</DialogTitle>
+            <DialogDescription>
+              Este é o email de notificação que a Chronos receberá com todos os dados da inscrição.
+            </DialogDescription>
+          </DialogHeader>
+          <div
+            className="mt-4 rounded-lg overflow-hidden border border-border"
+            dangerouslySetInnerHTML={{ __html: buildChronosPreviewHtml(
+              guardianRef.current,
+              studentRef.current,
+              selectedMethod ? paymentMethods.find(m => m.id === selectedMethod)?.label || selectedMethod : "Não selecionado"
+            ) }}
           />
         </DialogContent>
       </Dialog>
