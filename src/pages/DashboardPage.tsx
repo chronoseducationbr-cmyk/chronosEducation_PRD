@@ -125,16 +125,22 @@ const DashboardPage = () => {
   };
 
   const handleSendTestEmail = async () => {
-    if (!user?.email) return;
+    const guardianEmail = guardianRef.current.email?.trim();
+    const targetEmail = guardianEmail || user?.email;
+    if (!targetEmail) {
+      toast({ title: "Preencha o email do responsável", variant: "destructive" });
+      return;
+    }
+    const guardianName = guardianRef.current.fullName?.trim() || userName;
     setSendingTest(true);
     try {
       const { error } = await supabase.functions.invoke("send-enrollment-email", {
-        body: { email: user.email, name: userName },
+        body: { email: targetEmail, name: guardianName },
       });
       if (error) throw error;
       toast({
         title: "Email de teste enviado!",
-        description: `Verifique a caixa de entrada de ${user.email}`,
+        description: `Verifique a caixa de entrada de ${targetEmail}`,
       });
     } catch (err: any) {
       console.error(err);
