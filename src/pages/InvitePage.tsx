@@ -172,8 +172,10 @@ const InvitePage = () => {
                     type="text"
                     required
                     value={inviteCode}
-                    readOnly
-                    className="w-full pl-10 pr-4 py-3 rounded-lg border border-border bg-muted text-foreground text-sm outline-none transition font-mono tracking-widest cursor-not-allowed opacity-70"
+                    onChange={(e) => { setInviteCode(e.target.value); setVerified(null); }}
+                    disabled={verified === true}
+                    className="w-full pl-10 pr-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition font-mono tracking-widest disabled:opacity-60"
+                    placeholder="código de convite"
                   />
                 </div>
               </div>
