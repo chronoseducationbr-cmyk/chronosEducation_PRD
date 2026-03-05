@@ -1,14 +1,24 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
-import { GraduationCap, Mail, MapPin, Calendar, Save } from "lucide-react";
+import { GraduationCap, Mail, MapPin, Calendar } from "lucide-react";
 
-const StudentDataSection = () => {
+export interface StudentData {
+  studentName: string;
+  studentBirthDate: string;
+  studentEmail: string;
+  studentAddress: string;
+  studentSchool: string;
+  studentGraduationYear: string;
+}
+
+interface Props {
+  onChange?: (data: StudentData) => void;
+}
+
+const StudentDataSection = ({ onChange }: Props) => {
   const { user } = useAuth();
-  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
 
   const [studentName, setStudentName] = useState("");
   const [studentBirthDate, setStudentBirthDate] = useState("");
@@ -37,30 +47,9 @@ const StudentDataSection = () => {
     fetchProfile();
   }, []);
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
-    setSaving(true);
-
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        student_name: studentName.trim(),
-        student_birth_date: studentBirthDate || null,
-        student_email: studentEmail.trim(),
-        student_address: studentAddress.trim(),
-        student_school: studentSchool.trim(),
-        student_graduation_year: studentGraduationYear ? parseInt(studentGraduationYear, 10) : null,
-      } as any)
-      .eq("user_id", user.id);
-
-    if (error) {
-      toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: "Dados do aluno salvos!", description: "Informações atualizadas com sucesso." });
-    }
-    setSaving(false);
-  };
+  useEffect(() => {
+    onChange?.({ studentName, studentBirthDate, studentEmail, studentAddress, studentSchool, studentGraduationYear });
+  }, [studentName, studentBirthDate, studentEmail, studentAddress, studentSchool, studentGraduationYear]);
 
   const inputClasses = "w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition";
 
@@ -73,7 +62,7 @@ const StudentDataSection = () => {
   }
 
   return (
-    <form onSubmit={handleSave}>
+    <div>
       <h2 className="font-heading text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
         <GraduationCap size={20} className="text-secondary" />
         Dados do Aluno
@@ -155,16 +144,8 @@ const StudentDataSection = () => {
             />
           </div>
         </div>
-        <button
-          type="submit"
-          disabled={saving}
-          className="mt-5 bg-secondary text-secondary-foreground font-semibold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-2 text-sm"
-        >
-          <Save size={16} />
-          {saving ? "Salvando..." : "Salvar dados do aluno"}
-        </button>
       </div>
-    </form>
+    </div>
   );
 };
 

@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
-import { Users, Mail, Phone, FileText, Save } from "lucide-react";
+import { Users, Mail, Phone, FileText } from "lucide-react";
 
-const GuardianDataSection = () => {
+export interface GuardianData {
+  fullName: string;
+  email: string;
+  phone: string;
+  cpf: string;
+}
+
+interface Props {
+  onChange?: (data: GuardianData) => void;
+}
+
+const GuardianDataSection = ({ onChange }: Props) => {
   const { user } = useAuth();
-  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,34 +43,16 @@ const GuardianDataSection = () => {
     fetchProfile();
   }, [user]);
 
+  useEffect(() => {
+    onChange?.({ fullName, email, phone, cpf });
+  }, [fullName, email, phone, cpf]);
+
   const formatCpf = (value: string) => {
     const digits = value.replace(/\D/g, "").slice(0, 11);
     if (digits.length <= 3) return digits;
     if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`;
     if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`;
     return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
-  };
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
-    setSaving(true);
-
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        full_name: fullName.trim(),
-        email: email.trim(),
-        phone: phone.trim(),
-      })
-      .eq("user_id", user.id);
-
-    if (error) {
-      toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: "Dados do responsável salvos!", description: "Informações atualizadas com sucesso." });
-    }
-    setSaving(false);
   };
 
   const inputClasses = "w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition";
@@ -76,7 +66,7 @@ const GuardianDataSection = () => {
   }
 
   return (
-    <form onSubmit={handleSave}>
+    <div>
       <h2 className="font-heading text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
         <Users size={20} className="text-secondary" />
         Dados de Pai/Mãe ou Responsável
@@ -137,16 +127,8 @@ const GuardianDataSection = () => {
             </div>
           </div>
         </div>
-        <button
-          type="submit"
-          disabled={saving}
-          className="mt-5 bg-secondary text-secondary-foreground font-semibold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-2 text-sm"
-        >
-          <Save size={16} />
-          {saving ? "Salvando..." : "Salvar dados do responsável"}
-        </button>
       </div>
-    </form>
+    </div>
   );
 };
 
