@@ -60,20 +60,14 @@ const DashboardPage = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
-  const [profile, setProfile] = useState<any>(null);
+
+  const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
+  const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "" });
+
+  const handleGuardianChange = useCallback((data: GuardianData) => { guardianRef.current = data; }, []);
+  const handleStudentChange = useCallback((data: StudentData) => { studentRef.current = data; }, []);
 
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Aluno";
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("full_name, email, phone, student_name, student_email, student_birth_date, student_address, student_school, student_graduation_year")
-        .maybeSingle();
-      if (data) setProfile(data);
-    };
-    fetchProfile();
-  }, []);
 
   const handlePayment = async () => {
     if (!selectedMethod || !profile) {
