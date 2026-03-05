@@ -333,6 +333,9 @@ const DashboardPage = () => {
               {sendingTest ? "Enviando..." : "Enviar para teste"}
             </button>
           </div>
+          </div>
+        </div>
+      </div>
 
       {/* Email preview dialog - Responsável */}
       <Dialog open={showPreview} onOpenChange={setShowPreview}>
