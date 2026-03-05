@@ -278,21 +278,31 @@ async function handleWebhook(req: Request): Promise<Response> {
     })
   }
 
+  const emailPayload = {
+    run_id,
+    to: payload.data.email,
+    from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+    sender_domain: SENDER_DOMAIN,
+    subject: EMAIL_SUBJECTS[emailType] || 'Notification',
+    html,
+    text,
+    purpose: 'transactional',
+  }
+  
+  console.log('Sending email with payload', {
+    run_id,
+    to: emailPayload.to,
+    from: emailPayload.from,
+    sender_domain: emailPayload.sender_domain,
+    subject: emailPayload.subject,
+    callbackUrl,
+    htmlLength: html.length,
+  })
+
   let result: { message_id?: string }
   try {
-    result = await sendLovableEmail(
-      {
-        run_id,
-        to: payload.data.email,
-        from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
-        sender_domain: SENDER_DOMAIN,
-        subject: EMAIL_SUBJECTS[emailType] || 'Notification',
-        html,
-        text,
-        purpose: 'transactional',
-      },
-      { apiKey, sendUrl: callbackUrl }
-    )
+    result = await sendLovableEmail(emailPayload, { apiKey, sendUrl: callbackUrl })
+    console.log('sendLovableEmail raw result', JSON.stringify(result))
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to send email'
     console.error('Email API error', { error: message, run_id })
