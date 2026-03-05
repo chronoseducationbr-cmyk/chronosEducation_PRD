@@ -176,15 +176,6 @@ const LoginPage = () => {
             Continuar com Google
           </button>
 
-          <p className="text-sm text-center text-muted-foreground mt-6">
-            {isLogin ? "Ainda não tem conta?" : "Já tem uma conta?"}{" "}
-            <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-secondary font-semibold hover:underline"
-            >
-              {isLogin ? "Criar conta" : "Entrar"}
-            </button>
-          </p>
         </div>
       </div>
     </div>
