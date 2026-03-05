@@ -198,8 +198,8 @@ const InvitePage = () => {
                     <span>Convite inválido ou expirado</span>
                   </div>
                   <p className="text-muted-foreground pl-[26px]">
-                    Verifique na sua conta de email o convite recebido da Chronos Education. 
-                    O código de convite encontra-se no link do botão "Aceitar Convite".
+                    Verifique na sua conta de email o convite recebido da Chronos Education 
+                    e aceda através do botão "Aceitar Convite" que recebeu no seu email.
                   </p>
                   <p className="text-muted-foreground pl-[26px]">
                     💡 Caso não encontre o email, verifique a pasta de <strong>spam</strong> ou <strong>lixo eletrônico</strong>.
