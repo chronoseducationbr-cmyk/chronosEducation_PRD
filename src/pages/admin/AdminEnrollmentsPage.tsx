@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Search, Upload, Download, FileText } from "lucide-react";
+import { GraduationCap, Search, Upload, Download, FileText, Info } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +10,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
+
+interface Guardian {
+  full_name: string;
+  email: string | null;
+  phone: string | null;
+}
 
 interface Enrollment {
   id: string;
@@ -32,6 +43,7 @@ interface Enrollment {
   contract_url: string | null;
   contract_sent_at: string | null;
   contract_signed_at: string | null;
+  guardian?: Guardian;
 }
 
 const statuses = [
@@ -64,7 +76,25 @@ const AdminEnrollmentsPage = () => {
       .from("enrollments")
       .select("*")
       .order("created_at", { ascending: false });
-    setEnrollments((data as Enrollment[]) || []);
+    const enrs = (data as Enrollment[]) || [];
+
+    // Fetch guardian info from profiles
+    const userIds = [...new Set(enrs.map((e) => e.user_id))];
+    if (userIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("user_id, full_name, email, phone")
+        .in("user_id", userIds);
+      const guardianMap: Record<string, Guardian> = {};
+      (profiles || []).forEach((p: any) => {
+        guardianMap[p.user_id] = { full_name: p.full_name, email: p.email, phone: p.phone };
+      });
+      enrs.forEach((e) => {
+        e.guardian = guardianMap[e.user_id];
+      });
+    }
+
+    setEnrollments(enrs);
     setLoading(false);
   };
 
@@ -189,6 +219,32 @@ const AdminEnrollmentsPage = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 flex-wrap">
                     <p className="font-semibold text-foreground">{e.student_name || "Sem nome"}</p>
+                    {e.guardian && (
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-muted hover:bg-muted-foreground/20 transition-colors" title="Dados do responsável">
+                            <Info size={12} className="text-muted-foreground" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-64 p-3" side="right">
+                          <p className="text-xs font-semibold text-muted-foreground mb-2">Responsável</p>
+                          <div className="space-y-1.5 text-sm">
+                            <div>
+                              <span className="text-muted-foreground text-xs">Nome:</span>{" "}
+                              <span className="text-foreground font-medium">{e.guardian.full_name || "—"}</span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground text-xs">Email:</span>{" "}
+                              <span className="text-foreground font-medium">{e.guardian.email || "—"}</span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground text-xs">Telefone:</span>{" "}
+                              <span className="text-foreground font-medium">{e.guardian.phone || "—"}</span>
+                            </div>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    )}
                     <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
                       {e.status}
                     </span>
