@@ -65,6 +65,8 @@ const AdminPaymentsPage = () => {
   const [createForm, setCreateForm] = useState({ type: "tuition", count: "1", startDate: "" });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadTarget, setUploadTarget] = useState<string | null>(null);
+  const [editingAmount, setEditingAmount] = useState<string | null>(null);
+  const [editAmountValue, setEditAmountValue] = useState("");
 
   const load = async () => {
     setLoading(true);
@@ -109,6 +111,25 @@ const AdminPaymentsPage = () => {
       toast({ title: "Estado atualizado" });
       loadInstallments(enrollmentId);
     }
+  };
+
+  const saveAmount = async (instId: string, enrollmentId: string) => {
+    const cents = Math.round(parseFloat(editAmountValue || "0") * 100);
+    if (isNaN(cents) || cents < 0) {
+      toast({ title: "Valor inválido", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("installments")
+      .update({ amount_cents: cents } as any)
+      .eq("id", instId);
+    if (error) {
+      toast({ title: "Erro ao atualizar valor", variant: "destructive" });
+    } else {
+      toast({ title: "Valor atualizado" });
+      loadInstallments(enrollmentId);
+    }
+    setEditingAmount(null);
   };
 
   const handleUploadBoleto = async (file: File) => {
@@ -279,7 +300,43 @@ const AdminPaymentsPage = () => {
                                 <tr key={inst.id} className="border-b border-border/50 last:border-0">
                                   <td className="py-2 pr-2 text-foreground font-medium">{typeLabels[inst.type] || inst.type}</td>
                                   <td className="py-2 pr-2 text-foreground">{inst.installment_number}</td>
-                                  <td className="py-2 pr-2 text-foreground font-medium">{inst.amount_cents > 0 ? `$${(inst.amount_cents / 100).toFixed(0)}` : "—"}</td>
+                                  <td className="py-2 pr-2">
+                                    {editingAmount === inst.id ? (
+                                      <div className="flex items-center gap-1">
+                                        <span className="text-foreground text-[10px]">$</span>
+                                        <input
+                                          type="number"
+                                          step="0.01"
+                                          min="0"
+                                          className="w-16 h-6 text-[10px] border border-border rounded px-1 bg-background text-foreground"
+                                          value={editAmountValue}
+                                          onChange={(ev) => setEditAmountValue(ev.target.value)}
+                                          onKeyDown={(ev) => {
+                                            if (ev.key === "Enter") saveAmount(inst.id, e.id);
+                                            if (ev.key === "Escape") setEditingAmount(null);
+                                          }}
+                                          autoFocus
+                                        />
+                                        <button
+                                          onClick={() => saveAmount(inst.id, e.id)}
+                                          className="text-secondary hover:text-secondary/80 text-[10px] font-semibold"
+                                        >
+                                          ✓
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <button
+                                        onClick={() => {
+                                          setEditingAmount(inst.id);
+                                          setEditAmountValue((inst.amount_cents / 100).toString());
+                                        }}
+                                        className="text-foreground font-medium hover:text-secondary transition-colors cursor-pointer"
+                                        title="Clique para editar"
+                                      >
+                                        {inst.amount_cents > 0 ? `$${(inst.amount_cents / 100).toFixed(0)}` : "—"}
+                                      </button>
+                                    )}
+                                  </td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.due_date)}</td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.paid_at)}</td>
                                   <td className="py-2 pr-2">
