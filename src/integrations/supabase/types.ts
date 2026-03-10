@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          inscription_fee_cents: number
           referred_by_email: string | null
           status: string
           student_address: string | null
@@ -26,12 +27,17 @@ export type Database = {
           student_graduation_year: number | null
           student_name: string
           student_school: string | null
+          summercamp_installment_cents: number
+          summercamp_installments: number
+          tuition_installment_cents: number
+          tuition_installments: number
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
+          inscription_fee_cents?: number
           referred_by_email?: string | null
           status?: string
           student_address?: string | null
@@ -40,12 +46,17 @@ export type Database = {
           student_graduation_year?: number | null
           student_name?: string
           student_school?: string | null
+          summercamp_installment_cents?: number
+          summercamp_installments?: number
+          tuition_installment_cents?: number
+          tuition_installments?: number
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
+          inscription_fee_cents?: number
           referred_by_email?: string | null
           status?: string
           student_address?: string | null
@@ -54,6 +65,10 @@ export type Database = {
           student_graduation_year?: number | null
           student_name?: string
           student_school?: string | null
+          summercamp_installment_cents?: number
+          summercamp_installments?: number
+          tuition_installment_cents?: number
+          tuition_installments?: number
           updated_at?: string
           user_id?: string
         }

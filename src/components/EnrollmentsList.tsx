@@ -14,6 +14,11 @@ interface Enrollment {
   referred_by_email: string;
   status: string;
   created_at: string;
+  inscription_fee_cents: number;
+  tuition_installment_cents: number;
+  tuition_installments: number;
+  summercamp_installment_cents: number;
+  summercamp_installments: number;
 }
 
 interface Props {
@@ -121,13 +126,21 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                 {isExpanded && (
                   <div className="px-4 pb-4 border-t border-border">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 text-sm">
-                      <Detail label="Email" value={e.student_email} />
-                      <Detail label="Data de nascimento" value={e.student_birth_date || ""} />
-                      <Detail label="Morada" value={e.student_address} />
-                      <Detail label="Escola" value={e.student_school} />
-                      <Detail label="Ano de conclusão" value={e.student_graduation_year?.toString() || ""} />
-                      <Detail label="Indicado por" value={e.referred_by_email} />
-                    </div>
+                       <Detail label="Email" value={e.student_email} />
+                       <Detail label="Data de nascimento" value={e.student_birth_date || ""} />
+                       <Detail label="Morada" value={e.student_address} />
+                       <Detail label="Escola" value={e.student_school} />
+                       <Detail label="Ano de conclusão" value={e.student_graduation_year?.toString() || ""} />
+                       <Detail label="Indicado por" value={e.referred_by_email} />
+                     </div>
+                     <div className="mt-3 pt-3 border-t border-border">
+                       <p className="text-xs font-semibold text-muted-foreground mb-2">Valores</p>
+                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                         <Detail label="Inscrição" value={`$${(e.inscription_fee_cents / 100).toFixed(0)}`} />
+                         <Detail label={`Aulas Online (${e.tuition_installments}x)`} value={`$${(e.tuition_installment_cents / 100).toFixed(0)}`} />
+                         <Detail label={`Summer Camp (${e.summercamp_installments}x)`} value={`$${(e.summercamp_installment_cents / 100).toFixed(0)}`} />
+                       </div>
+                     </div>
                   </div>
                 )}
               </div>
