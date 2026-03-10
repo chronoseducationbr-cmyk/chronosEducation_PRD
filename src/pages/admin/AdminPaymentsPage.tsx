@@ -113,6 +113,25 @@ const AdminPaymentsPage = () => {
     }
   };
 
+  const saveAmount = async (instId: string, enrollmentId: string) => {
+    const cents = Math.round(parseFloat(editAmountValue || "0") * 100);
+    if (isNaN(cents) || cents < 0) {
+      toast({ title: "Valor inválido", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("installments")
+      .update({ amount_cents: cents } as any)
+      .eq("id", instId);
+    if (error) {
+      toast({ title: "Erro ao atualizar valor", variant: "destructive" });
+    } else {
+      toast({ title: "Valor atualizado" });
+      loadInstallments(enrollmentId);
+    }
+    setEditingAmount(null);
+  };
+
   const handleUploadBoleto = async (file: File) => {
     if (!uploadTarget) return;
     const instId = uploadTarget;
