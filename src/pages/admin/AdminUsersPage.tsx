@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, Users } from "lucide-react";
+import { Search, Users, Send } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 interface Profile {
   id: string;
@@ -13,9 +22,13 @@ interface Profile {
 }
 
 const AdminUsersPage = () => {
+  const { toast } = useToast();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -29,6 +42,27 @@ const AdminUsersPage = () => {
     };
     load();
   }, []);
+
+  const handleSendInvite = async () => {
+    if (!inviteEmail.trim()) {
+      toast({ title: "Email é obrigatório", variant: "destructive" });
+      return;
+    }
+    setSending(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-invite", {
+        body: { email: inviteEmail.trim() },
+      });
+      if (error) throw error;
+      toast({ title: "Convite enviado com sucesso", description: `Email enviado para ${inviteEmail}` });
+      setInviteEmail("");
+      setShowInviteDialog(false);
+    } catch (err: any) {
+      toast({ title: "Erro ao enviar convite", description: err.message || "Tente novamente", variant: "destructive" });
+    } finally {
+      setSending(false);
+    }
+  };
 
   const formatDate = (d: string) => {
     const dt = new Date(d);
@@ -44,9 +78,19 @@ const AdminUsersPage = () => {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="font-heading text-2xl font-bold text-foreground">Utilizadores</h1>
-        <p className="text-sm text-muted-foreground">{profiles.length} utilizadores registados</p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="font-heading text-2xl font-bold text-foreground">Utilizadores</h1>
+          <p className="text-sm text-muted-foreground">{profiles.length} utilizadores registados</p>
+        </div>
+        <Button
+          onClick={() => setShowInviteDialog(true)}
+          className="flex items-center gap-2"
+          size="sm"
+        >
+          <Send size={14} />
+          Enviar Convite
+        </Button>
       </div>
 
       <div className="relative mb-4 max-w-sm">
@@ -80,6 +124,35 @@ const AdminUsersPage = () => {
           )}
         </div>
       )}
+
+      {/* Invite Dialog */}
+      <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Enviar Convite</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <p className="text-sm text-muted-foreground">
+              Introduza o email do utilizador que pretende convidar para a plataforma.
+            </p>
+            <Input
+              type="email"
+              placeholder="email@exemplo.com"
+              value={inviteEmail}
+              onChange={(e) => setInviteEmail(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSendInvite()}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowInviteDialog(false)} disabled={sending}>
+              Cancelar
+            </Button>
+            <Button onClick={handleSendInvite} disabled={sending}>
+              {sending ? "A enviar..." : "Enviar Convite"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
