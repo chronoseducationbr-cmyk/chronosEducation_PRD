@@ -60,6 +60,7 @@ const statusConfig: Record<string, { label: string; icon: typeof Clock; color: s
 
 const AdminPaymentsPage = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [installments, setInstallments] = useState<Record<string, Installment[]>>({});
