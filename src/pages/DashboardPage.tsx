@@ -79,6 +79,7 @@ const DashboardPage = () => {
               student_graduation_year: s.studentGraduationYear,
             },
             payment_method: "Não especificado",
+            referred_by_email: referralRef.current.trim(),
           },
         }),
       ]);
