@@ -51,6 +51,7 @@ const DashboardPage = () => {
           student_address: s.studentAddress.trim(),
           student_school: s.studentSchool.trim(),
           student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
+          referred_by_email: referralRef.current.trim(),
         } as any)
         .eq("user_id", user.id);
 
