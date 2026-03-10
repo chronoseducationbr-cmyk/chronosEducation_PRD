@@ -225,35 +225,37 @@ const AdminEnrollmentsPage = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 flex-wrap">
                       <p className="font-semibold text-foreground">{e.student_name || "Sem nome"}</p>
-                    {e.guardian && (
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-muted hover:bg-muted-foreground/20 transition-colors" title="Dados do responsável">
-                            <Info size={12} className="text-muted-foreground" />
-                          </button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-64 p-3" side="right">
-                          <p className="text-xs font-semibold text-muted-foreground mb-2">Responsável</p>
-                          <div className="space-y-1.5 text-sm">
-                            <div>
-                              <span className="text-muted-foreground text-xs">Nome:</span>{" "}
-                              <span className="text-foreground font-medium">{e.guardian.full_name || "—"}</span>
+                      {e.guardian && (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-muted hover:bg-muted-foreground/20 transition-colors" title="Dados do responsável">
+                              <Info size={12} className="text-muted-foreground" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-64 p-3" side="right">
+                            <p className="text-xs font-semibold text-muted-foreground mb-2">Responsável</p>
+                            <div className="space-y-1.5 text-sm">
+                              <div>
+                                <span className="text-muted-foreground text-xs">Nome:</span>{" "}
+                                <span className="text-foreground font-medium">{e.guardian.full_name || "—"}</span>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground text-xs">Email:</span>{" "}
+                                <span className="text-foreground font-medium">{e.guardian.email || "—"}</span>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground text-xs">Telefone:</span>{" "}
+                                <span className="text-foreground font-medium">{e.guardian.phone || "—"}</span>
+                              </div>
                             </div>
-                            <div>
-                              <span className="text-muted-foreground text-xs">Email:</span>{" "}
-                              <span className="text-foreground font-medium">{e.guardian.email || "—"}</span>
-                            </div>
-                            <div>
-                              <span className="text-muted-foreground text-xs">Telefone:</span>{" "}
-                              <span className="text-foreground font-medium">{e.guardian.phone || "—"}</span>
-                            </div>
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    )}
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
-                      {e.status}
-                    </span>
+                          </PopoverContent>
+                        </Popover>
+                      )}
+                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
+                        {e.status}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">{e.student_email || "—"}</p>
                   </div>
                   <div className="shrink-0 w-48" onClick={(ev) => ev.stopPropagation()}>
                     <Select value={e.status} onValueChange={(v) => updateStatus(e.id, v)}>
