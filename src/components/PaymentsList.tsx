@@ -105,7 +105,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
             className="bg-card rounded-xl border border-border shadow-card overflow-hidden"
           >
             <button
-              onClick={() => setExpandedId(isExpanded ? null : e.id)}
+              onClick={() => handleExpand(e.id)}
               className="w-full flex items-center gap-4 p-4 text-left hover:bg-muted/30 transition-colors"
             >
               <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
