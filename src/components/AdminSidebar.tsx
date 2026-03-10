@@ -1,4 +1,4 @@
-import { GraduationCap, CreditCard, Users, Home, LogOut } from "lucide-react";
+import { GraduationCap, CreditCard, Users, LogOut } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
