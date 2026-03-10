@@ -144,6 +144,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                         </div>
                       </div>
                      )}
+                     <InstallmentsList enrollmentId={e.id} />
                   </div>
                 )}
               </div>
