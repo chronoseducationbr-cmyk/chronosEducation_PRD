@@ -70,14 +70,6 @@ export function AdminSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/" className="hover:bg-muted/50">
-                <Home className="mr-2 h-4 w-4" />
-                {!collapsed && <span>Voltar ao site</span>}
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
             <SidebarMenuButton onClick={signOut} className="hover:bg-muted/50 cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
               {!collapsed && <span>Sair</span>}
