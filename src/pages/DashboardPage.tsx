@@ -218,8 +218,6 @@ const DashboardPage = () => {
         </Tabs>
       </div>
     </div>
-      </div>
-    </div>
   );
 };
 
