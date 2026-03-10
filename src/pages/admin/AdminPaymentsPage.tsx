@@ -28,6 +28,8 @@ interface Enrollment {
   tuition_installments: number;
   summercamp_installment_cents: number;
   summercamp_installments: number;
+  user_id: string;
+  guardian_name?: string;
 }
 
 interface Installment {
@@ -77,7 +79,22 @@ const AdminPaymentsPage = () => {
       .from("enrollments")
       .select("*")
       .order("created_at", { ascending: false });
-    setEnrollments((data as Enrollment[]) || []);
+    const enrs = (data as Enrollment[]) || [];
+    
+    // Load guardian names from profiles
+    const userIds = [...new Set(enrs.map((e) => e.user_id))];
+    if (userIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("user_id, full_name")
+        .in("user_id", userIds);
+      const nameMap = (profiles || []).reduce<Record<string, string>>((acc, p: any) => {
+        acc[p.user_id] = p.full_name;
+        return acc;
+      }, {});
+      enrs.forEach((e) => { e.guardian_name = nameMap[e.user_id] || ""; });
+    }
+    setEnrollments(enrs);
     setLoading(false);
   };
 
@@ -282,6 +299,9 @@ const AdminPaymentsPage = () => {
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-foreground">{e.student_name}</p>
                     <p className="text-xs text-muted-foreground">{e.student_email || "—"}</p>
+                    {e.guardian_name && (
+                      <p className="text-xs text-muted-foreground">Responsável: {e.guardian_name}</p>
+                    )}
                   </div>
                   <span className="text-xs text-muted-foreground">{insts.length || "—"} prestações</span>
                   {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
