@@ -90,6 +90,7 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
               <thead>
                 <tr className="border-b border-border">
                   <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">#</th>
+                  <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Valor</th>
                   <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Vencimento</th>
                   <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Pago em</th>
                   <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Estado</th>
