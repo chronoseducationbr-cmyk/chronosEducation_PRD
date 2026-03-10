@@ -148,6 +148,15 @@ const AdminPaymentsPage = () => {
     const count = parseInt(createForm.count, 10);
     if (!count || count < 1) return;
 
+    // Get amount from enrollment based on type
+    const enrollment = enrollments.find((e) => e.id === showCreateDialog);
+    let amountCents = 0;
+    if (enrollment) {
+      if (createForm.type === "inscription_fee") amountCents = enrollment.inscription_fee_cents;
+      else if (createForm.type === "tuition") amountCents = enrollment.tuition_installment_cents;
+      else if (createForm.type === "summercamp") amountCents = enrollment.summercamp_installment_cents;
+    }
+
     const rows = Array.from({ length: count }, (_, i) => {
       const date = new Date(createForm.startDate);
       date.setMonth(date.getMonth() + i);
@@ -157,6 +166,7 @@ const AdminPaymentsPage = () => {
         installment_number: i + 1,
         due_date: date.toISOString().split("T")[0],
         status: "pending",
+        amount_cents: amountCents,
       };
     });
 
