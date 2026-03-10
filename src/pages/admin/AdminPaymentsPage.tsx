@@ -362,7 +362,11 @@ const AdminPaymentsPage = () => {
                                     )}
                                   </td>
                                   <td className="py-2 pr-2">
-                                    {editingDiscount === inst.id ? (
+                                    {inst.status === "paid" ? (
+                                      <span className="text-muted-foreground">
+                                        {inst.discount_percent > 0 ? `${inst.discount_percent}%` : "—"}
+                                      </span>
+                                    ) : editingDiscount === inst.id ? (
                                       <div className="flex items-center gap-1">
                                         <input
                                           type="number"
