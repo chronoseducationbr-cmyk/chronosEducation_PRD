@@ -107,6 +107,9 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
                       <td className="py-2 pr-2 text-foreground font-medium">
                         {inst.installment_number}
                       </td>
+                      <td className="py-2 pr-2 text-foreground font-medium">
+                        {inst.amount_cents > 0 ? `$${(inst.amount_cents / 100).toFixed(0)}` : "—"}
+                      </td>
                       <td className="py-2 pr-2 text-foreground">
                         {formatDate(inst.due_date)}
                       </td>
