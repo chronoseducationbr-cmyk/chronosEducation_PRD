@@ -8,6 +8,7 @@ interface Referral {
   referred_student_email: string;
   referred_enrollment_id: string;
   referred_name?: string;
+  created_at?: string;
 }
 
 interface Enrollment {
@@ -53,7 +54,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
     if (referrals[enrollmentId]) return;
     const { data } = await supabase
       .from("referrals" as any)
-      .select("referred_student_email, referred_enrollment_id")
+      .select("referred_student_email, referred_enrollment_id, created_at")
       .eq("referrer_enrollment_id", enrollmentId);
     const refs = (data as any[]) || [];
     if (refs.length > 0) {
@@ -166,10 +167,15 @@ const PaymentsList = ({ refreshKey }: Props) => {
                           <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
                             <GraduationCap size={14} />
                           </div>
-                          <div className="min-w-0">
+                          <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-foreground truncate">{ref.referred_name || "—"}</p>
                             <p className="text-xs text-muted-foreground">{ref.referred_student_email}</p>
                           </div>
+                          {ref.created_at && (
+                            <p className="text-xs text-muted-foreground shrink-0">
+                              {new Date(ref.created_at).toLocaleDateString("pt-PT")}
+                            </p>
+                          )}
                         </div>
                       ))}
                     </div>
