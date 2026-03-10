@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { GraduationCap, Search, Upload, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -65,6 +65,7 @@ const statusColors: Record<string, string> = {
 
 const AdminEnrollmentsPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -102,6 +103,14 @@ const AdminEnrollmentsPage = () => {
   };
 
   useEffect(() => { load(); }, []);
+
+  // Auto-expand student from URL param
+  useEffect(() => {
+    const studentId = searchParams.get("student");
+    if (studentId && !loading && enrollments.length > 0 && !expandedId) {
+      setExpandedId(studentId);
+    }
+  }, [searchParams, loading, enrollments]);
 
   const updateStatus = async (id: string, status: string) => {
     const updates: any = { status };

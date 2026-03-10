@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, Upload, Download, FileText, CheckCircle2, Clock, AlertCircle, Plus, ChevronDown, ChevronUp } from "lucide-react";
+import { Search, Upload, Download, FileText, CheckCircle2, Clock, AlertCircle, Plus, ChevronDown, ChevronUp, GraduationCap } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -60,6 +60,7 @@ const statusConfig: Record<string, { label: string; icon: typeof Clock; color: s
 
 const AdminPaymentsPage = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [installments, setInstallments] = useState<Record<string, Installment[]>>({});
@@ -316,6 +317,13 @@ const AdminPaymentsPage = () => {
                     )}
                   </div>
                   <span className="text-xs text-muted-foreground">{insts.length || "—"} prestações</span>
+                  <button
+                    onClick={(ev) => { ev.stopPropagation(); navigate(`/admin/inscricoes?student=${e.id}`); }}
+                    className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
+                    title="Ver inscrição"
+                  >
+                    <GraduationCap size={16} className="text-muted-foreground" />
+                  </button>
                   {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
                 </button>
 
