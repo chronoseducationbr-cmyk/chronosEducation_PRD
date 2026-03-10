@@ -22,6 +22,7 @@ interface PurchaseData {
     student_graduation_year: string;
   };
   payment_method: string;
+  referred_by_email?: string;
 }
 
 const formatDate = () => {
