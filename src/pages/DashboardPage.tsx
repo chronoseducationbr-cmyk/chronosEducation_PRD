@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, User } from "lucide-react";
 import GuardianDataSection, { type GuardianData } from "@/components/GuardianDataSection";
 import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
+import ReferralSection from "@/components/ReferralSection";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,9 +17,11 @@ const DashboardPage = () => {
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "" });
+  const referralRef = useRef("");
 
   const handleGuardianChange = useCallback((data: GuardianData) => { guardianRef.current = data; }, []);
   const handleStudentChange = useCallback((data: StudentData) => { studentRef.current = data; }, []);
+  const handleReferralChange = useCallback((email: string) => { referralRef.current = email; }, []);
 
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Aluno";
 
@@ -48,6 +51,7 @@ const DashboardPage = () => {
           student_address: s.studentAddress.trim(),
           student_school: s.studentSchool.trim(),
           student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
+          referred_by_email: referralRef.current.trim(),
         } as any)
         .eq("user_id", user.id);
 
@@ -75,6 +79,7 @@ const DashboardPage = () => {
               student_graduation_year: s.studentGraduationYear,
             },
             payment_method: "Não especificado",
+            referred_by_email: referralRef.current.trim(),
           },
         }),
       ]);
@@ -133,6 +138,10 @@ const DashboardPage = () => {
 
           <div className="mt-8">
             <StudentDataSection onChange={handleStudentChange} />
+          </div>
+
+          <div className="mt-8">
+            <ReferralSection onChange={handleReferralChange} />
           </div>
 
           <div className="mt-8">

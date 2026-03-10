@@ -22,6 +22,7 @@ interface PurchaseData {
     student_graduation_year: string;
   };
   payment_method: string;
+  referred_by_email?: string;
 }
 
 const formatDate = () => {
@@ -132,7 +133,7 @@ const buildNotificationHtml = (data: PurchaseData) => `
               </table>
 
               <!-- Payment Method -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;border:1px solid #e8ecef;margin-bottom:24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;border:1px solid #e8ecef;margin-bottom:20px;">
                 <tr>
                   <td style="padding:20px 24px;">
                     <h3 style="margin:0 0 8px;font-size:16px;font-weight:700;color:#062a45;">💳 Método de Pagamento</h3>
@@ -140,6 +141,18 @@ const buildNotificationHtml = (data: PurchaseData) => `
                   </td>
                 </tr>
               </table>
+
+              ${data.referred_by_email ? `
+              <!-- Referral -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;border:1px solid #e8ecef;margin-bottom:24px;">
+                <tr>
+                  <td style="padding:20px 24px;">
+                    <h3 style="margin:0 0 8px;font-size:16px;font-weight:700;color:#062a45;">🤝 Indicação</h3>
+                    <p style="margin:0;font-size:15px;color:#1a2b3c;font-weight:600;">${data.referred_by_email}</p>
+                  </td>
+                </tr>
+              </table>
+              ` : ''}
 
               <hr style="border:none;border-top:1px solid #e8ecef;margin:24px 0;" />
 

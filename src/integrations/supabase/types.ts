@@ -150,6 +150,7 @@ export type Database = {
           full_name: string
           id: string
           phone: string | null
+          referred_by_email: string | null
           student_address: string | null
           student_age: number | null
           student_birth_date: string | null
@@ -167,6 +168,7 @@ export type Database = {
           full_name?: string
           id?: string
           phone?: string | null
+          referred_by_email?: string | null
           student_address?: string | null
           student_age?: number | null
           student_birth_date?: string | null
@@ -184,6 +186,7 @@ export type Database = {
           full_name?: string
           id?: string
           phone?: string | null
+          referred_by_email?: string | null
           student_address?: string | null
           student_age?: number | null
           student_birth_date?: string | null
