@@ -39,6 +39,7 @@ interface Installment {
   paid_at: string | null;
   status: string;
   boleto_url: string | null;
+  amount_cents: number;
 }
 
 const typeLabels: Record<string, string> = {
