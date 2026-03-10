@@ -68,6 +68,22 @@ const DashboardPage = () => {
         setPaying(false);
         return;
       }
+
+      // Validate referral email if provided
+      const referral = referralRef.current.trim();
+      if (referral) {
+        const { data: referredEnrollment } = await supabase
+          .from("enrollments")
+          .select("id")
+          .eq("student_email", referral)
+          .maybeSingle();
+
+        if (!referredEnrollment) {
+          toast({ title: "Email de indicação inválido", description: "O email indicado não corresponde a nenhum aluno inscrito.", variant: "destructive" });
+          setPaying(false);
+          return;
+        }
+      }
       // Save guardian profile data
       await supabase
         .from("profiles")
