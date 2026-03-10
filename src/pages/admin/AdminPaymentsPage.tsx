@@ -303,7 +303,7 @@ const AdminPaymentsPage = () => {
             const insts = installments[e.id] || [];
 
             return (
-              <div key={e.id} className="bg-card rounded-xl border border-border overflow-hidden">
+              <div key={e.id} className={`bg-card rounded-xl border-2 overflow-hidden transition-colors ${isExpanded ? "border-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.2)]" : "border-border"}`}>
                 <button
                   onClick={() => toggleExpand(e.id)}
                   className="w-full flex items-center gap-4 p-4 text-left hover:bg-muted/30 transition-colors"
