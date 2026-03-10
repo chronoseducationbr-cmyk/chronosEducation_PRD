@@ -104,6 +104,14 @@ const AdminEnrollmentsPage = () => {
 
   useEffect(() => { load(); }, []);
 
+  // Auto-expand student from URL param
+  useEffect(() => {
+    const studentId = searchParams.get("student");
+    if (studentId && !loading && enrollments.length > 0 && !expandedId) {
+      setExpandedId(studentId);
+    }
+  }, [searchParams, loading, enrollments]);
+
   const updateStatus = async (id: string, status: string) => {
     const updates: any = { status };
     // Auto-set contract_signed_at when status changes to "Contrato assinado"
