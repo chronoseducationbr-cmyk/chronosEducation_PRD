@@ -16,12 +16,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
-const paymentMethods = [
-  { id: "credit", icon: CreditCard, label: "Cartão de Crédito", description: "Visa, Mastercard, Amex" },
-  { id: "pix", icon: QrCode, label: "PIX", description: "Pagamento instantâneo" },
-  { id: "boleto", icon: FileText, label: "Boleto Bancário", description: "Vencimento em 3 dias úteis" },
-  { id: "transfer", icon: Building2, label: "Transferência Bancária", description: "TED ou DOC" },
-];
 
 const buildPreviewHtml = (userName: string) => `
 <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;">
