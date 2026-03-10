@@ -87,87 +87,12 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
 
       {sortedTypes.map((type) => {
         const items = grouped[type];
+        const allPaid = items.every((i) => i.status === "paid");
+
         return (
-          <div key={type} className="mb-8 last:mb-0 bg-card rounded-lg border border-border p-4">
-          <p className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide">
-            {typeLabels[type] || type}
-          </p>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">#</th>
-                  <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Valor</th>
-                  <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Vencimento</th>
-                  <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Pago em</th>
-                  <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Estado</th>
-                  <th className="text-left py-1.5 text-muted-foreground font-medium">Boleto</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((inst) => {
-                  const cfg = statusConfig[inst.status] || statusConfig.pending;
-                  const StatusIcon = cfg.icon;
-
-                  return (
-                    <tr key={inst.id} className="border-b border-border/50 last:border-0">
-                      <td className="py-2 pr-2 text-foreground font-medium">
-                        {inst.installment_number}
-                      </td>
-                      <td className="py-2 pr-2 text-foreground font-medium">
-                        {(() => {
-                          if (inst.amount_cents <= 0) return "—";
-                          const disc = inst.discount_percent || 0;
-                          if (disc > 0) {
-                            const finalCents = Math.round(inst.amount_cents * (1 - disc / 100));
-                            return (
-                              <span className="flex flex-col leading-tight">
-                                <span className="line-through text-muted-foreground text-[10px]">${(inst.amount_cents / 100).toFixed(0)}</span>
-                                <span className="text-green-700">${(finalCents / 100).toFixed(0)} <span className="text-[10px] text-muted-foreground font-normal">(-{disc}%)</span></span>
-                              </span>
-                            );
-                          }
-                          return `$${(inst.amount_cents / 100).toFixed(0)}`;
-                        })()}
-                      </td>
-                      <td className="py-2 pr-2 text-foreground">
-                        {formatDate(inst.due_date)}
-                      </td>
-                      <td className="py-2 pr-2 text-foreground">
-                        {formatDate(inst.paid_at)}
-                      </td>
-                      <td className="py-2 pr-2">
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${cfg.bg} ${cfg.text}`}>
-                          <StatusIcon size={10} />
-                          {cfg.label}
-                        </span>
-                      </td>
-                      <td className="py-2">
-                        {inst.boleto_url ? (
-                          <button
-                            onClick={() => handleDownload(inst.boleto_url!)}
-                            className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 transition-colors font-medium"
-                            title="Descarregar boleto"
-                          >
-                            <Download size={12} />
-                            <span>Download</span>
-                          </button>
-                        ) : (
-                          <span className="text-muted-foreground flex items-center gap-1">
-                            <FileText size={12} />
-                            —
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
+          <TypeSection key={type} type={type} items={items} allPaid={allPaid} formatDate={formatDate} handleDownload={handleDownload} />
         );
+      })}
       })}
     </div>
   );
