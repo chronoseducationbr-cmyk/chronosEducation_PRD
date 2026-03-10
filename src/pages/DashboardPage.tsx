@@ -1,10 +1,11 @@
 import { useState, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, ArrowLeft } from "lucide-react";
 import GuardianDataSection, { type GuardianData } from "@/components/GuardianDataSection";
 import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
 import ReferralSection from "@/components/ReferralSection";
+import EnrollmentsList from "@/components/EnrollmentsList";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,6 +15,8 @@ const DashboardPage = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const [paying, setPaying] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "" });
@@ -25,10 +28,15 @@ const DashboardPage = () => {
 
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Aluno";
 
-  const handlePayment = async () => {
+  const handleSubmitEnrollment = async () => {
     const g = guardianRef.current;
     const s = studentRef.current;
     if (!user) return;
+
+    if (!s.studentName.trim()) {
+      toast({ title: "Preencha o nome do aluno", variant: "destructive" });
+      return;
+    }
 
     const targetEmail = g.email?.trim() || user?.email;
     if (!targetEmail) {
@@ -38,13 +46,21 @@ const DashboardPage = () => {
 
     setPaying(true);
     try {
-      // Save profile data
+      // Save guardian profile data
       await supabase
         .from("profiles")
         .update({
           full_name: g.fullName.trim(),
           email: g.email.trim(),
           phone: g.phone.trim(),
+        } as any)
+        .eq("user_id", user.id);
+
+      // Create enrollment record
+      const { error: enrollError } = await supabase
+        .from("enrollments")
+        .insert({
+          user_id: user.id,
           student_name: s.studentName.trim(),
           student_email: s.studentEmail.trim(),
           student_birth_date: s.studentBirthDate || null,
@@ -52,8 +68,9 @@ const DashboardPage = () => {
           student_school: s.studentSchool.trim(),
           student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
           referred_by_email: referralRef.current.trim(),
-        } as any)
-        .eq("user_id", user.id);
+          status: "Aguarda assinatura de contrato",
+        } as any);
+      if (enrollError) throw enrollError;
 
       const guardianName = g.fullName?.trim() || userName;
 
@@ -85,7 +102,13 @@ const DashboardPage = () => {
       ]);
       if (enrollmentResult.error) throw enrollmentResult.error;
       if (notificationResult.error) throw notificationResult.error;
+
       toast({ title: "Inscrição enviada!", description: "A equipa Chronos foi notificada e entrará em contacto em breve." });
+      setShowForm(false);
+      setRefreshKey((k) => k + 1);
+      // Reset student refs
+      studentRef.current = { studentName: "", studentBirthDate: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "" };
+      referralRef.current = "";
     } catch (err: any) {
       console.error(err);
       toast({ title: "Erro ao processar", description: err.message || "Tente novamente.", variant: "destructive" });
@@ -97,8 +120,8 @@ const DashboardPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="Pagamentos — Chronos Education"
-        description="Gerencie os seus pagamentos do programa Dual Diploma."
+        title="Inscrições — Chronos Education"
+        description="Gerencie as suas inscrições no programa Dual Diploma."
         canonical="/pagamentos"
       />
       {/* Top bar */}
@@ -130,29 +153,51 @@ const DashboardPage = () => {
       </header>
 
       <div className="container-narrow px-4 md:px-8 py-8">
-        <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Pagamentos</h1>
-        <p className="text-muted-foreground mb-8">Compre o Dual Diploma de forma fácil e segura.</p>
+        <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Inscrições</h1>
+        <p className="text-muted-foreground mb-8">Gerencie as inscrições no programa Dual Diploma.</p>
 
         <div className="max-w-lg">
-          <GuardianDataSection onChange={handleGuardianChange} />
+          {!showForm ? (
+            <>
+              <GuardianDataSection onChange={handleGuardianChange} />
+              <div className="mt-8">
+                <EnrollmentsList
+                  onNewEnrollment={() => setShowForm(true)}
+                  refreshKey={refreshKey}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setShowForm(false)}
+                className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
+              >
+                <ArrowLeft size={16} />
+                Voltar às inscrições
+              </button>
 
-          <div className="mt-8">
-            <StudentDataSection onChange={handleStudentChange} />
-          </div>
+              <h2 className="font-heading text-xl font-semibold text-foreground mb-6">
+                Nova Inscrição
+              </h2>
 
-          <div className="mt-8">
-            <ReferralSection onChange={handleReferralChange} />
-          </div>
+              <StudentDataSection onChange={handleStudentChange} />
 
-          <div className="mt-8">
-            <button
-              onClick={handlePayment}
-              disabled={paying}
-              className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {paying ? "Processando..." : "Confirmar Inscrição"}
-            </button>
-          </div>
+              <div className="mt-8">
+                <ReferralSection onChange={handleReferralChange} />
+              </div>
+
+              <div className="mt-8">
+                <button
+                  onClick={handleSubmitEnrollment}
+                  disabled={paying}
+                  className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {paying ? "Processando..." : "Confirmar Inscrição"}
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
