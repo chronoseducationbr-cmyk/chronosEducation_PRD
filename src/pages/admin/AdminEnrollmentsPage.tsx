@@ -65,6 +65,7 @@ const statusColors: Record<string, string> = {
 
 const AdminEnrollmentsPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
