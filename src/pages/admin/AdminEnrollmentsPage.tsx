@@ -227,7 +227,10 @@ const AdminEnrollmentsPage = () => {
                 className={`bg-card rounded-xl border-2 overflow-hidden transition-colors ${isExpanded ? "border-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.2)]" : "border-border"}`}
               >
                 {/* Collapsed row: name + status badge + select + expand */}
-                <div className="flex items-center gap-3 p-4">
+                <div
+                  className="flex items-center gap-3 p-4 cursor-pointer"
+                  onClick={() => setExpandedId(isExpanded ? null : e.id)}
+                >
                   <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
                     <GraduationCap size={20} />
                   </div>
