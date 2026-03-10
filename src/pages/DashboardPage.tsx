@@ -17,6 +17,7 @@ const DashboardPage = () => {
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "" });
+  const referralRef = useRef("");
 
   const handleGuardianChange = useCallback((data: GuardianData) => { guardianRef.current = data; }, []);
   const handleStudentChange = useCallback((data: StudentData) => { studentRef.current = data; }, []);
