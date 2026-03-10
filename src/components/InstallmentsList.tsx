@@ -40,7 +40,6 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
         .from("installments")
         .select("*")
         .eq("enrollment_id", enrollmentId)
-        .order("type")
         .order("installment_number", { ascending: true });
       setInstallments((data as Installment[]) || []);
       setLoading(false);
@@ -66,6 +65,8 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
     return null;
   }
 
+  const typeOrder = ["inscription_fee", "tuition", "summercamp"];
+
   // Group by type
   const grouped = installments.reduce<Record<string, Installment[]>>((acc, inst) => {
     if (!acc[inst.type]) acc[inst.type] = [];
@@ -73,14 +74,20 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
     return acc;
   }, {});
 
+  const sortedTypes = Object.keys(grouped).sort(
+    (a, b) => (typeOrder.indexOf(a) === -1 ? 99 : typeOrder.indexOf(a)) - (typeOrder.indexOf(b) === -1 ? 99 : typeOrder.indexOf(b))
+  );
+
   return (
     <div className="bg-muted/40 rounded-lg p-4">
       <h3 className="text-sm font-bold text-foreground mb-4 tracking-wide uppercase">
         Prestações
       </h3>
 
-      {Object.entries(grouped).map(([type, items]) => (
-        <div key={type} className="mb-5 last:mb-0">
+      {sortedTypes.map((type) => {
+        const items = grouped[type];
+        return (
+          <div key={type} className="mb-5 last:mb-0">
           <p className="text-xs font-semibold text-foreground mb-2 border-b border-border pb-1.5">
             {typeLabels[type] || type}
           </p>
@@ -146,7 +153,8 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
             </table>
           </div>
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
