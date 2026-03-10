@@ -271,68 +271,13 @@ const DashboardPage = () => {
           </div>
 
           <div className="mt-8">
-          <h2 className="font-heading text-lg font-semibold text-foreground mb-3">Forma de pagamento</h2>
-          <div className="bg-card rounded-xl border border-border shadow-card overflow-hidden">
-            {paymentMethods.map((method, index) => (
-              <button
-                key={method.id}
-                onClick={() => setSelectedMethod(method.id)}
-                className={`w-full flex items-center gap-4 p-5 text-left transition-colors ${
-                  index > 0 ? "border-t border-border" : ""
-                } ${selectedMethod === method.id ? "bg-secondary/10 ring-2 ring-secondary ring-inset" : "hover:bg-muted/50"}`}
-              >
-                <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
-                  <method.icon size={20} />
-                </div>
-                <div>
-                  <p className="font-medium text-foreground">{method.label}</p>
-                  <p className="text-sm text-muted-foreground">{method.description}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-
-          <button
-            onClick={handlePayment}
-            disabled={!selectedMethod || paying}
-            className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed mt-4"
-          >
-            {paying ? "Processando..." : "Confirmar Inscrição"}
-          </button>
-
-          {/* Test emails section */}
-          <div className="mt-8 p-5 bg-card rounded-xl border border-border shadow-card">
-            <h3 className="font-heading text-base font-semibold text-foreground mb-1">
-              📧 Emails de teste
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Simule o envio dos dois emails: confirmação para o responsável e notificação para a Chronos.
-            </p>
-            <div className="flex gap-3 mb-3">
-              <button
-                onClick={() => setShowPreview(true)}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-border text-foreground font-medium hover:bg-muted/50 transition-colors text-sm"
-              >
-                <Eye size={16} />
-                Email Responsável
-              </button>
-              <button
-                onClick={() => setShowChronosPreview(true)}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-border text-foreground font-medium hover:bg-muted/50 transition-colors text-sm"
-              >
-                <Eye size={16} />
-                Email Chronos
-              </button>
-            </div>
             <button
-              onClick={handleSendTestEmails}
-              disabled={sendingTest}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-secondary text-secondary-foreground font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+              onClick={handlePayment}
+              disabled={paying}
+              className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Send size={16} />
-              {sendingTest ? "Enviando..." : "Enviar para teste"}
+              {paying ? "Processando..." : "Confirmar Inscrição"}
             </button>
-          </div>
           </div>
         </div>
       </div>
