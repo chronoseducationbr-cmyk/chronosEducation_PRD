@@ -319,6 +319,48 @@ export type Database = {
         }
         Relationships: []
       }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          referred_enrollment_id: string
+          referred_student_email: string
+          referrer_enrollment_id: string
+          referrer_student_email: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          referred_enrollment_id: string
+          referred_student_email: string
+          referrer_enrollment_id: string
+          referrer_student_email: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          referred_enrollment_id?: string
+          referred_student_email?: string
+          referrer_enrollment_id?: string
+          referrer_student_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_referred_enrollment_id_fkey"
+            columns: ["referred_enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "enrollments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_referrer_enrollment_id_fkey"
+            columns: ["referrer_enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "enrollments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
