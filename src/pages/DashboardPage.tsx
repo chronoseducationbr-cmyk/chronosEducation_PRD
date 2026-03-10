@@ -8,13 +8,6 @@ import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
 
 
 const buildPreviewHtml = (userName: string) => `
