@@ -113,6 +113,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             <label className="text-sm font-medium text-foreground block mb-1.5">Ano previsto para fim do secundário</label>
             <input
               type="number"
+              required
               min={2024}
               max={2040}
               value={studentGraduationYear}
