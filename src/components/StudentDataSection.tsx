@@ -87,6 +87,7 @@ const StudentDataSection = ({ onChange }: Props) => {
               <Calendar size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="date"
+                required
                 value={studentBirthDate}
                 onChange={(e) => setStudentBirthDate(e.target.value)}
                 className={`${inputClasses} pl-10`}
