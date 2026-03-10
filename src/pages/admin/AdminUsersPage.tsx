@@ -185,7 +185,10 @@ const AdminUsersPage = () => {
                     <Users size={18} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-foreground truncate">{u.full_name || "Sem nome"}</p>
+                    <p className="font-semibold text-foreground truncate flex items-center gap-1.5">
+                      {u.full_name || "Sem nome"}
+                      {u.is_admin && <ShieldCheck size={14} className="text-primary shrink-0" />}
+                    </p>
                     <p className="text-xs text-muted-foreground">{u.email || "—"}</p>
                   </div>
                   <div className="text-right shrink-0 space-y-0.5">
