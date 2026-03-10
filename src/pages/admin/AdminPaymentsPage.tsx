@@ -317,6 +317,13 @@ const AdminPaymentsPage = () => {
                     )}
                   </div>
                   <span className="text-xs text-muted-foreground">{insts.length || "—"} prestações</span>
+                  <button
+                    onClick={(ev) => { ev.stopPropagation(); navigate(`/admin/inscricoes?student=${e.id}`); }}
+                    className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
+                    title="Ver inscrição"
+                  >
+                    <GraduationCap size={16} className="text-muted-foreground" />
+                  </button>
                   {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
                 </button>
 
