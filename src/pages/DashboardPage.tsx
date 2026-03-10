@@ -152,9 +152,19 @@ const DashboardPage = () => {
         <p className="text-muted-foreground mb-6">Gerencie as inscrições e pagamentos do programa Dual Diploma.</p>
 
         <Tabs defaultValue="inscricoes" className="w-full">
-          <TabsList className="mb-6">
-            <TabsTrigger value="inscricoes">Inscrições</TabsTrigger>
-            <TabsTrigger value="pagamentos">Pagamentos</TabsTrigger>
+          <TabsList className="mb-6 bg-transparent border-0 p-0 gap-6">
+            <TabsTrigger
+              value="inscricoes"
+              className="bg-transparent px-0 py-2 rounded-none shadow-none text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+            >
+              Inscrições
+            </TabsTrigger>
+            <TabsTrigger
+              value="pagamentos"
+              className="bg-transparent px-0 py-2 rounded-none shadow-none text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+            >
+              Pagamentos
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="inscricoes">
