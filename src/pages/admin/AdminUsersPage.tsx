@@ -137,16 +137,21 @@ const AdminUsersPage = () => {
     return { label: "Pendente", icon: Clock, color: "bg-amber-100 text-amber-800" };
   };
 
-  const filteredUsers = users.filter(
+  // Users: only those who have logged in at least once
+  const activeUsers = users.filter((u) => u.last_sign_in_at !== null);
+  const activeUserEmails = new Set(activeUsers.map((u) => u.email?.toLowerCase()));
+
+  const filteredUsers = activeUsers.filter(
     (u) =>
       u.full_name.toLowerCase().includes(search.toLowerCase()) ||
       (u.email?.toLowerCase() || "").includes(search.toLowerCase()) ||
       (u.phone?.toLowerCase() || "").includes(search.toLowerCase())
   );
 
-  const filteredInvites = invitations.filter(
-    (inv) => inv.email.toLowerCase().includes(search.toLowerCase())
-  );
+  // Invites: hide used invites where user has already logged in
+  const filteredInvites = invitations
+    .filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase())))
+    .filter((inv) => inv.email.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div>
