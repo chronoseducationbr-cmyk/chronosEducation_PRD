@@ -152,7 +152,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                                href={e.contract_url}
                                target="_blank"
                                rel="noopener noreferrer"
-                               className="inline-flex items-center gap-1.5 text-secondary hover:text-secondary/80 font-medium text-sm mt-0.5"
+                               className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm mt-0.5"
                              >
                                <Download size={14} />
                                Descarregar contrato
