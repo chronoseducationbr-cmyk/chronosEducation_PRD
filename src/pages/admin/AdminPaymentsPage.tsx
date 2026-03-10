@@ -263,6 +263,7 @@ const AdminPaymentsPage = () => {
                             <tr className="border-b border-border">
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Tipo</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">#</th>
+                              <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Valor</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Vencimento</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Pago em</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Estado</th>
