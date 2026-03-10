@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Search } from "lucide-react";
+import { GraduationCap, Search, Upload, Download, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -28,6 +29,9 @@ interface Enrollment {
   tuition_installments: number;
   summercamp_installment_cents: number;
   summercamp_installments: number;
+  contract_url: string | null;
+  contract_sent_at: string | null;
+  contract_signed_at: string | null;
 }
 
 const statuses = [
@@ -51,6 +55,8 @@ const AdminEnrollmentsPage = () => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadTargetId, setUploadTargetId] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -65,21 +71,63 @@ const AdminEnrollmentsPage = () => {
   useEffect(() => { load(); }, []);
 
   const updateStatus = async (id: string, status: string) => {
+    const updates: any = { status };
+    // Auto-set contract_signed_at when status changes to "Contrato assinado"
+    if (status === "Contrato assinado") {
+      updates.contract_signed_at = new Date().toISOString();
+    }
     const { error } = await supabase
       .from("enrollments")
-      .update({ status } as any)
+      .update(updates)
       .eq("id", id);
     if (error) {
       toast({ title: "Erro ao atualizar estado", variant: "destructive" });
     } else {
       toast({ title: `Estado alterado para "${status}"` });
       setEnrollments((prev) =>
-        prev.map((e) => (e.id === id ? { ...e, status } : e))
+        prev.map((e) => (e.id === id ? { ...e, ...updates } : e))
       );
     }
   };
 
-  const formatDate = (d: string) => {
+  const handleUploadContract = async (file: File) => {
+    if (!uploadTargetId) return;
+    const filePath = `contracts/${uploadTargetId}/${file.name}`;
+    const { error: uploadError } = await supabase.storage
+      .from("contracts")
+      .upload(filePath, file, { upsert: true });
+
+    if (uploadError) {
+      toast({ title: "Erro no upload", description: uploadError.message, variant: "destructive" });
+      return;
+    }
+
+    const { data: urlData } = supabase.storage.from("contracts").getPublicUrl(filePath);
+    const { error } = await supabase
+      .from("enrollments")
+      .update({
+        contract_url: urlData.publicUrl,
+        contract_sent_at: new Date().toISOString(),
+      } as any)
+      .eq("id", uploadTargetId);
+
+    if (error) {
+      toast({ title: "Erro ao guardar contrato", variant: "destructive" });
+    } else {
+      toast({ title: "Contrato carregado com sucesso" });
+      setEnrollments((prev) =>
+        prev.map((e) =>
+          e.id === uploadTargetId
+            ? { ...e, contract_url: urlData.publicUrl, contract_sent_at: new Date().toISOString() }
+            : e
+        )
+      );
+    }
+    setUploadTargetId(null);
+  };
+
+  const formatDate = (d: string | null) => {
+    if (!d) return "—";
     const dt = new Date(d);
     return `${String(dt.getDate()).padStart(2, "0")}/${String(dt.getMonth() + 1).padStart(2, "0")}/${dt.getFullYear()}`;
   };
@@ -108,6 +156,18 @@ const AdminEnrollmentsPage = () => {
           className="pl-9"
         />
       </div>
+
+      <input
+        type="file"
+        ref={fileInputRef}
+        className="hidden"
+        accept=".pdf,.doc,.docx"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) handleUploadContract(file);
+          e.target.value = "";
+        }}
+      />
 
       {loading ? (
         <div className="animate-pulse space-y-3">
@@ -151,6 +211,50 @@ const AdminEnrollmentsPage = () => {
                     <div>
                       <span className="text-muted-foreground">Morada:</span>{" "}
                       <span className="text-foreground font-medium">{e.student_address || "—"}</span>
+                    </div>
+                  </div>
+
+                  {/* Contract section */}
+                  <div className="mt-3 pt-3 border-t border-border">
+                    <p className="text-xs font-semibold text-muted-foreground mb-2">Contrato</p>
+                    <div className="flex items-center gap-4 text-xs flex-wrap">
+                      <div>
+                        <span className="text-muted-foreground">Enviado:</span>{" "}
+                        <span className="text-foreground font-medium">{formatDate(e.contract_sent_at)}</span>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Assinado:</span>{" "}
+                        <span className="text-foreground font-medium">{formatDate(e.contract_signed_at)}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {e.contract_url ? (
+                          <a
+                            href={e.contract_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium"
+                          >
+                            <Download size={12} />
+                            Ver contrato
+                          </a>
+                        ) : (
+                          <span className="text-muted-foreground inline-flex items-center gap-1">
+                            <FileText size={12} />
+                            Sem contrato
+                          </span>
+                        )}
+                        <button
+                          onClick={() => {
+                            setUploadTargetId(e.id);
+                            fileInputRef.current?.click();
+                          }}
+                          className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+                          title="Upload contrato"
+                        >
+                          <Upload size={12} />
+                          Upload
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
