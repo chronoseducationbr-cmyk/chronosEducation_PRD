@@ -279,6 +279,7 @@ const AdminPaymentsPage = () => {
                                 <tr key={inst.id} className="border-b border-border/50 last:border-0">
                                   <td className="py-2 pr-2 text-foreground font-medium">{typeLabels[inst.type] || inst.type}</td>
                                   <td className="py-2 pr-2 text-foreground">{inst.installment_number}</td>
+                                  <td className="py-2 pr-2 text-foreground font-medium">{inst.amount_cents > 0 ? `$${(inst.amount_cents / 100).toFixed(0)}` : "—"}</td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.due_date)}</td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.paid_at)}</td>
                                   <td className="py-2 pr-2">
