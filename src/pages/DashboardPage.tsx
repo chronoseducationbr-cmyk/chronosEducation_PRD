@@ -63,14 +63,18 @@ const DashboardPage = () => {
       }
     }
 
-    // Validate graduation year (must be 2-3 years from current year)
+    // Validate graduation year: November of that year must be at least 16 months from now
     if (s.studentGraduationYear) {
-      const currentYear = new Date().getFullYear();
+      const now = new Date();
       const gradYear = parseInt(s.studentGraduationYear, 10);
-      const minYear = currentYear + 2;
-      const maxYear = currentYear + 3;
-      if (gradYear < minYear || gradYear > maxYear) {
-        toast({ title: "Ano de conclusão inválido", description: `O ano previsto deve ser entre ${minYear} e ${maxYear}.`, variant: "destructive" });
+      const gradDate = new Date(gradYear, 10, 1); // November 1st of graduation year
+      const minDate = new Date(now.getFullYear(), now.getMonth() + 16, 1);
+      if (gradDate < minDate) {
+        const minGradYear = minDate.getMonth() >= 10 ? minDate.getFullYear() : minDate.getFullYear() + (minDate.getMonth() < 10 ? 0 : 1);
+        const earliestYear = new Date(now.getFullYear(), now.getMonth() + 16, 1).getMonth() >= 10
+          ? new Date(now.getFullYear(), now.getMonth() + 16, 1).getFullYear()
+          : new Date(now.getFullYear(), now.getMonth() + 16, 1).getFullYear() + 1;
+        toast({ title: "Ano de conclusão inválido", description: `O ano previsto deve ser ${earliestYear} ou superior.`, variant: "destructive" });
         return;
       }
     }
