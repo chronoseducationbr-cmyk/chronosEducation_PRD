@@ -288,68 +288,92 @@ const AdminEnrollmentsPage = () => {
 
                 {/* Expanded details */}
                 {isExpanded && (
-                  <div className="px-4 pb-4 border-t border-border">
-                    <p className="text-xs text-muted-foreground mt-3 mb-3">{e.student_email || "—"} · Inscrito em {formatDate(e.created_at)}</p>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                      <div>
-                        <span className="text-muted-foreground">Escola:</span>{" "}
-                        <span className="text-foreground font-medium">{e.student_school || "—"}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Ano conclusão:</span>{" "}
-                        <span className="text-foreground font-medium">{e.student_graduation_year || "—"}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Indicação:</span>{" "}
-                        <span className="text-foreground font-medium">{e.referred_by_email || "—"}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Morada:</span>{" "}
-                        <span className="text-foreground font-medium">{e.student_address || "—"}</span>
+                  <div className="px-4 pb-4 border-t border-border space-y-4">
+                    {/* Dados do Aluno */}
+                    <div className="mt-3">
+                      <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Dados do Aluno</p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">
+                        <div>
+                          <p className="text-muted-foreground text-xs">Email</p>
+                          <p className="text-foreground font-medium">{e.student_email || "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground text-xs">Data de nascimento</p>
+                          <p className="text-foreground font-medium">{e.student_birth_date ? formatDate(e.student_birth_date) : "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground text-xs">Escola</p>
+                          <p className="text-foreground font-medium">{e.student_school || "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground text-xs">Ano de conclusão</p>
+                          <p className="text-foreground font-medium">{e.student_graduation_year || "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground text-xs">Morada</p>
+                          <p className="text-foreground font-medium">{e.student_address || "—"}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground text-xs">Indicação</p>
+                          <p className="text-foreground font-medium">{e.referred_by_email || "—"}</p>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Contract section */}
-                    <div className="mt-3 pt-3 border-t border-border">
-                      <p className="text-xs font-semibold text-muted-foreground mb-2">Contrato</p>
-                      <div className="flex items-center gap-4 text-xs flex-wrap">
+                    {/* Inscrição */}
+                    <div>
+                      <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Inscrição</p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">
                         <div>
-                          <span className="text-muted-foreground">Enviado:</span>{" "}
-                          <span className="text-foreground font-medium">{formatDate(e.contract_sent_at)}</span>
+                          <p className="text-muted-foreground text-xs">Data de inscrição</p>
+                          <p className="text-foreground font-medium">{formatDate(e.created_at)}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Contrato */}
+                    <div>
+                      <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Contrato</p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">
+                        <div>
+                          <p className="text-muted-foreground text-xs">Enviado em</p>
+                          <p className="text-foreground font-medium">{formatDate(e.contract_sent_at)}</p>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Assinado:</span>{" "}
-                          <span className="text-foreground font-medium">{formatDate(e.contract_signed_at)}</span>
+                          <p className="text-muted-foreground text-xs">Assinado em</p>
+                          <p className="text-foreground font-medium">{formatDate(e.contract_signed_at)}</p>
                         </div>
-                        <div className="flex items-center gap-2">
-                          {e.contract_url ? (
-                            <a
-                              href={e.contract_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium"
+                        <div>
+                          <p className="text-muted-foreground text-xs">Documento</p>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            {e.contract_url ? (
+                              <a
+                                href={e.contract_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium text-sm"
+                              >
+                                <Download size={14} />
+                                Ver contrato
+                              </a>
+                            ) : (
+                              <span className="text-muted-foreground inline-flex items-center gap-1 text-sm italic">
+                                <FileText size={14} />
+                                Sem contrato
+                              </span>
+                            )}
+                            <button
+                              onClick={() => {
+                                setUploadTargetId(e.id);
+                                fileInputRef.current?.click();
+                              }}
+                              className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors text-sm"
+                              title="Upload contrato"
                             >
-                              <Download size={12} />
-                              Ver contrato
-                            </a>
-                          ) : (
-                            <span className="text-muted-foreground inline-flex items-center gap-1">
-                              <FileText size={12} />
-                              Sem contrato
-                            </span>
-                          )}
-                          <button
-                            onClick={() => {
-                              setUploadTargetId(e.id);
-                              fileInputRef.current?.click();
-                            }}
-                            className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
-                            title="Upload contrato"
-                          >
-                            <Upload size={12} />
-                            Upload
-                          </button>
+                              <Upload size={14} />
+                              Upload
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
