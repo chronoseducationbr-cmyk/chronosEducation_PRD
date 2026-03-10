@@ -1,0 +1,1 @@
+ALTER TABLE public.enrollments ALTER COLUMN summercamp_installments SET DEFAULT 6;
