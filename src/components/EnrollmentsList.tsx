@@ -133,14 +133,16 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                        <Detail label="Ano de conclusão" value={e.student_graduation_year?.toString() || ""} />
                        <Detail label="Indicado por" value={e.referred_by_email} />
                      </div>
-                     <div className="mt-3 pt-3 border-t border-border">
-                       <p className="text-xs font-semibold text-muted-foreground mb-2">Valores</p>
-                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                         <Detail label="Inscrição" value={`$${(e.inscription_fee_cents / 100).toFixed(0)}`} />
-                         <Detail label={`Aulas Online (${e.tuition_installments}x)`} value={`$${(e.tuition_installment_cents / 100).toFixed(0)}`} />
-                         <Detail label={`Summer Camp (${e.summercamp_installments}x)`} value={`$${(e.summercamp_installment_cents / 100).toFixed(0)}`} />
-                       </div>
-                     </div>
+                     {(e.inscription_fee_cents > 0 || e.tuition_installment_cents > 0 || e.summercamp_installment_cents > 0) && (
+                      <div className="mt-3 pt-3 border-t border-border">
+                        <p className="text-xs font-semibold text-muted-foreground mb-2">Valores</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                          <Detail label="Inscrição" value={`$${(e.inscription_fee_cents / 100).toFixed(0)}`} />
+                          <Detail label={`Aulas Online (${e.tuition_installments}x)`} value={`$${(e.tuition_installment_cents / 100).toFixed(0)}`} />
+                          <Detail label={`Summer Camp (${e.summercamp_installments}x)`} value={`$${(e.summercamp_installment_cents / 100).toFixed(0)}`} />
+                        </div>
+                      </div>
+                     )}
                   </div>
                 )}
               </div>
