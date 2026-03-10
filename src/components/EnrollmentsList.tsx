@@ -71,7 +71,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
     <div>
       <div className="flex items-center justify-between mb-3">
         <h2 className="font-heading text-lg font-semibold text-foreground">
-          Inscrições ({enrollments.length})
+          Inscrições <span className="text-[#f9b41f]">({enrollments.length})</span>
         </h2>
         <button
           onClick={onNewEnrollment}
