@@ -107,23 +107,32 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
               >
                 <button
                   onClick={() => setExpandedId(isExpanded ? null : e.id)}
-                  className="w-full flex items-center gap-4 p-4 text-left hover:bg-muted/30 transition-colors"
+                  className="w-full flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-4 text-left hover:bg-muted/30 transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
-                    <GraduationCap size={20} />
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                      <GraduationCap size={20} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-foreground">
+                        {e.student_name || "Sem nome"}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Inscrito em {formatDate(e.created_at)}
+                      </p>
+                    </div>
+                    <div className="sm:hidden shrink-0">
+                      {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground truncate">
-                      {e.student_name || "Sem nome"}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Inscrito em {formatDate(e.created_at)}
-                    </p>
+                  <div className="flex items-center gap-2 pl-[52px] sm:pl-0">
+                    <span className={`shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ${colors.bg} ${colors.text}`}>
+                      {e.status}
+                    </span>
+                    <div className="hidden sm:block">
+                      {isExpanded ? <ChevronUp size={16} className="text-muted-foreground shrink-0" /> : <ChevronDown size={16} className="text-muted-foreground shrink-0" />}
+                    </div>
                   </div>
-                  <span className={`shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ${colors.bg} ${colors.text}`}>
-                    {e.status}
-                  </span>
-                  {isExpanded ? <ChevronUp size={16} className="text-muted-foreground shrink-0" /> : <ChevronDown size={16} className="text-muted-foreground shrink-0" />}
                 </button>
 
                 {isExpanded && (
