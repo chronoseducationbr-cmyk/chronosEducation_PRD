@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Search, Upload, Download, FileText, Info } from "lucide-react";
+import { GraduationCap, Search, Upload, Download, FileText, Info, ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
