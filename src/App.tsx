@@ -39,14 +39,6 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
             <Route path="/termos" element={<TermsPage />} />
 
             {/* Admin routes */}
