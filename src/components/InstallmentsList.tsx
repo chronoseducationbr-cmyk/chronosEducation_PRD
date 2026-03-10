@@ -119,7 +119,7 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
                         {(() => {
                           if (inst.amount_cents <= 0) return "—";
                           const disc = inst.discount_percent || 0;
-                          if (disc > 0 && inst.status !== "paid") {
+                          if (disc > 0) {
                             const finalCents = Math.round(inst.amount_cents * (1 - disc / 100));
                             return (
                               <span className="flex flex-col leading-tight">
