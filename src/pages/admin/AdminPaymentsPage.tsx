@@ -299,6 +299,9 @@ const AdminPaymentsPage = () => {
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-foreground">{e.student_name}</p>
                     <p className="text-xs text-muted-foreground">{e.student_email || "—"}</p>
+                    {e.guardian_name && (
+                      <p className="text-xs text-muted-foreground">Responsável: {e.guardian_name}</p>
+                    )}
                   </div>
                   <span className="text-xs text-muted-foreground">{insts.length || "—"} prestações</span>
                   {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
