@@ -6,6 +6,8 @@ import GuardianDataSection, { type GuardianData } from "@/components/GuardianDat
 import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
 import ReferralSection from "@/components/ReferralSection";
 import EnrollmentsList from "@/components/EnrollmentsList";
+import PaymentsList from "@/components/PaymentsList";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
