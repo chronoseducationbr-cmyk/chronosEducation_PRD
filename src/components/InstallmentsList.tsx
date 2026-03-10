@@ -92,8 +92,6 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
         return (
           <TypeSection key={type} type={type} items={items} allPaid={allPaid} formatDate={formatDate} handleDownload={handleDownload} />
         );
-      })}
-      })}
     </div>
   );
 };
