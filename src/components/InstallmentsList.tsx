@@ -88,8 +88,8 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
       {sortedTypes.map((type) => {
         const items = grouped[type];
         return (
-          <div key={type} className="mb-5 last:mb-0">
-          <p className="text-xs font-semibold text-foreground mb-2 border-b border-border pb-1.5">
+          <div key={type} className="mb-8 last:mb-0 bg-card rounded-lg border border-border p-4">
+          <p className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide">
             {typeLabels[type] || type}
           </p>
 
