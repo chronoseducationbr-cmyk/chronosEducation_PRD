@@ -1,4 +1,4 @@
-import { GraduationCap, CreditCard, Users, Home, LogOut } from "lucide-react";
+import { GraduationCap, CreditCard, Users, LogOut } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -69,14 +69,6 @@ export function AdminSidebar() {
 
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/" className="hover:bg-muted/50">
-                <Home className="mr-2 h-4 w-4" />
-                {!collapsed && <span>Voltar ao site</span>}
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton onClick={signOut} className="hover:bg-muted/50 cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
