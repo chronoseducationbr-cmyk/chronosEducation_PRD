@@ -89,27 +89,32 @@ const PaymentsList = ({ refreshKey }: Props) => {
             </button>
 
             {isExpanded && (
-              <div className="px-4 pb-4 border-t border-border">
+              <div className="px-4 pb-5 border-t border-border space-y-6">
                 {hasValues && (
-                  <div className="mt-3">
-                    <p className="text-xs font-semibold text-muted-foreground mb-2">Resumo de Valores</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                      <div>
-                        <p className="text-muted-foreground text-xs">Inscrição</p>
-                        <p className="text-foreground font-medium">${(e.inscription_fee_cents / 100).toFixed(0)}</p>
+                  <div className="mt-4 bg-muted/40 rounded-lg p-4">
+                    <h3 className="text-sm font-bold text-foreground mb-3 tracking-wide uppercase">
+                      Resumo de Valores
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="bg-card rounded-lg p-3 border border-border">
+                        <p className="text-muted-foreground text-xs mb-0.5">Inscrição</p>
+                        <p className="text-foreground text-lg font-bold">${(e.inscription_fee_cents / 100).toFixed(0)}</p>
                       </div>
-                      <div>
-                        <p className="text-muted-foreground text-xs">Aulas Online ({e.tuition_installments}x)</p>
-                        <p className="text-foreground font-medium">${(e.tuition_installment_cents / 100).toFixed(0)}</p>
+                      <div className="bg-card rounded-lg p-3 border border-border">
+                        <p className="text-muted-foreground text-xs mb-0.5">Aulas Online ({e.tuition_installments}x)</p>
+                        <p className="text-foreground text-lg font-bold">${(e.tuition_installment_cents / 100).toFixed(0)}</p>
                       </div>
-                      <div>
-                        <p className="text-muted-foreground text-xs">Summer Camp ({e.summercamp_installments}x)</p>
-                        <p className="text-foreground font-medium">${(e.summercamp_installment_cents / 100).toFixed(0)}</p>
+                      <div className="bg-card rounded-lg p-3 border border-border">
+                        <p className="text-muted-foreground text-xs mb-0.5">Summer Camp ({e.summercamp_installments}x)</p>
+                        <p className="text-foreground text-lg font-bold">${(e.summercamp_installment_cents / 100).toFixed(0)}</p>
                       </div>
                     </div>
                   </div>
                 )}
-                <InstallmentsList enrollmentId={e.id} />
+
+                <div>
+                  <InstallmentsList enrollmentId={e.id} />
+                </div>
               </div>
             )}
           </div>
