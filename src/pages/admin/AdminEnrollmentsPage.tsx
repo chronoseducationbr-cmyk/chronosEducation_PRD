@@ -76,7 +76,25 @@ const AdminEnrollmentsPage = () => {
       .from("enrollments")
       .select("*")
       .order("created_at", { ascending: false });
-    setEnrollments((data as Enrollment[]) || []);
+    const enrs = (data as Enrollment[]) || [];
+
+    // Fetch guardian info from profiles
+    const userIds = [...new Set(enrs.map((e) => e.user_id))];
+    if (userIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("user_id, full_name, email, phone")
+        .in("user_id", userIds);
+      const guardianMap: Record<string, Guardian> = {};
+      (profiles || []).forEach((p: any) => {
+        guardianMap[p.user_id] = { full_name: p.full_name, email: p.email, phone: p.phone };
+      });
+      enrs.forEach((e) => {
+        e.guardian = guardianMap[e.user_id];
+      });
+    }
+
+    setEnrollments(enrs);
     setLoading(false);
   };
 
