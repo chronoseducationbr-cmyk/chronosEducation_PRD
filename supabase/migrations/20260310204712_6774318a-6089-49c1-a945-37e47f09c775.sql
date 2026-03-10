@@ -1,0 +1,1 @@
+ALTER TABLE public.installments ADD COLUMN discount_percent numeric NOT NULL DEFAULT 0;
