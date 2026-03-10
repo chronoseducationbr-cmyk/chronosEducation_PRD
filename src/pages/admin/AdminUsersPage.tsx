@@ -12,18 +12,18 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 
-interface Profile {
-  id: string;
+interface UserData {
   user_id: string;
-  full_name: string;
   email: string | null;
-  phone: string | null;
+  last_sign_in_at: string | null;
   created_at: string;
+  full_name: string;
+  phone: string | null;
 }
 
 const AdminUsersPage = () => {
   const { toast } = useToast();
-  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [showInviteDialog, setShowInviteDialog] = useState(false);
@@ -33,11 +33,31 @@ const AdminUsersPage = () => {
   useEffect(() => {
     const load = async () => {
       setLoading(true);
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .order("created_at", { ascending: false });
-      setProfiles((data as Profile[]) || []);
+
+      // Fetch auth users (email + last login) and profiles (name + phone) in parallel
+      const [authRes, profilesRes] = await Promise.all([
+        supabase.rpc("get_admin_users"),
+        supabase.from("profiles").select("user_id, full_name, phone"),
+      ]);
+
+      const authUsers = (authRes.data as any[]) || [];
+      const profiles = (profilesRes.data as any[]) || [];
+
+      const profileMap: Record<string, { full_name: string; phone: string | null }> = {};
+      profiles.forEach((p: any) => {
+        profileMap[p.user_id] = { full_name: p.full_name, phone: p.phone };
+      });
+
+      const merged: UserData[] = authUsers.map((u: any) => ({
+        user_id: u.user_id,
+        email: u.email,
+        last_sign_in_at: u.last_sign_in_at,
+        created_at: u.created_at,
+        full_name: profileMap[u.user_id]?.full_name || "",
+        phone: profileMap[u.user_id]?.phone || null,
+      }));
+
+      setUsers(merged);
       setLoading(false);
     };
     load();
@@ -50,7 +70,7 @@ const AdminUsersPage = () => {
     }
     setSending(true);
     try {
-      const { data, error } = await supabase.functions.invoke("create-invite", {
+      const { error } = await supabase.functions.invoke("create-invite", {
         body: { email: inviteEmail.trim() },
       });
       if (error) throw error;
@@ -64,16 +84,23 @@ const AdminUsersPage = () => {
     }
   };
 
-  const formatDate = (d: string) => {
+  const formatDate = (d: string | null) => {
+    if (!d) return "—";
     const dt = new Date(d);
     return `${String(dt.getDate()).padStart(2, "0")}/${String(dt.getMonth() + 1).padStart(2, "0")}/${dt.getFullYear()}`;
   };
 
-  const filtered = profiles.filter(
-    (p) =>
-      p.full_name.toLowerCase().includes(search.toLowerCase()) ||
-      (p.email?.toLowerCase() || "").includes(search.toLowerCase()) ||
-      (p.phone?.toLowerCase() || "").includes(search.toLowerCase())
+  const formatDateTime = (d: string | null) => {
+    if (!d) return "Nunca";
+    const dt = new Date(d);
+    return `${String(dt.getDate()).padStart(2, "0")}/${String(dt.getMonth() + 1).padStart(2, "0")}/${dt.getFullYear()} ${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}`;
+  };
+
+  const filtered = users.filter(
+    (u) =>
+      u.full_name.toLowerCase().includes(search.toLowerCase()) ||
+      (u.email?.toLowerCase() || "").includes(search.toLowerCase()) ||
+      (u.phone?.toLowerCase() || "").includes(search.toLowerCase())
   );
 
   return (
@@ -81,7 +108,7 @@ const AdminUsersPage = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="font-heading text-2xl font-bold text-foreground">Utilizadores</h1>
-          <p className="text-sm text-muted-foreground">{profiles.length} utilizadores registados</p>
+          <p className="text-sm text-muted-foreground">{users.length} utilizadores registados</p>
         </div>
         <Button
           onClick={() => setShowInviteDialog(true)}
@@ -104,18 +131,19 @@ const AdminUsersPage = () => {
         </div>
       ) : (
         <div className="space-y-2">
-          {filtered.map((p) => (
-            <div key={p.id} className="bg-card rounded-xl border border-border p-4 flex items-center gap-4">
+          {filtered.map((u) => (
+            <div key={u.user_id} className="bg-card rounded-xl border border-border p-4 flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                 <Users size={18} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-foreground truncate">{p.full_name || "Sem nome"}</p>
-                <p className="text-xs text-muted-foreground">{p.email || "—"}</p>
+                <p className="font-semibold text-foreground truncate">{u.full_name || "Sem nome"}</p>
+                <p className="text-xs text-muted-foreground">{u.email || "—"}</p>
               </div>
-              <div className="text-right shrink-0">
-                <p className="text-xs text-muted-foreground">{p.phone || "—"}</p>
-                <p className="text-[10px] text-muted-foreground">Registado em {formatDate(p.created_at)}</p>
+              <div className="text-right shrink-0 space-y-0.5">
+                <p className="text-xs text-muted-foreground">{u.phone || "—"}</p>
+                <p className="text-[10px] text-muted-foreground">Último login: {formatDateTime(u.last_sign_in_at)}</p>
+                <p className="text-[10px] text-muted-foreground">Registado em {formatDate(u.created_at)}</p>
               </div>
             </div>
           ))}
@@ -125,7 +153,6 @@ const AdminUsersPage = () => {
         </div>
       )}
 
-      {/* Invite Dialog */}
       <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
