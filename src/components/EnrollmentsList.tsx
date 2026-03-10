@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { GraduationCap, Clock, Plus, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import InstallmentsList from "@/components/InstallmentsList";
 
 interface Enrollment {
   id: string;
@@ -144,7 +143,6 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                         </div>
                       </div>
                      )}
-                     <InstallmentsList enrollmentId={e.id} />
                   </div>
                 )}
               </div>
