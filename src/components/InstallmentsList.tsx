@@ -73,12 +73,14 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
   }, {});
 
   return (
-    <div className="mt-3 pt-3 border-t border-border">
-      <p className="text-xs font-semibold text-muted-foreground mb-3">Pagamentos</p>
+    <div className="bg-muted/40 rounded-lg p-4">
+      <h3 className="text-sm font-bold text-foreground mb-4 tracking-wide uppercase">
+        Prestações
+      </h3>
 
       {Object.entries(grouped).map(([type, items]) => (
-        <div key={type} className="mb-4 last:mb-0">
-          <p className="text-xs font-medium text-foreground mb-2">
+        <div key={type} className="mb-5 last:mb-0">
+          <p className="text-xs font-semibold text-foreground mb-2 border-b border-border pb-1.5">
             {typeLabels[type] || type}
           </p>
 
