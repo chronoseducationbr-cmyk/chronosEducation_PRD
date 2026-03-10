@@ -173,8 +173,8 @@ const AdminUsersPage = () => {
 
       <Tabs defaultValue="users">
         <TabsList>
-          <TabsTrigger value="users">Utilizadores ({users.length})</TabsTrigger>
-          <TabsTrigger value="invites">Convites ({invitations.length})</TabsTrigger>
+          <TabsTrigger value="users">Utilizadores ({activeUsers.length})</TabsTrigger>
+          <TabsTrigger value="invites">Convites ({invitations.filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase()))).length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users" className="mt-4">
