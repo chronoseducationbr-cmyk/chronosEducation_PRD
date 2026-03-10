@@ -16,6 +16,9 @@ export type Database = {
     Tables: {
       enrollments: {
         Row: {
+          contract_sent_at: string | null
+          contract_signed_at: string | null
+          contract_url: string | null
           created_at: string
           id: string
           inscription_fee_cents: number
@@ -35,6 +38,9 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          contract_sent_at?: string | null
+          contract_signed_at?: string | null
+          contract_url?: string | null
           created_at?: string
           id?: string
           inscription_fee_cents?: number
@@ -54,6 +60,9 @@ export type Database = {
           user_id: string
         }
         Update: {
+          contract_sent_at?: string | null
+          contract_signed_at?: string | null
+          contract_url?: string | null
           created_at?: string
           id?: string
           inscription_fee_cents?: number
