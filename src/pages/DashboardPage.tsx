@@ -126,7 +126,7 @@ const DashboardPage = () => {
         .eq("user_id", user.id);
 
       // Create enrollment record
-      const { error: enrollError } = await supabase
+      const { data: newEnrollment, error: enrollError } = await supabase
         .from("enrollments")
         .insert({
           user_id: user.id,
@@ -138,8 +138,28 @@ const DashboardPage = () => {
           student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
           referred_by_email: referralRef.current.trim(),
           status: "Aguarda assinatura de contrato",
-        } as any);
+        } as any)
+        .select("id")
+        .single();
       if (enrollError) throw enrollError;
+
+      // Track referral if a referral email was provided
+      if (referral && newEnrollment) {
+        const { data: referrerEnrollment } = await supabase
+          .from("enrollments")
+          .select("id, student_email")
+          .eq("student_email", referral)
+          .maybeSingle();
+
+        if (referrerEnrollment) {
+          await supabase.from("referrals" as any).insert({
+            referrer_enrollment_id: referrerEnrollment.id,
+            referred_enrollment_id: newEnrollment.id,
+            referrer_student_email: referrerEnrollment.student_email,
+            referred_student_email: s.studentEmail.trim(),
+          });
+        }
+      }
 
       const guardianName = g.fullName?.trim() || userName;
 
