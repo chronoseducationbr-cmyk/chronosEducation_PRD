@@ -224,6 +224,7 @@ const AdminEnrollmentsPage = () => {
                   </div>
                   <div className="flex-1 min-w-0 flex items-center gap-3 flex-wrap">
                     <p className="font-semibold text-foreground">{e.student_name || "Sem nome"}</p>
+                    <span className="text-xs text-muted-foreground">{e.student_email || ""}</span>
                     {e.guardian && (
                       <Popover>
                         <PopoverTrigger asChild>
