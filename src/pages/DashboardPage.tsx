@@ -63,6 +63,18 @@ const DashboardPage = () => {
       }
     }
 
+    // Validate graduation year (must be 2-3 years from current year)
+    if (s.studentGraduationYear) {
+      const currentYear = new Date().getFullYear();
+      const gradYear = parseInt(s.studentGraduationYear, 10);
+      const minYear = currentYear + 2;
+      const maxYear = currentYear + 3;
+      if (gradYear < minYear || gradYear > maxYear) {
+        toast({ title: "Ano de conclusão inválido", description: `O ano previsto deve ser entre ${minYear} e ${maxYear}.`, variant: "destructive" });
+        return;
+      }
+    }
+
     const targetEmail = g.email?.trim() || user?.email;
     if (!targetEmail) {
       toast({ title: "Preencha o email do responsável", variant: "destructive" });
