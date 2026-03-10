@@ -94,10 +94,6 @@ const buildChronosPreviewHtml = (guardian: { fullName: string; email: string; ph
 const DashboardPage = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
-  const [sendingTest, setSendingTest] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
-  const [showChronosPreview, setShowChronosPreview] = useState(false);
-  const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
