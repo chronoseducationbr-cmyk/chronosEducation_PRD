@@ -107,14 +107,17 @@ const DashboardPage = () => {
   const handlePayment = async () => {
     const g = guardianRef.current;
     const s = studentRef.current;
-    if (!selectedMethod) {
-      toast({ title: "Selecione um método de pagamento", variant: "destructive" });
+    if (!user) return;
+
+    const targetEmail = g.email?.trim() || user?.email;
+    if (!targetEmail) {
+      toast({ title: "Preencha o email do responsável", variant: "destructive" });
       return;
     }
-    if (!user) return;
+
     setPaying(true);
     try {
-      // Save profile data automatically
+      // Save profile data
       await supabase
         .from("profiles")
         .update({
@@ -130,27 +133,35 @@ const DashboardPage = () => {
         } as any)
         .eq("user_id", user.id);
 
-      const methodLabel = paymentMethods.find(m => m.id === selectedMethod)?.label || selectedMethod;
-      const { error } = await supabase.functions.invoke("send-purchase-notification", {
-        body: {
-          guardian: {
-            full_name: g.fullName,
-            email: g.email || user?.email || "",
-            phone: g.phone,
-            cpf: g.cpf,
+      const guardianName = g.fullName?.trim() || userName;
+
+      // Send both emails
+      const [enrollmentResult, notificationResult] = await Promise.all([
+        supabase.functions.invoke("send-enrollment-email", {
+          body: { email: targetEmail, name: guardianName },
+        }),
+        supabase.functions.invoke("send-purchase-notification", {
+          body: {
+            guardian: {
+              full_name: g.fullName,
+              email: g.email || user?.email || "",
+              phone: g.phone,
+              cpf: g.cpf,
+            },
+            student: {
+              student_name: s.studentName,
+              student_email: s.studentEmail,
+              student_birth_date: s.studentBirthDate,
+              student_address: s.studentAddress,
+              student_school: s.studentSchool,
+              student_graduation_year: s.studentGraduationYear,
+            },
+            payment_method: "Não especificado",
           },
-          student: {
-            student_name: s.studentName,
-            student_email: s.studentEmail,
-            student_birth_date: s.studentBirthDate,
-            student_address: s.studentAddress,
-            student_school: s.studentSchool,
-            student_graduation_year: s.studentGraduationYear,
-          },
-          payment_method: methodLabel,
-        },
-      });
-      if (error) throw error;
+        }),
+      ]);
+      if (enrollmentResult.error) throw enrollmentResult.error;
+      if (notificationResult.error) throw notificationResult.error;
       toast({ title: "Inscrição enviada!", description: "A equipa Chronos foi notificada e entrará em contacto em breve." });
     } catch (err: any) {
       console.error(err);
