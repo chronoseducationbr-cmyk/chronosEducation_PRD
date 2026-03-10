@@ -40,7 +40,6 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
         .from("installments")
         .select("*")
         .eq("enrollment_id", enrollmentId)
-        .order("type")
         .order("installment_number", { ascending: true });
       setInstallments((data as Installment[]) || []);
       setLoading(false);
