@@ -100,6 +100,7 @@ const StudentDataSection = ({ onChange }: Props) => {
               <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="email"
+                required
                 maxLength={100}
                 value={studentEmail}
                 onChange={(e) => setStudentEmail(e.target.value)}
