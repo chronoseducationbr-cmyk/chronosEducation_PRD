@@ -213,7 +213,7 @@ const AdminEnrollmentsPage = () => {
             return (
               <div
                 key={e.id}
-                className="bg-card rounded-xl border border-border overflow-hidden"
+                className={`bg-card rounded-xl border-2 overflow-hidden transition-colors ${isExpanded ? "border-[#f9b41f] shadow-[0_0_0_1px_#f9b41f33]" : "border-border"}`}
               >
                 {/* Collapsed row: name + status badge + select + expand */}
                 <div className="flex items-center gap-3 p-4">
