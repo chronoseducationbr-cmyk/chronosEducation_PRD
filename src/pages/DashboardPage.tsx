@@ -141,6 +141,10 @@ const DashboardPage = () => {
           </div>
 
           <div className="mt-8">
+            <ReferralSection onChange={handleReferralChange} />
+          </div>
+
+          <div className="mt-8">
             <button
               onClick={handlePayment}
               disabled={paying}
