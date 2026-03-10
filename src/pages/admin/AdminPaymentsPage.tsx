@@ -28,6 +28,8 @@ interface Enrollment {
   tuition_installments: number;
   summercamp_installment_cents: number;
   summercamp_installments: number;
+  user_id: string;
+  guardian_name?: string;
 }
 
 interface Installment {
