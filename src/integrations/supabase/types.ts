@@ -85,6 +85,7 @@ export type Database = {
       }
       installments: {
         Row: {
+          amount_cents: number
           boleto_url: string | null
           created_at: string
           due_date: string | null
@@ -97,6 +98,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          amount_cents?: number
           boleto_url?: string | null
           created_at?: string
           due_date?: string | null
@@ -109,6 +111,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          amount_cents?: number
           boleto_url?: string | null
           created_at?: string
           due_date?: string | null
