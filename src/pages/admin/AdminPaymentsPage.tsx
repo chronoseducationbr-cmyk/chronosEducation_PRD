@@ -65,6 +65,8 @@ const AdminPaymentsPage = () => {
   const [createForm, setCreateForm] = useState({ type: "tuition", count: "1", startDate: "" });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadTarget, setUploadTarget] = useState<string | null>(null);
+  const [editingAmount, setEditingAmount] = useState<string | null>(null);
+  const [editAmountValue, setEditAmountValue] = useState("");
 
   const load = async () => {
     setLoading(true);
