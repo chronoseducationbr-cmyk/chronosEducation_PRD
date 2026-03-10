@@ -35,8 +35,16 @@ const DashboardPage = () => {
     const s = studentRef.current;
     if (!user) return;
 
-    if (!s.studentName.trim()) {
-      toast({ title: "Preencha o nome do aluno", variant: "destructive" });
+    const missingFields: string[] = [];
+    if (!s.studentName.trim()) missingFields.push("Nome do aluno");
+    if (!s.studentBirthDate) missingFields.push("Data de nascimento");
+    if (!s.studentEmail.trim()) missingFields.push("Email do aluno");
+    if (!s.studentAddress.trim()) missingFields.push("Morada");
+    if (!s.studentSchool.trim()) missingFields.push("Escola de origem");
+    if (!s.studentGraduationYear) missingFields.push("Ano de conclusão");
+
+    if (missingFields.length > 0) {
+      toast({ title: "Campos obrigatórios em falta", description: missingFields.join(", "), variant: "destructive" });
       return;
     }
 

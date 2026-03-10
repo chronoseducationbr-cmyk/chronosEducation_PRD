@@ -73,6 +73,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             <label className="text-sm font-medium text-foreground block mb-1.5">Nome completo do aluno</label>
             <input
               type="text"
+              required
               maxLength={100}
               value={studentName}
               onChange={(e) => setStudentName(e.target.value)}
@@ -86,6 +87,7 @@ const StudentDataSection = ({ onChange }: Props) => {
               <Calendar size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="date"
+                required
                 value={studentBirthDate}
                 onChange={(e) => setStudentBirthDate(e.target.value)}
                 className={`${inputClasses} pl-10`}
@@ -98,6 +100,7 @@ const StudentDataSection = ({ onChange }: Props) => {
               <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="email"
+                required
                 maxLength={100}
                 value={studentEmail}
                 onChange={(e) => setStudentEmail(e.target.value)}
@@ -110,6 +113,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             <label className="text-sm font-medium text-foreground block mb-1.5">Ano previsto para fim do secundário</label>
             <input
               type="number"
+              required
               min={2024}
               max={2040}
               value={studentGraduationYear}
@@ -124,6 +128,7 @@ const StudentDataSection = ({ onChange }: Props) => {
               <MapPin size={18} className="absolute left-3 top-3 text-muted-foreground" />
               <input
                 type="text"
+                required
                 maxLength={300}
                 value={studentAddress}
                 onChange={(e) => setStudentAddress(e.target.value)}
@@ -136,6 +141,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             <label className="text-sm font-medium text-foreground block mb-1.5">Escola de origem</label>
             <input
               type="text"
+              required
               maxLength={200}
               value={studentSchool}
               onChange={(e) => setStudentSchool(e.target.value)}
