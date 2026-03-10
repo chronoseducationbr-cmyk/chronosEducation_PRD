@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Search, Upload, Download, FileText } from "lucide-react";
+import { GraduationCap, Search, Upload, Download, FileText, Info } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +10,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
+
+interface Guardian {
+  full_name: string;
+  email: string | null;
+  phone: string | null;
+}
 
 interface Enrollment {
   id: string;
@@ -32,6 +43,7 @@ interface Enrollment {
   contract_url: string | null;
   contract_sent_at: string | null;
   contract_signed_at: string | null;
+  guardian?: Guardian;
 }
 
 const statuses = [
