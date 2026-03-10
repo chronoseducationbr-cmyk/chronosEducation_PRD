@@ -171,60 +171,6 @@ const DashboardPage = () => {
     }
   };
 
-  const handleSendTestEmails = async () => {
-    const guardianEmail = guardianRef.current.email?.trim();
-    const targetEmail = guardianEmail || user?.email;
-    if (!targetEmail) {
-      toast({ title: "Preencha o email do responsável", variant: "destructive" });
-      return;
-    }
-    const guardianName = guardianRef.current.fullName?.trim() || userName;
-    const g = guardianRef.current;
-    const s = studentRef.current;
-    const methodLabel = selectedMethod
-      ? paymentMethods.find(m => m.id === selectedMethod)?.label || selectedMethod
-      : "Não selecionado (teste)";
-
-    setSendingTest(true);
-    try {
-      const [enrollmentResult, notificationResult] = await Promise.all([
-        supabase.functions.invoke("send-enrollment-email", {
-          body: { email: targetEmail, name: guardianName },
-        }),
-        supabase.functions.invoke("send-purchase-notification", {
-          body: {
-            guardian: {
-              full_name: g.fullName,
-              email: g.email || user?.email || "",
-              phone: g.phone,
-              cpf: g.cpf,
-            },
-            student: {
-              student_name: s.studentName,
-              student_email: s.studentEmail,
-              student_birth_date: s.studentBirthDate,
-              student_address: s.studentAddress,
-              student_school: s.studentSchool,
-              student_graduation_year: s.studentGraduationYear,
-            },
-            payment_method: methodLabel,
-          },
-        }),
-      ]);
-      if (enrollmentResult.error) throw enrollmentResult.error;
-      if (notificationResult.error) throw notificationResult.error;
-      toast({
-        title: "Emails de teste enviados!",
-        description: `Confirmação → ${targetEmail} | Notificação → contato@chronoseducation.com`,
-      });
-    } catch (err: any) {
-      console.error(err);
-      toast({ title: "Erro ao enviar", description: err.message || "Tente novamente.", variant: "destructive" });
-    } finally {
-      setSendingTest(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
@@ -282,42 +228,6 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Email preview dialog - Responsável */}
-      <Dialog open={showPreview} onOpenChange={setShowPreview}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Email para o Responsável</DialogTitle>
-            <DialogDescription>
-              Este é o email que o responsável receberá após a confirmação do pagamento.
-            </DialogDescription>
-          </DialogHeader>
-          <div
-            className="mt-4 rounded-lg overflow-hidden border border-border"
-            dangerouslySetInnerHTML={{ __html: buildPreviewHtml(userName) }}
-          />
-        </DialogContent>
-      </Dialog>
-
-      {/* Email preview dialog - Chronos */}
-      <Dialog open={showChronosPreview} onOpenChange={setShowChronosPreview}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Email para a Chronos</DialogTitle>
-            <DialogDescription>
-              Este é o email de notificação que a Chronos receberá com todos os dados da inscrição.
-            </DialogDescription>
-          </DialogHeader>
-          <div
-            className="mt-4 rounded-lg overflow-hidden border border-border"
-            dangerouslySetInnerHTML={{ __html: buildChronosPreviewHtml(
-              guardianRef.current,
-              studentRef.current,
-              selectedMethod ? paymentMethods.find(m => m.id === selectedMethod)?.label || selectedMethod : "Não selecionado"
-            ) }}
-          />
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
