@@ -136,6 +136,32 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                        <Detail label="Ano de conclusão" value={e.student_graduation_year?.toString() || ""} />
                        <Detail label="Indicado por" value={e.referred_by_email} />
                      </div>
+                     {/* Contract section */}
+                     {(e.contract_url || e.contract_sent_at || e.contract_signed_at) && (
+                       <div className="mt-3 pt-3 border-t border-border">
+                         <p className="text-xs font-semibold text-muted-foreground mb-2">Contrato</p>
+                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                           <Detail label="Enviado em" value={e.contract_sent_at ? formatDate(e.contract_sent_at) : ""} />
+                           <Detail label="Assinado em" value={e.contract_signed_at ? formatDate(e.contract_signed_at) : ""} />
+                           <div>
+                             <p className="text-muted-foreground text-xs">Documento</p>
+                             {e.contract_url ? (
+                               <a
+                                 href={e.contract_url}
+                                 target="_blank"
+                                 rel="noopener noreferrer"
+                                 className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium text-sm mt-0.5"
+                               >
+                                 <Download size={14} />
+                                 Descarregar
+                               </a>
+                             ) : (
+                               <p className="text-foreground font-medium">—</p>
+                             )}
+                           </div>
+                         </div>
+                       </div>
+                     )}
                      {(e.inscription_fee_cents > 0 || e.tuition_installment_cents > 0 || e.summercamp_installment_cents > 0) && (
                       <div className="mt-3 pt-3 border-t border-border">
                         <p className="text-xs font-semibold text-muted-foreground mb-2">Valores</p>
