@@ -74,6 +74,53 @@ export type Database = {
         }
         Relationships: []
       }
+      installments: {
+        Row: {
+          boleto_url: string | null
+          created_at: string
+          due_date: string | null
+          enrollment_id: string
+          id: string
+          installment_number: number
+          paid_at: string | null
+          status: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          boleto_url?: string | null
+          created_at?: string
+          due_date?: string | null
+          enrollment_id: string
+          id?: string
+          installment_number?: number
+          paid_at?: string | null
+          status?: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          boleto_url?: string | null
+          created_at?: string
+          due_date?: string | null
+          enrollment_id?: string
+          id?: string
+          installment_number?: number
+          paid_at?: string | null
+          status?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "installments_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "enrollments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invitations: {
         Row: {
           created_at: string
