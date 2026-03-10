@@ -310,20 +310,22 @@ const AdminPaymentsPage = () => {
                   className="w-full flex items-center gap-4 p-4 text-left hover:bg-muted/30 transition-colors"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-foreground">{e.student_name}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-semibold text-foreground">{e.student_name}</p>
+                      <button
+                        onClick={(ev) => { ev.stopPropagation(); navigate(`/admin/inscricoes?student=${e.id}`); }}
+                        className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
+                        title="Ver inscrição"
+                      >
+                        <GraduationCap size={16} className="text-muted-foreground" />
+                      </button>
+                    </div>
                     <p className="text-xs text-muted-foreground">{e.student_email || "—"}</p>
                     {e.guardian_name && (
                       <p className="text-xs text-muted-foreground">Responsável: {e.guardian_name}</p>
                     )}
                   </div>
                   <span className="text-xs text-muted-foreground">{insts.length || "—"} prestações</span>
-                  <button
-                    onClick={(ev) => { ev.stopPropagation(); navigate(`/admin/inscricoes?student=${e.id}`); }}
-                    className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
-                    title="Ver inscrição"
-                  >
-                    <GraduationCap size={16} className="text-muted-foreground" />
-                  </button>
                   {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
                 </button>
 
