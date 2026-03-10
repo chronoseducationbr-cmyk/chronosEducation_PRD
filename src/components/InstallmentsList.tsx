@@ -153,7 +153,8 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
             </table>
           </div>
         </div>
-      )})
+        );
+      })}
     </div>
   );
 };
