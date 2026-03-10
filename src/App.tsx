@@ -10,7 +10,7 @@ import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import InvitePage from "./pages/InvitePage";
 import DashboardPage from "./pages/DashboardPage";
-import ProfilePage from "./pages/ProfilePage";
+
 import NotFound from "./pages/NotFound";
 import TermsPage from "./pages/TermsPage";
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -36,14 +36,6 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
                 </ProtectedRoute>
               }
             />

@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { LogOut, User, ArrowLeft } from "lucide-react";
+import { LogOut, ArrowLeft } from "lucide-react";
 import GuardianDataSection, { type GuardianData } from "@/components/GuardianDataSection";
 import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
 import ReferralSection from "@/components/ReferralSection";
@@ -136,13 +136,6 @@ const DashboardPage = () => {
             <span className="text-sm text-primary-foreground/70 hidden sm:block">
               {user?.email}
             </span>
-            <Link
-              to="/profile"
-              className="text-primary-foreground/70 hover:text-secondary transition-colors"
-              title="Editar perfil"
-            >
-              <User size={20} />
-            </Link>
             <button
               onClick={signOut}
               className="text-primary-foreground/70 hover:text-secondary transition-colors"
