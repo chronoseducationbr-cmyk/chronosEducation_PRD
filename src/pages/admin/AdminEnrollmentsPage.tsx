@@ -208,17 +208,19 @@ const AdminEnrollmentsPage = () => {
         </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map((e) => (
-            <div
-              key={e.id}
-              className="bg-card rounded-xl border border-border p-4"
-            >
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0 mt-0.5">
-                  <GraduationCap size={20} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 flex-wrap">
+          {filtered.map((e) => {
+            const isExpanded = expandedId === e.id;
+            return (
+              <div
+                key={e.id}
+                className="bg-card rounded-xl border border-border overflow-hidden"
+              >
+                {/* Collapsed row: name + status badge + select + expand */}
+                <div className="flex items-center gap-3 p-4">
+                  <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                    <GraduationCap size={20} />
+                  </div>
+                  <div className="flex-1 min-w-0 flex items-center gap-3 flex-wrap">
                     <p className="font-semibold text-foreground">{e.student_name || "Sem nome"}</p>
                     {e.guardian && (
                       <Popover>
@@ -250,89 +252,100 @@ const AdminEnrollmentsPage = () => {
                       {e.status}
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">{e.student_email || "—"} · Inscrito em {formatDate(e.created_at)}</p>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 text-xs">
-                    <div>
-                      <span className="text-muted-foreground">Escola:</span>{" "}
-                      <span className="text-foreground font-medium">{e.student_school || "—"}</span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Ano conclusão:</span>{" "}
-                      <span className="text-foreground font-medium">{e.student_graduation_year || "—"}</span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Indicação:</span>{" "}
-                      <span className="text-foreground font-medium">{e.referred_by_email || "—"}</span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Morada:</span>{" "}
-                      <span className="text-foreground font-medium">{e.student_address || "—"}</span>
-                    </div>
+                  <div className="shrink-0 w-48" onClick={(ev) => ev.stopPropagation()}>
+                    <Select value={e.status} onValueChange={(v) => updateStatus(e.id, v)}>
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {statuses.map((s) => (
+                          <SelectItem key={s} value={s} className="text-xs">
+                            {s}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
+                  <button
+                    onClick={() => setExpandedId(isExpanded ? null : e.id)}
+                    className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
+                  >
+                    {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
+                  </button>
+                </div>
 
-                  {/* Contract section */}
-                  <div className="mt-3 pt-3 border-t border-border">
-                    <p className="text-xs font-semibold text-muted-foreground mb-2">Contrato</p>
-                    <div className="flex items-center gap-4 text-xs flex-wrap">
+                {/* Expanded details */}
+                {isExpanded && (
+                  <div className="px-4 pb-4 border-t border-border">
+                    <p className="text-xs text-muted-foreground mt-3 mb-3">{e.student_email || "—"} · Inscrito em {formatDate(e.created_at)}</p>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                       <div>
-                        <span className="text-muted-foreground">Enviado:</span>{" "}
-                        <span className="text-foreground font-medium">{formatDate(e.contract_sent_at)}</span>
+                        <span className="text-muted-foreground">Escola:</span>{" "}
+                        <span className="text-foreground font-medium">{e.student_school || "—"}</span>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Assinado:</span>{" "}
-                        <span className="text-foreground font-medium">{formatDate(e.contract_signed_at)}</span>
+                        <span className="text-muted-foreground">Ano conclusão:</span>{" "}
+                        <span className="text-foreground font-medium">{e.student_graduation_year || "—"}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        {e.contract_url ? (
-                          <a
-                            href={e.contract_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium"
+                      <div>
+                        <span className="text-muted-foreground">Indicação:</span>{" "}
+                        <span className="text-foreground font-medium">{e.referred_by_email || "—"}</span>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Morada:</span>{" "}
+                        <span className="text-foreground font-medium">{e.student_address || "—"}</span>
+                      </div>
+                    </div>
+
+                    {/* Contract section */}
+                    <div className="mt-3 pt-3 border-t border-border">
+                      <p className="text-xs font-semibold text-muted-foreground mb-2">Contrato</p>
+                      <div className="flex items-center gap-4 text-xs flex-wrap">
+                        <div>
+                          <span className="text-muted-foreground">Enviado:</span>{" "}
+                          <span className="text-foreground font-medium">{formatDate(e.contract_sent_at)}</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Assinado:</span>{" "}
+                          <span className="text-foreground font-medium">{formatDate(e.contract_signed_at)}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {e.contract_url ? (
+                            <a
+                              href={e.contract_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium"
+                            >
+                              <Download size={12} />
+                              Ver contrato
+                            </a>
+                          ) : (
+                            <span className="text-muted-foreground inline-flex items-center gap-1">
+                              <FileText size={12} />
+                              Sem contrato
+                            </span>
+                          )}
+                          <button
+                            onClick={() => {
+                              setUploadTargetId(e.id);
+                              fileInputRef.current?.click();
+                            }}
+                            className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+                            title="Upload contrato"
                           >
-                            <Download size={12} />
-                            Ver contrato
-                          </a>
-                        ) : (
-                          <span className="text-muted-foreground inline-flex items-center gap-1">
-                            <FileText size={12} />
-                            Sem contrato
-                          </span>
-                        )}
-                        <button
-                          onClick={() => {
-                            setUploadTargetId(e.id);
-                            fileInputRef.current?.click();
-                          }}
-                          className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
-                          title="Upload contrato"
-                        >
-                          <Upload size={12} />
-                          Upload
-                        </button>
+                            <Upload size={12} />
+                            Upload
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="shrink-0 w-48">
-                  <Select value={e.status} onValueChange={(v) => updateStatus(e.id, v)}>
-                    <SelectTrigger className="h-8 text-xs">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {statuses.map((s) => (
-                        <SelectItem key={s} value={s} className="text-xs">
-                          {s}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
           {filtered.length === 0 && (
             <p className="text-center text-muted-foreground py-8">Nenhuma inscrição encontrada.</p>
           )}
