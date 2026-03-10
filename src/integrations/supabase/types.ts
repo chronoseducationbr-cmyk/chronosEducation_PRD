@@ -387,6 +387,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_admin_invitations: {
+        Args: never
+        Returns: {
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invite_code: string
+          status: string
+          used_at: string
+        }[]
+      }
       get_admin_users: {
         Args: never
         Returns: {
