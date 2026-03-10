@@ -269,6 +269,13 @@ const AdminEnrollmentsPage = () => {
                     </Select>
                   </div>
                   <button
+                    onClick={() => navigate(`/admin/pagamentos?student=${e.id}`)}
+                    className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
+                    title="Ver pagamentos"
+                  >
+                    <CreditCard size={16} className="text-muted-foreground" />
+                  </button>
+                  <button
                     onClick={() => setExpandedId(isExpanded ? null : e.id)}
                     className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
                   >

@@ -59,12 +59,14 @@ const statusConfig: Record<string, { label: string; icon: typeof Clock; color: s
 };
 
 const AdminPaymentsPage = () => {
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [installments, setInstallments] = useState<Record<string, Installment[]>>({});
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [initialExpanded, setInitialExpanded] = useState(false);
   const [showCreateDialog, setShowCreateDialog] = useState<string | null>(null);
   const [createForm, setCreateForm] = useState({ type: "tuition", count: "1", startDate: "" });
   const fileInputRef = useRef<HTMLInputElement>(null);
