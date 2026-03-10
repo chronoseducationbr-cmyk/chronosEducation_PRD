@@ -11,6 +11,7 @@ interface Installment {
   status: string;
   boleto_url: string | null;
   amount_cents: number;
+  discount_percent: number;
 }
 
 interface Props {
@@ -115,7 +116,21 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
                         {inst.installment_number}
                       </td>
                       <td className="py-2 pr-2 text-foreground font-medium">
-                        {inst.amount_cents > 0 ? `$${(inst.amount_cents / 100).toFixed(0)}` : "—"}
+                        {(() => {
+                          if (inst.amount_cents <= 0) return "—";
+                          const disc = inst.discount_percent || 0;
+                          if (disc > 0 && inst.status !== "paid") {
+                            const finalCents = Math.round(inst.amount_cents * (1 - disc / 100));
+                            return (
+                              <span>
+                                <span className="line-through text-muted-foreground mr-1">${(inst.amount_cents / 100).toFixed(0)}</span>
+                                <span className="text-green-700">${(finalCents / 100).toFixed(0)}</span>
+                                <span className="text-[10px] text-muted-foreground ml-1">(-{disc}%)</span>
+                              </span>
+                            );
+                          }
+                          return `$${(inst.amount_cents / 100).toFixed(0)}`;
+                        })()}
                       </td>
                       <td className="py-2 pr-2 text-foreground">
                         {formatDate(inst.due_date)}

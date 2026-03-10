@@ -40,6 +40,7 @@ interface Installment {
   status: string;
   boleto_url: string | null;
   amount_cents: number;
+  discount_percent: number;
 }
 
 const typeLabels: Record<string, string> = {
@@ -67,6 +68,8 @@ const AdminPaymentsPage = () => {
   const [uploadTarget, setUploadTarget] = useState<string | null>(null);
   const [editingAmount, setEditingAmount] = useState<string | null>(null);
   const [editAmountValue, setEditAmountValue] = useState("");
+  const [editingDiscount, setEditingDiscount] = useState<string | null>(null);
+  const [editDiscountValue, setEditDiscountValue] = useState("");
 
   const load = async () => {
     setLoading(true);
@@ -130,6 +133,25 @@ const AdminPaymentsPage = () => {
       loadInstallments(enrollmentId);
     }
     setEditingAmount(null);
+  };
+
+  const saveDiscount = async (instId: string, enrollmentId: string) => {
+    const val = parseFloat(editDiscountValue || "0");
+    if (isNaN(val) || val < 0 || val > 100) {
+      toast({ title: "Valor inválido (0-100%)", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("installments")
+      .update({ discount_percent: val } as any)
+      .eq("id", instId);
+    if (error) {
+      toast({ title: "Erro ao atualizar desconto", variant: "destructive" });
+    } else {
+      toast({ title: "Desconto atualizado" });
+      loadInstallments(enrollmentId);
+    }
+    setEditingDiscount(null);
   };
 
   const handleUploadBoleto = async (file: File) => {
@@ -285,6 +307,8 @@ const AdminPaymentsPage = () => {
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Tipo</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">#</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Valor</th>
+                              <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Desconto</th>
+                              <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Valor Final</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Vencimento</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Pago em</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Estado</th>
@@ -336,6 +360,54 @@ const AdminPaymentsPage = () => {
                                         {inst.amount_cents > 0 ? `$${(inst.amount_cents / 100).toFixed(0)}` : "—"}
                                       </button>
                                     )}
+                                  </td>
+                                  <td className="py-2 pr-2">
+                                    {editingDiscount === inst.id ? (
+                                      <div className="flex items-center gap-1">
+                                        <input
+                                          type="number"
+                                          step="0.1"
+                                          min="0"
+                                          max="100"
+                                          className="w-14 h-6 text-[10px] border border-border rounded px-1 bg-background text-foreground"
+                                          value={editDiscountValue}
+                                          onChange={(ev) => setEditDiscountValue(ev.target.value)}
+                                          onKeyDown={(ev) => {
+                                            if (ev.key === "Enter") saveDiscount(inst.id, e.id);
+                                            if (ev.key === "Escape") setEditingDiscount(null);
+                                          }}
+                                          autoFocus
+                                        />
+                                        <span className="text-[10px] text-foreground">%</span>
+                                        <button
+                                          onClick={() => saveDiscount(inst.id, e.id)}
+                                          className="text-secondary hover:text-secondary/80 text-[10px] font-semibold"
+                                        >
+                                          ✓
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <button
+                                        onClick={() => {
+                                          setEditingDiscount(inst.id);
+                                          setEditDiscountValue((inst.discount_percent || 0).toString());
+                                        }}
+                                        className="text-foreground font-medium hover:text-secondary transition-colors cursor-pointer"
+                                        title="Clique para editar desconto"
+                                      >
+                                        {inst.discount_percent > 0 ? `${inst.discount_percent}%` : "—"}
+                                      </button>
+                                    )}
+                                  </td>
+                                  <td className="py-2 pr-2 text-foreground font-medium">
+                                    {(() => {
+                                      if (inst.amount_cents <= 0) return "—";
+                                      const disc = inst.discount_percent || 0;
+                                      const final_cents = inst.status === "paid" ? inst.amount_cents : Math.round(inst.amount_cents * (1 - disc / 100));
+                                      return disc > 0 && inst.status !== "paid"
+                                        ? <span className="text-green-700">${(final_cents / 100).toFixed(0)}</span>
+                                        : `$${(final_cents / 100).toFixed(0)}`;
+                                    })()}
                                   </td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.due_date)}</td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.paid_at)}</td>

@@ -88,6 +88,7 @@ export type Database = {
           amount_cents: number
           boleto_url: string | null
           created_at: string
+          discount_percent: number
           due_date: string | null
           enrollment_id: string
           id: string
@@ -101,6 +102,7 @@ export type Database = {
           amount_cents?: number
           boleto_url?: string | null
           created_at?: string
+          discount_percent?: number
           due_date?: string | null
           enrollment_id: string
           id?: string
@@ -114,6 +116,7 @@ export type Database = {
           amount_cents?: number
           boleto_url?: string | null
           created_at?: string
+          discount_percent?: number
           due_date?: string | null
           enrollment_id?: string
           id?: string
