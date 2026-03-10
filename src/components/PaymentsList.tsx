@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
-import { GraduationCap, ChevronDown, ChevronUp } from "lucide-react";
+import { GraduationCap, ChevronDown, ChevronUp, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import InstallmentsList from "@/components/InstallmentsList";
+
+interface Referral {
+  referred_student_email: string;
+  referred_enrollment_id: string;
+  referred_name?: string;
+}
 
 interface Enrollment {
   id: string;
@@ -26,6 +32,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [referrals, setReferrals] = useState<Record<string, Referral[]>>({});
 
   useEffect(() => {
     const load = async () => {
@@ -41,6 +48,37 @@ const PaymentsList = ({ refreshKey }: Props) => {
     };
     load();
   }, [user, refreshKey]);
+
+  const loadReferrals = async (enrollmentId: string) => {
+    if (referrals[enrollmentId]) return;
+    const { data } = await supabase
+      .from("referrals" as any)
+      .select("referred_student_email, referred_enrollment_id")
+      .eq("referrer_enrollment_id", enrollmentId);
+    const refs = (data as any[]) || [];
+    if (refs.length > 0) {
+      const ids = refs.map((r) => r.referred_enrollment_id);
+      const { data: enrs } = await supabase
+        .from("enrollments")
+        .select("id, student_name")
+        .in("id", ids);
+      const nameMap = (enrs || []).reduce<Record<string, string>>((acc, en: any) => {
+        acc[en.id] = en.student_name;
+        return acc;
+      }, {});
+      refs.forEach((r) => { r.referred_name = nameMap[r.referred_enrollment_id] || ""; });
+    }
+    setReferrals((prev) => ({ ...prev, [enrollmentId]: refs }));
+  };
+
+  const handleExpand = (id: string) => {
+    if (expandedId === id) {
+      setExpandedId(null);
+    } else {
+      setExpandedId(id);
+      loadReferrals(id);
+    }
+  };
 
   if (loading) {
     return <div className="animate-pulse h-32 bg-muted rounded-xl" />;
@@ -67,7 +105,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
             className="bg-card rounded-xl border border-border shadow-card overflow-hidden"
           >
             <button
-              onClick={() => setExpandedId(isExpanded ? null : e.id)}
+              onClick={() => handleExpand(e.id)}
               className="w-full flex items-center gap-4 p-4 text-left hover:bg-muted/30 transition-colors"
             >
               <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
@@ -115,6 +153,28 @@ const PaymentsList = ({ refreshKey }: Props) => {
                 <div>
                   <InstallmentsList enrollmentId={e.id} />
                 </div>
+
+                {(referrals[e.id] || []).length > 0 && (
+                  <div className="bg-muted/40 rounded-lg p-4">
+                    <h3 className="text-sm font-bold text-foreground mb-3 tracking-wide uppercase flex items-center gap-2">
+                      <Users size={14} />
+                      Alunos que indicaram {e.student_name || "este aluno"}
+                    </h3>
+                    <div className="space-y-2">
+                      {referrals[e.id].map((ref, idx) => (
+                        <div key={idx} className="flex items-center gap-3 bg-card rounded-lg border border-border p-3">
+                          <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                            <GraduationCap size={14} />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-foreground truncate">{ref.referred_name || "—"}</p>
+                            <p className="text-xs text-muted-foreground">{ref.referred_student_email}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
