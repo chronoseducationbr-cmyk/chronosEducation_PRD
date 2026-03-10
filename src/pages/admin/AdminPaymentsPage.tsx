@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Search, Upload, Download, FileText, CheckCircle2, Clock, AlertCircle, Plus, ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
