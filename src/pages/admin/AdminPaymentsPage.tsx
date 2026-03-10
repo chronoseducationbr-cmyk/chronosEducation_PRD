@@ -79,7 +79,22 @@ const AdminPaymentsPage = () => {
       .from("enrollments")
       .select("*")
       .order("created_at", { ascending: false });
-    setEnrollments((data as Enrollment[]) || []);
+    const enrs = (data as Enrollment[]) || [];
+    
+    // Load guardian names from profiles
+    const userIds = [...new Set(enrs.map((e) => e.user_id))];
+    if (userIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("user_id, full_name")
+        .in("user_id", userIds);
+      const nameMap = (profiles || []).reduce<Record<string, string>>((acc, p: any) => {
+        acc[p.user_id] = p.full_name;
+        return acc;
+      }, {});
+      enrs.forEach((e) => { e.guardian_name = nameMap[e.user_id] || ""; });
+    }
+    setEnrollments(enrs);
     setLoading(false);
   };
 
