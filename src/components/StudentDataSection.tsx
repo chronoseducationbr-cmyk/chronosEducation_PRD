@@ -114,8 +114,8 @@ const StudentDataSection = ({ onChange }: Props) => {
             <input
               type="number"
               required
-              min={new Date().getFullYear() + 2}
-              max={new Date().getFullYear() + 3}
+              min={new Date().getFullYear() + 1}
+              max={new Date().getFullYear() + 5}
               value={studentGraduationYear}
               onChange={(e) => setStudentGraduationYear(e.target.value)}
               className={inputClasses}
