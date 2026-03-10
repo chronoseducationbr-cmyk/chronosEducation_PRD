@@ -141,6 +141,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             <label className="text-sm font-medium text-foreground block mb-1.5">Escola de origem</label>
             <input
               type="text"
+              required
               maxLength={200}
               value={studentSchool}
               onChange={(e) => setStudentSchool(e.target.value)}
