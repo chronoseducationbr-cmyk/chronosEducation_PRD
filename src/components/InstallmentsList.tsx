@@ -65,12 +65,18 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
     return null;
   }
 
+  const typeOrder = ["inscription_fee", "tuition", "summercamp"];
+
   // Group by type
   const grouped = installments.reduce<Record<string, Installment[]>>((acc, inst) => {
     if (!acc[inst.type]) acc[inst.type] = [];
     acc[inst.type].push(inst);
     return acc;
   }, {});
+
+  const sortedTypes = Object.keys(grouped).sort(
+    (a, b) => (typeOrder.indexOf(a) === -1 ? 99 : typeOrder.indexOf(a)) - (typeOrder.indexOf(b) === -1 ? 99 : typeOrder.indexOf(b))
+  );
 
   return (
     <div className="bg-muted/40 rounded-lg p-4">
