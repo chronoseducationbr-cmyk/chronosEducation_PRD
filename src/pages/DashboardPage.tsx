@@ -21,6 +21,7 @@ const DashboardPage = () => {
 
   const handleGuardianChange = useCallback((data: GuardianData) => { guardianRef.current = data; }, []);
   const handleStudentChange = useCallback((data: StudentData) => { studentRef.current = data; }, []);
+  const handleReferralChange = useCallback((email: string) => { referralRef.current = email; }, []);
 
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Aluno";
 
