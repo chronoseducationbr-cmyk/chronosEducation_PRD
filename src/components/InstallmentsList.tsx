@@ -84,7 +84,8 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
         Prestações
       </h3>
 
-      {Object.entries(grouped).map(([type, items]) => (
+      {sortedTypes.map((type) => {
+        const items = grouped[type];
         <div key={type} className="mb-5 last:mb-0">
           <p className="text-xs font-semibold text-foreground mb-2 border-b border-border pb-1.5">
             {typeLabels[type] || type}
