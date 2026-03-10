@@ -8,6 +8,7 @@ interface Referral {
   referred_student_email: string;
   referred_enrollment_id: string;
   referred_name?: string;
+  created_at?: string;
 }
 
 interface Enrollment {
