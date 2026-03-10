@@ -155,52 +155,69 @@ const DashboardPage = () => {
       </header>
 
       <div className="container-narrow px-4 md:px-8 py-8">
-        <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Inscrições</h1>
-        <p className="text-muted-foreground mb-8">Gerencie as inscrições no programa Dual Diploma.</p>
+        <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Painel</h1>
+        <p className="text-muted-foreground mb-6">Gerencie as inscrições e pagamentos do programa Dual Diploma.</p>
 
-        <div className="max-w-lg">
-          {!showForm ? (
-            <>
-              <GuardianDataSection onChange={handleGuardianChange} />
-              <div className="mt-8">
-                <EnrollmentsList
-                  onNewEnrollment={() => setShowForm(true)}
-                  refreshKey={refreshKey}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={() => setShowForm(false)}
-                className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
-              >
-                <ArrowLeft size={16} />
-                Voltar às inscrições
-              </button>
+        <Tabs defaultValue="inscricoes" className="w-full">
+          <TabsList className="mb-6">
+            <TabsTrigger value="inscricoes">Inscrições</TabsTrigger>
+            <TabsTrigger value="pagamentos">Pagamentos</TabsTrigger>
+          </TabsList>
 
-              <h2 className="font-heading text-xl font-semibold text-foreground mb-6">
-                Nova Inscrição
-              </h2>
+          <TabsContent value="inscricoes">
+            <div className="max-w-lg">
+              {!showForm ? (
+                <>
+                  <GuardianDataSection onChange={handleGuardianChange} />
+                  <div className="mt-8">
+                    <EnrollmentsList
+                      onNewEnrollment={() => setShowForm(true)}
+                      refreshKey={refreshKey}
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setShowForm(false)}
+                    className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
+                  >
+                    <ArrowLeft size={16} />
+                    Voltar às inscrições
+                  </button>
 
-              <StudentDataSection onChange={handleStudentChange} />
+                  <h2 className="font-heading text-xl font-semibold text-foreground mb-6">
+                    Nova Inscrição
+                  </h2>
 
-              <div className="mt-8">
-                <ReferralSection onChange={handleReferralChange} />
-              </div>
+                  <StudentDataSection onChange={handleStudentChange} />
 
-              <div className="mt-8">
-                <button
-                  onClick={handleSubmitEnrollment}
-                  disabled={paying}
-                  className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {paying ? "Processando..." : "Confirmar Inscrição"}
-                </button>
-              </div>
-            </>
-          )}
-        </div>
+                  <div className="mt-8">
+                    <ReferralSection onChange={handleReferralChange} />
+                  </div>
+
+                  <div className="mt-8">
+                    <button
+                      onClick={handleSubmitEnrollment}
+                      disabled={paying}
+                      className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {paying ? "Processando..." : "Confirmar Inscrição"}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="pagamentos">
+            <div className="max-w-2xl">
+              <PaymentsList refreshKey={refreshKey} />
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
       </div>
     </div>
   );
