@@ -11,6 +11,7 @@ interface Installment {
   status: string;
   boleto_url: string | null;
   amount_cents: number;
+  discount_percent: number;
 }
 
 interface Props {
