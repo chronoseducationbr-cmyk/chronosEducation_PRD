@@ -222,9 +222,9 @@ const AdminEnrollmentsPage = () => {
                   <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
                     <GraduationCap size={20} />
                   </div>
-                  <div className="flex-1 min-w-0 flex items-center gap-3 flex-wrap">
-                    <p className="font-semibold text-foreground">{e.student_name || "Sem nome"}</p>
-                    <span className="text-xs text-muted-foreground">{e.student_email || ""}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <p className="font-semibold text-foreground">{e.student_name || "Sem nome"}</p>
                     {e.guardian && (
                       <Popover>
                         <PopoverTrigger asChild>
