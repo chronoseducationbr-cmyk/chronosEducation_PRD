@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, Users, Send, RefreshCw, Mail, Clock, CheckCircle2, XCircle } from "lucide-react";
+import { Search, Users, Send, RefreshCw, Mail, Clock, CheckCircle2, XCircle, ShieldCheck } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +20,7 @@ interface UserData {
   created_at: string;
   full_name: string;
   phone: string | null;
+  is_admin: boolean;
 }
 
 interface Invitation {
@@ -45,18 +46,21 @@ const AdminUsersPage = () => {
 
   const load = async () => {
     setLoading(true);
-    const [authRes, profilesRes, invRes] = await Promise.all([
+    const [authRes, profilesRes, invRes, rolesRes] = await Promise.all([
       supabase.rpc("get_admin_users"),
       supabase.from("profiles").select("user_id, full_name, phone"),
       supabase.rpc("get_admin_invitations"),
+      supabase.from("user_roles").select("user_id, role"),
     ]);
 
     const authUsers = (authRes.data as any[]) || [];
     const profiles = (profilesRes.data as any[]) || [];
+    const roles = (rolesRes.data as any[]) || [];
     const profileMap: Record<string, { full_name: string; phone: string | null }> = {};
     profiles.forEach((p: any) => {
       profileMap[p.user_id] = { full_name: p.full_name, phone: p.phone };
     });
+    const adminSet = new Set(roles.filter((r: any) => r.role === "admin").map((r: any) => r.user_id));
 
     setUsers(authUsers.map((u: any) => ({
       user_id: u.user_id,
@@ -65,6 +69,7 @@ const AdminUsersPage = () => {
       created_at: u.created_at,
       full_name: profileMap[u.user_id]?.full_name || "",
       phone: profileMap[u.user_id]?.phone || null,
+      is_admin: adminSet.has(u.user_id),
     })));
 
     setInvitations((invRes.data as Invitation[]) || []);
@@ -180,7 +185,10 @@ const AdminUsersPage = () => {
                     <Users size={18} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-foreground truncate">{u.full_name || "Sem nome"}</p>
+                    <p className="font-semibold text-foreground truncate flex items-center gap-1.5">
+                      {u.full_name || "Sem nome"}
+                      {u.is_admin && <ShieldCheck size={14} className="text-primary shrink-0" />}
+                    </p>
                     <p className="text-xs text-muted-foreground">{u.email || "—"}</p>
                   </div>
                   <div className="text-right shrink-0 space-y-0.5">
