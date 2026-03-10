@@ -69,6 +69,7 @@ const AdminEnrollmentsPage = () => {
   const [search, setSearch] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadTargetId, setUploadTargetId] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
