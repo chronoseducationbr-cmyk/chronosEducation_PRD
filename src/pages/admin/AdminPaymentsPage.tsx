@@ -84,13 +84,18 @@ const AdminPaymentsPage = () => {
   useEffect(() => { load(); }, []);
 
   const loadInstallments = async (enrollmentId: string) => {
+    const typeOrder = ["inscription_fee", "tuition", "summercamp"];
     const { data } = await supabase
       .from("installments")
       .select("*")
       .eq("enrollment_id", enrollmentId)
-      .order("type")
       .order("installment_number", { ascending: true });
-    setInstallments((prev) => ({ ...prev, [enrollmentId]: (data as Installment[]) || [] }));
+    const sorted = ((data as Installment[]) || []).sort((a, b) => {
+      const ai = typeOrder.indexOf(a.type) === -1 ? 99 : typeOrder.indexOf(a.type);
+      const bi = typeOrder.indexOf(b.type) === -1 ? 99 : typeOrder.indexOf(b.type);
+      return ai - bi || a.installment_number - b.installment_number;
+    });
+    setInstallments((prev) => ({ ...prev, [enrollmentId]: sorted }));
   };
 
   const toggleExpand = (id: string) => {
