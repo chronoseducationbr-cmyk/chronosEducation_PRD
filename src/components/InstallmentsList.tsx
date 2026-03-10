@@ -10,6 +10,7 @@ interface Installment {
   paid_at: string | null;
   status: string;
   boleto_url: string | null;
+  amount_cents: number;
 }
 
 interface Props {
@@ -89,6 +90,7 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
               <thead>
                 <tr className="border-b border-border">
                   <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">#</th>
+                  <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Valor</th>
                   <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Vencimento</th>
                   <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Pago em</th>
                   <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Estado</th>
@@ -104,6 +106,9 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
                     <tr key={inst.id} className="border-b border-border/50 last:border-0">
                       <td className="py-2 pr-2 text-foreground font-medium">
                         {inst.installment_number}
+                      </td>
+                      <td className="py-2 pr-2 text-foreground font-medium">
+                        {inst.amount_cents > 0 ? `$${(inst.amount_cents / 100).toFixed(0)}` : "—"}
                       </td>
                       <td className="py-2 pr-2 text-foreground">
                         {formatDate(inst.due_date)}

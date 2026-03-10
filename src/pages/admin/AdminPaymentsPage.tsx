@@ -39,6 +39,7 @@ interface Installment {
   paid_at: string | null;
   status: string;
   boleto_url: string | null;
+  amount_cents: number;
 }
 
 const typeLabels: Record<string, string> = {
@@ -147,6 +148,15 @@ const AdminPaymentsPage = () => {
     const count = parseInt(createForm.count, 10);
     if (!count || count < 1) return;
 
+    // Get amount from enrollment based on type
+    const enrollment = enrollments.find((e) => e.id === showCreateDialog);
+    let amountCents = 0;
+    if (enrollment) {
+      if (createForm.type === "inscription_fee") amountCents = enrollment.inscription_fee_cents;
+      else if (createForm.type === "tuition") amountCents = enrollment.tuition_installment_cents;
+      else if (createForm.type === "summercamp") amountCents = enrollment.summercamp_installment_cents;
+    }
+
     const rows = Array.from({ length: count }, (_, i) => {
       const date = new Date(createForm.startDate);
       date.setMonth(date.getMonth() + i);
@@ -156,6 +166,7 @@ const AdminPaymentsPage = () => {
         installment_number: i + 1,
         due_date: date.toISOString().split("T")[0],
         status: "pending",
+        amount_cents: amountCents,
       };
     });
 
@@ -252,6 +263,7 @@ const AdminPaymentsPage = () => {
                             <tr className="border-b border-border">
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Tipo</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">#</th>
+                              <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Valor</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Vencimento</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Pago em</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Estado</th>
@@ -267,6 +279,7 @@ const AdminPaymentsPage = () => {
                                 <tr key={inst.id} className="border-b border-border/50 last:border-0">
                                   <td className="py-2 pr-2 text-foreground font-medium">{typeLabels[inst.type] || inst.type}</td>
                                   <td className="py-2 pr-2 text-foreground">{inst.installment_number}</td>
+                                  <td className="py-2 pr-2 text-foreground font-medium">{inst.amount_cents > 0 ? `$${(inst.amount_cents / 100).toFixed(0)}` : "—"}</td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.due_date)}</td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.paid_at)}</td>
                                   <td className="py-2 pr-2">
