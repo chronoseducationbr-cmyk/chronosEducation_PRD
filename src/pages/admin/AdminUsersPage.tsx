@@ -20,6 +20,7 @@ interface UserData {
   created_at: string;
   full_name: string;
   phone: string | null;
+  is_admin: boolean;
 }
 
 interface Invitation {
