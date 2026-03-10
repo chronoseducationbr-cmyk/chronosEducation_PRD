@@ -255,7 +255,7 @@ const DashboardPage = () => {
           </TabsList>
 
           <TabsContent value="inscricoes">
-            <div className="max-w-lg">
+            <div className="max-w-xl">
               {!showForm ? (
                 <>
                   <GuardianDataSection onChange={handleGuardianChange} />
