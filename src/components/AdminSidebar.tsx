@@ -45,7 +45,7 @@ export function AdminSidebar() {
             )}
           </SidebarGroupLabel>
 
-          <SidebarGroupContent>
+          <SidebarGroupContent className="mt-4">
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
