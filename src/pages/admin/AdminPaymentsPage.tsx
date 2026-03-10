@@ -135,6 +135,25 @@ const AdminPaymentsPage = () => {
     setEditingAmount(null);
   };
 
+  const saveDiscount = async (instId: string, enrollmentId: string) => {
+    const val = parseFloat(editDiscountValue || "0");
+    if (isNaN(val) || val < 0 || val > 100) {
+      toast({ title: "Valor inválido (0-100%)", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("installments")
+      .update({ discount_percent: val } as any)
+      .eq("id", instId);
+    if (error) {
+      toast({ title: "Erro ao atualizar desconto", variant: "destructive" });
+    } else {
+      toast({ title: "Desconto atualizado" });
+      loadInstallments(enrollmentId);
+    }
+    setEditingDiscount(null);
+  };
+
   const handleUploadBoleto = async (file: File) => {
     if (!uploadTarget) return;
     const instId = uploadTarget;
