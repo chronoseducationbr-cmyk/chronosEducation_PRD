@@ -122,10 +122,9 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
                           if (disc > 0 && inst.status !== "paid") {
                             const finalCents = Math.round(inst.amount_cents * (1 - disc / 100));
                             return (
-                              <span>
-                                <span className="line-through text-muted-foreground mr-1">${(inst.amount_cents / 100).toFixed(0)}</span>
-                                <span className="text-green-700">${(finalCents / 100).toFixed(0)}</span>
-                                <span className="text-[10px] text-muted-foreground ml-1">(-{disc}%)</span>
+                              <span className="flex flex-col leading-tight">
+                                <span className="line-through text-muted-foreground text-[10px]">${(inst.amount_cents / 100).toFixed(0)}</span>
+                                <span className="text-green-700">${(finalCents / 100).toFixed(0)} <span className="text-[10px] text-muted-foreground font-normal">(-{disc}%)</span></span>
                               </span>
                             );
                           }
