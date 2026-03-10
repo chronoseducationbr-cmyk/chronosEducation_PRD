@@ -48,6 +48,21 @@ const DashboardPage = () => {
       return;
     }
 
+    // Validate student age (must be between 13 and 17)
+    if (s.studentBirthDate) {
+      const birthDate = new Date(s.studentBirthDate);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      if (age < 13 || age > 17) {
+        toast({ title: "Idade inválida", description: "O aluno deve ter entre 13 e 17 anos na data da inscrição.", variant: "destructive" });
+        return;
+      }
+    }
+
     const targetEmail = g.email?.trim() || user?.email;
     if (!targetEmail) {
       toast({ title: "Preencha o email do responsável", variant: "destructive" });
