@@ -45,18 +45,21 @@ const AdminUsersPage = () => {
 
   const load = async () => {
     setLoading(true);
-    const [authRes, profilesRes, invRes] = await Promise.all([
+    const [authRes, profilesRes, invRes, rolesRes] = await Promise.all([
       supabase.rpc("get_admin_users"),
       supabase.from("profiles").select("user_id, full_name, phone"),
       supabase.rpc("get_admin_invitations"),
+      supabase.from("user_roles").select("user_id, role"),
     ]);
 
     const authUsers = (authRes.data as any[]) || [];
     const profiles = (profilesRes.data as any[]) || [];
+    const roles = (rolesRes.data as any[]) || [];
     const profileMap: Record<string, { full_name: string; phone: string | null }> = {};
     profiles.forEach((p: any) => {
       profileMap[p.user_id] = { full_name: p.full_name, phone: p.phone };
     });
+    const adminSet = new Set(roles.filter((r: any) => r.role === "admin").map((r: any) => r.user_id));
 
     setUsers(authUsers.map((u: any) => ({
       user_id: u.user_id,
@@ -65,6 +68,7 @@ const AdminUsersPage = () => {
       created_at: u.created_at,
       full_name: profileMap[u.user_id]?.full_name || "",
       phone: profileMap[u.user_id]?.phone || null,
+      is_admin: adminSet.has(u.user_id),
     })));
 
     setInvitations((invRes.data as Invitation[]) || []);
