@@ -103,6 +103,15 @@ const AdminPaymentsPage = () => {
 
   useEffect(() => { load(); }, []);
 
+  // Auto-expand student from URL param
+  useEffect(() => {
+    const studentId = searchParams.get("student");
+    if (studentId && !loading && enrollments.length > 0 && !initialExpanded) {
+      setInitialExpanded(true);
+      setExpandedId(studentId);
+      if (!installments[studentId]) loadInstallments(studentId);
+    }
+  }, [searchParams, loading, enrollments, initialExpanded]);
   const loadInstallments = async (enrollmentId: string) => {
     const typeOrder = ["inscription_fee", "tuition", "summercamp"];
     const { data } = await supabase
