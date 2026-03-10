@@ -137,23 +137,28 @@ const AdminUsersPage = () => {
     return { label: "Pendente", icon: Clock, color: "bg-amber-100 text-amber-800" };
   };
 
-  const filteredUsers = users.filter(
+  // Users: only those who have logged in at least once
+  const activeUsers = users.filter((u) => u.last_sign_in_at !== null);
+  const activeUserEmails = new Set(activeUsers.map((u) => u.email?.toLowerCase()));
+
+  const filteredUsers = activeUsers.filter(
     (u) =>
       u.full_name.toLowerCase().includes(search.toLowerCase()) ||
       (u.email?.toLowerCase() || "").includes(search.toLowerCase()) ||
       (u.phone?.toLowerCase() || "").includes(search.toLowerCase())
   );
 
-  const filteredInvites = invitations.filter(
-    (inv) => inv.email.toLowerCase().includes(search.toLowerCase())
-  );
+  // Invites: hide used invites where user has already logged in
+  const filteredInvites = invitations
+    .filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase())))
+    .filter((inv) => inv.email.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="font-heading text-2xl font-bold text-foreground">Utilizadores</h1>
-          <p className="text-sm text-muted-foreground">{users.length} utilizadores · {invitations.length} convites</p>
+          <p className="text-sm text-muted-foreground">{activeUsers.length} utilizadores · {invitations.filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase()))).length} convites</p>
         </div>
         <Button onClick={() => setShowInviteDialog(true)} className="flex items-center gap-2" size="sm">
           <Send size={14} />
@@ -168,8 +173,8 @@ const AdminUsersPage = () => {
 
       <Tabs defaultValue="users">
         <TabsList>
-          <TabsTrigger value="users">Utilizadores ({users.length})</TabsTrigger>
-          <TabsTrigger value="invites">Convites ({invitations.length})</TabsTrigger>
+          <TabsTrigger value="users">Utilizadores ({activeUsers.length})</TabsTrigger>
+          <TabsTrigger value="invites">Convites ({invitations.filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase()))).length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users" className="mt-4">
