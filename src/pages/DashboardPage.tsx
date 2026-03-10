@@ -56,6 +56,18 @@ const DashboardPage = () => {
 
     setPaying(true);
     try {
+      // Check if student email is already enrolled
+      const { data: existingEnrollment } = await supabase
+        .from("enrollments")
+        .select("id")
+        .eq("student_email", s.studentEmail.trim())
+        .maybeSingle();
+
+      if (existingEnrollment) {
+        toast({ title: "Email já inscrito", description: "Já existe uma inscrição com este email de aluno.", variant: "destructive" });
+        setPaying(false);
+        return;
+      }
       // Save guardian profile data
       await supabase
         .from("profiles")
