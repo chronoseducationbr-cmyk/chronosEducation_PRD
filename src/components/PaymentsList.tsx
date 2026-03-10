@@ -54,7 +54,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
     if (referrals[enrollmentId]) return;
     const { data } = await supabase
       .from("referrals" as any)
-      .select("referred_student_email, referred_enrollment_id")
+      .select("referred_student_email, referred_enrollment_id, created_at")
       .eq("referrer_enrollment_id", enrollmentId);
     const refs = (data as any[]) || [];
     if (refs.length > 0) {
