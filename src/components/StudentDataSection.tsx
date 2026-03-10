@@ -128,6 +128,7 @@ const StudentDataSection = ({ onChange }: Props) => {
               <MapPin size={18} className="absolute left-3 top-3 text-muted-foreground" />
               <input
                 type="text"
+                required
                 maxLength={300}
                 value={studentAddress}
                 onChange={(e) => setStudentAddress(e.target.value)}
