@@ -94,7 +94,7 @@ const InstallmentsList = ({ enrollmentId }: Props) => {
           </p>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-xs">
+            <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border">
                   <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">#</th>
