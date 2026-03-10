@@ -49,6 +49,37 @@ const PaymentsList = ({ refreshKey }: Props) => {
     load();
   }, [user, refreshKey]);
 
+  const loadReferrals = async (enrollmentId: string) => {
+    if (referrals[enrollmentId]) return;
+    const { data } = await supabase
+      .from("referrals" as any)
+      .select("referred_student_email, referred_enrollment_id")
+      .eq("referrer_enrollment_id", enrollmentId);
+    const refs = (data as any[]) || [];
+    if (refs.length > 0) {
+      const ids = refs.map((r) => r.referred_enrollment_id);
+      const { data: enrs } = await supabase
+        .from("enrollments")
+        .select("id, student_name")
+        .in("id", ids);
+      const nameMap = (enrs || []).reduce<Record<string, string>>((acc, en: any) => {
+        acc[en.id] = en.student_name;
+        return acc;
+      }, {});
+      refs.forEach((r) => { r.referred_name = nameMap[r.referred_enrollment_id] || ""; });
+    }
+    setReferrals((prev) => ({ ...prev, [enrollmentId]: refs }));
+  };
+
+  const handleExpand = (id: string) => {
+    if (expandedId === id) {
+      setExpandedId(null);
+    } else {
+      setExpandedId(id);
+      loadReferrals(id);
+    }
+  };
+
   if (loading) {
     return <div className="animate-pulse h-32 bg-muted rounded-xl" />;
   }
