@@ -67,6 +67,8 @@ const AdminPaymentsPage = () => {
   const [uploadTarget, setUploadTarget] = useState<string | null>(null);
   const [editingAmount, setEditingAmount] = useState<string | null>(null);
   const [editAmountValue, setEditAmountValue] = useState("");
+  const [editingDiscount, setEditingDiscount] = useState<string | null>(null);
+  const [editDiscountValue, setEditDiscountValue] = useState("");
 
   const load = async () => {
     setLoading(true);
