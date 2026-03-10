@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Search, Upload, Download, FileText, CheckCircle2, Clock, AlertCircle, Plus, ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -58,12 +59,14 @@ const statusConfig: Record<string, { label: string; icon: typeof Clock; color: s
 };
 
 const AdminPaymentsPage = () => {
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [installments, setInstallments] = useState<Record<string, Installment[]>>({});
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [initialExpanded, setInitialExpanded] = useState(false);
   const [showCreateDialog, setShowCreateDialog] = useState<string | null>(null);
   const [createForm, setCreateForm] = useState({ type: "tuition", count: "1", startDate: "" });
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -100,6 +103,15 @@ const AdminPaymentsPage = () => {
 
   useEffect(() => { load(); }, []);
 
+  // Auto-expand student from URL param
+  useEffect(() => {
+    const studentId = searchParams.get("student");
+    if (studentId && !loading && enrollments.length > 0 && !initialExpanded) {
+      setInitialExpanded(true);
+      setExpandedId(studentId);
+      if (!installments[studentId]) loadInstallments(studentId);
+    }
+  }, [searchParams, loading, enrollments, initialExpanded]);
   const loadInstallments = async (enrollmentId: string) => {
     const typeOrder = ["inscription_fee", "tuition", "summercamp"];
     const { data } = await supabase
