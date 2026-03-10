@@ -153,6 +153,28 @@ const PaymentsList = ({ refreshKey }: Props) => {
                 <div>
                   <InstallmentsList enrollmentId={e.id} />
                 </div>
+
+                {(referrals[e.id] || []).length > 0 && (
+                  <div className="bg-muted/40 rounded-lg p-4">
+                    <h3 className="text-sm font-bold text-foreground mb-3 tracking-wide uppercase flex items-center gap-2">
+                      <Users size={14} />
+                      Alunos que indicaram {e.student_name || "este aluno"}
+                    </h3>
+                    <div className="space-y-2">
+                      {referrals[e.id].map((ref, idx) => (
+                        <div key={idx} className="flex items-center gap-3 bg-card rounded-lg border border-border p-3">
+                          <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                            <GraduationCap size={14} />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-foreground truncate">{ref.referred_name || "—"}</p>
+                            <p className="text-xs text-muted-foreground">{ref.referred_student_email}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
