@@ -117,7 +117,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
                 maxLength={100}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className={inputClasses}
+                className={inputClass("guardianFullName")}
                 placeholder="Nome completo do responsável"
               />
             </div>
