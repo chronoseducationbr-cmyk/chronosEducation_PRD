@@ -277,12 +277,6 @@ const InvitePage = () => {
                 disabled={loading}
                 onClick={async () => {
                   setLoading(true);
-                  await supabase
-                    .from("invitations")
-                    .update({ status: "used", used_at: new Date().toISOString() } as any)
-                    .eq("email", email.toLowerCase().trim())
-                    .eq("invite_code", inviteCode.trim());
-
                   const { error } = await lovable.auth.signInWithOAuth("google", {
                     redirect_uri: window.location.origin,
                   });
