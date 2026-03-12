@@ -59,8 +59,8 @@ const StudentDataSection = ({ onChange }: Props) => {
   }, []);
 
   useEffect(() => {
-    onChange?.({ studentName, studentBirthDate, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl });
-  }, [studentName, studentBirthDate, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl]);
+    onChange?.({ studentName, studentBirthDate, studentGender, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl });
+  }, [studentName, studentBirthDate, studentGender, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl]);
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
