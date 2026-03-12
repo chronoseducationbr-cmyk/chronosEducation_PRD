@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { GraduationCap, Mail, MapPin, Calendar } from "lucide-react";
+import { GraduationCap, Mail, MapPin, Calendar, Camera, X } from "lucide-react";
 
 export interface StudentData {
   studentName: string;
@@ -10,6 +10,7 @@ export interface StudentData {
   studentAddress: string;
   studentSchool: string;
   studentGraduationYear: string;
+  studentPhotoUrl: string;
 }
 
 interface Props {
@@ -26,12 +27,16 @@ const StudentDataSection = ({ onChange }: Props) => {
   const [studentAddress, setStudentAddress] = useState("");
   const [studentSchool, setStudentSchool] = useState("");
   const [studentGraduationYear, setStudentGraduationYear] = useState("");
+  const [studentPhotoUrl, setStudentPhotoUrl] = useState("");
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("student_name, student_birth_date, student_email, student_address, student_school, student_graduation_year")
+        .select("student_name, student_birth_date, student_email, student_address, student_school, student_graduation_year, student_photo_url")
         .maybeSingle();
 
       if (data) {
@@ -41,6 +46,10 @@ const StudentDataSection = ({ onChange }: Props) => {
         setStudentAddress((data as any).student_address || "");
         setStudentSchool(data.student_school || "");
         setStudentGraduationYear((data as any).student_graduation_year?.toString() || "");
+        if (data.student_photo_url) {
+          setStudentPhotoUrl(data.student_photo_url);
+          setPhotoPreview(data.student_photo_url);
+        }
       }
       setLoading(false);
     };
@@ -48,8 +57,64 @@ const StudentDataSection = ({ onChange }: Props) => {
   }, []);
 
   useEffect(() => {
-    onChange?.({ studentName, studentBirthDate, studentEmail, studentAddress, studentSchool, studentGraduationYear });
-  }, [studentName, studentBirthDate, studentEmail, studentAddress, studentSchool, studentGraduationYear]);
+    onChange?.({ studentName, studentBirthDate, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl });
+  }, [studentName, studentBirthDate, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl]);
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    if (!file.type.startsWith("image/")) {
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      return;
+    }
+
+    // Show local preview immediately
+    const localPreview = URL.createObjectURL(file);
+    setPhotoPreview(localPreview);
+    setUploading(true);
+
+    const ext = file.name.split(".").pop();
+    const filePath = `${user.id}/photo.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("student-photos")
+      .upload(filePath, file, { upsert: true });
+
+    if (uploadError) {
+      setPhotoPreview(studentPhotoUrl || null);
+      setUploading(false);
+      return;
+    }
+
+    const { data: urlData } = supabase.storage
+      .from("student-photos")
+      .getPublicUrl(filePath);
+
+    const publicUrl = `${urlData.publicUrl}?t=${Date.now()}`;
+    setStudentPhotoUrl(publicUrl);
+    setPhotoPreview(publicUrl);
+
+    await supabase
+      .from("profiles")
+      .update({ student_photo_url: publicUrl } as any)
+      .eq("user_id", user.id);
+
+    setUploading(false);
+  };
+
+  const handleRemovePhoto = async () => {
+    setPhotoPreview(null);
+    setStudentPhotoUrl("");
+    if (user) {
+      await supabase
+        .from("profiles")
+        .update({ student_photo_url: "" } as any)
+        .eq("user_id", user.id);
+    }
+  };
 
   const inputClasses = "w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition";
 
@@ -68,6 +133,59 @@ const StudentDataSection = ({ onChange }: Props) => {
         Dados do Aluno
       </h2>
       <div className="bg-card rounded-xl border border-border shadow-card p-5">
+        {/* Photo upload */}
+        <div className="flex items-center gap-4 mb-5">
+          <div className="relative">
+            {photoPreview ? (
+              <div className="relative">
+                <img
+                  src={photoPreview}
+                  alt="Foto do aluno"
+                  className="w-20 h-20 rounded-full object-cover border-2 border-secondary/30"
+                />
+                <button
+                  type="button"
+                  onClick={handleRemovePhoto}
+                  className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground rounded-full p-0.5 hover:opacity-80 transition-opacity"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="w-20 h-20 rounded-full border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center text-muted-foreground hover:border-secondary/50 hover:text-secondary transition-colors"
+              >
+                <Camera size={20} />
+              </button>
+            )}
+            {uploading && (
+              <div className="absolute inset-0 bg-background/60 rounded-full flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-secondary" />
+              </div>
+            )}
+          </div>
+          <div>
+            <p className="text-sm font-medium text-foreground">Foto do aluno</p>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="text-xs text-secondary hover:underline"
+            >
+              {photoPreview ? "Alterar foto" : "Carregar foto"}
+            </button>
+            <p className="text-[10px] text-muted-foreground mt-0.5">JPG ou PNG, máx. 5MB</p>
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={handlePhotoUpload}
+          />
+        </div>
+
         <div className="grid sm:grid-cols-2 gap-5">
           <div className="sm:col-span-2">
             <label className="text-sm font-medium text-foreground block mb-1.5">Nome completo do aluno</label>
