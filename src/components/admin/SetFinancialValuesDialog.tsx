@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type FocusEvent, type MouseEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,6 +41,34 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
   const [summercampValue, setSummercampValue] = useState("");
   const [summercampInstallments, setSummercampInstallments] = useState("6");
   const [summercampStartDate, setSummercampStartDate] = useState("");
+
+  const formatMoneyInput = (value: string) => (value ? `${value},00` : "");
+
+  const parseMoneyInput = (value: string) => {
+    const [integerPart = ""] = value.split(",");
+    return integerPart.replace(/\D/g, "");
+  };
+
+  const placeCaretBeforeDecimals = (input: HTMLInputElement) => {
+    const caretPosition = parseMoneyInput(input.value).length;
+    requestAnimationFrame(() => {
+      input.setSelectionRange(caretPosition, caretPosition);
+    });
+  };
+
+  const handleMoneyChange = (event: ChangeEvent<HTMLInputElement>, setValue: (value: string) => void) => {
+    const integerPart = parseMoneyInput(event.target.value);
+    setValue(integerPart);
+    placeCaretBeforeDecimals(event.target);
+  };
+
+  const handleMoneyFocus = (event: FocusEvent<HTMLInputElement>) => {
+    placeCaretBeforeDecimals(event.currentTarget);
+  };
+
+  const handleMoneyClick = (event: MouseEvent<HTMLInputElement>) => {
+    placeCaretBeforeDecimals(event.currentTarget);
+  };
 
   const handleOpen = () => {
     setInscriptionFee(currentValues.inscription_fee_cents > 0 ? String(currentValues.inscription_fee_cents / 100) : "800");
@@ -119,18 +147,16 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
             <div>
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula</Label>
               <div className="mt-1">
-                <div className="flex items-center">
-                  <Input
-                    type="number"
-                    min="0"
-                    step="1"
-                    placeholder="0"
-                    value={inscriptionFee}
-                    onChange={(e) => setInscriptionFee(e.target.value.replace(/[^0-9]/g, ""))}
-                    className="h-9 rounded-r-none border-r-0"
-                  />
-                  <span className="h-9 flex items-center px-2 bg-muted border border-l-0 border-input rounded-r-md text-sm text-muted-foreground select-none">,00</span>
-                </div>
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="0,00"
+                  value={formatMoneyInput(inscriptionFee)}
+                  onChange={(e) => handleMoneyChange(e, setInscriptionFee)}
+                  onFocus={handleMoneyFocus}
+                  onClick={handleMoneyClick}
+                  className="h-9"
+                />
                 <p className="text-[10px] text-muted-foreground mt-0.5">Valor em dólares ($)</p>
               </div>
             </div>
@@ -150,18 +176,16 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
                 </div>
                 <div>
                   <Label className="text-xs text-muted-foreground">Valor da mensalidade ($)</Label>
-                  <div className="flex items-center">
-                    <Input
-                      type="number"
-                      min="0"
-                      step="1"
-                      placeholder="0"
-                      value={tuitionValue}
-                      onChange={(e) => setTuitionValue(e.target.value.replace(/[^0-9]/g, ""))}
-                      className="h-9 rounded-r-none border-r-0"
-                    />
-                    <span className="h-9 flex items-center px-2 bg-muted border border-l-0 border-input rounded-r-md text-sm text-muted-foreground select-none">,00</span>
-                  </div>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="0,00"
+                    value={formatMoneyInput(tuitionValue)}
+                    onChange={(e) => handleMoneyChange(e, setTuitionValue)}
+                    onFocus={handleMoneyFocus}
+                    onClick={handleMoneyClick}
+                    className="h-9"
+                  />
                 </div>
               </div>
               <div className="mt-2">
@@ -190,18 +214,16 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
                 </div>
                 <div>
                   <Label className="text-xs text-muted-foreground">Valor da mensalidade ($)</Label>
-                  <div className="flex items-center">
-                    <Input
-                      type="number"
-                      min="0"
-                      step="1"
-                      placeholder="0"
-                      value={summercampValue}
-                      onChange={(e) => setSummercampValue(e.target.value.replace(/[^0-9]/g, ""))}
-                      className="h-9 rounded-r-none border-r-0"
-                    />
-                    <span className="h-9 flex items-center px-2 bg-muted border border-l-0 border-input rounded-r-md text-sm text-muted-foreground select-none">,00</span>
-                  </div>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="0,00"
+                    value={formatMoneyInput(summercampValue)}
+                    onChange={(e) => handleMoneyChange(e, setSummercampValue)}
+                    onFocus={handleMoneyFocus}
+                    onClick={handleMoneyClick}
+                    className="h-9"
+                  />
                 </div>
               </div>
               <div className="mt-2">
