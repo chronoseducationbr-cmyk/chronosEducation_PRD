@@ -444,6 +444,23 @@ const AdminEnrollmentsPage = () => {
           )}
         </div>
       )}
+
+      <AlertDialog open={!!pendingStatusChange} onOpenChange={(open) => { if (!open) setPendingStatusChange(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar alteração de estado</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem a certeza que deseja alterar o estado de <span className="font-semibold">{pendingStatusChange?.studentName}</span> de{" "}
+              <span className="font-semibold">"{pendingStatusChange?.from}"</span> para{" "}
+              <span className="font-semibold">"{pendingStatusChange?.to}"</span>?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmStatusChange}>Confirmar</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
