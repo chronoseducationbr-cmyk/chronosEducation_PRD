@@ -144,7 +144,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
                   maxLength={20}
                   value={phone}
                   onChange={(e) => setPhone(formatPhone(e.target.value))}
-                  className={`${inputClasses} pl-10`}
+                  className={`${inputClass("guardianPhone")} pl-10`}
                   placeholder="(11) 99999-9999"
                 />
               </div>
