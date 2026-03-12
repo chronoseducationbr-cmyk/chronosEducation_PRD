@@ -290,13 +290,22 @@ const DashboardPage = () => {
                   </div>
 
                   <div className="mt-8">
+                    <ContractSignatureSection onAcceptChange={setContractAccepted} />
+                  </div>
+
+                  <div className="mt-8">
                     <button
                       onClick={handleSubmitEnrollment}
-                      disabled={paying}
+                      disabled={paying || !contractAccepted}
                       className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {paying ? "Processando..." : "Confirmar matrícula"}
                     </button>
+                    {!contractAccepted && (
+                      <p className="text-xs text-muted-foreground text-center mt-2">
+                        É necessário aceitar o contrato para prosseguir.
+                      </p>
+                    )}
                   </div>
                 </>
               )}
