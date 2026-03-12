@@ -102,11 +102,11 @@ const AdminEnrollmentsPage = () => {
     if (userIds.length > 0) {
       const { data: profiles } = await supabase
         .from("profiles")
-        .select("user_id, full_name, email, phone")
+        .select("user_id, full_name, email, phone, student_photo_url")
         .in("user_id", userIds);
       const guardianMap: Record<string, Guardian> = {};
       (profiles || []).forEach((p: any) => {
-        guardianMap[p.user_id] = { full_name: p.full_name, email: p.email, phone: p.phone };
+        guardianMap[p.user_id] = { full_name: p.full_name, email: p.email, phone: p.phone, student_photo_url: p.student_photo_url };
       });
       enrs.forEach((e) => {
         e.guardian = guardianMap[e.user_id];
