@@ -157,8 +157,8 @@ const AdminUsersPage = () => {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-foreground">Utilizadores</h1>
-          <p className="text-sm text-muted-foreground">{activeUsers.length} utilizadores · {invitations.filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase()))).length} convites</p>
+          <h1 className="font-heading text-2xl font-bold text-foreground">Usuários</h1>
+          <p className="text-sm text-muted-foreground">{activeUsers.length} usuários · {invitations.filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase()))).length} convites</p>
         </div>
         <Button onClick={() => setShowInviteDialog(true)} className="flex items-center gap-2" size="sm">
           <Send size={14} />
