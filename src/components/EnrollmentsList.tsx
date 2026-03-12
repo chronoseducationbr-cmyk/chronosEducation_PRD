@@ -71,21 +71,21 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
     <div>
       <div className="flex items-center justify-between mb-3">
         <h2 className="font-heading text-lg font-semibold text-foreground">
-          Inscrições <span className="text-[#f9b41f]">({enrollments.length})</span>
+          Matrículas <span className="text-[#f9b41f]">({enrollments.length})</span>
         </h2>
         <button
           onClick={onNewEnrollment}
           className="flex items-center gap-1.5 text-sm font-semibold text-[#25D366] hover:text-[#25D366]/80 transition-colors"
         >
           <Plus size={16} />
-          Nova Inscrição
+          Nova Matrícula
         </button>
       </div>
 
       {enrollments.length === 0 ? (
         <div className="bg-card rounded-xl border border-border shadow-card p-8 text-center">
           <GraduationCap size={40} className="mx-auto text-muted-foreground mb-3" />
-          <p className="text-muted-foreground mb-4">Ainda não tem inscrições registadas.</p>
+          <p className="text-muted-foreground mb-4">Ainda não tem matrículas registadas.</p>
           <button
             onClick={onNewEnrollment}
             className="inline-flex items-center gap-2 bg-secondary text-secondary-foreground font-semibold py-2.5 px-5 rounded-lg hover:opacity-90 transition-opacity text-sm"

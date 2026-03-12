@@ -47,7 +47,7 @@ interface Installment {
 }
 
 const typeLabels: Record<string, string> = {
-  inscription_fee: "Inscrição",
+  inscription_fee: "Matrícula",
   tuition: "Aulas Online",
   summercamp: "Summer Camp",
 };
@@ -315,7 +315,7 @@ const AdminPaymentsPage = () => {
                       <button
                         onClick={(ev) => { ev.stopPropagation(); navigate(`/admin/inscricoes?student=${e.id}`); }}
                         className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
-                        title="Ver inscrição"
+                        title="Ver matrícula"
                       >
                         <GraduationCap size={16} className="text-muted-foreground" />
                       </button>
@@ -531,7 +531,7 @@ const AdminPaymentsPage = () => {
               <Select value={createForm.type} onValueChange={(v) => setCreateForm((f) => ({ ...f, type: v }))}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="inscription_fee">Inscrição</SelectItem>
+                  <SelectItem value="inscription_fee">Matrícula</SelectItem>
                   <SelectItem value="tuition">Aulas Online</SelectItem>
                   <SelectItem value="summercamp">Summer Camp</SelectItem>
                 </SelectContent>

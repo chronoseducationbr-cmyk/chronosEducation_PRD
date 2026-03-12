@@ -95,7 +95,7 @@ const DashboardPage = () => {
         .maybeSingle();
 
       if (existingEnrollment) {
-        toast({ title: "Email já inscrito", description: "Já existe uma inscrição com este email de aluno.", variant: "destructive" });
+        toast({ title: "Email já inscrito", description: "Já existe uma matrícula com este email de aluno.", variant: "destructive" });
         setPaying(false);
         return;
       }
@@ -192,7 +192,7 @@ const DashboardPage = () => {
       if (enrollmentResult.error) throw enrollmentResult.error;
       if (notificationResult.error) throw notificationResult.error;
 
-      toast({ title: "Inscrição enviada!", description: "A equipa Chronos foi notificada e entrará em contacto em breve." });
+      toast({ title: "Matrícula enviada!", description: "A equipa Chronos foi notificada e entrará em contacto em breve." });
       setShowForm(false);
       setRefreshKey((k) => k + 1);
       // Reset student refs
@@ -208,9 +208,9 @@ const DashboardPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEOHead
-        title="Inscrições — Chronos Education"
-        description="Gerencie as suas inscrições no programa Dual Diploma."
+        <SEOHead
+        title="Matrículas — Chronos Education"
+        description="Gerencie as suas matrículas no programa Dual Diploma."
         canonical="/pagamentos"
       />
       {/* Top bar */}
@@ -236,7 +236,7 @@ const DashboardPage = () => {
 
       <div className="container-narrow px-4 md:px-8 py-8">
         <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Painel</h1>
-        <p className="text-muted-foreground mb-6">Gerencie as inscrições e pagamentos do programa Dual Diploma.</p>
+        <p className="text-muted-foreground mb-6">Gerencie as matrículas e pagamentos do programa Dual Diploma.</p>
 
         <Tabs defaultValue="inscricoes" className="w-full">
           <TabsList className="mb-6 bg-transparent border-0 p-0 gap-10">
@@ -244,7 +244,7 @@ const DashboardPage = () => {
               value="inscricoes"
               className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
-              Inscrições
+              Matrículas
             </TabsTrigger>
             <TabsTrigger
               value="pagamentos"
@@ -273,11 +273,11 @@ const DashboardPage = () => {
                     className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
                   >
                     <ArrowLeft size={16} />
-                    Voltar às inscrições
+                    Voltar às matrículas
                   </button>
 
                   <h2 className="font-heading text-xl font-semibold text-foreground mb-6">
-                    Nova Inscrição
+                   Nova Matrícula
                   </h2>
 
                   <StudentDataSection onChange={handleStudentChange} />
