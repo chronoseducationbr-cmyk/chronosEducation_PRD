@@ -196,6 +196,7 @@ const DashboardPage = () => {
 
       toast({ title: "Matrícula enviada!", description: "A equipa Chronos foi notificada e entrará em contacto em breve." });
       setShowForm(false);
+      setContractAccepted(false);
       setRefreshKey((k) => k + 1);
       // Reset student refs
       studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
