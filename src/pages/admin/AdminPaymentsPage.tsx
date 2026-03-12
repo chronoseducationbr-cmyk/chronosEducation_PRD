@@ -250,9 +250,9 @@ const AdminPaymentsPage = () => {
 
     const { error } = await supabase.from("installments").insert(rows as any);
     if (error) {
-      toast({ title: "Erro ao criar prestações", description: error.message, variant: "destructive" });
+      toast({ title: "Erro ao criar mensalidades", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: `${count} prestações criadas` });
+      toast({ title: `${count} mensalidades criadas` });
       loadInstallments(showCreateDialog);
     }
     setShowCreateDialog(null);
@@ -325,14 +325,14 @@ const AdminPaymentsPage = () => {
                       <p className="text-xs text-muted-foreground">Responsável: {e.guardian_name}</p>
                     )}
                   </div>
-                  <span className="text-xs text-muted-foreground">{insts.length || "—"} prestações</span>
+                  <span className="text-xs text-muted-foreground">{insts.length || "—"} mensalidades</span>
                   {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
                 </button>
 
                 {isExpanded && (
                   <div className="px-4 pb-4 border-t border-border">
                     <div className="flex items-center justify-between mt-3 mb-3">
-                      <p className="text-sm font-bold text-foreground uppercase tracking-wide">Prestações</p>
+                      <p className="text-sm font-bold text-foreground uppercase tracking-wide">Mensalidades</p>
                       <Button
                         size="sm"
                         variant="outline"
@@ -340,12 +340,12 @@ const AdminPaymentsPage = () => {
                         className="text-xs"
                       >
                         <Plus size={14} className="mr-1" />
-                        Criar Prestações
+                        Criar Mensalidades
                       </Button>
                     </div>
 
                     {insts.length === 0 ? (
-                      <p className="text-sm text-muted-foreground text-center py-4">Sem prestações registadas.</p>
+                      <p className="text-sm text-muted-foreground text-center py-4">Sem mensalidades registadas.</p>
                     ) : (
                       <div className="overflow-x-auto">
                         <table className="w-full text-xs">
@@ -523,7 +523,7 @@ const AdminPaymentsPage = () => {
       <Dialog open={!!showCreateDialog} onOpenChange={(open) => !open && setShowCreateDialog(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Criar Prestações</DialogTitle>
+            <DialogTitle>Criar Mensalidades</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div>
@@ -538,7 +538,7 @@ const AdminPaymentsPage = () => {
               </Select>
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground mb-1 block">Número de prestações</label>
+              <label className="text-sm font-medium text-foreground mb-1 block">Número de mensalidades</label>
               <Input type="number" min="1" value={createForm.count} onChange={(e) => setCreateForm((f) => ({ ...f, count: e.target.value }))} />
             </div>
             <div>
