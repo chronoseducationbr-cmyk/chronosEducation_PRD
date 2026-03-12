@@ -31,6 +31,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/auth-redirect" element={<AuthRedirect />} />
             <Route path="/convite" element={<InvitePage />} />
             <Route
               path="/pagamentos"
