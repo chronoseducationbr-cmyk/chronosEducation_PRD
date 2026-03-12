@@ -312,6 +312,18 @@ const AdminPaymentsPage = () => {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
+                      {e.tuition_installment_cents === 0 && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <AlertTriangle size={16} className="text-amber-500 shrink-0" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Mensalidades ainda não definidas</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
                       <p className="font-semibold text-foreground">{e.student_name}</p>
                       <button
                         onClick={(ev) => { ev.stopPropagation(); navigate(`/admin/inscricoes?student=${e.id}`); }}
