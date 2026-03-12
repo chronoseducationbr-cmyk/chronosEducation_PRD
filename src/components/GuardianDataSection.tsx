@@ -48,6 +48,11 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
     fetchData();
   }, [user]);
 
+  const saveProfile = async (fields: Record<string, string>) => {
+    if (!user) return;
+    await supabase.from("profiles").update(fields as any).eq("user_id", user.id);
+  };
+
   useEffect(() => {
     onChange?.({ fullName, email, phone, cpf });
   }, [fullName, email, phone, cpf]);
@@ -117,6 +122,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
                 maxLength={100}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                onBlur={() => saveProfile({ full_name: fullName.trim() })}
                 className={inputClass("guardianFullName")}
                 placeholder="Nome completo do responsável"
               />
@@ -130,6 +136,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
                   maxLength={100}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onBlur={() => saveProfile({ email: email.trim() })}
                   className={`${inputClass("guardianEmail")} pl-10`}
                   placeholder="email@exemplo.com"
                 />
@@ -144,6 +151,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
                   maxLength={20}
                   value={phone}
                   onChange={(e) => setPhone(formatPhone(e.target.value))}
+                  onBlur={() => saveProfile({ phone: phone.trim() })}
                   className={`${inputClass("guardianPhone")} pl-10`}
                   placeholder="(11) 99999-9999"
                 />
