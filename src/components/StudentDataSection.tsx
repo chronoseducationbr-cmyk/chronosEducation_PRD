@@ -133,7 +133,7 @@ const StudentDataSection = ({ onChange }: Props) => {
                 value={studentAddress}
                 onChange={(e) => setStudentAddress(e.target.value)}
                 className={`${inputClasses} pl-10`}
-                placeholder="Morada completa do aluno"
+                placeholder="Endereço completo do aluno"
               />
             </div>
           </div>
