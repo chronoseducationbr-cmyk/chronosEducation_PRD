@@ -42,7 +42,7 @@ const DashboardPage = () => {
     if (!s.studentName.trim()) missingFields.push("Nome do aluno");
     if (!s.studentBirthDate) missingFields.push("Data de nascimento");
     if (!s.studentEmail.trim()) missingFields.push("Email do aluno");
-    if (!s.studentAddress.trim()) missingFields.push("Morada");
+    if (!s.studentAddress.trim()) missingFields.push("Endereço");
     if (!s.studentSchool.trim()) missingFields.push("Escola atual");
     if (!s.studentGraduationYear) missingFields.push("Ano de conclusão");
 
@@ -217,7 +217,7 @@ const DashboardPage = () => {
     if (!s.studentName.trim()) missingFields.push("Nome do aluno");
     if (!s.studentBirthDate) missingFields.push("Data de nascimento");
     if (!s.studentEmail.trim()) missingFields.push("Email do aluno");
-    if (!s.studentAddress.trim()) missingFields.push("Morada");
+    if (!s.studentAddress.trim()) missingFields.push("Endereço");
     if (!s.studentSchool.trim()) missingFields.push("Escola atual");
     if (!s.studentGraduationYear) missingFields.push("Ano de conclusão");
 
