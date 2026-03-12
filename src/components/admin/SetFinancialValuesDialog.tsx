@@ -128,7 +128,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
                   onChange={(e) => setInscriptionFee(e.target.value)}
                   className="h-9"
                 />
-                <p className="text-[10px] text-muted-foreground mt-0.5">Valor em euros (€)</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">Valor em dólares ($)</p>
               </div>
             </div>
 
