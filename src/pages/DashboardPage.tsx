@@ -323,14 +323,18 @@ const DashboardPage = () => {
                 <>
                   <button
                     onClick={() => {
-                      setShowForm(false);
-                      setWizardStep(1);
-                      setContractAccepted(false);
+                      if (wizardStep === 2) {
+                        setWizardStep(1);
+                      } else {
+                        setShowForm(false);
+                        setWizardStep(1);
+                        setContractAccepted(false);
+                      }
                     }}
                     className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
                   >
                     <ArrowLeft size={16} />
-                    Voltar às matrículas
+                    {wizardStep === 2 ? "Voltar aos dados do aluno" : "Voltar às matrículas"}
                   </button>
 
                   <h2 className="font-heading text-xl font-semibold text-foreground mb-2">
