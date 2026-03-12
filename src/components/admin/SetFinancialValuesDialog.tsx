@@ -176,18 +176,16 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
                 </div>
                 <div>
                   <Label className="text-xs text-muted-foreground">Valor da mensalidade ($)</Label>
-                  <div className="flex items-center">
-                    <Input
-                      type="number"
-                      min="0"
-                      step="1"
-                      placeholder="0"
-                      value={tuitionValue}
-                      onChange={(e) => setTuitionValue(e.target.value.replace(/[^0-9]/g, ""))}
-                      className="h-9 rounded-r-none border-r-0"
-                    />
-                    <span className="h-9 flex items-center px-2 bg-muted border border-l-0 border-input rounded-r-md text-sm text-muted-foreground select-none">,00</span>
-                  </div>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="0,00"
+                    value={formatMoneyInput(tuitionValue)}
+                    onChange={(e) => handleMoneyChange(e, setTuitionValue)}
+                    onFocus={handleMoneyFocus}
+                    onClick={handleMoneyClick}
+                    className="h-9"
+                  />
                 </div>
               </div>
               <div className="mt-2">
