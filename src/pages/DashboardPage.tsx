@@ -322,7 +322,14 @@ const DashboardPage = () => {
                   <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} />
                   <div className="mt-8">
                     <EnrollmentsList
-                      onNewEnrollment={() => setShowForm(true)}
+                      onNewEnrollment={() => {
+                        studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
+                        referralRef.current = "";
+                        setValidationErrors([]);
+                        setContractAccepted(false);
+                        setWizardStep(1);
+                        setShowForm(true);
+                      }}
                       refreshKey={refreshKey}
                     />
                   </div>
