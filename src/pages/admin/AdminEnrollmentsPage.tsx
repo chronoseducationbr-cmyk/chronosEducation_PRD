@@ -269,20 +269,7 @@ const AdminEnrollmentsPage = () => {
                     </div>
                     <p className="text-xs text-muted-foreground">{e.student_email || "—"}</p>
                   </div>
-                  <div className="shrink-0 w-48" onClick={(ev) => ev.stopPropagation()}>
-                    <Select value={e.status} onValueChange={(v) => updateStatus(e.id, v)}>
-                      <SelectTrigger className="h-8 text-xs">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {statuses.map((s) => (
-                          <SelectItem key={s} value={s} className="text-xs">
-                            {s}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  
                   <button
                     onClick={() => navigate(`/admin/pagamentos?student=${e.id}`)}
                     className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
