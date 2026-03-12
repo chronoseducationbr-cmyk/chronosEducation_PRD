@@ -211,7 +211,7 @@ const StudentDataSection = ({ onChange, validationErrors = [] }: Props) => {
                 required
                 value={studentBirthDate}
                 onChange={(e) => setStudentBirthDate(e.target.value)}
-                className={`${inputClasses} pl-10`}
+                className={`${inputClasses("studentBirthDate")} pl-10`}
               />
             </div>
           </div>
