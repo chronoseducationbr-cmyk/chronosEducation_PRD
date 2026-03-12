@@ -37,6 +37,10 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (initialData && (initialData.studentName || initialData.studentEmail)) {
+      setLoading(false);
+      return;
+    }
     const fetchProfile = async () => {
       const { data } = await supabase
         .from("profiles")
