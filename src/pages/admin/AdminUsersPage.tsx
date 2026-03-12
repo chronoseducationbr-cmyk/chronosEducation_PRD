@@ -177,7 +177,7 @@ const AdminUsersPage = () => {
             value="users"
             className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
           >
-            Utilizadores ({activeUsers.length})
+            Usuários ({activeUsers.length})
           </TabsTrigger>
           <TabsTrigger
             value="invites"
