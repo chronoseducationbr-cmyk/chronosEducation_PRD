@@ -284,9 +284,9 @@ const AdminEnrollmentsPage = () => {
                     </div>
                     <p className="text-xs text-muted-foreground">{e.student_email || "—"}</p>
                     <div className="flex items-center gap-3 mt-1 flex-wrap text-[11px] text-muted-foreground">
-                      <span>Matrícula: <span className="font-medium text-foreground">{e.inscription_fee_cents > 0 ? `$${(e.inscription_fee_cents / 100).toFixed(0)}` : "—"}</span></span>
-                      <span>Plataforma: <span className="font-medium text-foreground">{e.tuition_installment_cents > 0 ? `${e.tuition_installments}x $${(e.tuition_installment_cents / 100).toFixed(0)}` : "—"}</span></span>
-                      <span>Summer: <span className="font-medium text-foreground">{e.summercamp_installment_cents > 0 ? `${e.summercamp_installments}x $${(e.summercamp_installment_cents / 100).toFixed(0)}` : "—"}</span></span>
+                      <span>Matrícula: <span className="font-medium text-foreground">{e.inscription_fee_cents > 0 ? `$${(e.inscription_fee_cents / 100).toFixed(2)}` : "—"}</span></span>
+                      <span>Plataforma: <span className="font-medium text-foreground">{e.tuition_installment_cents > 0 ? `${e.tuition_installments}x $${(e.tuition_installment_cents / 100).toFixed(2)}` : "—"}</span></span>
+                      <span>Summer: <span className="font-medium text-foreground">{e.summercamp_installment_cents > 0 ? `${e.summercamp_installments}x $${(e.summercamp_installment_cents / 100).toFixed(2)}` : "—"}</span></span>
                       <SetFinancialValuesDialog
                         enrollmentId={e.id}
                         studentName={e.student_name}

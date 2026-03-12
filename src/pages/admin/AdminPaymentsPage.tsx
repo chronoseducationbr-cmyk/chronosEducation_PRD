@@ -456,8 +456,8 @@ const AdminPaymentsPage = () => {
                                       const disc = inst.discount_percent || 0;
                                       const final_cents = inst.status === "paid" ? inst.amount_cents : Math.round(inst.amount_cents * (1 - disc / 100));
                                       return disc > 0 && inst.status !== "paid"
-                                        ? <span className="text-green-700">${(final_cents / 100).toFixed(0)}</span>
-                                        : `$${(final_cents / 100).toFixed(0)}`;
+                                        ? <span className="text-green-700">${(final_cents / 100).toFixed(2)}</span>
+                                        : `$${(final_cents / 100).toFixed(2)}`;
                                     })()}
                                   </td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.due_date)}</td>

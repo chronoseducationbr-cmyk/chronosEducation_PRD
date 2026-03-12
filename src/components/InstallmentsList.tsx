@@ -101,7 +101,7 @@ const TypeSection = ({
                             </span>
                           );
                         }
-                        return `$${(inst.amount_cents / 100).toFixed(0)}`;
+                        return `$${(inst.amount_cents / 100).toFixed(2)}`;
                       })()}
                     </td>
                     <td className="py-2 pr-2 text-foreground">

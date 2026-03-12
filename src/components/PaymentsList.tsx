@@ -145,7 +145,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
                       </div>
                       <div className="bg-card rounded-lg p-3 border border-border">
                         <p className="text-muted-foreground text-xs mb-0.5">Summer Camp ({e.summercamp_installments}x)</p>
-                        <p className="text-foreground text-lg font-bold">${(e.summercamp_installment_cents / 100).toFixed(0)}</p>
+                        <p className="text-foreground text-lg font-bold">${(e.summercamp_installment_cents / 100).toFixed(2)}</p>
                       </div>
                     </div>
                   </div>
