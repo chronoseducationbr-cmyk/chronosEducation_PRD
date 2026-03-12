@@ -229,7 +229,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             </select>
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-foreground block mb-1.5">Email do aluno</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Email do aluno <span className="text-[#F9B91D]">*</span></label>
             <div className="relative">
               <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input
