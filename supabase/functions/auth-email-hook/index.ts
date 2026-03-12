@@ -246,7 +246,7 @@ async function handleWebhook(req: Request): Promise<Response> {
 
   // For invites, build a custom confirmation URL with the invite code
   const confirmationUrl = emailType === 'invite' && inviteCode
-    ? `https://${ROOT_DOMAIN}/convite?code=${inviteCode}`
+    ? `https://chronoseducation.com/convite`
     : payload.data.url
 
   const templateProps = {
