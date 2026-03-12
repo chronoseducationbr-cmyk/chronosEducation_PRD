@@ -272,7 +272,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             </div>
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-foreground block mb-1.5">Escola atual</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Escola atual <span className="text-[#F9B91D]">*</span></label>
             <input
               type="text"
               required
