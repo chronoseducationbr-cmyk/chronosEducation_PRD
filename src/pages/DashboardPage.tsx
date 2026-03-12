@@ -390,7 +390,7 @@ const DashboardPage = () => {
                   {/* Step 2: Contract Signature */}
                   {wizardStep === 2 && (
                     <>
-                      <ContractSignatureSection onAcceptChange={setContractAccepted} />
+                      <ContractSignatureSection onAcceptChange={setContractAccepted} guardianData={guardianRef.current} studentData={studentRef.current} />
 
                       <div className="mt-8">
                         <button
