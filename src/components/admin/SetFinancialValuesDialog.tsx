@@ -119,18 +119,17 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
             <div>
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula</Label>
               <div className="mt-1">
-                <div className="flex items-center gap-0">
-                  <Input
-                    type="number"
-                    step="1"
-                    min="0"
-                    placeholder="0"
-                    value={inscriptionFee}
-                    onChange={(e) => setInscriptionFee(e.target.value)}
-                    className="h-9 rounded-r-none border-r-0"
-                  />
-                  <span className="h-9 flex items-center px-2 bg-muted border border-border rounded-r-md text-sm text-muted-foreground select-none">.00</span>
-                </div>
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="0,00"
+                  value={inscriptionFee ? `${inscriptionFee},00` : ""}
+                  onChange={(e) => {
+                    const raw = e.target.value.replace(/[^0-9]/g, "");
+                    setInscriptionFee(raw);
+                  }}
+                  className="h-9"
+                />
                 <p className="text-[10px] text-muted-foreground mt-0.5">Valor em dólares ($)</p>
               </div>
             </div>
@@ -150,18 +149,17 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
                 </div>
                 <div>
                   <Label className="text-xs text-muted-foreground">Valor da mensalidade ($)</Label>
-                  <div className="flex items-center gap-0">
-                    <Input
-                      type="number"
-                      step="1"
-                      min="0"
-                      placeholder="0"
-                      value={tuitionValue}
-                      onChange={(e) => setTuitionValue(e.target.value)}
-                      className="h-9 rounded-r-none border-r-0"
-                    />
-                    <span className="h-9 flex items-center px-2 bg-muted border border-border rounded-r-md text-sm text-muted-foreground select-none">.00</span>
-                  </div>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="0,00"
+                    value={tuitionValue ? `${tuitionValue},00` : ""}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/[^0-9]/g, "");
+                      setTuitionValue(raw);
+                    }}
+                    className="h-9"
+                  />
                 </div>
               </div>
               <div className="mt-2">
@@ -190,18 +188,17 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
                 </div>
                 <div>
                   <Label className="text-xs text-muted-foreground">Valor da mensalidade ($)</Label>
-                  <div className="flex items-center gap-0">
-                    <Input
-                      type="number"
-                      step="1"
-                      min="0"
-                      placeholder="0"
-                      value={summercampValue}
-                      onChange={(e) => setSummercampValue(e.target.value)}
-                      className="h-9 rounded-r-none border-r-0"
-                    />
-                    <span className="h-9 flex items-center px-2 bg-muted border border-border rounded-r-md text-sm text-muted-foreground select-none">.00</span>
-                  </div>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="0,00"
+                    value={summercampValue ? `${summercampValue},00` : ""}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/[^0-9]/g, "");
+                      setSummercampValue(raw);
+                    }}
+                    className="h-9"
+                  />
                 </div>
               </div>
               <div className="mt-2">
