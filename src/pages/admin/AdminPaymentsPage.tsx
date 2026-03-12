@@ -48,7 +48,7 @@ interface Installment {
 
 const typeLabels: Record<string, string> = {
   inscription_fee: "Matrícula",
-  tuition: "Aulas Online",
+  tuition: "Plataforma Online",
   summercamp: "Summer Camp",
 };
 
@@ -532,7 +532,7 @@ const AdminPaymentsPage = () => {
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="inscription_fee">Matrícula</SelectItem>
-                  <SelectItem value="tuition">Aulas Online</SelectItem>
+                  <SelectItem value="tuition">Plataforma Online</SelectItem>
                   <SelectItem value="summercamp">Summer Camp</SelectItem>
                 </SelectContent>
               </Select>
