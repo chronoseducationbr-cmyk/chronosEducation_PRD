@@ -192,7 +192,7 @@ const DashboardPage = () => {
       if (enrollmentResult.error) throw enrollmentResult.error;
       if (notificationResult.error) throw notificationResult.error;
 
-      toast({ title: "Inscrição enviada!", description: "A equipa Chronos foi notificada e entrará em contacto em breve." });
+      toast({ title: "Matrícula enviada!", description: "A equipa Chronos foi notificada e entrará em contacto em breve." });
       setShowForm(false);
       setRefreshKey((k) => k + 1);
       // Reset student refs
