@@ -257,7 +257,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-foreground block mb-1.5">Endereço</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Endereço <span className="text-[#F9B91D]">*</span></label>
             <div className="relative">
               <MapPin size={18} className="absolute left-3 top-3 text-muted-foreground" />
               <input
