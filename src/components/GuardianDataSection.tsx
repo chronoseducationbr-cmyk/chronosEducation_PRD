@@ -12,6 +12,7 @@ export interface GuardianData {
 
 interface Props {
   onChange?: (data: GuardianData) => void;
+  validationErrors?: string[];
 }
 
 const GuardianDataSection = ({ onChange }: Props) => {
