@@ -292,7 +292,7 @@ const DashboardPage = () => {
                       disabled={paying}
                       className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {paying ? "Processando..." : "Confirmar Inscrição"}
+                      {paying ? "Processando..." : "Confirmar matrícula"}
                     </button>
                   </div>
                 </>
