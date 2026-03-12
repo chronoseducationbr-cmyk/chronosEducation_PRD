@@ -276,13 +276,12 @@ const AdminEnrollmentsPage = () => {
                           </PopoverContent>
                         </Popover>
                       )}
-                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
-                        {e.status}
-                      </span>
                     </div>
                     <p className="text-xs text-muted-foreground">{e.student_email || "—"}</p>
                   </div>
-                  
+                  <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
+                    {e.status}
+                  </span>
                   <button
                     onClick={() => navigate(`/admin/pagamentos?student=${e.id}`)}
                     className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
