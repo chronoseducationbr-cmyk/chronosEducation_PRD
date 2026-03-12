@@ -93,15 +93,17 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
 
   const hasValues = currentValues.inscription_fee_cents > 0 || currentValues.tuition_installment_cents > 0 || currentValues.summercamp_installment_cents > 0;
 
+  if (hasValues) return null;
+
   return (
     <>
       <button
         onClick={(ev) => { ev.stopPropagation(); handleOpen(); }}
-        className={`inline-flex items-center gap-1 text-[11px] font-medium transition-colors ${hasValues ? "text-secondary hover:text-secondary/80" : "text-accent hover:text-accent/80"}`}
-        title={hasValues ? "Editar valores financeiros" : "Definir valores financeiros"}
+        className="inline-flex items-center gap-1 text-[11px] font-medium transition-colors text-accent hover:text-accent/80"
+        title="Definir valores financeiros"
       >
         <Settings size={12} />
-        {hasValues ? "Editar" : "Definir valores"}
+        Definir valores
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
