@@ -34,8 +34,8 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
     }
     const fetchData = async () => {
       const [profileRes, enrollRes] = await Promise.all([
-        supabase.from("profiles").select("full_name, email, phone").maybeSingle(),
-        supabase.from("enrollments").select("id").limit(1),
+        supabase.from("profiles").select("full_name, email, phone").eq("user_id", user!.id).maybeSingle(),
+        supabase.from("enrollments").select("id").eq("user_id", user!.id).limit(1),
       ]);
 
       if (profileRes.data) {
