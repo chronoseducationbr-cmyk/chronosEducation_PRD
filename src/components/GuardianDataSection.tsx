@@ -136,6 +136,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
                   maxLength={100}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onBlur={() => saveProfile({ email: email.trim() })}
                   className={`${inputClass("guardianEmail")} pl-10`}
                   placeholder="email@exemplo.com"
                 />
