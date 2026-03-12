@@ -169,7 +169,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             )}
           </div>
           <div>
-            <p className="text-sm font-medium text-foreground">Foto do aluno</p>
+            <p className="text-sm font-medium text-foreground">Foto do aluno <span className="text-[#F9B91D]">*</span></p>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
