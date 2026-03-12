@@ -78,7 +78,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
           className="flex items-center gap-1.5 text-sm font-semibold text-[#25D366] hover:text-[#25D366]/80 transition-colors"
         >
           <Plus size={16} />
-          Nova Inscrição
+          Nova Matrícula
         </button>
       </div>
 
