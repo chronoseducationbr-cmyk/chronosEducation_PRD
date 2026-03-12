@@ -214,15 +214,17 @@ const DashboardPage = () => {
 
   const validateStep1 = (): boolean => {
     const s = studentRef.current;
+    const errors: string[] = [];
     const missingFields: string[] = [];
-    if (!s.studentName.trim()) missingFields.push("Nome do aluno");
-    if (!s.studentBirthDate) missingFields.push("Data de nascimento");
-    if (!s.studentEmail.trim()) missingFields.push("Email do aluno");
-    if (!s.studentAddress.trim()) missingFields.push("Endereço");
-    if (!s.studentSchool.trim()) missingFields.push("Escola atual");
-    if (!s.studentGraduationYear) missingFields.push("Ano de conclusão");
+    if (!s.studentName.trim()) { missingFields.push("Nome do aluno"); errors.push("studentName"); }
+    if (!s.studentBirthDate) { missingFields.push("Data de nascimento"); errors.push("studentBirthDate"); }
+    if (!s.studentEmail.trim()) { missingFields.push("Email do aluno"); errors.push("studentEmail"); }
+    if (!s.studentAddress.trim()) { missingFields.push("Endereço"); errors.push("studentAddress"); }
+    if (!s.studentSchool.trim()) { missingFields.push("Escola atual"); errors.push("studentSchool"); }
+    if (!s.studentGraduationYear) { missingFields.push("Ano de conclusão"); errors.push("studentGraduationYear"); }
 
-    if (missingFields.length > 0) {
+    if (errors.length > 0) {
+      setValidationErrors(errors);
       toast({ title: "Campos obrigatórios em falta", description: missingFields.join(", "), variant: "destructive" });
       return false;
     }
@@ -234,6 +236,7 @@ const DashboardPage = () => {
       const monthDiff = today.getMonth() - birthDate.getMonth();
       if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
       if (age < 13 || age > 17) {
+        setValidationErrors(["studentBirthDate"]);
         toast({ title: "Idade inválida", description: "O aluno deve ter entre 13 e 17 anos na data da inscrição.", variant: "destructive" });
         return false;
       }
@@ -246,11 +249,13 @@ const DashboardPage = () => {
       const minDate = new Date(now.getFullYear(), now.getMonth() + 16, 1);
       if (gradDate < minDate) {
         const earliestYear = minDate.getMonth() >= 10 ? minDate.getFullYear() : minDate.getFullYear() + 1;
+        setValidationErrors(["studentGraduationYear"]);
         toast({ title: "Ano de conclusão inválido", description: `O ano previsto deve ser ${earliestYear} ou superior.`, variant: "destructive" });
         return false;
       }
     }
 
+    setValidationErrors([]);
     return true;
   };
 
