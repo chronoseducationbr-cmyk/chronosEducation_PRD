@@ -130,7 +130,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
                   maxLength={100}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className={`${inputClasses} pl-10`}
+                  className={`${inputClass("guardianEmail")} pl-10`}
                   placeholder="email@exemplo.com"
                 />
               </div>
