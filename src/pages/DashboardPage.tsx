@@ -21,7 +21,7 @@ const DashboardPage = () => {
   const [refreshKey, setRefreshKey] = useState(0);
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
-  const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
+  const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
   const referralRef = useRef("");
 
   const handleGuardianChange = useCallback((data: GuardianData) => { guardianRef.current = data; }, []);
@@ -196,7 +196,7 @@ const DashboardPage = () => {
       setShowForm(false);
       setRefreshKey((k) => k + 1);
       // Reset student refs
-      studentRef.current = { studentName: "", studentBirthDate: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
+      studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
       referralRef.current = "";
     } catch (err: any) {
       console.error(err);
