@@ -32,6 +32,7 @@ interface Enrollment {
   summercamp_installments: number;
   user_id: string;
   guardian_name?: string;
+  has_installments?: boolean;
 }
 
 interface Installment {
@@ -98,6 +99,16 @@ const AdminPaymentsPage = () => {
         return acc;
       }, {});
       enrs.forEach((e) => { e.guardian_name = nameMap[e.user_id] || ""; });
+    }
+    // Check which enrollments have installments
+    const enrollmentIds = enrs.map((e) => e.id);
+    if (enrollmentIds.length > 0) {
+      const { data: instData } = await supabase
+        .from("installments")
+        .select("enrollment_id")
+        .in("enrollment_id", enrollmentIds);
+      const idsWithInst = new Set((instData || []).map((i: any) => i.enrollment_id));
+      enrs.forEach((e) => { e.has_installments = idsWithInst.has(e.id); });
     }
     setEnrollments(enrs);
     setLoading(false);
@@ -312,7 +323,7 @@ const AdminPaymentsPage = () => {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      {e.tuition_installment_cents === 0 && (
+                      {!e.has_installments && (
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
