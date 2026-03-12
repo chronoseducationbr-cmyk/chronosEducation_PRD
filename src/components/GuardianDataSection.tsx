@@ -157,7 +157,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
                   type="text"
                   value={cpf}
                   onChange={(e) => setCpf(formatCpf(e.target.value))}
-                  className={`${inputClasses} pl-10`}
+                  className={`${inputClass("guardianCpf")} pl-10`}
                   placeholder="000.000.000-00"
                   maxLength={14}
                 />
