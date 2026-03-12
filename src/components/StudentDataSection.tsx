@@ -24,6 +24,7 @@ const StudentDataSection = ({ onChange }: Props) => {
 
   const [studentName, setStudentName] = useState("");
   const [studentBirthDate, setStudentBirthDate] = useState("");
+  const [studentGender, setStudentGender] = useState("");
   const [studentEmail, setStudentEmail] = useState("");
   const [studentAddress, setStudentAddress] = useState("");
   const [studentSchool, setStudentSchool] = useState("");
