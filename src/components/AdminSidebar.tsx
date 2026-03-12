@@ -19,7 +19,7 @@ import {
 const items = [
   { title: "Matrículas", url: "/admin/inscricoes", icon: GraduationCap },
   { title: "Pagamentos", url: "/admin/pagamentos", icon: CreditCard },
-  { title: "Utilizadores", url: "/admin/utilizadores", icon: Users },
+  { title: "Usuários", url: "/admin/utilizadores", icon: Users },
 ];
 
 export function AdminSidebar() {

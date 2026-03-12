@@ -281,7 +281,7 @@ const AdminUsersPage = () => {
           </DialogHeader>
           <div className="space-y-3 py-2">
             <p className="text-sm text-muted-foreground">
-              Introduza o email do utilizador que pretende convidar para a plataforma.
+              Introduza o email do usuário que pretende convidar para a plataforma.
             </p>
             <Input
               type="email"
