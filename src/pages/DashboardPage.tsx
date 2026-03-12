@@ -40,7 +40,7 @@ const DashboardPage = () => {
     if (!s.studentBirthDate) missingFields.push("Data de nascimento");
     if (!s.studentEmail.trim()) missingFields.push("Email do aluno");
     if (!s.studentAddress.trim()) missingFields.push("Morada");
-    if (!s.studentSchool.trim()) missingFields.push("Escola de origem");
+    if (!s.studentSchool.trim()) missingFields.push("Escola atual");
     if (!s.studentGraduationYear) missingFields.push("Ano de conclusão");
 
     if (missingFields.length > 0) {
