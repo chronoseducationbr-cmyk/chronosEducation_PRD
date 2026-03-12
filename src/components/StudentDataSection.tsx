@@ -19,7 +19,7 @@ interface Props {
   validationErrors?: string[];
 }
 
-const StudentDataSection = ({ onChange }: Props) => {
+const StudentDataSection = ({ onChange, validationErrors = [] }: Props) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
 
