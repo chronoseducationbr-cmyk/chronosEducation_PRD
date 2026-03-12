@@ -196,7 +196,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
                 </div>
               </div>
               <div className="mt-2">
-                <Label className="text-xs text-muted-foreground">Data início das prestações</Label>
+                <Label className="text-xs text-muted-foreground">Data início das parcelas</Label>
                 <Input
                   type="date"
                   value={summercampStartDate}
