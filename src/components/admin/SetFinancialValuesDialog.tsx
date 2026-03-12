@@ -42,6 +42,34 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
   const [summercampInstallments, setSummercampInstallments] = useState("6");
   const [summercampStartDate, setSummercampStartDate] = useState("");
 
+  const formatMoneyInput = (value: string) => (value ? `${value},00` : "");
+
+  const parseMoneyInput = (value: string) => {
+    const [integerPart = ""] = value.split(",");
+    return integerPart.replace(/\D/g, "");
+  };
+
+  const placeCaretBeforeDecimals = (input: HTMLInputElement) => {
+    const caretPosition = parseMoneyInput(input.value).length;
+    requestAnimationFrame(() => {
+      input.setSelectionRange(caretPosition, caretPosition);
+    });
+  };
+
+  const handleMoneyChange = (event: ChangeEvent<HTMLInputElement>, setValue: (value: string) => void) => {
+    const integerPart = parseMoneyInput(event.target.value);
+    setValue(integerPart);
+    placeCaretBeforeDecimals(event.target);
+  };
+
+  const handleMoneyFocus = (event: FocusEvent<HTMLInputElement>) => {
+    placeCaretBeforeDecimals(event.currentTarget);
+  };
+
+  const handleMoneyClick = (event: MouseEvent<HTMLInputElement>) => {
+    placeCaretBeforeDecimals(event.currentTarget);
+  };
+
   const handleOpen = () => {
     setInscriptionFee(currentValues.inscription_fee_cents > 0 ? String(currentValues.inscription_fee_cents / 100) : "800");
     setTuitionValue(currentValues.tuition_installment_cents > 0 ? String(currentValues.tuition_installment_cents / 100) : "450");
