@@ -19,6 +19,7 @@ const DashboardPage = () => {
   const { toast } = useToast();
   const [paying, setPaying] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [wizardStep, setWizardStep] = useState(1);
   const [refreshKey, setRefreshKey] = useState(0);
   const [contractAccepted, setContractAccepted] = useState(false);
 
