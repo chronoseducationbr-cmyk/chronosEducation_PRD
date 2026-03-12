@@ -208,9 +208,9 @@ const DashboardPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEOHead
-        title="Inscrições — Chronos Education"
-        description="Gerencie as suas inscrições no programa Dual Diploma."
+        <SEOHead
+        title="Matrículas — Chronos Education"
+        description="Gerencie as suas matrículas no programa Dual Diploma."
         canonical="/pagamentos"
       />
       {/* Top bar */}
