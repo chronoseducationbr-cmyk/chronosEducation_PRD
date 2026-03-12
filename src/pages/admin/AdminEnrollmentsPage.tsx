@@ -364,7 +364,14 @@ const AdminEnrollmentsPage = () => {
                         <div>
                           <p className="text-muted-foreground text-xs">Alterar estado</p>
                           <div className="mt-1">
-                            <Select value={e.status} onValueChange={(v) => updateStatus(e.id, v)}>
+                            <Select
+                              value={e.status}
+                              onValueChange={(v) => {
+                                if (v !== e.status) {
+                                  setPendingStatusChange({ id: e.id, studentName: e.student_name, from: e.status, to: v });
+                                }
+                              }}
+                            >
                               <SelectTrigger className="h-8 text-xs w-56">
                                 <SelectValue />
                               </SelectTrigger>
