@@ -17,15 +17,23 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const redirectByRole = async (userId: string) => {
+    const { data } = await supabase.rpc("has_role", {
+      _user_id: userId,
+      _role: "admin" as const,
+    });
+    navigate(data ? "/admin" : "/pagamentos");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate("/pagamentos");
+        await redirectByRole(data.user.id);
       } else {
         const { error } = await supabase.auth.signUp({
           email,
@@ -163,7 +171,7 @@ const LoginPage = () => {
             onClick={async () => {
               setLoading(true);
               const { error } = await lovable.auth.signInWithOAuth("google", {
-                redirect_uri: window.location.origin,
+                redirect_uri: window.location.origin + "/auth-redirect",
               });
               if (error) {
                 toast({ title: "Erro", description: error.message, variant: "destructive" });
