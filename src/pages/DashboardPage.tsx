@@ -211,6 +211,48 @@ const DashboardPage = () => {
     }
   };
 
+  const validateStep1 = (): boolean => {
+    const s = studentRef.current;
+    const missingFields: string[] = [];
+    if (!s.studentName.trim()) missingFields.push("Nome do aluno");
+    if (!s.studentBirthDate) missingFields.push("Data de nascimento");
+    if (!s.studentEmail.trim()) missingFields.push("Email do aluno");
+    if (!s.studentAddress.trim()) missingFields.push("Morada");
+    if (!s.studentSchool.trim()) missingFields.push("Escola atual");
+    if (!s.studentGraduationYear) missingFields.push("Ano de conclusão");
+
+    if (missingFields.length > 0) {
+      toast({ title: "Campos obrigatórios em falta", description: missingFields.join(", "), variant: "destructive" });
+      return false;
+    }
+
+    if (s.studentBirthDate) {
+      const birthDate = new Date(s.studentBirthDate);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
+      if (age < 13 || age > 17) {
+        toast({ title: "Idade inválida", description: "O aluno deve ter entre 13 e 17 anos na data da inscrição.", variant: "destructive" });
+        return false;
+      }
+    }
+
+    if (s.studentGraduationYear) {
+      const now = new Date();
+      const gradYear = parseInt(s.studentGraduationYear, 10);
+      const gradDate = new Date(gradYear, 10, 1);
+      const minDate = new Date(now.getFullYear(), now.getMonth() + 16, 1);
+      if (gradDate < minDate) {
+        const earliestYear = minDate.getMonth() >= 10 ? minDate.getFullYear() : minDate.getFullYear() + 1;
+        toast({ title: "Ano de conclusão inválido", description: `O ano previsto deve ser ${earliestYear} ou superior.`, variant: "destructive" });
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   return (
     <div className="min-h-screen bg-background">
         <SEOHead
