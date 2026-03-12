@@ -538,7 +538,7 @@ const AdminPaymentsPage = () => {
               </Select>
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground mb-1 block">Número de prestações</label>
+              <label className="text-sm font-medium text-foreground mb-1 block">Número de mensalidades</label>
               <Input type="number" min="1" value={createForm.count} onChange={(e) => setCreateForm((f) => ({ ...f, count: e.target.value }))} />
             </div>
             <div>
