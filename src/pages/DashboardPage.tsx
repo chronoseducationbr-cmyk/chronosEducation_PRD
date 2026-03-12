@@ -22,6 +22,7 @@ const DashboardPage = () => {
   const [wizardStep, setWizardStep] = useState(1);
   const [refreshKey, setRefreshKey] = useState(0);
   const [contractAccepted, setContractAccepted] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
