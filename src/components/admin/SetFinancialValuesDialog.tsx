@@ -136,7 +136,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Plataforma Online</Label>
               <div className="grid grid-cols-2 gap-3 mt-1">
                 <div>
-                  <Label className="text-xs text-muted-foreground">Nº prestações</Label>
+                  <Label className="text-xs text-muted-foreground">Nº parcelas</Label>
                   <Input
                     type="number"
                     min="1"
@@ -173,7 +173,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Summer Camp</Label>
               <div className="grid grid-cols-2 gap-3 mt-1">
                 <div>
-                  <Label className="text-xs text-muted-foreground">Nº prestações</Label>
+                  <Label className="text-xs text-muted-foreground">Nº parcelas</Label>
                   <Input
                     type="number"
                     min="1"
