@@ -32,6 +32,7 @@ interface Enrollment {
   summercamp_installments: number;
   user_id: string;
   guardian_name?: string;
+  has_installments?: boolean;
 }
 
 interface Installment {
