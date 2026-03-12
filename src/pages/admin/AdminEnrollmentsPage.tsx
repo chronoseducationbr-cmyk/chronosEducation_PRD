@@ -187,11 +187,13 @@ const AdminEnrollmentsPage = () => {
     return `${String(dt.getDate()).padStart(2, "0")}/${String(dt.getMonth() + 1).padStart(2, "0")}/${dt.getFullYear()}`;
   };
 
-  const filtered = enrollments.filter(
-    (e) =>
-      e.student_name.toLowerCase().includes(search.toLowerCase()) ||
-      (e.student_email?.toLowerCase() || "").includes(search.toLowerCase())
-  );
+  const filtered = enrollments
+    .filter(
+      (e) =>
+        e.student_name.toLowerCase().includes(search.toLowerCase()) ||
+        (e.student_email?.toLowerCase() || "").includes(search.toLowerCase())
+    )
+    .sort((a, b) => a.student_name.localeCompare(b.student_name, "pt"));
 
   return (
     <div>
