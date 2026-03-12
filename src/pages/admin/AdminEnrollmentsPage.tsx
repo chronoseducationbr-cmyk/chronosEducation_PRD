@@ -280,6 +280,11 @@ const AdminEnrollmentsPage = () => {
                       )}
                     </div>
                     <p className="text-xs text-muted-foreground">{e.student_email || "—"}</p>
+                    <div className="flex items-center gap-3 mt-1 flex-wrap text-[11px] text-muted-foreground">
+                      <span>Inscrição: <span className="font-medium text-foreground">{(e.inscription_fee_cents / 100).toFixed(2)}€</span></span>
+                      <span>Online: <span className="font-medium text-foreground">{e.tuition_installments}x {(e.tuition_installment_cents / 100).toFixed(2)}€</span></span>
+                      <span>Summer: <span className="font-medium text-foreground">{e.summercamp_installments}x {(e.summercamp_installment_cents / 100).toFixed(2)}€</span></span>
+                    </div>
                   </div>
                   <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
                     {e.status}
