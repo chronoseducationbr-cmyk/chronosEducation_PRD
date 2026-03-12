@@ -127,7 +127,7 @@ const GuardianDataSection = ({ onChange }: Props) => {
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Telefone</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Celular</label>
               <div className="relative">
                 <Phone size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
@@ -136,7 +136,7 @@ const GuardianDataSection = ({ onChange }: Props) => {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   className={`${inputClasses} pl-10`}
-                  placeholder="+351 912 345 678"
+                  placeholder="(11) 99999-9999"
                 />
               </div>
             </div>

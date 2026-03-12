@@ -128,7 +128,7 @@ const ProfilePage = () => {
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium text-foreground block mb-1.5">Telefone</label>
+                <label className="text-sm font-medium text-foreground block mb-1.5">Celular</label>
                 <div className="relative">
                   <Phone size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <input
