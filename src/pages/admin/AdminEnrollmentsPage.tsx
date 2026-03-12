@@ -380,12 +380,12 @@ const AdminEnrollmentsPage = () => {
                       </div>
                     )}
 
-                    {/* Inscrição */}
+                    {/* Matrícula */}
                     <div>
-                      <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Inscrição</p>
+                      <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Matrícula</p>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">
                         <div>
-                          <p className="text-muted-foreground text-xs">Data de inscrição</p>
+                          <p className="text-muted-foreground text-xs">Data de matrícula</p>
                           <p className="text-foreground font-medium">{formatDate(e.created_at)}</p>
                         </div>
                         <div>
