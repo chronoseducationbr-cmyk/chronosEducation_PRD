@@ -5,6 +5,7 @@ import { LogOut, ArrowLeft } from "lucide-react";
 import GuardianDataSection, { type GuardianData } from "@/components/GuardianDataSection";
 import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
 import ReferralSection from "@/components/ReferralSection";
+import ContractSignatureSection from "@/components/ContractSignatureSection";
 import EnrollmentsList from "@/components/EnrollmentsList";
 import PaymentsList from "@/components/PaymentsList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,6 +20,7 @@ const DashboardPage = () => {
   const [paying, setPaying] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [contractAccepted, setContractAccepted] = useState(false);
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
@@ -194,6 +196,7 @@ const DashboardPage = () => {
 
       toast({ title: "Matrícula enviada!", description: "A equipa Chronos foi notificada e entrará em contacto em breve." });
       setShowForm(false);
+      setContractAccepted(false);
       setRefreshKey((k) => k + 1);
       // Reset student refs
       studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
@@ -287,13 +290,22 @@ const DashboardPage = () => {
                   </div>
 
                   <div className="mt-8">
+                    <ContractSignatureSection onAcceptChange={setContractAccepted} />
+                  </div>
+
+                  <div className="mt-8">
                     <button
                       onClick={handleSubmitEnrollment}
-                      disabled={paying}
+                      disabled={paying || !contractAccepted}
                       className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {paying ? "Processando..." : "Confirmar matrícula"}
                     </button>
+                    {!contractAccepted && (
+                      <p className="text-xs text-muted-foreground text-center mt-2">
+                        É necessário aceitar o contrato para prosseguir.
+                      </p>
+                    )}
                   </div>
                 </>
               )}
