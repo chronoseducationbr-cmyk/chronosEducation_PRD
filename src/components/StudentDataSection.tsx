@@ -215,7 +215,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-foreground block mb-1.5">Gênero</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Gênero <span className="text-[#F9B91D]">*</span></label>
             <select
               required
               value={studentGender}
