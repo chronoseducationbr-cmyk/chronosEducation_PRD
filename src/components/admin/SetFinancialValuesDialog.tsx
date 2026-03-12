@@ -43,8 +43,8 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
   const [summercampStartDate, setSummercampStartDate] = useState("");
 
   const handleOpen = () => {
-    setInscriptionFee(currentValues.inscription_fee_cents > 0 ? String(currentValues.inscription_fee_cents / 100) : "");
-    setTuitionValue(currentValues.tuition_installment_cents > 0 ? String(currentValues.tuition_installment_cents / 100) : "");
+    setInscriptionFee(currentValues.inscription_fee_cents > 0 ? String(currentValues.inscription_fee_cents / 100) : "800");
+    setTuitionValue(currentValues.tuition_installment_cents > 0 ? String(currentValues.tuition_installment_cents / 100) : "450");
     setTuitionInstallments(String(currentValues.tuition_installments));
     setTuitionStartDate(currentValues.tuition_start_date || "");
     setSummercampValue(currentValues.summercamp_installment_cents > 0 ? String(currentValues.summercamp_installment_cents / 100) : "");
