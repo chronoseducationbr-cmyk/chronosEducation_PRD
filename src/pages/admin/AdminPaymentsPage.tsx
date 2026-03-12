@@ -100,6 +100,16 @@ const AdminPaymentsPage = () => {
       }, {});
       enrs.forEach((e) => { e.guardian_name = nameMap[e.user_id] || ""; });
     }
+    // Check which enrollments have installments
+    const enrollmentIds = enrs.map((e) => e.id);
+    if (enrollmentIds.length > 0) {
+      const { data: instData } = await supabase
+        .from("installments")
+        .select("enrollment_id")
+        .in("enrollment_id", enrollmentIds);
+      const idsWithInst = new Set((instData || []).map((i: any) => i.enrollment_id));
+      enrs.forEach((e) => { e.has_installments = idsWithInst.has(e.id); });
+    }
     setEnrollments(enrs);
     setLoading(false);
   };
