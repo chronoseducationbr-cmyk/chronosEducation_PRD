@@ -13,20 +13,25 @@ export interface GuardianData {
 interface Props {
   onChange?: (data: GuardianData) => void;
   validationErrors?: string[];
+  initialData?: GuardianData;
 }
 
-const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
+const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: Props) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [hasEnrollments, setHasEnrollments] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [cpf, setCpf] = useState("");
+  const [fullName, setFullName] = useState(initialData?.fullName || "");
+  const [email, setEmail] = useState(initialData?.email || "");
+  const [phone, setPhone] = useState(initialData?.phone || "");
+  const [cpf, setCpf] = useState(initialData?.cpf || "");
 
   useEffect(() => {
+    if (initialData && (initialData.fullName || initialData.email)) {
+      setLoading(false);
+      return;
+    }
     const fetchData = async () => {
       const [profileRes, enrollRes] = await Promise.all([
         supabase.from("profiles").select("full_name, email, phone").maybeSingle(),
