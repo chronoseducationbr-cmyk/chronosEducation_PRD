@@ -209,7 +209,7 @@ const AdminUsersPage = () => {
                   <div className="text-right shrink-0 space-y-0.5">
                     <p className="text-xs text-muted-foreground">{u.phone || "—"}</p>
                     <p className="text-[10px] text-muted-foreground">Último login: {formatDateTime(u.last_sign_in_at)}</p>
-                    <p className="text-[10px] text-muted-foreground">Registado em {formatDate(u.created_at)}</p>
+                    <p className="text-[10px] text-muted-foreground">Registrado em {formatDate(u.created_at)}</p>
                   </div>
                 </div>
               ))}
