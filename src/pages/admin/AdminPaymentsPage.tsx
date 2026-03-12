@@ -523,7 +523,7 @@ const AdminPaymentsPage = () => {
       <Dialog open={!!showCreateDialog} onOpenChange={(open) => !open && setShowCreateDialog(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Criar Prestações</DialogTitle>
+            <DialogTitle>Criar Mensalidades</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div>
