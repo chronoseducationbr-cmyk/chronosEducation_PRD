@@ -17,6 +17,7 @@ export interface StudentData {
 interface Props {
   onChange?: (data: StudentData) => void;
   validationErrors?: string[];
+  initialData?: StudentData;
 }
 
 const StudentDataSection = ({ onChange, validationErrors = [] }: Props) => {
