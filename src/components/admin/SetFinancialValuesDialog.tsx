@@ -55,9 +55,9 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
 
   const handleSave = async () => {
     const fee = Math.round(parseFloat(inscriptionFee || "0")) * 100;
-    const tuition = Math.round(parseFloat(tuitionValue || "0") * 100);
+    const tuition = Math.round(parseFloat(tuitionValue || "0")) * 100;
     const tInstallments = parseInt(tuitionInstallments) || 16;
-    const summer = Math.round(parseFloat(summercampValue || "0") * 100);
+    const summer = Math.round(parseFloat(summercampValue || "0")) * 100;
     const sInstallments = parseInt(summercampInstallments) || 6;
 
     if (fee < 0 || tuition < 0 || summer < 0) {
