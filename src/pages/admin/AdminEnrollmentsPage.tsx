@@ -16,6 +16,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 
 interface Guardian {
@@ -73,6 +83,7 @@ const AdminEnrollmentsPage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadTargetId, setUploadTargetId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [pendingStatusChange, setPendingStatusChange] = useState<{ id: string; studentName: string; from: string; to: string } | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -112,9 +123,10 @@ const AdminEnrollmentsPage = () => {
     }
   }, [searchParams, loading, enrollments]);
 
-  const updateStatus = async (id: string, status: string) => {
+  const confirmStatusChange = async () => {
+    if (!pendingStatusChange) return;
+    const { id, to: status } = pendingStatusChange;
     const updates: any = { status };
-    // Auto-set contract_signed_at when status changes to "Contrato assinado"
     if (status === "Contrato assinado") {
       updates.contract_signed_at = new Date().toISOString();
     }
@@ -130,6 +142,7 @@ const AdminEnrollmentsPage = () => {
         prev.map((e) => (e.id === id ? { ...e, ...updates } : e))
       );
     }
+    setPendingStatusChange(null);
   };
 
   const handleUploadContract = async (file: File) => {
@@ -351,7 +364,14 @@ const AdminEnrollmentsPage = () => {
                         <div>
                           <p className="text-muted-foreground text-xs">Alterar estado</p>
                           <div className="mt-1">
-                            <Select value={e.status} onValueChange={(v) => updateStatus(e.id, v)}>
+                            <Select
+                              value={e.status}
+                              onValueChange={(v) => {
+                                if (v !== e.status) {
+                                  setPendingStatusChange({ id: e.id, studentName: e.student_name, from: e.status, to: v });
+                                }
+                              }}
+                            >
                               <SelectTrigger className="h-8 text-xs w-56">
                                 <SelectValue />
                               </SelectTrigger>
@@ -424,6 +444,23 @@ const AdminEnrollmentsPage = () => {
           )}
         </div>
       )}
+
+      <AlertDialog open={!!pendingStatusChange} onOpenChange={(open) => { if (!open) setPendingStatusChange(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar alteração de estado</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem a certeza que deseja alterar o estado de <span className="font-semibold">{pendingStatusChange?.studentName}</span> de{" "}
+              <span className="font-semibold">"{pendingStatusChange?.from}"</span> para{" "}
+              <span className="font-semibold">"{pendingStatusChange?.to}"</span>?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmStatusChange}>Confirmar</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
