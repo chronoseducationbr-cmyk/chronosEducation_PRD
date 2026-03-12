@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Mail } from "lucide-react";
+import { Mail, Info } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -43,8 +44,18 @@ const ReferralSection = ({ onChange }: Props) => {
 
   return (
     <div>
-      <h2 className="font-heading text-lg font-semibold text-foreground mb-3">
+      <h2 className="font-heading text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
         Indicação
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info size={16} className="text-muted-foreground cursor-help" />
+            </TooltipTrigger>
+            <TooltipContent side="right" className="max-w-[260px] text-xs">
+              Esta informação irá conceder um desconto para o aluno que está se matriculando e para o aluno que o indicou.
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </h2>
       <div className="bg-card rounded-xl border border-border shadow-card p-5">
         <p className="text-sm text-muted-foreground mb-3">
