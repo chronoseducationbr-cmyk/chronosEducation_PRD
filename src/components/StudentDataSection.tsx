@@ -119,7 +119,7 @@ const StudentDataSection = ({ onChange }: Props) => {
               value={studentGraduationYear}
               onChange={(e) => setStudentGraduationYear(e.target.value)}
               className={inputClasses}
-              placeholder="Ex: 2027"
+              placeholder={String(new Date().getFullYear() + 2)}
             />
           </div>
           <div className="sm:col-span-2">
