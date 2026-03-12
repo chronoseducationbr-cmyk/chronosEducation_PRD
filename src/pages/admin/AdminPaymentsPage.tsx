@@ -325,7 +325,7 @@ const AdminPaymentsPage = () => {
                       <p className="text-xs text-muted-foreground">Responsável: {e.guardian_name}</p>
                     )}
                   </div>
-                  <span className="text-xs text-muted-foreground">{insts.length || "—"} prestações</span>
+                  <span className="text-xs text-muted-foreground">{insts.length || "—"} mensalidades</span>
                   {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
                 </button>
 
