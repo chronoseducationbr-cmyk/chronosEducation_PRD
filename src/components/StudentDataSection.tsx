@@ -110,7 +110,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-foreground block mb-1.5">Ano previsto para fim do secundário</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Ano previsto para finalizar o ensino médio</label>
             <input
               type="number"
               required
