@@ -47,7 +47,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
     setTuitionValue(currentValues.tuition_installment_cents > 0 ? String(currentValues.tuition_installment_cents / 100) : "");
     setTuitionInstallments(String(currentValues.tuition_installments));
     setTuitionStartDate(currentValues.tuition_start_date || "");
-    setSummercampValue(currentValues.summercamp_installment_cents > 0 ? (currentValues.summercamp_installment_cents / 100).toFixed(2) : "");
+    setSummercampValue(currentValues.summercamp_installment_cents > 0 ? String(currentValues.summercamp_installment_cents / 100) : "");
     setSummercampInstallments(String(currentValues.summercamp_installments));
     setSummercampStartDate(currentValues.summercamp_start_date || "");
     setOpen(true);
