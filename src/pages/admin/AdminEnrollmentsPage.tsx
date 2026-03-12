@@ -203,7 +203,7 @@ const AdminEnrollmentsPage = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="font-heading text-2xl font-bold text-foreground">Matrículas</h1>
-          <p className="text-sm text-muted-foreground">{enrollments.length} matrículas registadas</p>
+          <p className="text-sm text-muted-foreground">{enrollments.length} matrículas registradas</p>
         </div>
       </div>
 
