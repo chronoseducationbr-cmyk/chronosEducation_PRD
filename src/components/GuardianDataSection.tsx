@@ -48,6 +48,11 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
     fetchData();
   }, [user]);
 
+  const saveProfile = async (fields: Record<string, string>) => {
+    if (!user) return;
+    await supabase.from("profiles").update(fields as any).eq("user_id", user.id);
+  };
+
   useEffect(() => {
     onChange?.({ fullName, email, phone, cpf });
   }, [fullName, email, phone, cpf]);
