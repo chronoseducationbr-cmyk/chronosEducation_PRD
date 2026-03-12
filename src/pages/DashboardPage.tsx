@@ -277,7 +277,7 @@ const DashboardPage = () => {
                   </button>
 
                   <h2 className="font-heading text-xl font-semibold text-foreground mb-6">
-                    Nova Inscrição
+                   Nova Matrícula
                   </h2>
 
                   <StudentDataSection onChange={handleStudentChange} />
