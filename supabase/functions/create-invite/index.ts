@@ -69,7 +69,7 @@ Deno.serve(async (req) => {
     // Send invite email via Resend
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
     if (RESEND_API_KEY) {
-      const inviteUrl = `https://info.chronoseducation.com/convite?code=${inviteCode}`
+      const inviteUrl = `https://info.chronoseducation.com/convite`
       const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -134,7 +134,7 @@ function buildInviteHtml(inviteUrl: string, inviteCode: string): string {
           <p style="margin:0 0 25px;font-size:15px;color:#476878;line-height:1.6;">
             Clique no botão abaixo para aceitar o convite e criar a sua conta.
           </p>
-          <a href="${inviteUrl}" style="display:inline-block;background-color:#80ff00;color:#042D45;font-size:14px;font-weight:600;border-radius:12px;padding:14px 24px;text-decoration:none;">
+          <a href="https://info.chronoseducation.com/convite" style="display:inline-block;background-color:#80ff00;color:#042D45;font-size:14px;font-weight:600;border-radius:12px;padding:14px 24px;text-decoration:none;">
             Aceitar Convite
           </a>
           <p style="font-size:12px;color:#9aa8b5;margin:30px 0 0;">
