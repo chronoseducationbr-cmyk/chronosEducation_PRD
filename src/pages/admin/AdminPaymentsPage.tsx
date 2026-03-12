@@ -345,7 +345,7 @@ const AdminPaymentsPage = () => {
                     </div>
 
                     {insts.length === 0 ? (
-                      <p className="text-sm text-muted-foreground text-center py-4">Sem prestações registadas.</p>
+                      <p className="text-sm text-muted-foreground text-center py-4">Sem mensalidades registadas.</p>
                     ) : (
                       <div className="overflow-x-auto">
                         <table className="w-full text-xs">
