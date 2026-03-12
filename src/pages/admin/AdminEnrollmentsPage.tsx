@@ -83,6 +83,7 @@ const AdminEnrollmentsPage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadTargetId, setUploadTargetId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [pendingStatusChange, setPendingStatusChange] = useState<{ id: string; studentName: string; from: string; to: string } | null>(null);
 
   const load = async () => {
     setLoading(true);
