@@ -384,8 +384,8 @@ const AdminEnrollmentsPage = () => {
                           <div>
                             <p className="text-muted-foreground text-xs">Telefone</p>
                             <p className="text-foreground font-medium">{e.guardian.phone || "—"}</p>
-                          </div>
-                        </div>
+                      </div>
+                      </div>
                       </div>
                     )}
 
