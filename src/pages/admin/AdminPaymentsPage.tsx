@@ -332,7 +332,7 @@ const AdminPaymentsPage = () => {
                 {isExpanded && (
                   <div className="px-4 pb-4 border-t border-border">
                     <div className="flex items-center justify-between mt-3 mb-3">
-                      <p className="text-sm font-bold text-foreground uppercase tracking-wide">Prestações</p>
+                      <p className="text-sm font-bold text-foreground uppercase tracking-wide">Mensalidades</p>
                       <Button
                         size="sm"
                         variant="outline"
@@ -340,7 +340,7 @@ const AdminPaymentsPage = () => {
                         className="text-xs"
                       >
                         <Plus size={14} className="mr-1" />
-                        Criar Prestações
+                        Criar Mensalidades
                       </Button>
                     </div>
 
