@@ -89,7 +89,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
     return (
       <div className="bg-card rounded-xl border border-border shadow-card p-8 text-center">
         <GraduationCap size={40} className="mx-auto text-muted-foreground mb-3" />
-        <p className="text-muted-foreground">Sem inscrições para exibir pagamentos.</p>
+        <p className="text-muted-foreground">Sem matrículas para exibir pagamentos.</p>
       </div>
     );
   }
