@@ -151,6 +151,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
                   maxLength={20}
                   value={phone}
                   onChange={(e) => setPhone(formatPhone(e.target.value))}
+                  onBlur={() => saveProfile({ phone: phone.trim() })}
                   className={`${inputClass("guardianPhone")} pl-10`}
                   placeholder="(11) 99999-9999"
                 />
