@@ -58,6 +58,11 @@ const InvitePage = () => {
         return;
       }
 
+      // Mark invite as used via edge function (service role)
+      await supabase.functions.invoke("mark-invite-used", {
+        body: { email: email.toLowerCase().trim(), invite_code: inviteCode.trim() },
+      });
+
       setVerified(true);
       toast({
         title: "Convite verificado!",
