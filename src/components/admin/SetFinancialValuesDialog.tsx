@@ -146,7 +146,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Valor por prestação ($)</Label>
+                  <Label className="text-xs text-muted-foreground">Valor da mensalidade ($)</Label>
                   <Input
                     type="number"
                     step="1"
