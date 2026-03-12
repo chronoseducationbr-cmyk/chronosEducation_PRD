@@ -323,7 +323,7 @@ const AdminPaymentsPage = () => {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      {e.tuition_installment_cents === 0 && (
+                      {!e.has_installments && (
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
