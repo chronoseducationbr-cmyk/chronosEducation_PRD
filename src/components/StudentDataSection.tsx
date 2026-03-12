@@ -280,7 +280,7 @@ const StudentDataSection = ({ onChange, validationErrors = [] }: Props) => {
               maxLength={200}
               value={studentSchool}
               onChange={(e) => setStudentSchool(e.target.value)}
-              className={inputClasses}
+              className={inputClasses("studentSchool")}
               placeholder="Nome da escola atual do aluno"
             />
           </div>
