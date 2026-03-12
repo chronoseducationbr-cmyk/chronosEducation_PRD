@@ -250,9 +250,9 @@ const AdminPaymentsPage = () => {
 
     const { error } = await supabase.from("installments").insert(rows as any);
     if (error) {
-      toast({ title: "Erro ao criar prestações", description: error.message, variant: "destructive" });
+      toast({ title: "Erro ao criar mensalidades", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: `${count} prestações criadas` });
+      toast({ title: `${count} mensalidades criadas` });
       loadInstallments(showCreateDialog);
     }
     setShowCreateDialog(null);
