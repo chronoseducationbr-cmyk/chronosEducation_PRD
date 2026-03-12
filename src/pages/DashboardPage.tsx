@@ -388,7 +388,7 @@ const DashboardPage = () => {
                     <>
                       <ContractSignatureSection onAcceptChange={setContractAccepted} />
 
-                      <div className="mt-8">
+                      <div className="mt-8 flex flex-col gap-3">
                         <button
                           onClick={handleSubmitEnrollment}
                           disabled={paying || !contractAccepted}
@@ -397,10 +397,16 @@ const DashboardPage = () => {
                           {paying ? "Processando..." : "Confirmar matrícula"}
                         </button>
                         {!contractAccepted && (
-                          <p className="text-xs text-muted-foreground text-center mt-2">
+                          <p className="text-xs text-muted-foreground text-center">
                             É necessário assinar o contrato para prosseguir.
                           </p>
                         )}
+                        <button
+                          onClick={() => setWizardStep(1)}
+                          className="w-full border border-border text-muted-foreground font-medium py-3 rounded-lg hover:text-foreground hover:border-foreground/30 transition-colors text-sm"
+                        >
+                          ← Voltar aos dados do aluno
+                        </button>
                       </div>
                     </>
                   )}
