@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: "Quanto tempo dura o programa?",
-    a: "O programa pode ser concluído em até 4 anos. Contudo a duração média dos nossos alunos é em torno a 2 anos.",
+    a: "O programa tem a duração média de 2 anos.",
   },
   {
     q: "Como funciona o acompanhamento pedagógico?",
