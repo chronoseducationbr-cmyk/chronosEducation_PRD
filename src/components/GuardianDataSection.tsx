@@ -75,7 +75,7 @@ const GuardianDataSection = ({ onChange }: Props) => {
     <div>
       <h2 className="font-heading text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
         <Users size={20} className="text-secondary" />
-        Dados de Pai/Mãe ou Responsável
+        Dados Pai/Mãe ou Responsável
       </h2>
 
       {isCollapsed ? (
