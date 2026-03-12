@@ -16,9 +16,10 @@ export interface StudentData {
 
 interface Props {
   onChange?: (data: StudentData) => void;
+  validationErrors?: string[];
 }
 
-const StudentDataSection = ({ onChange }: Props) => {
+const StudentDataSection = ({ onChange, validationErrors = [] }: Props) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
 
@@ -118,7 +119,7 @@ const StudentDataSection = ({ onChange }: Props) => {
     }
   };
 
-  const inputClasses = "w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition";
+  const inputClasses = (field?: string) => `w-full px-4 py-3 rounded-lg border ${field && validationErrors.includes(field) ? "border-destructive" : "border-border"} bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition`;
 
   if (loading) {
     return (
@@ -197,7 +198,7 @@ const StudentDataSection = ({ onChange }: Props) => {
               maxLength={100}
               value={studentName}
               onChange={(e) => setStudentName(e.target.value)}
-              className={inputClasses}
+              className={inputClasses("studentName")}
               placeholder="Nome completo do aluno"
             />
           </div>
@@ -210,7 +211,7 @@ const StudentDataSection = ({ onChange }: Props) => {
                 required
                 value={studentBirthDate}
                 onChange={(e) => setStudentBirthDate(e.target.value)}
-                className={`${inputClasses} pl-10`}
+                className={`${inputClasses("studentBirthDate")} pl-10`}
               />
             </div>
           </div>
@@ -220,7 +221,7 @@ const StudentDataSection = ({ onChange }: Props) => {
               required
               value={studentGender}
               onChange={(e) => setStudentGender(e.target.value)}
-              className={inputClasses}
+              className={inputClasses("studentGender")}
             >
               <option value="">Selecionar...</option>
               <option value="Feminino">Feminino</option>
@@ -238,7 +239,7 @@ const StudentDataSection = ({ onChange }: Props) => {
                 maxLength={100}
                 value={studentEmail}
                 onChange={(e) => setStudentEmail(e.target.value)}
-                className={`${inputClasses} pl-10`}
+                className={`${inputClasses("studentEmail")} pl-10`}
                 placeholder="aluno@exemplo.com"
               />
             </div>
@@ -252,7 +253,7 @@ const StudentDataSection = ({ onChange }: Props) => {
               max={new Date().getFullYear() + 5}
               value={studentGraduationYear}
               onChange={(e) => setStudentGraduationYear(e.target.value)}
-              className={inputClasses}
+              className={inputClasses("studentGraduationYear")}
               placeholder={String(new Date().getFullYear() + 2)}
             />
           </div>
@@ -266,7 +267,7 @@ const StudentDataSection = ({ onChange }: Props) => {
                 maxLength={300}
                 value={studentAddress}
                 onChange={(e) => setStudentAddress(e.target.value)}
-                className={`${inputClasses} pl-10`}
+                className={`${inputClasses("studentAddress")} pl-10`}
                 placeholder="Endereço completo do aluno"
               />
             </div>
@@ -279,7 +280,7 @@ const StudentDataSection = ({ onChange }: Props) => {
               maxLength={200}
               value={studentSchool}
               onChange={(e) => setStudentSchool(e.target.value)}
-              className={inputClasses}
+              className={inputClasses("studentSchool")}
               placeholder="Nome da escola atual do aluno"
             />
           </div>
