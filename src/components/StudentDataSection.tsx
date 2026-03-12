@@ -214,6 +214,19 @@ const StudentDataSection = ({ onChange }: Props) => {
               />
             </div>
           </div>
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Gênero</label>
+            <select
+              required
+              value={studentGender}
+              onChange={(e) => setStudentGender(e.target.value)}
+              className={inputClasses}
+            >
+              <option value="">Selecionar...</option>
+              <option value="Feminino">Feminino</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Prefiro não dizer">Prefiro não dizer</option>
+            </select>
           <div className="sm:col-span-2">
             <label className="text-sm font-medium text-foreground block mb-1.5">Email do aluno</label>
             <div className="relative">
