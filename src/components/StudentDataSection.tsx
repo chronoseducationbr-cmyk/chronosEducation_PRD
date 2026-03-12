@@ -190,7 +190,7 @@ const StudentDataSection = ({ onChange }: Props) => {
 
         <div className="grid sm:grid-cols-2 gap-5">
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-foreground block mb-1.5">Nome completo do aluno</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Nome completo do aluno <span className="text-[#F9B91D]">*</span></label>
             <input
               type="text"
               required
