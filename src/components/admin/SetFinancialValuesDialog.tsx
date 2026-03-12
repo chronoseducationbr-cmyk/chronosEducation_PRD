@@ -43,21 +43,21 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
   const [summercampStartDate, setSummercampStartDate] = useState("");
 
   const handleOpen = () => {
-    setInscriptionFee(currentValues.inscription_fee_cents > 0 ? (currentValues.inscription_fee_cents / 100).toFixed(2) : "");
-    setTuitionValue(currentValues.tuition_installment_cents > 0 ? (currentValues.tuition_installment_cents / 100).toFixed(2) : "");
+    setInscriptionFee(currentValues.inscription_fee_cents > 0 ? String(currentValues.inscription_fee_cents / 100) : "");
+    setTuitionValue(currentValues.tuition_installment_cents > 0 ? String(currentValues.tuition_installment_cents / 100) : "");
     setTuitionInstallments(String(currentValues.tuition_installments));
     setTuitionStartDate(currentValues.tuition_start_date || "");
-    setSummercampValue(currentValues.summercamp_installment_cents > 0 ? (currentValues.summercamp_installment_cents / 100).toFixed(2) : "");
+    setSummercampValue(currentValues.summercamp_installment_cents > 0 ? String(currentValues.summercamp_installment_cents / 100) : "");
     setSummercampInstallments(String(currentValues.summercamp_installments));
     setSummercampStartDate(currentValues.summercamp_start_date || "");
     setOpen(true);
   };
 
   const handleSave = async () => {
-    const fee = Math.round(parseFloat(inscriptionFee || "0") * 100);
-    const tuition = Math.round(parseFloat(tuitionValue || "0") * 100);
+    const fee = Math.round(parseFloat(inscriptionFee || "0")) * 100;
+    const tuition = Math.round(parseFloat(tuitionValue || "0")) * 100;
     const tInstallments = parseInt(tuitionInstallments) || 16;
-    const summer = Math.round(parseFloat(summercampValue || "0") * 100);
+    const summer = Math.round(parseFloat(summercampValue || "0")) * 100;
     const sInstallments = parseInt(summercampInstallments) || 6;
 
     if (fee < 0 || tuition < 0 || summer < 0) {
@@ -121,9 +121,9 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
               <div className="mt-1">
                 <Input
                   type="number"
-                  step="0.01"
+                  step="1"
                   min="0"
-                  placeholder="0.00"
+                  placeholder="0"
                   value={inscriptionFee}
                   onChange={(e) => setInscriptionFee(e.target.value)}
                   className="h-9"
@@ -149,9 +149,9 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
                   <Label className="text-xs text-muted-foreground">Valor por prestação ($)</Label>
                   <Input
                     type="number"
-                    step="0.01"
+                    step="1"
                     min="0"
-                    placeholder="0.00"
+                    placeholder="0"
                     value={tuitionValue}
                     onChange={(e) => setTuitionValue(e.target.value)}
                     className="h-9"
@@ -186,9 +186,9 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
                   <Label className="text-xs text-muted-foreground">Valor por prestação ($)</Label>
                   <Input
                     type="number"
-                    step="0.01"
+                    step="1"
                     min="0"
-                    placeholder="0.00"
+                    placeholder="0"
                     value={summercampValue}
                     onChange={(e) => setSummercampValue(e.target.value)}
                     className="h-9"
