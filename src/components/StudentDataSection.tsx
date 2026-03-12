@@ -253,7 +253,7 @@ const StudentDataSection = ({ onChange, validationErrors = [] }: Props) => {
               max={new Date().getFullYear() + 5}
               value={studentGraduationYear}
               onChange={(e) => setStudentGraduationYear(e.target.value)}
-              className={inputClasses}
+              className={inputClasses("studentGraduationYear")}
               placeholder={String(new Date().getFullYear() + 2)}
             />
           </div>
