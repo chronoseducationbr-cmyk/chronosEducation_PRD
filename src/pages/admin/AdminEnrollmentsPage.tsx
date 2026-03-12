@@ -123,9 +123,10 @@ const AdminEnrollmentsPage = () => {
     }
   }, [searchParams, loading, enrollments]);
 
-  const updateStatus = async (id: string, status: string) => {
+  const confirmStatusChange = async () => {
+    if (!pendingStatusChange) return;
+    const { id, to: status } = pendingStatusChange;
     const updates: any = { status };
-    // Auto-set contract_signed_at when status changes to "Contrato assinado"
     if (status === "Contrato assinado") {
       updates.contract_signed_at = new Date().toISOString();
     }
@@ -141,6 +142,7 @@ const AdminEnrollmentsPage = () => {
         prev.map((e) => (e.id === id ? { ...e, ...updates } : e))
       );
     }
+    setPendingStatusChange(null);
   };
 
   const handleUploadContract = async (file: File) => {
