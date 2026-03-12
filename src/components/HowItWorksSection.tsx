@@ -7,7 +7,7 @@ const steps = [
   {
     number: "1",
     title: "Matrícula",
-    description: "Faça a sua inscrição e receba acesso à plataforma americana de ensino com suporte completo.",
+    description: "Faça a sua matrícula e receba acesso à plataforma americana de ensino com suporte completo.",
   },
   {
     number: "2",

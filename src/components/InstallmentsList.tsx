@@ -19,7 +19,7 @@ interface Props {
 }
 
 const typeLabels: Record<string, string> = {
-  inscription_fee: "Inscrição",
+  inscription_fee: "Matrícula",
   tuition: "Aulas Online",
   summercamp: "Summer Camp",
 };

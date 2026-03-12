@@ -284,7 +284,7 @@ const AdminEnrollmentsPage = () => {
                     </div>
                     <p className="text-xs text-muted-foreground">{e.student_email || "—"}</p>
                     <div className="flex items-center gap-3 mt-1 flex-wrap text-[11px] text-muted-foreground">
-                      <span>Inscrição: <span className="font-medium text-foreground">{e.inscription_fee_cents > 0 ? `${(e.inscription_fee_cents / 100).toFixed(2)}€` : "—"}</span></span>
+                      <span>Matrícula: <span className="font-medium text-foreground">{e.inscription_fee_cents > 0 ? `${(e.inscription_fee_cents / 100).toFixed(2)}€` : "—"}</span></span>
                       <span>Online: <span className="font-medium text-foreground">{e.tuition_installment_cents > 0 ? `${e.tuition_installments}x ${(e.tuition_installment_cents / 100).toFixed(2)}€` : "—"}</span></span>
                       <span>Summer: <span className="font-medium text-foreground">{e.summercamp_installment_cents > 0 ? `${e.summercamp_installments}x ${(e.summercamp_installment_cents / 100).toFixed(2)}€` : "—"}</span></span>
                       <SetFinancialValuesDialog
@@ -380,12 +380,12 @@ const AdminEnrollmentsPage = () => {
                       </div>
                     )}
 
-                    {/* Inscrição */}
+                    {/* Matrícula */}
                     <div>
-                      <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Inscrição</p>
+                      <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Matrícula</p>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">
                         <div>
-                          <p className="text-muted-foreground text-xs">Data de inscrição</p>
+                          <p className="text-muted-foreground text-xs">Data de matrícula</p>
                           <p className="text-foreground font-medium">{formatDate(e.created_at)}</p>
                         </div>
                         <div>
