@@ -21,7 +21,6 @@ const DashboardPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [contractAccepted, setContractAccepted] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
