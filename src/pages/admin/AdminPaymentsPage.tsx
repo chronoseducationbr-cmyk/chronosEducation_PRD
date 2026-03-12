@@ -82,7 +82,7 @@ const AdminPaymentsPage = () => {
     const { data } = await supabase
       .from("enrollments")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("student_name", { ascending: true });
     const enrs = (data as Enrollment[]) || [];
     
     // Load guardian names from profiles
