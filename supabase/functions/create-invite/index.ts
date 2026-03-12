@@ -69,7 +69,7 @@ Deno.serve(async (req) => {
     // Send invite email via Resend
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
     if (RESEND_API_KEY) {
-      const inviteUrl = `https://info.chronoseducation.com/convite?code=${inviteCode}`
+      const inviteUrl = `https://info.chronoseducation.com/convite`
       const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
