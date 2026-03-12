@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Mail } from "lucide-react";
+import { Mail, Info } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
