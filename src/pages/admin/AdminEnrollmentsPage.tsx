@@ -33,6 +33,7 @@ interface Guardian {
   full_name: string;
   email: string | null;
   phone: string | null;
+  student_photo_url: string | null;
 }
 
 interface Enrollment {
@@ -101,11 +102,11 @@ const AdminEnrollmentsPage = () => {
     if (userIds.length > 0) {
       const { data: profiles } = await supabase
         .from("profiles")
-        .select("user_id, full_name, email, phone")
+        .select("user_id, full_name, email, phone, student_photo_url")
         .in("user_id", userIds);
       const guardianMap: Record<string, Guardian> = {};
       (profiles || []).forEach((p: any) => {
-        guardianMap[p.user_id] = { full_name: p.full_name, email: p.email, phone: p.phone };
+        guardianMap[p.user_id] = { full_name: p.full_name, email: p.email, phone: p.phone, student_photo_url: p.student_photo_url };
       });
       enrs.forEach((e) => {
         e.guardian = guardianMap[e.user_id];
@@ -331,7 +332,15 @@ const AdminEnrollmentsPage = () => {
                     {/* Dados do Aluno */}
                     <div className="mt-3">
                       <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Dados do Aluno</p>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">
+                      <div className="flex gap-4">
+                        {e.guardian?.student_photo_url && (
+                          <img
+                            src={e.guardian.student_photo_url}
+                            alt={`Foto de ${e.student_name}`}
+                            className="w-16 h-16 rounded-full object-cover border-2 border-secondary/30 shrink-0"
+                          />
+                        )}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm flex-1">
                         <div>
                           <p className="text-muted-foreground text-xs">Email</p>
                           <p className="text-foreground font-medium">{e.student_email || "—"}</p>
@@ -357,6 +366,7 @@ const AdminEnrollmentsPage = () => {
                           <p className="text-foreground font-medium">{e.referred_by_email || "—"}</p>
                         </div>
                       </div>
+                      </div>
                     </div>
 
                     {/* Dados do Responsável */}
@@ -375,8 +385,8 @@ const AdminEnrollmentsPage = () => {
                           <div>
                             <p className="text-muted-foreground text-xs">Telefone</p>
                             <p className="text-foreground font-medium">{e.guardian.phone || "—"}</p>
-                          </div>
-                        </div>
+                      </div>
+                      </div>
                       </div>
                     )}
 
