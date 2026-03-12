@@ -221,7 +221,7 @@ const StudentDataSection = ({ onChange, validationErrors = [] }: Props) => {
               required
               value={studentGender}
               onChange={(e) => setStudentGender(e.target.value)}
-              className={inputClasses}
+              className={inputClasses("studentGender")}
             >
               <option value="">Selecionar...</option>
               <option value="Feminino">Feminino</option>
