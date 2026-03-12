@@ -323,14 +323,18 @@ const DashboardPage = () => {
                 <>
                   <button
                     onClick={() => {
-                      setShowForm(false);
-                      setWizardStep(1);
-                      setContractAccepted(false);
+                      if (wizardStep === 2) {
+                        setWizardStep(1);
+                      } else {
+                        setShowForm(false);
+                        setWizardStep(1);
+                        setContractAccepted(false);
+                      }
                     }}
                     className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
                   >
                     <ArrowLeft size={16} />
-                    Voltar às matrículas
+                    {wizardStep === 2 ? "Voltar aos dados do aluno" : "Voltar às matrículas"}
                   </button>
 
                   <h2 className="font-heading text-xl font-semibold text-foreground mb-2">
@@ -388,7 +392,7 @@ const DashboardPage = () => {
                     <>
                       <ContractSignatureSection onAcceptChange={setContractAccepted} />
 
-                      <div className="mt-8 flex flex-col gap-3">
+                      <div className="mt-8">
                         <button
                           onClick={handleSubmitEnrollment}
                           disabled={paying || !contractAccepted}
@@ -397,16 +401,10 @@ const DashboardPage = () => {
                           {paying ? "Processando..." : "Confirmar matrícula"}
                         </button>
                         {!contractAccepted && (
-                          <p className="text-xs text-muted-foreground text-center">
+                          <p className="text-xs text-muted-foreground text-center mt-2">
                             É necessário assinar o contrato para prosseguir.
                           </p>
                         )}
-                        <button
-                          onClick={() => setWizardStep(1)}
-                          className="w-full border border-border text-muted-foreground font-medium py-3 rounded-lg hover:text-foreground hover:border-foreground/30 transition-colors text-sm"
-                        >
-                          ← Voltar aos dados do aluno
-                        </button>
                       </div>
                     </>
                   )}
