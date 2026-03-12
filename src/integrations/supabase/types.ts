@@ -32,8 +32,10 @@ export type Database = {
           student_school: string | null
           summercamp_installment_cents: number
           summercamp_installments: number
+          summercamp_start_date: string | null
           tuition_installment_cents: number
           tuition_installments: number
+          tuition_start_date: string | null
           updated_at: string
           user_id: string
         }
@@ -54,8 +56,10 @@ export type Database = {
           student_school?: string | null
           summercamp_installment_cents?: number
           summercamp_installments?: number
+          summercamp_start_date?: string | null
           tuition_installment_cents?: number
           tuition_installments?: number
+          tuition_start_date?: string | null
           updated_at?: string
           user_id: string
         }
@@ -76,8 +80,10 @@ export type Database = {
           student_school?: string | null
           summercamp_installment_cents?: number
           summercamp_installments?: number
+          summercamp_start_date?: string | null
           tuition_installment_cents?: number
           tuition_installments?: number
+          tuition_start_date?: string | null
           updated_at?: string
           user_id?: string
         }
