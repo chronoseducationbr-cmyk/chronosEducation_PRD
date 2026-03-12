@@ -127,7 +127,7 @@ const GuardianDataSection = ({ onChange }: Props) => {
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Celular</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Celular <span className="text-[#F9B91D]">*</span></label>
               <div className="relative">
                 <Phone size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
