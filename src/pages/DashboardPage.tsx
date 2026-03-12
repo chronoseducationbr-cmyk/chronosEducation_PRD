@@ -5,6 +5,7 @@ import { LogOut, ArrowLeft } from "lucide-react";
 import GuardianDataSection, { type GuardianData } from "@/components/GuardianDataSection";
 import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
 import ReferralSection from "@/components/ReferralSection";
+import ContractSignatureSection from "@/components/ContractSignatureSection";
 import EnrollmentsList from "@/components/EnrollmentsList";
 import PaymentsList from "@/components/PaymentsList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
