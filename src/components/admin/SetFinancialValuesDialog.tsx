@@ -111,7 +111,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
           <DialogHeader>
             <DialogTitle>Valores Financeiros</DialogTitle>
             <DialogDescription>
-              Definir valores para <span className="font-semibold">{studentName}</span>
+              Definir valores para <span className="font-semibold text-accent">{studentName}</span>
             </DialogDescription>
           </DialogHeader>
 
