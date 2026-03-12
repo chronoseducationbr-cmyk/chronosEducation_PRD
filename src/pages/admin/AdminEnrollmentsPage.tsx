@@ -366,6 +366,7 @@ const AdminEnrollmentsPage = () => {
                           <p className="text-foreground font-medium">{e.referred_by_email || "—"}</p>
                         </div>
                       </div>
+                      </div>
                     </div>
 
                     {/* Dados do Responsável */}
