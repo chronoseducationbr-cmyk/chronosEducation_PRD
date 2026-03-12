@@ -33,6 +33,7 @@ interface Guardian {
   full_name: string;
   email: string | null;
   phone: string | null;
+  student_photo_url: string | null;
 }
 
 interface Enrollment {
