@@ -373,7 +373,10 @@ const DashboardPage = () => {
                   {/* Step 1: Student Data */}
                   {wizardStep === 1 && (
                     <>
-                      <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
+                      <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} />
+                      <div className="mt-6">
+                        <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
+                      </div>
 
                       <div className="mt-8">
                         <ReferralSection onChange={handleReferralChange} />
