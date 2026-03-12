@@ -188,18 +188,17 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
                 </div>
                 <div>
                   <Label className="text-xs text-muted-foreground">Valor da mensalidade ($)</Label>
-                  <div className="flex items-center gap-0">
-                    <Input
-                      type="number"
-                      step="1"
-                      min="0"
-                      placeholder="0"
-                      value={summercampValue}
-                      onChange={(e) => setSummercampValue(e.target.value)}
-                      className="h-9 rounded-r-none border-r-0"
-                    />
-                    <span className="h-9 flex items-center px-2 bg-muted border border-border rounded-r-md text-sm text-muted-foreground select-none">.00</span>
-                  </div>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="0,00"
+                    value={summercampValue ? `${summercampValue},00` : ""}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/[^0-9]/g, "");
+                      setSummercampValue(raw);
+                    }}
+                    className="h-9"
+                  />
                 </div>
               </div>
               <div className="mt-2">
