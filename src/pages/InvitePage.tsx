@@ -97,13 +97,6 @@ const InvitePage = () => {
       });
       if (error) throw error;
 
-      // Mark invitation as used
-      await supabase
-        .from("invitations")
-        .update({ status: "used", used_at: new Date().toISOString() } as any)
-        .eq("email", email.toLowerCase().trim())
-        .eq("invite_code", inviteCode.trim());
-
       toast({
         title: "Conta criada!",
         description: "Verifique o seu email para confirmar o registo.",
