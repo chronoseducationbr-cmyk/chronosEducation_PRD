@@ -122,6 +122,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
                 maxLength={100}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                onBlur={() => saveProfile({ full_name: fullName.trim() })}
                 className={inputClass("guardianFullName")}
                 placeholder="Nome completo do responsável"
               />
