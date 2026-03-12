@@ -28,6 +28,10 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
   const [cpf, setCpf] = useState(initialData?.cpf || "");
 
   useEffect(() => {
+    if (initialData && (initialData.fullName || initialData.email)) {
+      setLoading(false);
+      return;
+    }
     const fetchData = async () => {
       const [profileRes, enrollRes] = await Promise.all([
         supabase.from("profiles").select("full_name, email, phone").maybeSingle(),
