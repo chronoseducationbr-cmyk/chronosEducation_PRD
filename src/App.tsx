@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AdminRoute from "@/components/AdminRoute";
+import AuthRedirect from "@/components/AuthRedirect";
 import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import InvitePage from "./pages/InvitePage";
