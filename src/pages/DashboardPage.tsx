@@ -19,6 +19,7 @@ const DashboardPage = () => {
   const { toast } = useToast();
   const [paying, setPaying] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [wizardStep, setWizardStep] = useState(1);
   const [refreshKey, setRefreshKey] = useState(0);
   const [contractAccepted, setContractAccepted] = useState(false);
 
@@ -196,6 +197,7 @@ const DashboardPage = () => {
 
       toast({ title: "Matrícula enviada!", description: "A equipa Chronos foi notificada e entrará em contacto em breve." });
       setShowForm(false);
+      setWizardStep(1);
       setContractAccepted(false);
       setRefreshKey((k) => k + 1);
       // Reset student refs
@@ -207,6 +209,48 @@ const DashboardPage = () => {
     } finally {
       setPaying(false);
     }
+  };
+
+  const validateStep1 = (): boolean => {
+    const s = studentRef.current;
+    const missingFields: string[] = [];
+    if (!s.studentName.trim()) missingFields.push("Nome do aluno");
+    if (!s.studentBirthDate) missingFields.push("Data de nascimento");
+    if (!s.studentEmail.trim()) missingFields.push("Email do aluno");
+    if (!s.studentAddress.trim()) missingFields.push("Morada");
+    if (!s.studentSchool.trim()) missingFields.push("Escola atual");
+    if (!s.studentGraduationYear) missingFields.push("Ano de conclusão");
+
+    if (missingFields.length > 0) {
+      toast({ title: "Campos obrigatórios em falta", description: missingFields.join(", "), variant: "destructive" });
+      return false;
+    }
+
+    if (s.studentBirthDate) {
+      const birthDate = new Date(s.studentBirthDate);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
+      if (age < 13 || age > 17) {
+        toast({ title: "Idade inválida", description: "O aluno deve ter entre 13 e 17 anos na data da inscrição.", variant: "destructive" });
+        return false;
+      }
+    }
+
+    if (s.studentGraduationYear) {
+      const now = new Date();
+      const gradYear = parseInt(s.studentGraduationYear, 10);
+      const gradDate = new Date(gradYear, 10, 1);
+      const minDate = new Date(now.getFullYear(), now.getMonth() + 16, 1);
+      if (gradDate < minDate) {
+        const earliestYear = minDate.getMonth() >= 10 ? minDate.getFullYear() : minDate.getFullYear() + 1;
+        toast({ title: "Ano de conclusão inválido", description: `O ano previsto deve ser ${earliestYear} ou superior.`, variant: "destructive" });
+        return false;
+      }
+    }
+
+    return true;
   };
 
   return (
@@ -272,41 +316,92 @@ const DashboardPage = () => {
               ) : (
                 <>
                   <button
-                    onClick={() => setShowForm(false)}
+                    onClick={() => {
+                      if (wizardStep === 2) {
+                        setWizardStep(1);
+                      } else {
+                        setShowForm(false);
+                        setWizardStep(1);
+                        setContractAccepted(false);
+                      }
+                    }}
                     className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
                   >
                     <ArrowLeft size={16} />
-                    Voltar às matrículas
+                    {wizardStep === 2 ? "Voltar aos dados do aluno" : "Voltar às matrículas"}
                   </button>
 
-                  <h2 className="font-heading text-xl font-semibold text-foreground mb-6">
-                   Nova Matrícula
+                  <h2 className="font-heading text-xl font-semibold text-foreground mb-2">
+                    Nova Matrícula
                   </h2>
 
-                  <StudentDataSection onChange={handleStudentChange} />
-
-                  <div className="mt-8">
-                    <ReferralSection onChange={handleReferralChange} />
+                  {/* Step indicator */}
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 1 ? "bg-secondary text-secondary-foreground" : "bg-secondary/20 text-secondary"}`}>
+                        1
+                      </div>
+                      <span className={`text-sm font-medium ${wizardStep === 1 ? "text-foreground" : "text-muted-foreground"}`}>
+                        Dados do Aluno
+                      </span>
+                    </div>
+                    <div className="w-8 h-px bg-border" />
+                    <div className="flex items-center gap-2">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 2 ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>
+                        2
+                      </div>
+                      <span className={`text-sm font-medium ${wizardStep === 2 ? "text-foreground" : "text-muted-foreground"}`}>
+                        Assinatura de Contrato
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="mt-8">
-                    <ContractSignatureSection onAcceptChange={setContractAccepted} />
-                  </div>
+                  {/* Step 1: Student Data */}
+                  {wizardStep === 1 && (
+                    <>
+                      <StudentDataSection onChange={handleStudentChange} />
 
-                  <div className="mt-8">
-                    <button
-                      onClick={handleSubmitEnrollment}
-                      disabled={paying || !contractAccepted}
-                      className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {paying ? "Processando..." : "Confirmar matrícula"}
-                    </button>
-                    {!contractAccepted && (
-                      <p className="text-xs text-muted-foreground text-center mt-2">
-                        É necessário assinar o contrato para prosseguir.
-                      </p>
-                    )}
-                  </div>
+                      <div className="mt-8">
+                        <ReferralSection onChange={handleReferralChange} />
+                      </div>
+
+                      <div className="mt-8">
+                        <button
+                          onClick={() => {
+                            if (validateStep1()) {
+                              setWizardStep(2);
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            }
+                          }}
+                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity"
+                        >
+                          Continuar para Assinatura
+                        </button>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Step 2: Contract Signature */}
+                  {wizardStep === 2 && (
+                    <>
+                      <ContractSignatureSection onAcceptChange={setContractAccepted} />
+
+                      <div className="mt-8">
+                        <button
+                          onClick={handleSubmitEnrollment}
+                          disabled={paying || !contractAccepted}
+                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {paying ? "Processando..." : "Confirmar matrícula"}
+                        </button>
+                        {!contractAccepted && (
+                          <p className="text-xs text-muted-foreground text-center mt-2">
+                            É necessário assinar o contrato para prosseguir.
+                          </p>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </>
               )}
             </div>
