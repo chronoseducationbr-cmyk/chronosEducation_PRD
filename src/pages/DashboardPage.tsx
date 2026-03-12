@@ -379,7 +379,7 @@ const DashboardPage = () => {
                               window.scrollTo({ top: 0, behavior: "smooth" });
                             }
                           }}
-                          className="w-full border-2 border-secondary text-secondary bg-transparent font-semibold py-3.5 rounded-lg hover:bg-secondary/10 transition-colors"
+                          className="w-full border-2 border-secondary text-primary bg-transparent font-semibold py-3.5 rounded-lg hover:bg-secondary/10 transition-colors"
                         >
                           Continuar para Assinatura
                         </button>
