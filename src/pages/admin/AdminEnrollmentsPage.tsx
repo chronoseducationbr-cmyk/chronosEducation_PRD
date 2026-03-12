@@ -349,7 +349,7 @@ const AdminEnrollmentsPage = () => {
                           <p className="text-foreground font-medium">{e.student_graduation_year || "—"}</p>
                         </div>
                         <div>
-                          <p className="text-muted-foreground text-xs">Morada</p>
+                          <p className="text-muted-foreground text-xs">Endereço</p>
                           <p className="text-foreground font-medium">{e.student_address || "—"}</p>
                         </div>
                         <div>

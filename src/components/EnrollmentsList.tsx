@@ -140,7 +140,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 text-sm">
                        <Detail label="Email" value={e.student_email} />
                        <Detail label="Data de nascimento" value={e.student_birth_date || ""} />
-                       <Detail label="Morada" value={e.student_address} />
+                       <Detail label="Endereço" value={e.student_address} />
                        <Detail label="Escola" value={e.student_school} />
                        <Detail label="Ano de conclusão" value={e.student_graduation_year?.toString() || ""} />
                        <Detail label="Indicado por" value={e.referred_by_email} />

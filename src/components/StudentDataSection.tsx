@@ -123,7 +123,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-foreground block mb-1.5">Morada</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Endereço</label>
             <div className="relative">
               <MapPin size={18} className="absolute left-3 top-3 text-muted-foreground" />
               <input
@@ -133,7 +133,7 @@ const StudentDataSection = ({ onChange }: Props) => {
                 value={studentAddress}
                 onChange={(e) => setStudentAddress(e.target.value)}
                 className={`${inputClasses} pl-10`}
-                placeholder="Morada completa do aluno"
+                placeholder="Endereço completo do aluno"
               />
             </div>
           </div>
