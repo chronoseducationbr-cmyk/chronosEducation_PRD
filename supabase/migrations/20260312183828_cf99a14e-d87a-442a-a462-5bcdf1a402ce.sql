@@ -1,0 +1,1 @@
+DROP POLICY "Anon can update invitations by email match" ON public.invitations;

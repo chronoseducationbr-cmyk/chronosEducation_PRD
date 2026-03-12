@@ -58,6 +58,11 @@ const InvitePage = () => {
         return;
       }
 
+      // Mark invite as used via edge function (service role)
+      await supabase.functions.invoke("mark-invite-used", {
+        body: { email: email.toLowerCase().trim(), invite_code: inviteCode.trim() },
+      });
+
       setVerified(true);
       toast({
         title: "Convite verificado!",
@@ -91,13 +96,6 @@ const InvitePage = () => {
         },
       });
       if (error) throw error;
-
-      // Mark invitation as used
-      await supabase
-        .from("invitations")
-        .update({ status: "used", used_at: new Date().toISOString() } as any)
-        .eq("email", email.toLowerCase().trim())
-        .eq("invite_code", inviteCode.trim());
 
       toast({
         title: "Conta criada!",
@@ -279,12 +277,6 @@ const InvitePage = () => {
                 disabled={loading}
                 onClick={async () => {
                   setLoading(true);
-                  await supabase
-                    .from("invitations")
-                    .update({ status: "used", used_at: new Date().toISOString() } as any)
-                    .eq("email", email.toLowerCase().trim())
-                    .eq("invite_code", inviteCode.trim());
-
                   const { error } = await lovable.auth.signInWithOAuth("google", {
                     redirect_uri: window.location.origin,
                   });
