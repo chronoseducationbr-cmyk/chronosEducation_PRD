@@ -142,7 +142,7 @@ const GuardianDataSection = ({ onChange }: Props) => {
                   type="tel"
                   maxLength={20}
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setPhone(formatPhone(e.target.value))}
                   className={`${inputClasses} pl-10`}
                   placeholder="(11) 99999-9999"
                 />
