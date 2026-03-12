@@ -196,7 +196,7 @@ const DashboardPage = () => {
       setShowForm(false);
       setRefreshKey((k) => k + 1);
       // Reset student refs
-      studentRef.current = { studentName: "", studentBirthDate: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "" };
+      studentRef.current = { studentName: "", studentBirthDate: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
       referralRef.current = "";
     } catch (err: any) {
       console.error(err);
