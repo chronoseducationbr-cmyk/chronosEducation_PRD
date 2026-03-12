@@ -15,7 +15,7 @@ interface Props {
   validationErrors?: string[];
 }
 
-const GuardianDataSection = ({ onChange }: Props) => {
+const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [hasEnrollments, setHasEnrollments] = useState(false);
