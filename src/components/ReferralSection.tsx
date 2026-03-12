@@ -59,7 +59,7 @@ const ReferralSection = ({ onChange }: Props) => {
       </h2>
       <div className="bg-card rounded-xl border border-border shadow-card p-5">
         <p className="text-sm text-muted-foreground mb-3">
-          Foi indicado por um aluno já inscrito? Indique o email (opcional).
+          Foi indicado por um aluno já matriculado? Indique o email (opcional).
         </p>
         <div className="relative">
           <Mail
