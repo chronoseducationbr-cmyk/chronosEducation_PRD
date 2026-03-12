@@ -12,9 +12,10 @@ export interface GuardianData {
 
 interface Props {
   onChange?: (data: GuardianData) => void;
+  validationErrors?: string[];
 }
 
-const GuardianDataSection = ({ onChange }: Props) => {
+const GuardianDataSection = ({ onChange, validationErrors = [] }: Props) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [hasEnrollments, setHasEnrollments] = useState(false);
@@ -66,7 +67,7 @@ const GuardianDataSection = ({ onChange }: Props) => {
     return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
   };
 
-  const inputClasses = "w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition";
+  const inputClass = (field?: string) => `w-full px-4 py-3 rounded-lg border ${field && validationErrors.includes(field) ? "border-destructive" : "border-border"} bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition`;
 
   if (loading) {
     return (
@@ -116,7 +117,7 @@ const GuardianDataSection = ({ onChange }: Props) => {
                 maxLength={100}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className={inputClasses}
+                className={inputClass("guardianFullName")}
                 placeholder="Nome completo do responsável"
               />
             </div>
@@ -129,7 +130,7 @@ const GuardianDataSection = ({ onChange }: Props) => {
                   maxLength={100}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className={`${inputClasses} pl-10`}
+                  className={`${inputClass("guardianEmail")} pl-10`}
                   placeholder="email@exemplo.com"
                 />
               </div>
@@ -143,7 +144,7 @@ const GuardianDataSection = ({ onChange }: Props) => {
                   maxLength={20}
                   value={phone}
                   onChange={(e) => setPhone(formatPhone(e.target.value))}
-                  className={`${inputClasses} pl-10`}
+                  className={`${inputClass("guardianPhone")} pl-10`}
                   placeholder="(11) 99999-9999"
                 />
               </div>
@@ -156,7 +157,7 @@ const GuardianDataSection = ({ onChange }: Props) => {
                   type="text"
                   value={cpf}
                   onChange={(e) => setCpf(formatCpf(e.target.value))}
-                  className={`${inputClasses} pl-10`}
+                  className={`${inputClass("guardianCpf")} pl-10`}
                   placeholder="000.000.000-00"
                   maxLength={14}
                 />

@@ -213,9 +213,17 @@ const DashboardPage = () => {
   };
 
   const validateStep1 = (): boolean => {
+    const g = guardianRef.current;
     const s = studentRef.current;
     const errors: string[] = [];
     const missingFields: string[] = [];
+
+    // Guardian fields
+    if (!g.fullName.trim()) { missingFields.push("Nome do responsável"); errors.push("guardianFullName"); }
+    if (!g.email.trim()) { missingFields.push("Email do responsável"); errors.push("guardianEmail"); }
+    if (!g.phone.trim()) { missingFields.push("Celular do responsável"); errors.push("guardianPhone"); }
+
+    // Student fields
     if (!s.studentName.trim()) { missingFields.push("Nome do aluno"); errors.push("studentName"); }
     if (!s.studentBirthDate) { missingFields.push("Data de nascimento"); errors.push("studentBirthDate"); }
     if (!s.studentEmail.trim()) { missingFields.push("Email do aluno"); errors.push("studentEmail"); }
@@ -311,7 +319,7 @@ const DashboardPage = () => {
             <div className="max-w-xl">
               {!showForm ? (
                 <>
-                  <GuardianDataSection onChange={handleGuardianChange} />
+                  <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} />
                   <div className="mt-8">
                     <EnrollmentsList
                       onNewEnrollment={() => setShowForm(true)}
@@ -365,7 +373,10 @@ const DashboardPage = () => {
                   {/* Step 1: Student Data */}
                   {wizardStep === 1 && (
                     <>
-                      <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
+                      <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} />
+                      <div className="mt-6">
+                        <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
+                      </div>
 
                       <div className="mt-8">
                         <ReferralSection onChange={handleReferralChange} />
