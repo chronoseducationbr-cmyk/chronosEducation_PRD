@@ -121,9 +121,9 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
               <div className="mt-1">
                 <Input
                   type="number"
-                  step="0.01"
+                  step="1"
                   min="0"
-                  placeholder="0.00"
+                  placeholder="0"
                   value={inscriptionFee}
                   onChange={(e) => setInscriptionFee(e.target.value)}
                   className="h-9"
