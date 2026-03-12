@@ -274,7 +274,7 @@ const AdminPaymentsPage = () => {
   return (
     <div>
       <h1 className="font-heading text-2xl font-bold text-foreground mb-1">Pagamentos</h1>
-      <p className="text-sm text-muted-foreground mb-6">Gerir mensalidades e boletos de cada aluno.</p>
+      <p className="text-sm text-muted-foreground mb-6">Gerir mensalidades e boletos de cada aluno</p>
 
       <div className="relative mb-4 max-w-sm">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
