@@ -6,6 +6,7 @@ import { GraduationCap, Mail, MapPin, Calendar, Camera, X } from "lucide-react";
 export interface StudentData {
   studentName: string;
   studentBirthDate: string;
+  studentGender: string;
   studentEmail: string;
   studentAddress: string;
   studentSchool: string;
