@@ -136,7 +136,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div className="bg-card rounded-lg p-3 border border-border">
-                        <p className="text-muted-foreground text-xs mb-0.5">Inscrição</p>
+                        <p className="text-muted-foreground text-xs mb-0.5">Matrícula</p>
                         <p className="text-foreground text-lg font-bold">${(e.inscription_fee_cents / 100).toFixed(0)}</p>
                       </div>
                       <div className="bg-card rounded-lg p-3 border border-border">

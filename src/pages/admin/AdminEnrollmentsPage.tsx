@@ -202,8 +202,8 @@ const AdminEnrollmentsPage = () => {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-foreground">Inscrições</h1>
-          <p className="text-sm text-muted-foreground">{enrollments.length} inscrições registadas</p>
+          <h1 className="font-heading text-2xl font-bold text-foreground">Matrículas</h1>
+          <p className="text-sm text-muted-foreground">{enrollments.length} matrículas registadas</p>
         </div>
       </div>
 

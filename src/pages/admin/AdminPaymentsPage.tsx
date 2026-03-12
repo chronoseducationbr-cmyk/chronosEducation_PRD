@@ -531,7 +531,7 @@ const AdminPaymentsPage = () => {
               <Select value={createForm.type} onValueChange={(v) => setCreateForm((f) => ({ ...f, type: v }))}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="inscription_fee">Inscrição</SelectItem>
+                  <SelectItem value="inscription_fee">Matrícula</SelectItem>
                   <SelectItem value="tuition">Aulas Online</SelectItem>
                   <SelectItem value="summercamp">Summer Camp</SelectItem>
                 </SelectContent>

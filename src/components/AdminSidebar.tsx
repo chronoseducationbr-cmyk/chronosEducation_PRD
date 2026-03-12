@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const items = [
-  { title: "Inscrições", url: "/admin/inscricoes", icon: GraduationCap },
+  { title: "Matrículas", url: "/admin/inscricoes", icon: GraduationCap },
   { title: "Pagamentos", url: "/admin/pagamentos", icon: CreditCard },
   { title: "Utilizadores", url: "/admin/utilizadores", icon: Users },
 ];
