@@ -244,7 +244,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-foreground block mb-1.5">Ano previsto para finalizar o ensino médio</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Ano previsto para finalizar o ensino médio <span className="text-[#F9B91D]">*</span></label>
             <input
               type="number"
               required
