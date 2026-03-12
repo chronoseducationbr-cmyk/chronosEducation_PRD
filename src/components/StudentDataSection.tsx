@@ -169,7 +169,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             )}
           </div>
           <div>
-            <p className="text-sm font-medium text-foreground">Foto do aluno</p>
+            <p className="text-sm font-medium text-foreground">Foto do aluno <span className="text-[#F9B91D]">*</span></p>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
@@ -190,7 +190,7 @@ const StudentDataSection = ({ onChange }: Props) => {
 
         <div className="grid sm:grid-cols-2 gap-5">
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-foreground block mb-1.5">Nome completo do aluno</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Nome completo do aluno <span className="text-[#F9B91D]">*</span></label>
             <input
               type="text"
               required
@@ -202,7 +202,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-foreground block mb-1.5">Data de nascimento</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Data de nascimento <span className="text-[#F9B91D]">*</span></label>
             <div className="relative">
               <Calendar size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input
@@ -215,7 +215,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-foreground block mb-1.5">Gênero</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Gênero <span className="text-[#F9B91D]">*</span></label>
             <select
               required
               value={studentGender}
@@ -229,7 +229,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             </select>
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-foreground block mb-1.5">Email do aluno</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Email do aluno <span className="text-[#F9B91D]">*</span></label>
             <div className="relative">
               <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input
@@ -244,7 +244,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-foreground block mb-1.5">Ano previsto para finalizar o ensino médio</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Ano previsto para finalizar o ensino médio <span className="text-[#F9B91D]">*</span></label>
             <input
               type="number"
               required
@@ -257,7 +257,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-foreground block mb-1.5">Endereço</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Endereço <span className="text-[#F9B91D]">*</span></label>
             <div className="relative">
               <MapPin size={18} className="absolute left-3 top-3 text-muted-foreground" />
               <input
@@ -272,7 +272,7 @@ const StudentDataSection = ({ onChange }: Props) => {
             </div>
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-foreground block mb-1.5">Escola atual</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Escola atual <span className="text-[#F9B91D]">*</span></label>
             <input
               type="text"
               required
