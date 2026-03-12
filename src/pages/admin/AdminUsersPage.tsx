@@ -148,9 +148,9 @@ const AdminUsersPage = () => {
       (u.phone?.toLowerCase() || "").includes(search.toLowerCase())
   );
 
-  // Invites: hide used invites where user has already logged in
+  // Invites: hide invites where user has already logged in (regardless of invite status)
   const filteredInvites = invitations
-    .filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase())))
+    .filter((inv) => !activeUserEmails.has(inv.email.toLowerCase()))
     .filter((inv) => inv.email.toLowerCase().includes(search.toLowerCase()));
 
   return (
