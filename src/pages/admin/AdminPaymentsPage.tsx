@@ -315,7 +315,7 @@ const AdminPaymentsPage = () => {
                       <button
                         onClick={(ev) => { ev.stopPropagation(); navigate(`/admin/inscricoes?student=${e.id}`); }}
                         className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
-                        title="Ver inscrição"
+                        title="Ver matrícula"
                       >
                         <GraduationCap size={16} className="text-muted-foreground" />
                       </button>
