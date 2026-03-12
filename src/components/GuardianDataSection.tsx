@@ -92,13 +92,14 @@ const GuardianDataSection = ({ onChange }: Props) => {
       ) : (
         <div className="bg-card rounded-xl border border-border shadow-card p-5">
           {hasEnrollments && (
-            <button
-              onClick={() => setExpanded(false)}
-              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mb-4"
-            >
-              <ChevronUp size={14} />
-              Recolher
-            </button>
+            <div className="flex justify-end mb-4">
+              <button
+                onClick={() => setExpanded(false)}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <ChevronUp size={18} />
+              </button>
+            </div>
           )}
           <div className="grid sm:grid-cols-2 gap-5">
             <div className="sm:col-span-2">
