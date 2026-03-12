@@ -316,41 +316,92 @@ const DashboardPage = () => {
               ) : (
                 <>
                   <button
-                    onClick={() => setShowForm(false)}
+                    onClick={() => {
+                      if (wizardStep === 2) {
+                        setWizardStep(1);
+                      } else {
+                        setShowForm(false);
+                        setWizardStep(1);
+                        setContractAccepted(false);
+                      }
+                    }}
                     className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
                   >
                     <ArrowLeft size={16} />
-                    Voltar às matrículas
+                    {wizardStep === 2 ? "Voltar aos dados do aluno" : "Voltar às matrículas"}
                   </button>
 
-                  <h2 className="font-heading text-xl font-semibold text-foreground mb-6">
-                   Nova Matrícula
+                  <h2 className="font-heading text-xl font-semibold text-foreground mb-2">
+                    Nova Matrícula
                   </h2>
 
-                  <StudentDataSection onChange={handleStudentChange} />
-
-                  <div className="mt-8">
-                    <ReferralSection onChange={handleReferralChange} />
+                  {/* Step indicator */}
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 1 ? "bg-secondary text-secondary-foreground" : "bg-secondary/20 text-secondary"}`}>
+                        1
+                      </div>
+                      <span className={`text-sm font-medium ${wizardStep === 1 ? "text-foreground" : "text-muted-foreground"}`}>
+                        Dados do Aluno
+                      </span>
+                    </div>
+                    <div className="w-8 h-px bg-border" />
+                    <div className="flex items-center gap-2">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 2 ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>
+                        2
+                      </div>
+                      <span className={`text-sm font-medium ${wizardStep === 2 ? "text-foreground" : "text-muted-foreground"}`}>
+                        Assinatura de Contrato
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="mt-8">
-                    <ContractSignatureSection onAcceptChange={setContractAccepted} />
-                  </div>
+                  {/* Step 1: Student Data */}
+                  {wizardStep === 1 && (
+                    <>
+                      <StudentDataSection onChange={handleStudentChange} />
 
-                  <div className="mt-8">
-                    <button
-                      onClick={handleSubmitEnrollment}
-                      disabled={paying || !contractAccepted}
-                      className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {paying ? "Processando..." : "Confirmar matrícula"}
-                    </button>
-                    {!contractAccepted && (
-                      <p className="text-xs text-muted-foreground text-center mt-2">
-                        É necessário assinar o contrato para prosseguir.
-                      </p>
-                    )}
-                  </div>
+                      <div className="mt-8">
+                        <ReferralSection onChange={handleReferralChange} />
+                      </div>
+
+                      <div className="mt-8">
+                        <button
+                          onClick={() => {
+                            if (validateStep1()) {
+                              setWizardStep(2);
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            }
+                          }}
+                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity"
+                        >
+                          Continuar para Assinatura
+                        </button>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Step 2: Contract Signature */}
+                  {wizardStep === 2 && (
+                    <>
+                      <ContractSignatureSection onAcceptChange={setContractAccepted} />
+
+                      <div className="mt-8">
+                        <button
+                          onClick={handleSubmitEnrollment}
+                          disabled={paying || !contractAccepted}
+                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {paying ? "Processando..." : "Confirmar matrícula"}
+                        </button>
+                        {!contractAccepted && (
+                          <p className="text-xs text-muted-foreground text-center mt-2">
+                            É necessário assinar o contrato para prosseguir.
+                          </p>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </>
               )}
             </div>
