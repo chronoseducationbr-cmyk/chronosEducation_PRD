@@ -214,7 +214,7 @@ const AdminUsersPage = () => {
                 </div>
               ))}
               {filteredUsers.length === 0 && (
-                <p className="text-center text-muted-foreground py-8">Nenhum utilizador encontrado.</p>
+                <p className="text-center text-muted-foreground py-8">Nenhum usuário encontrado.</p>
               )}
             </div>
           )}
