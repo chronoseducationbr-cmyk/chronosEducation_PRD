@@ -117,7 +117,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
 
           <div className="space-y-4">
             <div>
-              <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Inscrição</Label>
+              <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula</Label>
               <div className="mt-1">
                 <Input
                   type="number"
