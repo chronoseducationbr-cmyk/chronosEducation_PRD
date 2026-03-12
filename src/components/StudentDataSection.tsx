@@ -20,19 +20,19 @@ interface Props {
   initialData?: StudentData;
 }
 
-const StudentDataSection = ({ onChange, validationErrors = [] }: Props) => {
+const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Props) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
 
-  const [studentName, setStudentName] = useState("");
-  const [studentBirthDate, setStudentBirthDate] = useState("");
-  const [studentGender, setStudentGender] = useState("");
-  const [studentEmail, setStudentEmail] = useState("");
-  const [studentAddress, setStudentAddress] = useState("");
-  const [studentSchool, setStudentSchool] = useState("");
-  const [studentGraduationYear, setStudentGraduationYear] = useState("");
-  const [studentPhotoUrl, setStudentPhotoUrl] = useState("");
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [studentName, setStudentName] = useState(initialData?.studentName || "");
+  const [studentBirthDate, setStudentBirthDate] = useState(initialData?.studentBirthDate || "");
+  const [studentGender, setStudentGender] = useState(initialData?.studentGender || "");
+  const [studentEmail, setStudentEmail] = useState(initialData?.studentEmail || "");
+  const [studentAddress, setStudentAddress] = useState(initialData?.studentAddress || "");
+  const [studentSchool, setStudentSchool] = useState(initialData?.studentSchool || "");
+  const [studentGraduationYear, setStudentGraduationYear] = useState(initialData?.studentGraduationYear || "");
+  const [studentPhotoUrl, setStudentPhotoUrl] = useState(initialData?.studentPhotoUrl || "");
+  const [photoPreview, setPhotoPreview] = useState<string | null>(initialData?.studentPhotoUrl || null);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
