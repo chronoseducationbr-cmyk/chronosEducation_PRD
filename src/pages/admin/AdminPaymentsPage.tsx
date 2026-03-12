@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, Upload, Download, FileText, CheckCircle2, Clock, AlertCircle, Plus, ChevronDown, ChevronUp, GraduationCap } from "lucide-react";
+import { Search, Upload, Download, FileText, CheckCircle2, Clock, AlertCircle, Plus, ChevronDown, ChevronUp, GraduationCap, AlertTriangle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -311,6 +312,18 @@ const AdminPaymentsPage = () => {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
+                      {e.tuition_installment_cents === 0 && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <AlertTriangle size={16} className="text-amber-500 shrink-0" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Mensalidades ainda não definidas</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
                       <p className="font-semibold text-foreground">{e.student_name}</p>
                       <button
                         onClick={(ev) => { ev.stopPropagation(); navigate(`/admin/inscricoes?student=${e.id}`); }}
