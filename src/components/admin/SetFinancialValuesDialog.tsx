@@ -133,7 +133,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, on
             </div>
 
             <div className="border-t border-border pt-3">
-              <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Aulas Online</Label>
+              <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Plataforma Online</Label>
               <div className="grid grid-cols-2 gap-3 mt-1">
                 <div>
                   <Label className="text-xs text-muted-foreground">Nº prestações</Label>

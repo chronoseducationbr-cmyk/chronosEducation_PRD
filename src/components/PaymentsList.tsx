@@ -140,7 +140,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
                         <p className="text-foreground text-lg font-bold">${(e.inscription_fee_cents / 100).toFixed(0)}</p>
                       </div>
                       <div className="bg-card rounded-lg p-3 border border-border">
-                        <p className="text-muted-foreground text-xs mb-0.5">Aulas Online ({e.tuition_installments}x)</p>
+                        <p className="text-muted-foreground text-xs mb-0.5">Plataforma Online ({e.tuition_installments}x)</p>
                         <p className="text-foreground text-lg font-bold">${(e.tuition_installment_cents / 100).toFixed(0)}</p>
                       </div>
                       <div className="bg-card rounded-lg p-3 border border-border">

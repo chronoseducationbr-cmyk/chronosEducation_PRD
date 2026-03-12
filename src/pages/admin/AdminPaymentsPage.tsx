@@ -532,7 +532,7 @@ const AdminPaymentsPage = () => {
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="inscription_fee">Matrícula</SelectItem>
-                  <SelectItem value="tuition">Aulas Online</SelectItem>
+                  <SelectItem value="tuition">Plataforma Online</SelectItem>
                   <SelectItem value="summercamp">Summer Camp</SelectItem>
                 </SelectContent>
               </Select>
