@@ -95,7 +95,7 @@ const DashboardPage = () => {
         .maybeSingle();
 
       if (existingEnrollment) {
-        toast({ title: "Email já inscrito", description: "Já existe uma inscrição com este email de aluno.", variant: "destructive" });
+        toast({ title: "Email já inscrito", description: "Já existe uma matrícula com este email de aluno.", variant: "destructive" });
         setPaying(false);
         return;
       }
