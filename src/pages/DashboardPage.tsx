@@ -380,7 +380,7 @@ const DashboardPage = () => {
                   {/* Step 1: Student Data */}
                   {wizardStep === 1 && (
                     <>
-                      <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} />
+                      <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} initialData={guardianRef.current} />
                       <div className="mt-6">
                         <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
                       </div>
