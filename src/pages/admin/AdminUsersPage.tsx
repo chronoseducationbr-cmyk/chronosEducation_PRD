@@ -157,8 +157,8 @@ const AdminUsersPage = () => {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-foreground">Utilizadores</h1>
-          <p className="text-sm text-muted-foreground">{activeUsers.length} utilizadores · {invitations.filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase()))).length} convites</p>
+          <h1 className="font-heading text-2xl font-bold text-foreground">Usuários</h1>
+          <p className="text-sm text-muted-foreground">{activeUsers.length} usuários · {invitations.filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase()))).length} convites</p>
         </div>
         <Button onClick={() => setShowInviteDialog(true)} className="flex items-center gap-2" size="sm">
           <Send size={14} />
@@ -177,7 +177,7 @@ const AdminUsersPage = () => {
             value="users"
             className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
           >
-            Utilizadores ({activeUsers.length})
+            Usuários ({activeUsers.length})
           </TabsTrigger>
           <TabsTrigger
             value="invites"
@@ -214,7 +214,7 @@ const AdminUsersPage = () => {
                 </div>
               ))}
               {filteredUsers.length === 0 && (
-                <p className="text-center text-muted-foreground py-8">Nenhum utilizador encontrado.</p>
+                <p className="text-center text-muted-foreground py-8">Nenhum usuário encontrado.</p>
               )}
             </div>
           )}
@@ -281,7 +281,7 @@ const AdminUsersPage = () => {
           </DialogHeader>
           <div className="space-y-3 py-2">
             <p className="text-sm text-muted-foreground">
-              Introduza o email do utilizador que pretende convidar para a plataforma.
+              Introduza o email do usuário que pretende convidar para a plataforma.
             </p>
             <Input
               type="email"
