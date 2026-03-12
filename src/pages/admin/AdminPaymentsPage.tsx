@@ -404,7 +404,7 @@ const AdminPaymentsPage = () => {
                                         className="text-foreground font-medium hover:text-secondary transition-colors cursor-pointer"
                                         title="Clique para editar"
                                       >
-                                        {inst.amount_cents > 0 ? `$${(inst.amount_cents / 100).toFixed(0)}` : "—"}
+                                        {inst.amount_cents > 0 ? `$${(inst.amount_cents / 100).toFixed(2)}` : "—"}
                                       </button>
                                     )}
                                   </td>
