@@ -348,6 +348,23 @@ const AdminEnrollmentsPage = () => {
                           <p className="text-muted-foreground text-xs">Data de inscrição</p>
                           <p className="text-foreground font-medium">{formatDate(e.created_at)}</p>
                         </div>
+                        <div>
+                          <p className="text-muted-foreground text-xs">Alterar estado</p>
+                          <div className="mt-1">
+                            <Select value={e.status} onValueChange={(v) => updateStatus(e.id, v)}>
+                              <SelectTrigger className="h-8 text-xs w-56">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {statuses.map((s) => (
+                                  <SelectItem key={s} value={s} className="text-xs">
+                                    {s}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
