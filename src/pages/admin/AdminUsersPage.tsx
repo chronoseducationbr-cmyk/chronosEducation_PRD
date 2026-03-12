@@ -148,9 +148,9 @@ const AdminUsersPage = () => {
       (u.phone?.toLowerCase() || "").includes(search.toLowerCase())
   );
 
-  // Invites: hide used invites where user has already logged in
+  // Invites: hide invites where user has already logged in (regardless of invite status)
   const filteredInvites = invitations
-    .filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase())))
+    .filter((inv) => !activeUserEmails.has(inv.email.toLowerCase()))
     .filter((inv) => inv.email.toLowerCase().includes(search.toLowerCase()));
 
   return (
@@ -158,7 +158,7 @@ const AdminUsersPage = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="font-heading text-2xl font-bold text-foreground">Usuários</h1>
-          <p className="text-sm text-muted-foreground">{activeUsers.length} usuários · {invitations.filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase()))).length} convites</p>
+          <p className="text-sm text-muted-foreground">{activeUsers.length} usuários · {invitations.filter((inv) => !activeUserEmails.has(inv.email.toLowerCase())).length} convites</p>
         </div>
         <Button onClick={() => setShowInviteDialog(true)} className="flex items-center gap-2" size="sm">
           <Send size={14} />
@@ -183,7 +183,7 @@ const AdminUsersPage = () => {
             value="invites"
             className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
           >
-            Convites ({invitations.filter((inv) => !(inv.status === "used" && activeUserEmails.has(inv.email.toLowerCase()))).length})
+            Convites ({invitations.filter((inv) => !activeUserEmails.has(inv.email.toLowerCase())).length})
           </TabsTrigger>
         </TabsList>
 
