@@ -399,7 +399,7 @@ const DashboardPage = () => {
                           }}
                           className="w-full border-2 border-secondary text-primary bg-transparent font-semibold py-3.5 rounded-lg hover:bg-secondary/10 transition-colors"
                         >
-                          Continuar para Assinatura
+                          Continuar para Assinatura do Contrato
                         </button>
                       </div>
                     </>
