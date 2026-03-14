@@ -147,10 +147,23 @@ const DashboardPage = () => {
           referred_by_email: referralRef.current.trim(),
           status: "Contrato assinado",
           contract_sent_at: new Date().toISOString(),
+          inscription_fee_cents: 80000,
         } as any)
         .select("id")
         .single();
       if (enrollError) throw enrollError;
+
+      // Create inscription fee installment ($800, due on enrollment date)
+      if (newEnrollment) {
+        await supabase.from("installments").insert({
+          enrollment_id: newEnrollment.id,
+          type: "inscription",
+          installment_number: 1,
+          amount_cents: 80000,
+          due_date: new Date().toISOString().split("T")[0],
+          status: "pending",
+        } as any);
+      }
 
       // Track referral if a referral email was provided
       if (referral && newEnrollment) {
