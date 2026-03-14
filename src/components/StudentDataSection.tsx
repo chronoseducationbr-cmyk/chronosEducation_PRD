@@ -37,7 +37,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (initialData && (initialData.studentName || initialData.studentEmail)) {
+    if (initialData) {
       setLoading(false);
       return;
     }
