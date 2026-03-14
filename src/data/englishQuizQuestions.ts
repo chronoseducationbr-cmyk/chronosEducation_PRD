@@ -649,4 +649,16 @@ export const quizQuestions: QuizQuestion[] = [
     ],
     correctAnswer: "a",
   },
+  {
+    id: 59,
+    question: "Listen to the audio and answer the question.\n\nWhy do they decide to adopt an agile approach for the project?",
+    audioUrl: "/audio/59_Question.mp3",
+    options: [
+      { label: "a", text: "To meet a tight deadline while maintaining quality" },
+      { label: "b", text: "To reduce project costs" },
+      { label: "c", text: "To follow company policy" },
+      { label: "d", text: "To respond to client complaints" },
+    ],
+    correctAnswer: "a",
+  },
 ];
