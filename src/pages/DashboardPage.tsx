@@ -468,7 +468,7 @@ const DashboardPage = () => {
                         </button>
                         {!contractAccepted && (
                           <p className="text-xs text-muted-foreground text-center mt-2">
-                            É necessário assinar o contrato para prosseguir.
+                            É necessário aceitar e assinar o contrato para prosseguir.
                           </p>
                         )}
                       </div>
