@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { GraduationCap, Clock, Plus, ChevronDown, ChevronUp, FileText, Download } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { GraduationCap, Clock, Plus, ChevronDown, ChevronUp, FileText, Download, BookOpen, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -39,7 +40,9 @@ const statusColors: Record<string, { bg: string; text: string }> = {
 
 const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number }>>({});
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -53,6 +56,20 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
       setEnrollments((data as Enrollment[]) || []);
+
+      // Fetch quiz results for all enrollments
+      const { data: qr } = await supabase
+        .from("quiz_results" as any)
+        .select("enrollment_id, correct_count, total_questions")
+        .eq("user_id", user.id);
+      const resultsMap: Record<string, { correct_count: number; total_questions: number }> = {};
+      if (qr) {
+        (qr as any[]).forEach((r: any) => {
+          resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions };
+        });
+      }
+      setQuizResults(resultsMap);
+
       setLoading(false);
     };
     load();
@@ -195,6 +212,29 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                         </div>
                       </div>
                      )}
+                     {/* English Test Section */}
+                     <div className="mt-3 pt-3 border-t border-border">
+                       <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
+                         <BookOpen size={14} />
+                         Teste de Inglês
+                       </p>
+                       {quizResults[e.id] ? (
+                         <div className="flex items-center gap-2 text-sm">
+                           <CheckCircle2 size={16} className="text-secondary" />
+                           <span className="text-foreground font-medium">
+                             {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
+                           </span>
+                         </div>
+                       ) : (
+                         <button
+                           onClick={() => navigate(`/teste-ingles?enrollment=${e.id}`)}
+                           className="inline-flex items-center gap-1.5 text-sm font-semibold text-secondary hover:text-secondary/80 transition-colors"
+                         >
+                           <BookOpen size={14} />
+                           Realizar teste de inglês
+                         </button>
+                       )}
+                     </div>
                   </div>
                 )}
               </div>
