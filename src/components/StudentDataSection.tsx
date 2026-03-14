@@ -85,7 +85,8 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
     setUploading(true);
 
     const ext = file.name.split(".").pop();
-    const filePath = `${user.id}/photo.${ext}`;
+    const uniqueId = crypto.randomUUID();
+    const filePath = `${user.id}/${uniqueId}.${ext}`;
 
     const { error: uploadError } = await supabase.storage
       .from("student-photos")
