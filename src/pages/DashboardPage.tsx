@@ -320,7 +320,7 @@ const DashboardPage = () => {
         <SEOHead
         title="Matrículas — Chronos Education"
         description="Gerencie as suas matrículas no programa Dual Diploma."
-        canonical="/pagamentos"
+        canonical="/gestao-matriculas"
       />
       {/* Top bar */}
       <header className="bg-primary border-b border-primary-foreground/10">

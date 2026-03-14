@@ -35,7 +35,7 @@ const App = () => (
             <Route path="/auth-redirect" element={<AuthRedirect />} />
             <Route path="/convite" element={<InvitePage />} />
             <Route
-              path="/pagamentos"
+              path="/gestao-matriculas"
               element={
                 <ProtectedRoute>
                   <DashboardPage />
