@@ -198,7 +198,7 @@ const EnglishQuizPage = () => {
               return (
                 <>
                   <p className="text-sm font-medium text-muted-foreground mb-3">{matchedPrefix}</p>
-                  <h2 className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{rest}</h2>
+                  <p className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{rest}</p>
                 </>
               );
             }
