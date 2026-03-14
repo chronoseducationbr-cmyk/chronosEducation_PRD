@@ -73,7 +73,7 @@ const EnglishQuizPage = () => {
 
   useEffect(() => {
     if (!enrollmentId) {
-      navigate("/pagamentos");
+      navigate("/gestao-matriculas");
     }
   }, [enrollmentId, navigate]);
 
