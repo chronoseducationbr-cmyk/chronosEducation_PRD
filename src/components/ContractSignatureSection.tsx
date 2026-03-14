@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { FileText, CheckCircle2 } from "lucide-react";
 import type { GuardianData } from "@/components/GuardianDataSection";
 import type { StudentData } from "@/components/StudentDataSection";
@@ -11,8 +11,20 @@ interface Props {
 
 const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }: Props) => {
   const [accepted, setAccepted] = useState(false);
+  const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
+  const contractRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = useCallback(() => {
+    const el = contractRef.current;
+    if (!el || hasScrolledToEnd) return;
+    // Consider "scrolled to end" when within 20px of the bottom
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 20) {
+      setHasScrolledToEnd(true);
+    }
+  }, [hasScrolledToEnd]);
 
   const handleToggle = () => {
+    if (!hasScrolledToEnd) return;
     const next = !accepted;
     setAccepted(next);
     onAcceptChange(next);
