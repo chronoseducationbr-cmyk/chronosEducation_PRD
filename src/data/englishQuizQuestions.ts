@@ -482,7 +482,7 @@ export const quizQuestions: QuizQuestion[] = [
   },
   {
     id: 44,
-    question: "They're coming to our house ___________________ Sunday.",
+    question: "They're coming to our house _______________ Sunday.",
     options: [
       { label: "a", text: "in" },
       { label: "b", text: "at" },
