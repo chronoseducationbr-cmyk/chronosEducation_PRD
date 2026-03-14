@@ -185,17 +185,8 @@ const AdminEnrollmentsPage = () => {
         />
       </div>
 
-      <input
-        type="file"
-        ref={fileInputRef}
-        className="hidden"
-        accept=".pdf,.doc,.docx"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) handleUploadContract(file);
-          e.target.value = "";
-        }}
-      />
+
+
 
       {loading ? (
         <div className="animate-pulse space-y-3">
