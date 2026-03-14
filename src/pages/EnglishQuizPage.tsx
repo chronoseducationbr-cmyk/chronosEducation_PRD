@@ -105,7 +105,7 @@ const EnglishQuizPage = () => {
         {/* Progress header */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-            <h1 className="font-heading text-xl font-bold text-foreground">Teste de Nível de Inglês</h1>
+            <h1 className="font-heading text-xl font-bold text-foreground">English Level Test</h1>
             <span className="text-sm font-semibold text-muted-foreground">
               {currentIndex + 1}/{total}
             </span>
@@ -115,7 +115,7 @@ const EnglishQuizPage = () => {
 
         {/* Question card */}
         <div className="bg-card border border-border rounded-xl p-6 mb-6">
-          <p className="text-sm font-medium text-muted-foreground mb-1">Pergunta {currentIndex + 1}</p>
+          <p className="text-sm font-medium text-muted-foreground mb-1">Question {currentIndex + 1}</p>
           <h2 className="text-lg font-semibold text-foreground leading-relaxed">{current.question}</h2>
         </div>
 
@@ -156,7 +156,7 @@ const EnglishQuizPage = () => {
           disabled={!selectedAnswer}
           className="w-full flex items-center justify-center gap-2 bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {currentIndex < total - 1 ? "Próxima" : "Finalizar"}
+          {currentIndex < total - 1 ? "Next" : "Finish"}
           <ChevronRight size={18} />
         </button>
       </div>
