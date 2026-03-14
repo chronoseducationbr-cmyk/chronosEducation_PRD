@@ -328,6 +328,41 @@ export type Database = {
         }
         Relationships: []
       }
+      quiz_results: {
+        Row: {
+          correct_count: number
+          created_at: string
+          enrollment_id: string
+          id: string
+          total_questions: number
+          user_id: string
+        }
+        Insert: {
+          correct_count?: number
+          created_at?: string
+          enrollment_id: string
+          id?: string
+          total_questions?: number
+          user_id: string
+        }
+        Update: {
+          correct_count?: number
+          created_at?: string
+          enrollment_id?: string
+          id?: string
+          total_questions?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_results_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: true
+            referencedRelation: "enrollments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       referrals: {
         Row: {
           created_at: string
