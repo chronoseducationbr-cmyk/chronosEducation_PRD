@@ -89,7 +89,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
   if (enrollments.length === 0) {
     return (
       <div className="bg-card rounded-xl border border-border shadow-card p-8 text-center">
-        <GraduationCap size={40} className="mx-auto text-[#97E50B] mb-3" />
+        <GraduationCap size={40} className="mx-auto text-secondary mb-3" />
         <p className="text-muted-foreground">Sem matrículas para exibir pagamentos.</p>
       </div>
     );
@@ -111,9 +111,9 @@ const PaymentsList = ({ refreshKey }: Props) => {
               className="w-full flex items-center gap-4 p-4 text-left hover:bg-muted/30 transition-colors"
             >
               {e.student_photo_url ? (
-                <img src={e.student_photo_url} alt={e.student_name} className="w-10 h-10 rounded-full object-cover border-2 border-[#97E50B]/30 shrink-0" />
+                <img src={e.student_photo_url} alt={e.student_name} className="w-10 h-10 rounded-full object-cover border-2 border-secondary/30 shrink-0" />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-[#97E50B]/10 flex items-center justify-center text-[#97E50B] shrink-0">
+                <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
                   <GraduationCap size={20} />
                 </div>
               )}
@@ -169,7 +169,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
                     <div className="space-y-2">
                       {referrals[e.id].map((ref, idx) => (
                         <div key={idx} className="flex items-center gap-3 bg-card rounded-lg border border-border p-3">
-                          <div className="w-8 h-8 rounded-full bg-[#97E50B]/10 flex items-center justify-center text-[#97E50B] shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
                             <GraduationCap size={14} />
                           </div>
                           <div className="flex-1 min-w-0">
