@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import InvitePage from "./pages/InvitePage";
 import DashboardPage from "./pages/DashboardPage";
+import EnglishQuizPage from "./pages/EnglishQuizPage";
 
 import NotFound from "./pages/NotFound";
 import TermsPage from "./pages/TermsPage";
@@ -42,6 +43,14 @@ const App = () => (
               }
             />
             <Route path="/termos" element={<TermsPage />} />
+            <Route
+              path="/teste-ingles"
+              element={
+                <ProtectedRoute>
+                  <EnglishQuizPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Admin routes */}
             <Route
