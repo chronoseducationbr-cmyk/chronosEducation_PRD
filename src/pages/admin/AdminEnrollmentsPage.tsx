@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Search, Upload, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard } from "lucide-react";
+import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard } from "lucide-react";
 import SetFinancialValuesDialog from "@/components/admin/SetFinancialValuesDialog";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -84,8 +84,8 @@ const AdminEnrollmentsPage = () => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadTargetId, setUploadTargetId] = useState<string | null>(null);
+
+
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [pendingStatusChange, setPendingStatusChange] = useState<{ id: string; studentName: string; from: string; to: string } | null>(null);
 
@@ -149,41 +149,8 @@ const AdminEnrollmentsPage = () => {
     setPendingStatusChange(null);
   };
 
-  const handleUploadContract = async (file: File) => {
-    if (!uploadTargetId) return;
-    const filePath = `contracts/${uploadTargetId}/${file.name}`;
-    const { error: uploadError } = await supabase.storage
-      .from("contracts")
-      .upload(filePath, file, { upsert: true });
 
-    if (uploadError) {
-      toast({ title: "Erro no upload", description: uploadError.message, variant: "destructive" });
-      return;
-    }
 
-    const { data: urlData } = supabase.storage.from("contracts").getPublicUrl(filePath);
-    const { error } = await supabase
-      .from("enrollments")
-      .update({
-        contract_url: urlData.publicUrl,
-        contract_sent_at: new Date().toISOString(),
-      } as any)
-      .eq("id", uploadTargetId);
-
-    if (error) {
-      toast({ title: "Erro ao guardar contrato", variant: "destructive" });
-    } else {
-      toast({ title: "Contrato carregado com sucesso" });
-      setEnrollments((prev) =>
-        prev.map((e) =>
-          e.id === uploadTargetId
-            ? { ...e, contract_url: urlData.publicUrl, contract_sent_at: new Date().toISOString() }
-            : e
-        )
-      );
-    }
-    setUploadTargetId(null);
-  };
 
   const formatDate = (d: string | null) => {
     if (!d) return "—";
@@ -218,17 +185,8 @@ const AdminEnrollmentsPage = () => {
         />
       </div>
 
-      <input
-        type="file"
-        ref={fileInputRef}
-        className="hidden"
-        accept=".pdf,.doc,.docx"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) handleUploadContract(file);
-          e.target.value = "";
-        }}
-      />
+
+
 
       {loading ? (
         <div className="animate-pulse space-y-3">
@@ -441,32 +399,34 @@ const AdminEnrollmentsPage = () => {
                           <p className="text-muted-foreground text-xs">Documento</p>
                           <div className="flex items-center gap-2 mt-0.5">
                             {e.contract_url ? (
-                              <a
-                                href={e.contract_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    const res = await fetch(e.contract_url!);
+                                    const blob = await res.blob();
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = `contrato-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                    URL.revokeObjectURL(url);
+                                  } catch (err) {
+                                    console.error("Download error:", err);
+                                  }
+                                }}
                                 className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium text-sm"
                               >
                                 <Download size={14} />
-                                Ver contrato
-                              </a>
+                                Descarregar contrato
+                              </button>
                             ) : (
                               <span className="text-muted-foreground inline-flex items-center gap-1 text-sm italic">
                                 <FileText size={14} />
                                 Sem contrato
                               </span>
                             )}
-                            <button
-                              onClick={() => {
-                                setUploadTargetId(e.id);
-                                fileInputRef.current?.click();
-                              }}
-                              className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors text-sm"
-                              title="Upload contrato"
-                            >
-                              <Upload size={14} />
-                              Upload
-                            </button>
                           </div>
                         </div>
                       </div>
