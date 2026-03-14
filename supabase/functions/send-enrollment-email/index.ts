@@ -6,7 +6,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const buildEmailHtml = (userName: string) => `
+const buildEmailHtml = (userName: string, studentName: string) => `
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -50,7 +50,7 @@ const buildEmailHtml = (userName: string) => `
                 Inscrição Confirmada!
               </h2>
               <p style="margin:0 0 24px;font-size:15px;color:#5a6a78;text-align:center;line-height:1.6;">
-                Parabéns, <strong style="color:#062a45;">${userName}</strong>!
+                Parabéns, <strong style="color:#062a45;">${userName}</strong>! A inscrição de <strong style="color:#062a45;">${studentName}</strong> foi confirmada com sucesso.
               </p>
 
               <!-- Card -->
@@ -119,7 +119,7 @@ serve(async (req) => {
   }
 
   try {
-    const { email, name, contractBase64, contractFileName, contractContentType } = await req.json();
+    const { email, name, studentName, contractBase64, contractFileName, contractContentType } = await req.json();
 
     if (!email || !name) {
       return new Response(
@@ -132,7 +132,7 @@ serve(async (req) => {
       from: "Chronos Education <contato@info.chronoseducation.com>",
       to: [email],
       subject: "Inscrição Confirmada — Dual Diploma | Chronos Education",
-      html: buildEmailHtml(name),
+      html: buildEmailHtml(name, studentName || ""),
       reply_to: "chronoseducationbr@gmail.com",
     };
 

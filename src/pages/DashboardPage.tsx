@@ -204,6 +204,7 @@ const DashboardPage = () => {
           body: {
             email: targetEmail,
             name: guardianName,
+            studentName: s.studentName?.trim() || "",
             contractBase64,
             contractFileName,
             contractContentType,
