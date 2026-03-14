@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { GraduationCap, Clock, Plus, ChevronDown, ChevronUp, FileText, Download, BookOpen, CheckCircle2, ExternalLink } from "lucide-react";
+import { GraduationCap, Clock, Plus, ChevronDown, ChevronUp, FileText, Download, BookOpen, Check, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -235,7 +235,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                             <span className="text-foreground font-medium">
                               {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
                             </span>
-                            <span className="text-[#97E50B] font-semibold inline-flex items-center gap-1">Realizado <CheckCircle2 size={14} /></span>
+                            <span className="text-[#97E50B] font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
                           </div>
                        ) : (
                           <button
