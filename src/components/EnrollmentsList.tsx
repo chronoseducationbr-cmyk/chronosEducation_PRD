@@ -177,7 +177,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                      {/* Contract section - always visible */}
                      <div className="mt-3 pt-3 border-t border-border">
                        <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
-                         <FileText size={14} className="text-[#97E50B]" />
+                         <FileText size={14} className="text-secondary" />
                          Contrato
                        </p>
                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
