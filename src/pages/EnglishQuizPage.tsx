@@ -188,21 +188,22 @@ const EnglishQuizPage = () => {
               </audio>
             </div>
           )}
-          {current.question.includes("\n") ? (() => {
-            const parts = current.question.split("\n");
-            const lastLine = parts[parts.length - 1];
-            const passageLines = parts.slice(0, -1).join("\n").trim();
-            return (
-              <>
-                {passageLines && (
-                  <p className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line mb-3">{passageLines}</p>
-                )}
-                <h2 className="text-lg font-semibold text-foreground leading-relaxed">{lastLine}</h2>
-              </>
-            );
-          })() : (
-            <h2 className="text-lg font-semibold text-foreground leading-relaxed">{current.question}</h2>
-          )}
+          {(() => {
+            const text = current.question;
+            const instructionPrefixes = ["Read and select the best option.", "Listen to the audio and answer the question.", "Listen to the following audio and select the most appropriate sentence.", "Listen to the audio passage and select the most appropriate sentence.", "Listen and answer the question."];
+            const matchedPrefix = instructionPrefixes.find(p => text.startsWith(p));
+            
+            if (matchedPrefix) {
+              const rest = text.slice(matchedPrefix.length).trim();
+              return (
+                <>
+                  <p className="text-sm font-medium text-muted-foreground mb-3">{matchedPrefix}</p>
+                  <h2 className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{rest}</h2>
+                </>
+              );
+            }
+            return <h2 className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{text}</h2>;
+          })()}
         </div>
 
         <div className="space-y-3 mb-8">
