@@ -177,8 +177,8 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                                 className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm mt-0.5"
                               >
                                 <Download size={14} />
-                               Descarregar contrato
-                             </a>
+                                Descarregar contrato
+                              </button>
                            ) : (
                              <p className="text-foreground font-medium text-xs mt-0.5 italic text-muted-foreground">Ainda não disponível</p>
                            )}
