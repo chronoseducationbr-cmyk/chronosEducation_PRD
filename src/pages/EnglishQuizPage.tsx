@@ -180,14 +180,6 @@ const EnglishQuizPage = () => {
 
         <div className="bg-card border border-border rounded-xl p-6 mb-6">
           <p className="text-sm font-medium text-muted-foreground mb-1">Question {currentIndex + 1}</p>
-          {current.audioUrl && (
-            <div className="my-4 flex items-center gap-3 bg-muted/50 rounded-lg p-4">
-              <Volume2 className="w-5 h-5 text-accent shrink-0" />
-              <audio controls className="w-full h-10" src={current.audioUrl}>
-                Your browser does not support the audio element.
-              </audio>
-            </div>
-          )}
           {(() => {
             const text = current.question;
             const instructionPrefixes = ["Read and select the best option.", "Listen to the audio and answer the question.", "Listen to the following audio and select the most appropriate sentence.", "Listen to the audio passage and select the most appropriate sentence.", "Listen and answer the question."];
@@ -198,11 +190,31 @@ const EnglishQuizPage = () => {
               return (
                 <>
                   <p className="text-sm font-medium text-secondary mb-3">{matchedPrefix}</p>
-                  <p className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{rest}</p>
+                  {current.audioUrl && (
+                    <div className="my-4 flex items-center gap-3 bg-muted/50 rounded-lg p-4">
+                      <Volume2 className="w-5 h-5 text-accent shrink-0" />
+                      <audio controls className="w-full h-10" src={current.audioUrl}>
+                        Your browser does not support the audio element.
+                      </audio>
+                    </div>
+                  )}
+                  {rest && <p className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{rest}</p>}
                 </>
               );
             }
-            return <p className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{text}</p>;
+            return (
+              <>
+                {current.audioUrl && (
+                  <div className="my-4 flex items-center gap-3 bg-muted/50 rounded-lg p-4">
+                    <Volume2 className="w-5 h-5 text-accent shrink-0" />
+                    <audio controls className="w-full h-10" src={current.audioUrl}>
+                      Your browser does not support the audio element.
+                    </audio>
+                  </div>
+                )}
+                <p className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{text}</p>
+              </>
+            );
           })()}
         </div>
 
