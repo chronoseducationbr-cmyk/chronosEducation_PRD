@@ -43,6 +43,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number }>>({});
+  const [studentPhotoUrl, setStudentPhotoUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -50,18 +51,27 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
     const load = async () => {
       if (!user) return;
       setLoading(true);
-      const { data } = await supabase
-        .from("enrollments")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-      setEnrollments((data as Enrollment[]) || []);
 
-      // Fetch quiz results for all enrollments
-      const { data: qr } = await supabase
-        .from("quiz_results" as any)
-        .select("enrollment_id, correct_count, total_questions")
-        .eq("user_id", user.id);
+      const [{ data }, { data: profile }, { data: qr }] = await Promise.all([
+        supabase
+          .from("enrollments")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("profiles")
+          .select("student_photo_url")
+          .eq("user_id", user.id)
+          .single(),
+        supabase
+          .from("quiz_results" as any)
+          .select("enrollment_id, correct_count, total_questions")
+          .eq("user_id", user.id),
+      ]);
+
+      setEnrollments((data as Enrollment[]) || []);
+      setStudentPhotoUrl(profile?.student_photo_url || null);
+
       const resultsMap: Record<string, { correct_count: number; total_questions: number }> = {};
       if (qr) {
         (qr as any[]).forEach((r: any) => {
