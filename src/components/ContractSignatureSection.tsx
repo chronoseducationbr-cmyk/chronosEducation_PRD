@@ -54,7 +54,7 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }:
       </p>
 
       {/* Contract body */}
-      <div className="bg-muted/30 border border-border rounded-lg p-5 max-h-[420px] overflow-y-auto space-y-5 text-sm text-foreground leading-relaxed">
+      <div ref={contractRef} onScroll={handleScroll} className="bg-muted/30 border border-border rounded-lg p-5 max-h-[420px] overflow-y-auto space-y-5 text-sm text-foreground leading-relaxed">
         <div className="text-center space-y-1">
           <p className="font-heading font-bold text-base uppercase tracking-wide">
             Contrato de Prestação de Serviços Educacionais
