@@ -372,7 +372,7 @@ export const quizQuestions: QuizQuestion[] = [
   },
   {
     id: 34,
-    question: "If I hadn't replied to your email, I _________________ here with you now.",
+    question: "If I hadn't replied to your email, I _____________ here with you now.",
     options: [
       { label: "a", text: "can't be" },
       { label: "b", text: "wouldn't be" },
