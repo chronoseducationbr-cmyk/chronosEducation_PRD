@@ -111,7 +111,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
               className="w-full flex items-center gap-4 p-4 text-left hover:bg-muted/30 transition-colors"
             >
               {e.student_photo_url ? (
-                <img src={e.student_photo_url} alt={e.student_name} className="w-10 h-10 rounded-full object-cover border-2 border-[#97E50B]/30 shrink-0" />
+                <img src={e.student_photo_url} alt={e.student_name} className="w-10 h-10 rounded-full object-cover border-2 border-secondary/30 shrink-0" />
               ) : (
                 <div className="w-10 h-10 rounded-full bg-[#97E50B]/10 flex items-center justify-center text-[#97E50B] shrink-0">
                   <GraduationCap size={20} />
