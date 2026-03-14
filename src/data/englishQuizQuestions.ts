@@ -637,4 +637,16 @@ export const quizQuestions: QuizQuestion[] = [
     ],
     correctAnswer: "a",
   },
+  {
+    id: 58,
+    question: "Listen to the audio and answer the question.\n\nWhich of the following items are most likely sold where Colin works?",
+    audioUrl: "/audio/58_Question.mp3",
+    options: [
+      { label: "a", text: "shoes" },
+      { label: "b", text: "jewelry" },
+      { label: "c", text: "knives" },
+      { label: "d", text: "underwear" },
+    ],
+    correctAnswer: "a",
+  },
 ];
