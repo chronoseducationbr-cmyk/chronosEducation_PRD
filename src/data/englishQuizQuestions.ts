@@ -339,7 +339,7 @@ export const quizQuestions: QuizQuestion[] = [
   },
   {
     id: 31,
-    question: "What I like more than anything else _______________ at weekends.",
+    question: "What I like more than anything else ____________ at weekends.",
     options: [
       { label: "a", text: "playing golf" },
       { label: "b", text: "to play golf" },
