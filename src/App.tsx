@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import InvitePage from "./pages/InvitePage";
 import DashboardPage from "./pages/DashboardPage";
+import EnglishQuizPage from "./pages/EnglishQuizPage";
 
 import NotFound from "./pages/NotFound";
 import TermsPage from "./pages/TermsPage";
