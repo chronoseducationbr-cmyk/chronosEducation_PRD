@@ -409,7 +409,7 @@ const DashboardPage = () => {
                   {/* Step indicator */}
                   <div className="flex items-center gap-3 mb-6">
                     <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 1 ? "bg-[#97E50B] text-secondary-foreground" : "bg-[#97E50B]/20 text-[#97E50B]"}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 1 ? "bg-secondary text-secondary-foreground" : "bg-secondary/20 text-secondary"}`}>
                         1
                       </div>
                       <span className={`text-sm font-medium ${wizardStep === 1 ? "text-foreground" : "text-muted-foreground"}`}>
