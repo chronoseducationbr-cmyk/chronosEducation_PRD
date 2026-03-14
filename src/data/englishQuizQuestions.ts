@@ -3,6 +3,7 @@ export interface QuizQuestion {
   question: string;
   options: { label: string; text: string }[];
   correctAnswer: string;
+  audioUrl?: string;
 }
 
 export const quizQuestions: QuizQuestion[] = [
