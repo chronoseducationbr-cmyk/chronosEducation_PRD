@@ -661,4 +661,16 @@ export const quizQuestions: QuizQuestion[] = [
     ],
     correctAnswer: "a",
   },
+  {
+    id: 60,
+    question: "Listen to the audio and answer the question.\n\nWhat is the woman's overall attitude toward the novel?",
+    audioUrl: "/audio/60_Question.mp3",
+    options: [
+      { label: "a", text: "She finds the novel emotionally engaging but historically unreliable." },
+      { label: "b", text: "She appreciates the characters but questions the historical plausibility of some elements." },
+      { label: "c", text: "She feels the novel lacks atmosphere and convincing detail." },
+      { label: "d", text: "She believes the novel prioritizes scientific accuracy over storytelling." },
+    ],
+    correctAnswer: "d",
+  },
 ];
