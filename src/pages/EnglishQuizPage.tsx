@@ -202,7 +202,7 @@ const EnglishQuizPage = () => {
                 </>
               );
             }
-            return <h2 className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{text}</h2>;
+            return <p className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{text}</p>;
           })()}
         </div>
 
