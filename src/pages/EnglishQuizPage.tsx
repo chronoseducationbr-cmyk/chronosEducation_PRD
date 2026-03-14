@@ -110,7 +110,7 @@ const EnglishQuizPage = () => {
               onClick={() => setStarted(true)}
               className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity"
             >
-              Começar
+              Let's start!
             </button>
           </div>
         </div>
