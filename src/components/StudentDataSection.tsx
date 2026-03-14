@@ -110,7 +110,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
     setStudentPhotoUrl("");
   };
 
-  const inputClasses = (field?: string) => `w-full px-4 py-3 rounded-lg border ${field && validationErrors.includes(field) ? "border-destructive" : "border-border"} bg-background text-foreground text-sm focus:ring-2 focus:ring-[#97E50B] focus:border-transparent outline-none transition`;
+  const inputClasses = (field?: string) => `w-full px-4 py-3 rounded-lg border ${field && validationErrors.includes(field) ? "border-destructive" : "border-border"} bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition`;
 
   if (loading) {
     return (
