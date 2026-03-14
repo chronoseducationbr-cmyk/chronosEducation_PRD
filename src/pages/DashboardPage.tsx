@@ -147,6 +147,7 @@ const DashboardPage = () => {
           referred_by_email: referralRef.current.trim(),
           status: "Contrato assinado",
           contract_sent_at: new Date().toISOString(),
+          inscription_fee_cents: 80000,
         } as any)
         .select("id")
         .single();
