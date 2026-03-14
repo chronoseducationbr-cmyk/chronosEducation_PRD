@@ -219,7 +219,7 @@ const EnglishQuizPage = () => {
         </div>
 
         <div className="space-y-3 mb-8">
-          {current.options.map((opt) => {
+          {[...current.options, { label: "e", text: "I don't know" }].map((opt) => {
             const isSelected = selectedAnswer === opt.label;
             return (
               <button
