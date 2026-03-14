@@ -282,6 +282,11 @@ const DashboardPage = () => {
     if (s.studentBirthDate) {
       const birthDate = new Date(s.studentBirthDate);
       const today = new Date();
+      if (birthDate > today) {
+        setValidationErrors(["studentBirthDate"]);
+        toast({ title: "Data de nascimento inválida", description: "A data de nascimento não pode ser superior à data atual.", variant: "destructive" });
+        return false;
+      }
       let age = today.getFullYear() - birthDate.getFullYear();
       const monthDiff = today.getMonth() - birthDate.getMonth();
       if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
