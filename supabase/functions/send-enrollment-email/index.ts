@@ -132,7 +132,7 @@ serve(async (req) => {
       from: "Chronos Education <contato@info.chronoseducation.com>",
       to: [email],
       subject: "Inscrição Confirmada — Dual Diploma | Chronos Education",
-      html: buildEmailHtml(name),
+      html: buildEmailHtml(name, studentName || ""),
       reply_to: "chronoseducationbr@gmail.com",
     };
 
