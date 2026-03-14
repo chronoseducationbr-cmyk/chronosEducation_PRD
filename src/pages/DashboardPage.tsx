@@ -447,7 +447,7 @@ const DashboardPage = () => {
                               window.scrollTo({ top: 0, behavior: "smooth" });
                             }
                           }}
-                          className="w-full border-2 border-secondary text-primary bg-transparent font-semibold py-3.5 rounded-lg hover:bg-secondary/10 transition-colors"
+                          className="w-full border-2 border-[#97E50B] text-primary bg-transparent font-semibold py-3.5 rounded-lg hover:bg-[#97E50B]/10 transition-colors"
                         >
                           Continuar para Assinatura do Contrato
                         </button>
