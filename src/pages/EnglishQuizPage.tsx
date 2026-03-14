@@ -16,6 +16,7 @@ const EnglishQuizPage = () => {
   const enrollmentId = searchParams.get("enrollment");
   const { toast } = useToast();
 
+  const [started, setStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<number, string>>({});
