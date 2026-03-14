@@ -79,8 +79,46 @@ const EnglishQuizPage = () => {
   }, [enrollmentId, navigate]);
 
   if (!enrollmentId) return null;
+  if (!started) {
+    return (
+      <div className="min-h-screen bg-background">
+        <SEOHead title="Teste de Inglês — Chronos Education" description="Avaliação de nível de inglês." />
+        <header className="bg-primary border-b border-primary-foreground/10">
+          <div className="container-narrow flex items-center justify-between h-16 px-4 md:px-8">
+            <Link to="/" className="flex items-center">
+              <img src={chronosLogo} alt="Chronos Education" className="h-8" />
+            </Link>
+          </div>
+        </header>
 
-  if (finished) {
+        <div className="container-narrow px-4 md:px-8 py-12 max-w-xl mx-auto">
+          <button
+            onClick={() => navigate("/gestao-matriculas")}
+            className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-8"
+          >
+            <ArrowLeft size={16} />
+            Voltar ao Painel
+          </button>
+
+          <div className="bg-card border border-border rounded-xl p-8 text-center">
+            <h1 className="font-heading text-2xl font-bold text-accent mb-4">Bem-vindo ao teste de nível de inglês!</h1>
+            <p className="text-foreground mb-2">Este teste avalia teu conhecimento da gramática inglesa.</p>
+            <p className="text-foreground mb-2">As perguntas são de múltipla escolha, sendo que ao avançar para a pergunta seguinte já não podes voltar a pergunta anterior.</p>
+            <p className="text-foreground mb-8">Responde a todas as perguntas</p>
+
+            <button
+              onClick={() => setStarted(true)}
+              className="w-full bg-[#97E50B] text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              Começar
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+
     return (
       <div className="min-h-screen bg-background">
         <SEOHead title="Resultado — Teste de Inglês" description="Resultado do teste de nível de inglês." />
