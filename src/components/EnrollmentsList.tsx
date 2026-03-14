@@ -138,7 +138,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                         className="w-10 h-10 rounded-full object-cover border-2 border-secondary/30 shrink-0"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-[#97E50B]/10 flex items-center justify-center text-[#97E50B] shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
                         <GraduationCap size={20} />
                       </div>
                     )}
