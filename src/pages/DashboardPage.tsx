@@ -268,6 +268,7 @@ const DashboardPage = () => {
 
     // Student fields
     if (!s.studentName.trim()) { missingFields.push("Nome do aluno"); errors.push("studentName"); }
+    if (!s.studentPhotoUrl) { missingFields.push("Foto do aluno"); errors.push("studentPhoto"); }
     if (!s.studentBirthDate) { missingFields.push("Data de nascimento"); errors.push("studentBirthDate"); }
     if (!s.studentEmail.trim()) { missingFields.push("Email do aluno"); errors.push("studentEmail"); }
     if (!s.studentAddress.trim()) { missingFields.push("Endereço"); errors.push("studentAddress"); }
