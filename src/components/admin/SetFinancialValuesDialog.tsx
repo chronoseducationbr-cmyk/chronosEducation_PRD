@@ -17,6 +17,7 @@ import { Settings } from "lucide-react";
 interface Props {
   enrollmentId: string;
   studentName: string;
+  contractSignedAt: string | null;
   currentValues: {
     inscription_fee_cents: number;
     tuition_installment_cents: number;

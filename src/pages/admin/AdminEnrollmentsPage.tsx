@@ -249,6 +249,7 @@ const AdminEnrollmentsPage = () => {
                       <SetFinancialValuesDialog
                         enrollmentId={e.id}
                         studentName={e.student_name}
+                        contractSignedAt={e.contract_signed_at}
                         currentValues={{
                           inscription_fee_cents: e.inscription_fee_cents,
                           tuition_installment_cents: e.tuition_installment_cents,
