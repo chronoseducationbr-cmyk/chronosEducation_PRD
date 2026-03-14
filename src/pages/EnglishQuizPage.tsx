@@ -102,9 +102,16 @@ const EnglishQuizPage = () => {
 
           <div className="bg-card border border-border rounded-xl p-8 text-center">
             <h1 className="font-heading text-2xl font-bold text-accent mb-4">Bem-vindo ao teste de nível de inglês!</h1>
-            <p className="text-foreground mb-2">Este teste avalia teu conhecimento da gramática inglesa.</p>
-            <p className="text-foreground mb-2">As perguntas são de múltipla escolha, sendo que ao avançar para a pergunta seguinte já não podes voltar a pergunta anterior.</p>
-            <p className="text-foreground mb-8">Responde a todas as perguntas</p>
+            <p className="text-foreground mb-6">Este teste avalia o teu conhecimento da gramática inglesa.</p>
+            
+            <h2 className="font-heading text-lg font-semibold text-foreground mb-4 text-left">Instruções para o teste:</h2>
+            <ol className="text-foreground text-left space-y-3 mb-8 list-decimal list-outside pl-5">
+              <li><strong>Responde a todas as perguntas:</strong> Há 60 perguntas de múltipla escolha no total.</li>
+              <li><strong>Após avançar para a pergunta seguinte</strong> já não podes voltar a pergunta anterior.</li>
+              <li><strong>Sê honesto:</strong> Para aproveitar ao máximo o teste, certifica-te de que as tuas respostas são verdadeiras. Se não souberes a resposta, seleciona "I don't know". Ninguém te está julgando!</li>
+              <li><strong>Fica atento ao tempo:</strong> Embora não tenhas limite de tempo, tenta não pensar demais em cada resposta. Isso te ajudará a obter um resultado mais preciso.</li>
+              <li><strong>Lê as perguntas com atenção:</strong> Não te apresses ao ler as perguntas e certifica-te de entendê-las antes de responder.</li>
+            </ol>
 
             <button
               onClick={() => setStarted(true)}
