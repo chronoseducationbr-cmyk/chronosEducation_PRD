@@ -195,7 +195,7 @@ const EnglishQuizPage = () => {
             return (
               <>
                 {passageLines && (
-                  <p className="text-sm font-medium text-muted-foreground leading-relaxed whitespace-pre-line mb-3">{passageLines}</p>
+                  <p className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line mb-3">{passageLines}</p>
                 )}
                 <h2 className="text-lg font-semibold text-foreground leading-relaxed">{lastLine}</h2>
               </>
