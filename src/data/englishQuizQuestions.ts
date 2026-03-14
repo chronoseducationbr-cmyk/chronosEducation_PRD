@@ -471,7 +471,7 @@ export const quizQuestions: QuizQuestion[] = [
   },
   {
     id: 43,
-    question: "Hello, this is Jack. Could I ___________________ to Sharon, please?",
+    question: "Hello, this is Jack. Could I _______________ to Sharon, please?",
     options: [
       { label: "a", text: "say" },
       { label: "b", text: "tell" },
