@@ -82,6 +82,7 @@ const AdminEnrollmentsPage = () => {
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number }>>({});
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
