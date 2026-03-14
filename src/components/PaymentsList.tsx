@@ -15,6 +15,7 @@ interface Enrollment {
   id: string;
   student_name: string;
   student_email: string;
+  student_photo_url: string | null;
   status: string;
   created_at: string;
   inscription_fee_cents: number;
