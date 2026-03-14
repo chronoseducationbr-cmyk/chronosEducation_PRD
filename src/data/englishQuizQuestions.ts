@@ -229,7 +229,7 @@ export const quizQuestions: QuizQuestion[] = [
   },
   {
     id: 21,
-    question: "He doesn't smoke now, but he __________________ a lot when he was young.",
+    question: "He doesn't smoke now, but he _____________ a lot when he was young.",
     options: [
       { label: "a", text: "has smoked" },
       { label: "b", text: "smokes" },
