@@ -106,11 +106,11 @@ const EnglishQuizPage = () => {
             
             <h2 className="font-heading text-lg font-semibold text-foreground mb-4 text-left">Instruções para o teste:</h2>
             <ol className="text-foreground text-left space-y-3 mb-8 list-none pl-0">
-              <li><span className="text-accent font-bold">1.</span> <strong>Responde a todas as perguntas:</strong> Há 60 perguntas de múltipla escolha no total.</li>
-              <li><span className="text-accent font-bold">2.</span> <strong>Após avançar para a pergunta seguinte</strong> já não podes voltar a pergunta anterior.</li>
-              <li><span className="text-accent font-bold">3.</span> <strong>Sê honesto:</strong> Para aproveitar ao máximo o teste, certifica-te de que as tuas respostas são verdadeiras. Se não souberes a resposta, seleciona "I don't know". Ninguém te está julgando!</li>
-              <li><span className="text-accent font-bold">4.</span> <strong>Fica atento ao tempo:</strong> Embora não tenhas limite de tempo, tenta não pensar demais em cada resposta. Isso te ajudará a obter um resultado mais preciso.</li>
-              <li><span className="text-accent font-bold">5.</span> <strong>Lê as perguntas com atenção:</strong> Não te apresses ao ler as perguntas e certifica-te de entendê-las antes de responder.</li>
+              <li><span className="font-heading text-accent font-bold">1.</span> <strong>Responde a todas as perguntas:</strong> Há 60 perguntas de múltipla escolha no total.</li>
+              <li><span className="font-heading text-accent font-bold">2.</span> <strong>Após avançar para a pergunta seguinte</strong> já não podes voltar a pergunta anterior.</li>
+              <li><span className="font-heading text-accent font-bold">3.</span> <strong>Sê honesto:</strong> Para aproveitar ao máximo o teste, certifica-te de que as tuas respostas são verdadeiras. Se não souberes a resposta, seleciona "I don't know". Ninguém te está julgando!</li>
+              <li><span className="font-heading text-accent font-bold">4.</span> <strong>Fica atento ao tempo:</strong> Embora não tenhas limite de tempo, tenta não pensar demais em cada resposta. Isso te ajudará a obter um resultado mais preciso.</li>
+              <li><span className="font-heading text-accent font-bold">5.</span> <strong>Lê as perguntas com atenção:</strong> Não te apresses ao ler as perguntas e certifica-te de entendê-las antes de responder.</li>
             </ol>
 
             <button
