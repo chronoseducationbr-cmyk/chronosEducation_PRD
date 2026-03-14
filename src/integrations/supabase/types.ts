@@ -29,6 +29,7 @@ export type Database = {
           student_email: string | null
           student_graduation_year: number | null
           student_name: string
+          student_photo_url: string | null
           student_school: string | null
           summercamp_installment_cents: number
           summercamp_installments: number
@@ -53,6 +54,7 @@ export type Database = {
           student_email?: string | null
           student_graduation_year?: number | null
           student_name?: string
+          student_photo_url?: string | null
           student_school?: string | null
           summercamp_installment_cents?: number
           summercamp_installments?: number
@@ -77,6 +79,7 @@ export type Database = {
           student_email?: string | null
           student_graduation_year?: number | null
           student_name?: string
+          student_photo_url?: string | null
           student_school?: string | null
           summercamp_installment_cents?: number
           summercamp_installments?: number

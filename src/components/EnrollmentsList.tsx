@@ -12,6 +12,7 @@ interface Enrollment {
   student_address: string;
   student_school: string;
   student_graduation_year: number | null;
+  student_photo_url: string | null;
   referred_by_email: string;
   status: string;
   created_at: string;
@@ -43,7 +44,6 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number }>>({});
-  const [studentPhotoUrl, setStudentPhotoUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -52,17 +52,12 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
       if (!user) return;
       setLoading(true);
 
-      const [{ data }, { data: profile }, { data: qr }] = await Promise.all([
+      const [{ data }, { data: qr }] = await Promise.all([
         supabase
           .from("enrollments")
           .select("*")
           .eq("user_id", user.id)
           .order("created_at", { ascending: false }),
-        supabase
-          .from("profiles")
-          .select("student_photo_url")
-          .eq("user_id", user.id)
-          .single(),
         supabase
           .from("quiz_results" as any)
           .select("enrollment_id, correct_count, total_questions")
@@ -70,7 +65,6 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
       ]);
 
       setEnrollments((data as Enrollment[]) || []);
-      setStudentPhotoUrl(profile?.student_photo_url || null);
 
       const resultsMap: Record<string, { correct_count: number; total_questions: number }> = {};
       if (qr) {
@@ -137,9 +131,9 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                   className="w-full flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-4 text-left hover:bg-muted/30 transition-colors"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
-                    {studentPhotoUrl ? (
+                    {e.student_photo_url ? (
                       <img
-                        src={studentPhotoUrl}
+                        src={e.student_photo_url}
                         alt={e.student_name}
                         className="w-10 h-10 rounded-full object-cover border-2 border-secondary/30 shrink-0"
                       />
