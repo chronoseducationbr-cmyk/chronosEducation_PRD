@@ -102,23 +102,12 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
     setStudentPhotoUrl(publicUrl);
     setPhotoPreview(publicUrl);
 
-    await supabase
-      .from("profiles")
-      .update({ student_photo_url: publicUrl } as any)
-      .eq("user_id", user.id);
-
     setUploading(false);
   };
 
   const handleRemovePhoto = async () => {
     setPhotoPreview(null);
     setStudentPhotoUrl("");
-    if (user) {
-      await supabase
-        .from("profiles")
-        .update({ student_photo_url: "" } as any)
-        .eq("user_id", user.id);
-    }
   };
 
   const inputClasses = (field?: string) => `w-full px-4 py-3 rounded-lg border ${field && validationErrors.includes(field) ? "border-destructive" : "border-border"} bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition`;
