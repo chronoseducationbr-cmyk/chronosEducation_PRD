@@ -167,10 +167,46 @@ const DashboardPage = () => {
 
       const guardianName = g.fullName?.trim() || userName;
 
+      // Generate contract PDF
+      let contractBase64 = "";
+      let contractFileName = "";
+      let contractContentType = "";
+      try {
+        const { data: contractData, error: contractError } = await supabase.functions.invoke("generate-contract-pdf", {
+          body: {
+            guardian: { fullName: g.fullName, email: g.email, phone: g.phone },
+            student: {
+              studentName: s.studentName,
+              studentBirthDate: s.studentBirthDate,
+              studentEmail: s.studentEmail,
+              studentAddress: s.studentAddress,
+              studentSchool: s.studentSchool,
+              studentGraduationYear: s.studentGraduationYear,
+            },
+            enrollmentId: newEnrollment.id,
+          },
+        });
+        if (contractError) {
+          console.error("Contract PDF error:", contractError);
+        } else if (contractData) {
+          contractBase64 = contractData.contractBase64 || "";
+          contractFileName = contractData.fileName || "";
+          contractContentType = contractData.contentType || "application/pdf";
+        }
+      } catch (pdfErr) {
+        console.error("Contract PDF generation failed:", pdfErr);
+      }
+
       // Send both emails
       const [enrollmentResult, notificationResult] = await Promise.all([
         supabase.functions.invoke("send-enrollment-email", {
-          body: { email: targetEmail, name: guardianName },
+          body: {
+            email: targetEmail,
+            name: guardianName,
+            contractBase64,
+            contractFileName,
+            contractContentType,
+          },
         }),
         supabase.functions.invoke("send-purchase-notification", {
           body: {
