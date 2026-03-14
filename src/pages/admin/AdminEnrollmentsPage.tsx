@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard } from "lucide-react";
+import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard, BookOpen } from "lucide-react";
 import SetFinancialValuesDialog from "@/components/admin/SetFinancialValuesDialog";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -82,6 +82,7 @@ const AdminEnrollmentsPage = () => {
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number }>>({});
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
@@ -112,6 +113,18 @@ const AdminEnrollmentsPage = () => {
         e.guardian = guardianMap[e.user_id];
       });
     }
+
+    // Fetch quiz results
+    const { data: qr } = await supabase
+      .from("quiz_results" as any)
+      .select("enrollment_id, correct_count, total_questions");
+    const resultsMap: Record<string, { correct_count: number; total_questions: number }> = {};
+    if (qr) {
+      (qr as any[]).forEach((r: any) => {
+        resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions };
+      });
+    }
+    setQuizResults(resultsMap);
 
     setEnrollments(enrs);
     setLoading(false);
@@ -265,6 +278,16 @@ const AdminEnrollmentsPage = () => {
                           );
                         }}
                       />
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-1 text-[11px]">
+                      <BookOpen size={12} className="text-muted-foreground" />
+                      {quizResults[e.id] ? (
+                        <span className="text-foreground font-medium">
+                          Teste: {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} certas
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground italic">Teste não realizado</span>
+                      )}
                     </div>
                   </div>
                   <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
