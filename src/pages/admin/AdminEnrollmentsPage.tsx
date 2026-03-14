@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard } from "lucide-react";
 import SetFinancialValuesDialog from "@/components/admin/SetFinancialValuesDialog";
