@@ -228,7 +228,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                        ) : (
                          <button
                            onClick={() => navigate(`/teste-ingles?enrollment=${e.id}`)}
-                           className="inline-flex items-center gap-1.5 text-sm font-semibold text-secondary hover:text-secondary/80 transition-colors"
+                           className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent/80 transition-colors"
                          >
                            <BookOpen size={14} />
                            Realizar teste de inglês
