@@ -102,7 +102,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
       {enrollments.length === 0 ? (
         <div className="bg-card rounded-xl border border-border shadow-card p-8 text-center">
           <GraduationCap size={40} className="mx-auto text-muted-foreground mb-3" />
-          <p className="text-muted-foreground mb-4">Ainda não tem matrículas registadas.</p>
+          <p className="text-muted-foreground mb-4">Ainda não tem matrículas registradas.</p>
           <button
             onClick={onNewEnrollment}
             className="inline-flex items-center gap-2 bg-secondary text-secondary-foreground font-semibold py-2.5 px-5 rounded-lg hover:opacity-90 transition-opacity text-sm"
