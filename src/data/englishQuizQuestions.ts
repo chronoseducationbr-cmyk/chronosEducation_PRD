@@ -613,4 +613,16 @@ export const quizQuestions: QuizQuestion[] = [
     ],
     correctAnswer: "c",
   },
+  {
+    id: 56,
+    question: "Listen to the audio passage and select the most appropriate sentence.",
+    audioUrl: "/audio/56_Question.mp3",
+    options: [
+      { label: "a", text: "Jim lives in the country on a vegetable farm." },
+      { label: "b", text: "Jim does not eat meat." },
+      { label: "c", text: "Jim was a chef in a famous vegetarian restaurant." },
+      { label: "d", text: "Jim lives in the city with his gerbil." },
+    ],
+    correctAnswer: "b",
+  },
 ];
