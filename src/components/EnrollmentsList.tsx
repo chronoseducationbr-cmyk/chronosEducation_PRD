@@ -243,7 +243,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                            className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent/80 transition-colors"
                          >
                            Realizar teste de inglês
-                           <ExternalLink size={14} />
+                           <ExternalLink size={14} className="text-[#97E50B]" />
                          </button>
                        )}
                      </div>
