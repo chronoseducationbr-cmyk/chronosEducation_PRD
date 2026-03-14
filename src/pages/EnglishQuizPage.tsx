@@ -115,7 +115,7 @@ const EnglishQuizPage = () => {
 
         {/* Question card */}
         <div className="bg-card border border-border rounded-xl p-6 mb-6">
-          <p className="text-sm font-medium text-muted-foreground mb-1">Pergunta {currentIndex + 1}</p>
+          <p className="text-sm font-medium text-muted-foreground mb-1">Question {currentIndex + 1}</p>
           <h2 className="text-lg font-semibold text-foreground leading-relaxed">{current.question}</h2>
         </div>
 
