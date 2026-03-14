@@ -40,7 +40,9 @@ const statusColors: Record<string, { bg: string; text: string }> = {
 
 const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number }>>({});
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -54,6 +56,20 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
       setEnrollments((data as Enrollment[]) || []);
+
+      // Fetch quiz results for all enrollments
+      const { data: qr } = await supabase
+        .from("quiz_results" as any)
+        .select("enrollment_id, correct_count, total_questions")
+        .eq("user_id", user.id);
+      const resultsMap: Record<string, { correct_count: number; total_questions: number }> = {};
+      if (qr) {
+        (qr as any[]).forEach((r: any) => {
+          resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions };
+        });
+      }
+      setQuizResults(resultsMap);
+
       setLoading(false);
     };
     load();
