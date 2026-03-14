@@ -188,7 +188,21 @@ const EnglishQuizPage = () => {
               </audio>
             </div>
           )}
-          <h2 className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{current.question}</h2>
+          {current.question.includes("\n") ? (() => {
+            const parts = current.question.split("\n");
+            const lastLine = parts[parts.length - 1];
+            const passageLines = parts.slice(0, -1).join("\n").trim();
+            return (
+              <>
+                {passageLines && (
+                  <p className="text-sm font-medium text-muted-foreground leading-relaxed whitespace-pre-line mb-3">{passageLines}</p>
+                )}
+                <h2 className="text-lg font-semibold text-foreground leading-relaxed">{lastLine}</h2>
+              </>
+            );
+          })() : (
+            <h2 className="text-lg font-semibold text-foreground leading-relaxed">{current.question}</h2>
+          )}
         </div>
 
         <div className="space-y-3 mb-8">
