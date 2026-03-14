@@ -231,12 +231,12 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                          Teste de Inglês
                        </p>
                        {quizResults[e.id] ? (
-                         <div className="flex items-center gap-2 text-sm">
-                           <CheckCircle2 size={16} className="text-[#97E50B]" />
-                           <span className="text-foreground font-medium">
-                             {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
-                           </span>
-                         </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <span className="text-foreground font-medium">
+                              {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
+                            </span>
+                            <span className="text-[#97E50B] font-semibold">Realizado</span>
+                          </div>
                        ) : (
                           <button
                             onClick={() => navigate(`/teste-ingles?enrollment=${e.id}`)}
