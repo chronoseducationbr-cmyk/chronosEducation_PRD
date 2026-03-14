@@ -96,7 +96,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
         </h2>
         <button
           onClick={onNewEnrollment}
-          className="flex items-center gap-1.5 text-sm font-semibold text-[#82CC07] hover:text-[#82CC07]/80 transition-colors"
+          className="flex items-center gap-1.5 text-sm font-semibold text-[#97E50B] hover:text-[#97E50B]/80 transition-colors"
         >
           <Plus size={16} />
           Nova Matrícula
@@ -105,7 +105,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
 
       {enrollments.length === 0 ? (
         <div className="bg-card rounded-xl border border-border shadow-card p-8 text-center">
-          <GraduationCap size={40} className="mx-auto text-muted-foreground mb-3" />
+          <GraduationCap size={40} className="mx-auto text-[#97E50B] mb-3" />
           <p className="text-muted-foreground mb-4">Ainda não tem matrículas registradas.</p>
           <button
             onClick={onNewEnrollment}
@@ -138,7 +138,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                         className="w-10 h-10 rounded-full object-cover border-2 border-secondary/30 shrink-0"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-[#97E50B]/10 flex items-center justify-center text-[#97E50B] shrink-0">
                         <GraduationCap size={20} />
                       </div>
                     )}
@@ -177,7 +177,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                      {/* Contract section - always visible */}
                      <div className="mt-3 pt-3 border-t border-border">
                        <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
-                         <FileText size={14} />
+                         <FileText size={14} className="text-[#97E50B]" />
                          Contrato
                        </p>
                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
@@ -205,7 +205,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                                 }}
                                 className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm mt-0.5"
                               >
-                                <Download size={14} />
+                                <Download size={14} className="text-[#97E50B]" />
                                 Descarregar contrato
                               </button>
                            ) : (
@@ -227,12 +227,12 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                      {/* English Test Section */}
                      <div className="mt-3 pt-3 border-t border-border">
                        <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
-                         <BookOpen size={14} />
+                         <BookOpen size={14} className="text-[#97E50B]" />
                          Teste de Inglês
                        </p>
                        {quizResults[e.id] ? (
                          <div className="flex items-center gap-2 text-sm">
-                           <CheckCircle2 size={16} className="text-secondary" />
+                           <CheckCircle2 size={16} className="text-[#97E50B]" />
                            <span className="text-foreground font-medium">
                              {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
                            </span>
@@ -243,7 +243,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                            className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent/80 transition-colors"
                          >
                            Realizar teste de inglês
-                           <ExternalLink size={14} />
+                           <ExternalLink size={14} className="text-[#97E50B]" />
                          </button>
                        )}
                      </div>
