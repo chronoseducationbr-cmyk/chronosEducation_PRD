@@ -225,8 +225,8 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                         <p className="text-xs font-semibold text-muted-foreground mb-2">Valores</p>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
                           <Detail label="Matrícula" value={`$${(e.inscription_fee_cents / 100).toFixed(2)}`} />
-                          <Detail label={`Plataforma Online (${e.tuition_installments}x)`} value={e.tuition_installment_cents > 0 ? `$${(e.tuition_installment_cents / 100).toFixed(2)}` : "falta associar"} />
-                          <Detail label={`Summer Camp (${e.summercamp_installments}x)`} value={e.summercamp_installment_cents > 0 ? `$${(e.summercamp_installment_cents / 100).toFixed(2)}` : "falta associar"} />
+                          <Detail label={`Plataforma Online (${e.tuition_installments}x)`} value={e.tuition_installment_cents > 0 ? `$${(e.tuition_installment_cents / 100).toFixed(2)}` : ""} emptyText="falta associar" />
+                          <Detail label={`Summer Camp (${e.summercamp_installments}x)`} value={e.summercamp_installment_cents > 0 ? `$${(e.summercamp_installment_cents / 100).toFixed(2)}` : ""} emptyText="falta associar" />
                         </div>
                       </div>
                      )}
@@ -264,10 +264,14 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   );
 };
 
-const Detail = ({ label, value }: { label: string; value: string }) => (
+const Detail = ({ label, value, emptyText }: { label: string; value: string; emptyText?: string }) => (
   <div>
     <p className="text-muted-foreground text-xs">{label}</p>
-    <p className="text-foreground font-medium">{value || "—"}</p>
+    {value ? (
+      <p className="text-foreground font-medium">{value}</p>
+    ) : (
+      <p className="text-muted-foreground font-medium italic">{emptyText || "—"}</p>
+    )}
   </div>
 );
 
