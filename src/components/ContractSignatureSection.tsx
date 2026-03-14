@@ -162,12 +162,13 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }:
       </div>
 
       {/* Acceptance checkbox */}
-      <label className="flex items-start gap-3 cursor-pointer group mt-2">
+      <label className={`flex items-start gap-3 mt-2 ${hasScrolledToEnd ? "cursor-pointer group" : "cursor-not-allowed opacity-50"}`}>
         <div className="relative mt-0.5">
           <input
             type="checkbox"
             checked={accepted}
             onChange={handleToggle}
+            disabled={!hasScrolledToEnd}
             className="sr-only"
           />
           <div
@@ -184,6 +185,11 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }:
           Li e aceito os termos do contrato do programa Dual Diploma da Chronos Education.
         </span>
       </label>
+      {!hasScrolledToEnd && (
+        <p className="text-xs text-muted-foreground italic mt-1">
+          Leia o contrato até ao fim para poder aceitar os termos.
+        </p>
+      )}
     </div>
   );
 };
