@@ -159,7 +159,7 @@ const EnglishQuizPage = () => {
         </div>
       </header>
 
-      <div className="container-narrow px-4 md:px-8 py-8 max-w-xl mx-auto">
+      <div className="container-narrow px-4 md:px-8 py-8 max-w-3xl mx-auto">
         <button
           onClick={() => navigate("/gestao-matriculas")}
           className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-6"
