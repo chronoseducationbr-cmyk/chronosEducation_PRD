@@ -114,6 +114,18 @@ const AdminEnrollmentsPage = () => {
       });
     }
 
+    // Fetch quiz results
+    const { data: qr } = await supabase
+      .from("quiz_results" as any)
+      .select("enrollment_id, correct_count, total_questions");
+    const resultsMap: Record<string, { correct_count: number; total_questions: number }> = {};
+    if (qr) {
+      (qr as any[]).forEach((r: any) => {
+        resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions };
+      });
+    }
+    setQuizResults(resultsMap);
+
     setEnrollments(enrs);
     setLoading(false);
   };
