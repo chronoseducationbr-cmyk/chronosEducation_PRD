@@ -84,8 +84,8 @@ const AdminEnrollmentsPage = () => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadTargetId, setUploadTargetId] = useState<string | null>(null);
+
+
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [pendingStatusChange, setPendingStatusChange] = useState<{ id: string; studentName: string; from: string; to: string } | null>(null);
 
