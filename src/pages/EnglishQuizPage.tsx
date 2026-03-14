@@ -130,7 +130,7 @@ const EnglishQuizPage = () => {
           </div>
         </header>
 
-        <div className="container-narrow px-4 md:px-8 py-12 max-w-xl mx-auto text-center">
+        <div className="container-narrow px-4 md:px-8 py-12 max-w-3xl mx-auto text-center">
           <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-8 h-8 text-secondary" />
           </div>
