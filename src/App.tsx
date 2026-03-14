@@ -43,6 +43,14 @@ const App = () => (
               }
             />
             <Route path="/termos" element={<TermsPage />} />
+            <Route
+              path="/teste-ingles"
+              element={
+                <ProtectedRoute>
+                  <EnglishQuizPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Admin routes */}
             <Route
