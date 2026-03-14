@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, ChevronRight, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ChevronRight, CheckCircle2, Volume2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { quizQuestions } from "@/data/englishQuizQuestions";
 import chronosLogo from "@/assets/chronos-logo-header.png";
@@ -180,7 +180,15 @@ const EnglishQuizPage = () => {
 
         <div className="bg-card border border-border rounded-xl p-6 mb-6">
           <p className="text-sm font-medium text-muted-foreground mb-1">Question {currentIndex + 1}</p>
-          <h2 className="text-lg font-semibold text-foreground leading-relaxed">{current.question}</h2>
+          {current.audioUrl && (
+            <div className="my-4 flex items-center gap-3 bg-muted/50 rounded-lg p-4">
+              <Volume2 className="w-5 h-5 text-accent shrink-0" />
+              <audio controls className="w-full h-10" src={current.audioUrl}>
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+          )}
+          <h2 className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{current.question}</h2>
         </div>
 
         <div className="space-y-3 mb-8">

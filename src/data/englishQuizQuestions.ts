@@ -3,6 +3,7 @@ export interface QuizQuestion {
   question: string;
   options: { label: string; text: string }[];
   correctAnswer: string;
+  audioUrl?: string;
 }
 
 export const quizQuestions: QuizQuestion[] = [
@@ -597,6 +598,18 @@ export const quizQuestions: QuizQuestion[] = [
       { label: "b", text: "Technological progress naturally leads to a fairer and more efficient society." },
       { label: "c", text: "Technological advancement requires ethical oversight to avoid worsening social inequalities." },
       { label: "d", text: "Governments should prioritize regulation over innovation in all circumstances." },
+    ],
+    correctAnswer: "c",
+  },
+  {
+    id: 55,
+    question: "Listen and answer the question.\n\nWhere are you?",
+    audioUrl: "/audio/55_Question.mp3",
+    options: [
+      { label: "a", text: "A bus station" },
+      { label: "b", text: "A supermarket" },
+      { label: "c", text: "An airport" },
+      { label: "d", text: "A post office" },
     ],
     correctAnswer: "c",
   },
