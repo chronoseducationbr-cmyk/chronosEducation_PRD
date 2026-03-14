@@ -33,7 +33,6 @@ interface Guardian {
   full_name: string;
   email: string | null;
   phone: string | null;
-  student_photo_url: string | null;
 }
 
 interface Enrollment {
@@ -41,6 +40,7 @@ interface Enrollment {
   user_id: string;
   student_name: string;
   student_email: string | null;
+  student_photo_url: string | null;
   student_birth_date: string | null;
   student_address: string | null;
   student_school: string | null;
@@ -103,11 +103,11 @@ const AdminEnrollmentsPage = () => {
     if (userIds.length > 0) {
       const { data: profiles } = await supabase
         .from("profiles")
-        .select("user_id, full_name, email, phone, student_photo_url")
+        .select("user_id, full_name, email, phone")
         .in("user_id", userIds);
       const guardianMap: Record<string, Guardian> = {};
       (profiles || []).forEach((p: any) => {
-        guardianMap[p.user_id] = { full_name: p.full_name, email: p.email, phone: p.phone, student_photo_url: p.student_photo_url };
+        guardianMap[p.user_id] = { full_name: p.full_name, email: p.email, phone: p.phone };
       });
       enrs.forEach((e) => {
         e.guardian = guardianMap[e.user_id];

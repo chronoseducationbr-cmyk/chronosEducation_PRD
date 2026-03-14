@@ -143,6 +143,7 @@ const DashboardPage = () => {
           student_birth_date: s.studentBirthDate || null,
           student_address: s.studentAddress.trim(),
           student_school: s.studentSchool.trim(),
+          student_photo_url: s.studentPhotoUrl?.trim() || null,
           student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
           referred_by_email: referralRef.current.trim(),
           status: "Contrato assinado",
