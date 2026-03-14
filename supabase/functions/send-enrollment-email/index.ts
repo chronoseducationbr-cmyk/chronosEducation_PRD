@@ -119,7 +119,7 @@ serve(async (req) => {
   }
 
   try {
-    const { email, name, contractBase64, contractFileName, contractContentType } = await req.json();
+    const { email, name, studentName, contractBase64, contractFileName, contractContentType } = await req.json();
 
     if (!email || !name) {
       return new Response(
