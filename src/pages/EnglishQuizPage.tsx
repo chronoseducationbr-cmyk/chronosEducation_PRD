@@ -197,7 +197,7 @@ const EnglishQuizPage = () => {
               const rest = text.slice(matchedPrefix.length).trim();
               return (
                 <>
-                  <p className="text-sm font-medium text-muted-foreground mb-3">{matchedPrefix}</p>
+                  <p className="text-sm font-medium text-secondary mb-3">{matchedPrefix}</p>
                   <p className="text-lg font-semibold text-foreground leading-relaxed whitespace-pre-line">{rest}</p>
                 </>
               );
