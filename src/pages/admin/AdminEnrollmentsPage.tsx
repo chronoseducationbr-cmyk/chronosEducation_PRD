@@ -149,41 +149,8 @@ const AdminEnrollmentsPage = () => {
     setPendingStatusChange(null);
   };
 
-  const handleUploadContract = async (file: File) => {
-    if (!uploadTargetId) return;
-    const filePath = `contracts/${uploadTargetId}/${file.name}`;
-    const { error: uploadError } = await supabase.storage
-      .from("contracts")
-      .upload(filePath, file, { upsert: true });
 
-    if (uploadError) {
-      toast({ title: "Erro no upload", description: uploadError.message, variant: "destructive" });
-      return;
-    }
 
-    const { data: urlData } = supabase.storage.from("contracts").getPublicUrl(filePath);
-    const { error } = await supabase
-      .from("enrollments")
-      .update({
-        contract_url: urlData.publicUrl,
-        contract_sent_at: new Date().toISOString(),
-      } as any)
-      .eq("id", uploadTargetId);
-
-    if (error) {
-      toast({ title: "Erro ao guardar contrato", variant: "destructive" });
-    } else {
-      toast({ title: "Contrato carregado com sucesso" });
-      setEnrollments((prev) =>
-        prev.map((e) =>
-          e.id === uploadTargetId
-            ? { ...e, contract_url: urlData.publicUrl, contract_sent_at: new Date().toISOString() }
-            : e
-        )
-      );
-    }
-    setUploadTargetId(null);
-  };
 
   const formatDate = (d: string | null) => {
     if (!d) return "—";
