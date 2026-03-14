@@ -601,4 +601,16 @@ export const quizQuestions: QuizQuestion[] = [
     ],
     correctAnswer: "c",
   },
+  {
+    id: 55,
+    question: "Listen and answer the question.\n\nWhere are you?",
+    audioUrl: "/audio/55_Question.mp3",
+    options: [
+      { label: "a", text: "A bus station" },
+      { label: "b", text: "A supermarket" },
+      { label: "c", text: "An airport" },
+      { label: "d", text: "A post office" },
+    ],
+    correctAnswer: "c",
+  },
 ];
