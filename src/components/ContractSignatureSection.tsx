@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { FileText, CheckCircle2 } from "lucide-react";
 import type { GuardianData } from "@/components/GuardianDataSection";
 import type { StudentData } from "@/components/StudentDataSection";
@@ -11,8 +11,20 @@ interface Props {
 
 const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }: Props) => {
   const [accepted, setAccepted] = useState(false);
+  const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
+  const contractRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = useCallback(() => {
+    const el = contractRef.current;
+    if (!el || hasScrolledToEnd) return;
+    // Consider "scrolled to end" when within 20px of the bottom
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 20) {
+      setHasScrolledToEnd(true);
+    }
+  }, [hasScrolledToEnd]);
 
   const handleToggle = () => {
+    if (!hasScrolledToEnd) return;
     const next = !accepted;
     setAccepted(next);
     onAcceptChange(next);
@@ -42,7 +54,7 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }:
       </p>
 
       {/* Contract body */}
-      <div className="bg-muted/30 border border-border rounded-lg p-5 max-h-[420px] overflow-y-auto space-y-5 text-sm text-foreground leading-relaxed">
+      <div ref={contractRef} onScroll={handleScroll} className="bg-muted/30 border border-border rounded-lg p-5 max-h-[420px] overflow-y-auto space-y-5 text-sm text-foreground leading-relaxed">
         <div className="text-center space-y-1">
           <p className="font-heading font-bold text-base uppercase tracking-wide">
             Contrato de Prestação de Serviços Educacionais
@@ -150,12 +162,13 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }:
       </div>
 
       {/* Acceptance checkbox */}
-      <label className="flex items-start gap-3 cursor-pointer group mt-2">
+      <label className={`flex items-start gap-3 mt-2 ${hasScrolledToEnd ? "cursor-pointer group" : "cursor-not-allowed opacity-50"}`}>
         <div className="relative mt-0.5">
           <input
             type="checkbox"
             checked={accepted}
             onChange={handleToggle}
+            disabled={!hasScrolledToEnd}
             className="sr-only"
           />
           <div
@@ -172,6 +185,11 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }:
           Li e aceito os termos do contrato do programa Dual Diploma da Chronos Education.
         </span>
       </label>
+      {!hasScrolledToEnd && (
+        <p className="text-xs text-muted-foreground italic mt-1">
+          Leia o contrato até ao fim para poder aceitar os termos.
+        </p>
+      )}
     </div>
   );
 };
