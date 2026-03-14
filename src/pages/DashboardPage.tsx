@@ -418,7 +418,7 @@ const DashboardPage = () => {
                     </div>
                     <div className="w-8 h-px bg-border" />
                     <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 2 ? "bg-[#97E50B] text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 2 ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>
                         2
                       </div>
                       <span className={`text-sm font-medium ${wizardStep === 2 ? "text-foreground" : "text-muted-foreground"}`}>
