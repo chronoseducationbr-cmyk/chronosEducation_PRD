@@ -44,7 +44,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
     const fetchProfile = async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("student_name, student_birth_date, student_email, student_address, student_school, student_graduation_year, student_photo_url")
+        .select("student_name, student_birth_date, student_email, student_address, student_school, student_graduation_year")
         .maybeSingle();
 
       if (data) {
@@ -54,10 +54,6 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
         setStudentAddress((data as any).student_address || "");
         setStudentSchool(data.student_school || "");
         setStudentGraduationYear((data as any).student_graduation_year?.toString() || "");
-        if (data.student_photo_url) {
-          setStudentPhotoUrl(data.student_photo_url);
-          setPhotoPreview(data.student_photo_url);
-        }
       }
       setLoading(false);
     };
