@@ -202,10 +202,16 @@ serve(async (req) => {
       console.error("Update enrollment error:", updateError);
     }
 
-    // Return the contract as base64 for email attachment
-    const base64Content = btoa(
-      String.fromCharCode(...pdfBytes)
-    );
+    // Return the contract as base64 for email attachment (chunked to avoid stack overflow)
+    const chunkSize = 8192;
+    let binary = "";
+    for (let i = 0; i < pdfBytes.length; i += chunkSize) {
+      const chunk = pdfBytes.subarray(i, Math.min(i + chunkSize, pdfBytes.length));
+      for (let j = 0; j < chunk.length; j++) {
+        binary += String.fromCharCode(chunk[j]);
+      }
+    }
+    const base64Content = btoa(binary);
 
     return new Response(
       JSON.stringify({
