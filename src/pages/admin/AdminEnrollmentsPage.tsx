@@ -305,9 +305,9 @@ const AdminEnrollmentsPage = () => {
                     <div className="mt-3">
                       <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Dados do Aluno</p>
                       <div className="flex gap-4">
-                        {e.guardian?.student_photo_url && (
+                        {e.student_photo_url && (
                           <img
-                            src={e.guardian.student_photo_url}
+                            src={e.student_photo_url}
                             alt={`Foto de ${e.student_name}`}
                             className="w-16 h-16 rounded-full object-cover border-2 border-secondary/30 shrink-0"
                           />
