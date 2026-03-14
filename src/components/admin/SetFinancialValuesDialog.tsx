@@ -30,7 +30,7 @@ interface Props {
   onSaved: (updates: Record<string, any>) => void;
 }
 
-const SetFinancialValuesDialog = ({ enrollmentId, studentName, currentValues, onSaved }: Props) => {
+const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt, currentValues, onSaved }: Props) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
