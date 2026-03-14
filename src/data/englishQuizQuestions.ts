@@ -625,4 +625,16 @@ export const quizQuestions: QuizQuestion[] = [
     ],
     correctAnswer: "b",
   },
+  {
+    id: 57,
+    question: "Listen to the following audio and select the most appropriate sentence.",
+    audioUrl: "/audio/57_Question.mp3",
+    options: [
+      { label: "a", text: "Kathy will get nursing experience before she graduates." },
+      { label: "b", text: "Kathy will save money after she graduates from college." },
+      { label: "c", text: "Kathy has enough money to get an apartment for herself." },
+      { label: "d", text: "Kathy has found a really good job because she has experience." },
+    ],
+    correctAnswer: "a",
+  },
 ];
