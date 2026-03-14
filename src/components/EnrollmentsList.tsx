@@ -156,14 +156,27 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                          <Detail label="Assinado em" value={e.contract_signed_at ? formatDate(e.contract_signed_at) : ""} />
                          <div>
                            <p className="text-muted-foreground text-xs">Documento</p>
-                           {e.contract_url ? (
-                             <a
-                               href={e.contract_url}
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm mt-0.5"
-                             >
-                               <Download size={14} />
+                            {e.contract_url ? (
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    const res = await fetch(e.contract_url!);
+                                    const blob = await res.blob();
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = `contrato-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                    URL.revokeObjectURL(url);
+                                  } catch (err) {
+                                    console.error("Download error:", err);
+                                  }
+                                }}
+                                className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm mt-0.5"
+                              >
+                                <Download size={14} />
                                Descarregar contrato
                              </a>
                            ) : (
