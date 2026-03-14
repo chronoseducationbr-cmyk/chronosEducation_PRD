@@ -147,18 +147,31 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
           <div className="space-y-4">
             <div>
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula</Label>
-              <div className="mt-1">
-                <Input
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="0,00"
-                  value={formatMoneyInput(inscriptionFee)}
-                  onChange={(e) => handleMoneyChange(e, setInscriptionFee)}
-                  onFocus={handleMoneyFocus}
-                  onClick={handleMoneyClick}
-                  className="h-9"
-                />
-                <p className="text-[10px] text-muted-foreground mt-0.5">Valor em dólares ($)</p>
+              <div className="grid grid-cols-2 gap-3 mt-1">
+                <div>
+                  <Label className="text-xs text-muted-foreground">Valor ($)</Label>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="0,00"
+                    value={formatMoneyInput(inscriptionFee)}
+                    onChange={(e) => handleMoneyChange(e, setInscriptionFee)}
+                    onFocus={handleMoneyFocus}
+                    onClick={handleMoneyClick}
+                    className="h-9"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">Data de vencimento</Label>
+                  <Input
+                    type="text"
+                    readOnly
+                    value={contractSignedAt ? new Date(contractSignedAt).toLocaleDateString("pt-BR") : "Data da assinatura"}
+                    className="h-9 bg-muted cursor-not-allowed"
+                    title="Igual à data de assinatura do contrato"
+                  />
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Igual à data de assinatura do contrato</p>
+                </div>
               </div>
             </div>
 
