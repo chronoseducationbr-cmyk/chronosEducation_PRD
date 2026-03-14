@@ -212,6 +212,29 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                         </div>
                       </div>
                      )}
+                     {/* English Test Section */}
+                     <div className="mt-3 pt-3 border-t border-border">
+                       <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
+                         <BookOpen size={14} />
+                         Teste de Inglês
+                       </p>
+                       {quizResults[e.id] ? (
+                         <div className="flex items-center gap-2 text-sm">
+                           <CheckCircle2 size={16} className="text-secondary" />
+                           <span className="text-foreground font-medium">
+                             {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
+                           </span>
+                         </div>
+                       ) : (
+                         <button
+                           onClick={() => navigate(`/teste-ingles?enrollment=${e.id}`)}
+                           className="inline-flex items-center gap-1.5 text-sm font-semibold text-secondary hover:text-secondary/80 transition-colors"
+                         >
+                           <BookOpen size={14} />
+                           Realizar teste de inglês
+                         </button>
+                       )}
+                     </div>
                   </div>
                 )}
               </div>
