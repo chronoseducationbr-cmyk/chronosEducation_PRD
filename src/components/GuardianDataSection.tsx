@@ -92,7 +92,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
   return (
     <div>
       <h2 className="font-heading text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-        <Users size={20} className="text-secondary" />
+        <Users size={20} className="text-[#97E50B]" />
         Dados Pai/Mãe ou Responsável
       </h2>
 

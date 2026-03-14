@@ -165,7 +165,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="text-xs text-secondary hover:underline"
+              className="text-xs text-[#97E50B] hover:underline"
             >
               {photoPreview ? "Alterar foto" : "Carregar foto"}
             </button>
