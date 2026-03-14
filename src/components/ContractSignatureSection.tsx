@@ -45,7 +45,7 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }:
   return (
     <div className="bg-card rounded-xl border border-border shadow-card p-6 space-y-5">
       <h2 className="font-heading text-lg font-semibold text-foreground flex items-center gap-2">
-        <FileText size={20} className="text-secondary" />
+        <FileText size={20} className="text-[#97E50B]" />
         Contrato de Prestação de Serviços Educacionais
       </h2>
 
