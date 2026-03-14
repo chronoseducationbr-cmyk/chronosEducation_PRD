@@ -57,18 +57,7 @@ const EnglishQuizPage = () => {
           <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-8 h-8 text-secondary" />
           </div>
-          <h1 className="font-heading text-3xl font-bold text-foreground mb-3">Teste Concluído!</h1>
-          <p className="text-muted-foreground mb-8">
-            Acertaste <span className="font-bold text-foreground">{correctCount}</span> de{" "}
-            <span className="font-bold text-foreground">{total}</span> perguntas.
-          </p>
-
-          <div className="bg-card border border-border rounded-xl p-6 mb-8">
-            <div className="text-5xl font-heading font-bold text-secondary mb-2">
-              {Math.round((correctCount / total) * 100)}%
-            </div>
-            <p className="text-sm text-muted-foreground">Taxa de acerto</p>
-          </div>
+          <h1 className="font-heading text-3xl font-bold text-foreground mb-8">Test Completed!</h1>
 
           <button
             onClick={() => navigate("/pagamentos")}
