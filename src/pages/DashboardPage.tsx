@@ -142,6 +142,7 @@ const DashboardPage = () => {
           student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
           referred_by_email: referralRef.current.trim(),
           status: "Contrato assinado",
+          contract_sent_at: new Date().toISOString(),
         } as any)
         .select("id")
         .single();
