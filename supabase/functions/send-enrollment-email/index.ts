@@ -62,6 +62,9 @@ const buildEmailHtml = (userName: string) => `
                       Agradecemos a confiança nos nossos serviços.
                     </p>
                     <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
+                      Em anexo, encontrará o contrato de prestação de serviços educacionais assinado digitalmente.
+                    </p>
+                    <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
                       A partir de agora, a nossa equipa irá entrar em contacto consigo com os próximos passos para iniciar a sua jornada rumo ao diploma americano.
                     </p>
                     <p style="margin:0;font-size:15px;color:#333;line-height:1.7;">
@@ -116,7 +119,7 @@ serve(async (req) => {
   }
 
   try {
-    const { email, name } = await req.json();
+    const { email, name, contractBase64, contractFileName, contractContentType } = await req.json();
 
     if (!email || !name) {
       return new Response(
@@ -125,19 +128,32 @@ serve(async (req) => {
       );
     }
 
+    const emailPayload: Record<string, unknown> = {
+      from: "Chronos Education <contato@info.chronoseducation.com>",
+      to: [email],
+      subject: "Inscrição Confirmada — Dual Diploma | Chronos Education",
+      html: buildEmailHtml(name),
+      reply_to: "chronoseducationbr@gmail.com",
+    };
+
+    // Attach contract PDF if provided
+    if (contractBase64 && contractFileName) {
+      emailPayload.attachments = [
+        {
+          filename: contractFileName,
+          content: contractBase64,
+          type: contractContentType || "application/pdf",
+        },
+      ];
+    }
+
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${RESEND_API_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        from: "Chronos Education <contato@info.chronoseducation.com>",
-        to: [email],
-        subject: "Inscrição Confirmada — Dual Diploma | Chronos Education",
-        html: buildEmailHtml(name),
-        reply_to: "chronoseducationbr@gmail.com",
-      }),
+      body: JSON.stringify(emailPayload),
     });
 
     const data = await response.json();
