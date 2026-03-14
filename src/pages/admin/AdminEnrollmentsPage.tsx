@@ -279,6 +279,16 @@ const AdminEnrollmentsPage = () => {
                         }}
                       />
                     </div>
+                    <div className="flex items-center gap-1.5 mt-1 text-[11px]">
+                      <BookOpen size={12} className="text-muted-foreground" />
+                      {quizResults[e.id] ? (
+                        <span className="text-foreground font-medium">
+                          Teste: {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} certas
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground italic">Teste não realizado</span>
+                      )}
+                    </div>
                   </div>
                   <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
                     {e.status}
