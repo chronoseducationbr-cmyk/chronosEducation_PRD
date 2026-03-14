@@ -105,7 +105,7 @@ const EnglishQuizPage = () => {
         {/* Progress header */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-            <h1 className="font-heading text-xl font-bold text-foreground">English Level Test</h1>
+            <h1 className="font-heading text-xl font-bold text-accent">English Level Test</h1>
             <span className="text-sm font-semibold text-muted-foreground">
               {currentIndex + 1}/{total}
             </span>
