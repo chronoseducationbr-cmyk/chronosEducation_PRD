@@ -50,7 +50,7 @@ const buildEmailHtml = (userName: string, studentName: string) => `
                 Inscrição Confirmada!
               </h2>
               <p style="margin:0 0 24px;font-size:15px;color:#5a6a78;text-align:center;line-height:1.6;">
-                Parabéns, <strong style="color:#062a45;">${userName}</strong>!
+                Parabéns, <strong style="color:#062a45;">${userName}</strong>! A inscrição de <strong style="color:#062a45;">${studentName}</strong> foi confirmada com sucesso.
               </p>
 
               <!-- Card -->
