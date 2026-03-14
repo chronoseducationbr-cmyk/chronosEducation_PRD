@@ -141,7 +141,7 @@ const DashboardPage = () => {
           student_school: s.studentSchool.trim(),
           student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
           referred_by_email: referralRef.current.trim(),
-          status: "Aguarda assinatura de contrato",
+          status: "Contrato assinado",
         } as any)
         .select("id")
         .single();
