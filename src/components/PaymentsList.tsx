@@ -164,7 +164,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
                     <div className="space-y-2">
                       {referrals[e.id].map((ref, idx) => (
                         <div key={idx} className="flex items-center gap-3 bg-card rounded-lg border border-border p-3">
-                          <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-[#97E50B]/10 flex items-center justify-center text-[#97E50B] shrink-0">
                             <GraduationCap size={14} />
                           </div>
                           <div className="flex-1 min-w-0">
