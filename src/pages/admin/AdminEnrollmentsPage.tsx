@@ -445,6 +445,21 @@ const AdminEnrollmentsPage = () => {
                         </div>
                       </div>
                     </div>
+
+                    {/* Teste de Inglês */}
+                    <div>
+                      <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Teste de Inglês</p>
+                      {quizResults[e.id] ? (
+                        <div className="flex items-center gap-2 text-sm">
+                          <CheckCircle2 size={16} className="text-secondary" />
+                          <span className="text-foreground font-medium">
+                            {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground text-sm italic">Teste não realizado</span>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
