@@ -37,7 +37,7 @@ const AdminRoute = ({ children }: Props) => {
   }
 
   if (!user) return <Navigate to="/login" replace />;
-  if (!isAdmin) return <Navigate to="/pagamentos" replace />;
+  if (!isAdmin) return <Navigate to="/gestao-matriculas" replace />;
 
   return <>{children}</>;
 };

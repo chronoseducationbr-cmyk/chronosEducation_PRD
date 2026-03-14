@@ -14,7 +14,7 @@ const AuthRedirect = () => {
     }
     // Wait a tick for isAdmin to be resolved
     const timer = setTimeout(() => {
-      navigate(isAdmin ? "/admin" : "/pagamentos", { replace: true });
+      navigate(isAdmin ? "/admin" : "/gestao-matriculas", { replace: true });
     }, 300);
     return () => clearTimeout(timer);
   }, [user, loading, isAdmin, navigate]);

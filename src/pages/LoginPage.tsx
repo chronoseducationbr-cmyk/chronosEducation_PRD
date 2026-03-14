@@ -22,7 +22,7 @@ const LoginPage = () => {
       _user_id: userId,
       _role: "admin" as const,
     });
-    navigate(data ? "/admin" : "/pagamentos");
+    navigate(data ? "/admin" : "/gestao-matriculas");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
