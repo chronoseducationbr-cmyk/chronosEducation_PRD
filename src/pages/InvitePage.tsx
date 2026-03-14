@@ -99,7 +99,7 @@ const InvitePage = () => {
 
       toast({
         title: "Conta criada!",
-        description: "Verifique o seu email para confirmar o registo.",
+        description: "Verifique o seu email para confirmar o registro.",
       });
     } catch (error: any) {
       toast({

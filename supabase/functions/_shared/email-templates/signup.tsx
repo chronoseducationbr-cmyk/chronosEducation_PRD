@@ -41,7 +41,7 @@ export const SignupEmail = ({
         <Section style={content}>
           <Heading style={h1}>Confirme o seu email</Heading>
           <Text style={text}>
-            Obrigado por se registar na{' '}
+            Obrigado por se registrar na{' '}
             <Link href={siteUrl} style={link}>
               <strong>Chronos Education</strong>
             </Link>
