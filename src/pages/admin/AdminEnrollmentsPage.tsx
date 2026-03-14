@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard, BookOpen } from "lucide-react";
+import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard, BookOpen, CheckCircle2 } from "lucide-react";
 import SetFinancialValuesDialog from "@/components/admin/SetFinancialValuesDialog";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -279,16 +279,6 @@ const AdminEnrollmentsPage = () => {
                         }}
                       />
                     </div>
-                    <div className="flex items-center gap-1.5 mt-1 text-[11px]">
-                      <BookOpen size={12} className="text-muted-foreground" />
-                      {quizResults[e.id] ? (
-                        <span className="text-foreground font-medium">
-                          Teste: {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} certas
-                        </span>
-                      ) : (
-                        <span className="text-muted-foreground italic">Teste não realizado</span>
-                      )}
-                    </div>
                   </div>
                   <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
                     {e.status}
@@ -454,6 +444,21 @@ const AdminEnrollmentsPage = () => {
                           </div>
                         </div>
                       </div>
+                    </div>
+
+                    {/* Teste de Inglês */}
+                    <div>
+                      <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Teste de Inglês</p>
+                      {quizResults[e.id] ? (
+                        <div className="flex items-center gap-2 text-sm">
+                          <CheckCircle2 size={16} className="text-secondary" />
+                          <span className="text-foreground font-medium">
+                            {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground text-sm italic">Teste não realizado</span>
+                      )}
                     </div>
                   </div>
                 )}
