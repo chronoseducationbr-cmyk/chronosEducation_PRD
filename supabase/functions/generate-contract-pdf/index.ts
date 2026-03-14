@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { PDFDocument, StandardFonts, rgb } from "https://esm.sh/pdf-lib@1.17.1";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -8,11 +9,93 @@ const corsHeaders = {
 };
 
 function formatDate(dateStr: string | null): string {
-  if (!dateStr) return "—";
+  if (!dateStr) return "\u2014";
   return new Date(dateStr + "T00:00:00").toLocaleDateString("pt-BR");
 }
 
-function buildContractHtml(
+const PRIMARY = rgb(6 / 255, 42 / 255, 69 / 255);
+const GRAY = rgb(90 / 255, 106 / 255, 120 / 255);
+const BLACK = rgb(0, 0, 0);
+const GREEN = rgb(42 / 255, 125 / 255, 42 / 255);
+
+interface DrawCtx {
+  page: ReturnType<PDFDocument["addPage"]>;
+  y: number;
+  font: Awaited<ReturnType<PDFDocument["embedFont"]>>;
+  fontBold: Awaited<ReturnType<PDFDocument["embedFont"]>>;
+  doc: PDFDocument;
+}
+
+function addPage(ctx: DrawCtx) {
+  ctx.page = ctx.doc.addPage([595.28, 841.89]); // A4
+  ctx.y = 800;
+}
+
+function ensureSpace(ctx: DrawCtx, needed: number) {
+  if (ctx.y < needed + 40) addPage(ctx);
+}
+
+function drawTitle(ctx: DrawCtx, text: string, size: number) {
+  ensureSpace(ctx, 30);
+  const width = ctx.fontBold.widthOfTextAtSize(text, size);
+  ctx.page.drawText(text, { x: (595.28 - width) / 2, y: ctx.y, size, font: ctx.fontBold, color: PRIMARY });
+  ctx.y -= size + 6;
+}
+
+function drawSectionTitle(ctx: DrawCtx, text: string) {
+  ensureSpace(ctx, 30);
+  ctx.y -= 10;
+  ctx.page.drawText(text, { x: 50, y: ctx.y, size: 11, font: ctx.fontBold, color: BLACK });
+  ctx.y -= 16;
+}
+
+function wrapText(text: string, font: DrawCtx["font"], size: number, maxWidth: number): string[] {
+  const words = text.split(" ");
+  const lines: string[] = [];
+  let current = "";
+  for (const word of words) {
+    const test = current ? current + " " + word : word;
+    if (font.widthOfTextAtSize(test, size) > maxWidth) {
+      if (current) lines.push(current);
+      current = word;
+    } else {
+      current = test;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+function drawParagraph(ctx: DrawCtx, text: string, indent = 60) {
+  const lines = wrapText(text, ctx.font, 10, 595.28 - indent - 50);
+  for (const line of lines) {
+    ensureSpace(ctx, 16);
+    ctx.page.drawText(line, { x: indent, y: ctx.y, size: 10, font: ctx.font, color: BLACK });
+    ctx.y -= 14;
+  }
+}
+
+function drawField(ctx: DrawCtx, label: string, value: string, x: number) {
+  ensureSpace(ctx, 16);
+  const labelWidth = ctx.font.widthOfTextAtSize(label + " ", 10);
+  ctx.page.drawText(label, { x, y: ctx.y, size: 10, font: ctx.font, color: GRAY });
+  ctx.page.drawText(value || "\u2014", { x: x + labelWidth, y: ctx.y, size: 10, font: ctx.fontBold, color: BLACK });
+  ctx.y -= 15;
+}
+
+function drawBullet(ctx: DrawCtx, text: string) {
+  const lines = wrapText(text, ctx.font, 10, 595.28 - 80 - 50);
+  for (let i = 0; i < lines.length; i++) {
+    ensureSpace(ctx, 16);
+    if (i === 0) {
+      ctx.page.drawText("\u2022", { x: 65, y: ctx.y, size: 10, font: ctx.font, color: BLACK });
+    }
+    ctx.page.drawText(lines[i], { x: 80, y: ctx.y, size: 10, font: ctx.font, color: BLACK });
+    ctx.y -= 14;
+  }
+}
+
+async function buildContractPdf(
   guardian: { fullName: string; email: string; phone: string },
   student: {
     studentName: string;
@@ -23,92 +106,91 @@ function buildContractHtml(
     studentGraduationYear: string;
   },
   signedDate: string
-): string {
-  return `
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <style>
-    body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: #222; margin: 40px; line-height: 1.7; }
-    h1 { text-align: center; font-size: 16px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; color: #062a45; }
-    h2 { text-align: center; font-size: 14px; margin-top: 0; color: #062a45; }
-    .date { text-align: center; font-size: 12px; color: #666; margin-bottom: 28px; }
-    .section-title { font-weight: 700; font-size: 13px; margin-top: 20px; margin-bottom: 4px; }
-    .sub-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; font-weight: 600; margin-bottom: 4px; margin-top: 12px; }
-    .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 16px; }
-    .data-grid p { margin: 2px 0; }
-    .data-grid .value { font-weight: 600; }
-    ul { padding-left: 20px; }
-    ul li { margin-bottom: 2px; }
-    .indent { padding-left: 16px; }
-    .signature-block { margin-top: 40px; border-top: 1px solid #ccc; padding-top: 20px; text-align: center; }
-    .signature-block .check { color: #2a7d2a; font-weight: 700; }
-  </style>
-</head>
-<body>
-  <h1>Contrato de Prestação de Serviços Educacionais</h1>
-  <h2>Programa Dual Diploma — Chronos Education</h2>
-  <p class="date">Data: ${signedDate}</p>
+): Promise<Uint8Array> {
+  const doc = await PDFDocument.create();
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
 
-  <p class="section-title">1. PARTES</p>
-  <div class="indent">
-    <p class="sub-title">Contratante (Pai/Mãe ou Responsável)</p>
-    <div class="data-grid">
-      <p>Nome: <span class="value">${guardian.fullName || "—"}</span></p>
-      <p>Email: <span class="value">${guardian.email || "—"}</span></p>
-      <p>Celular: <span class="value">${guardian.phone || "—"}</span></p>
-    </div>
-    <p class="sub-title">Aluno(a) Beneficiário(a)</p>
-    <div class="data-grid">
-      <p>Nome: <span class="value">${student.studentName || "—"}</span></p>
-      <p>Data de nascimento: <span class="value">${formatDate(student.studentBirthDate)}</span></p>
-      <p>Email: <span class="value">${student.studentEmail || "—"}</span></p>
-      <p>Endereço: <span class="value">${student.studentAddress || "—"}</span></p>
-      <p>Escola atual: <span class="value">${student.studentSchool || "—"}</span></p>
-      <p>Ano de conclusão do Ensino Médio: <span class="value">${student.studentGraduationYear || "—"}</span></p>
-    </div>
-  </div>
+  const page = doc.addPage([595.28, 841.89]);
+  const ctx: DrawCtx = { page, y: 780, font, fontBold, doc };
 
-  <p class="section-title">2. OBJETO</p>
-  <p class="indent">O presente contrato tem por objeto a prestação de serviços educacionais do Programa Dual Diploma da Chronos Education, que permite ao aluno obter simultaneamente o diploma brasileiro de Ensino Médio e o diploma americano de High School, através da Plataforma Online.</p>
+  // Title
+  drawTitle(ctx, "CONTRATO DE PRESTACAO DE SERVICOS EDUCACIONAIS", 13);
+  drawTitle(ctx, "Programa Dual Diploma - Chronos Education", 11);
+  ctx.y -= 4;
+  const dateStr = `Data: ${signedDate}`;
+  const dateW = font.widthOfTextAtSize(dateStr, 9);
+  ctx.page.drawText(dateStr, { x: (595.28 - dateW) / 2, y: ctx.y, size: 9, font, color: GRAY });
+  ctx.y -= 24;
 
-  <p class="section-title">3. DURAÇÃO</p>
-  <p class="indent">O programa tem duração média de 2 (dois) anos, com início na data de confirmação da matrícula.</p>
+  // 1. PARTES
+  drawSectionTitle(ctx, "1. PARTES");
+  ctx.page.drawText("Contratante (Pai/Mae ou Responsavel)", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
+  ctx.y -= 16;
+  drawField(ctx, "Nome:", guardian.fullName, 60);
+  drawField(ctx, "Email:", guardian.email, 60);
+  drawField(ctx, "Celular:", guardian.phone, 60);
+  ctx.y -= 6;
+  ctx.page.drawText("Aluno(a) Beneficiario(a)", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
+  ctx.y -= 16;
+  drawField(ctx, "Nome:", student.studentName, 60);
+  drawField(ctx, "Data de nascimento:", formatDate(student.studentBirthDate), 60);
+  drawField(ctx, "Email:", student.studentEmail, 60);
+  drawField(ctx, "Endereco:", student.studentAddress, 60);
+  drawField(ctx, "Escola atual:", student.studentSchool, 60);
+  drawField(ctx, "Ano de conclusao do Ensino Medio:", student.studentGraduationYear || "\u2014", 60);
 
-  <p class="section-title">4. OBRIGAÇÕES DA CHRONOS EDUCATION</p>
-  <ul>
-    <li>Disponibilizar acesso à Plataforma Online;</li>
-    <li>Fornecer tutoria individual e suporte técnico;</li>
-    <li>Enviar relatórios periódicos aos pais/responsáveis;</li>
-    <li>Emitir o diploma americano de High School após a conclusão dos créditos necessários.</li>
-  </ul>
+  // 2. OBJETO
+  drawSectionTitle(ctx, "2. OBJETO");
+  drawParagraph(ctx, "O presente contrato tem por objeto a prestacao de servicos educacionais do Programa Dual Diploma da Chronos Education, que permite ao aluno obter simultaneamente o diploma brasileiro de Ensino Medio e o diploma americano de High School, atraves da Plataforma Online.");
 
-  <p class="section-title">5. OBRIGAÇÕES DO CONTRATANTE</p>
-  <ul>
-    <li>Efetuar o pagamento das parcelas nos prazos estabelecidos;</li>
-    <li>Garantir que o aluno dedique entre 1 a 2 horas semanais às atividades do programa;</li>
-    <li>Manter os dados cadastrais atualizados.</li>
-  </ul>
+  // 3. DURACAO
+  drawSectionTitle(ctx, "3. DURACAO");
+  drawParagraph(ctx, "O programa tem duracao media de 2 (dois) anos, com inicio na data de confirmacao da matricula.");
 
-  <p class="section-title">6. VALORES E PAGAMENTO</p>
-  <p class="indent">As condições de pagamento, incluindo taxa de matrícula e mensalidades, serão comunicadas pela equipe Chronos Education após a confirmação da matrícula.</p>
+  // 4. OBRIGACOES DA CHRONOS
+  drawSectionTitle(ctx, "4. OBRIGACOES DA CHRONOS EDUCATION");
+  drawBullet(ctx, "Disponibilizar acesso a Plataforma Online;");
+  drawBullet(ctx, "Fornecer tutoria individual e suporte tecnico;");
+  drawBullet(ctx, "Enviar relatorios periodicos aos pais/responsaveis;");
+  drawBullet(ctx, "Emitir o diploma americano de High School apos a conclusao dos creditos necessarios.");
 
-  <p class="section-title">7. CANCELAMENTO</p>
-  <p class="indent">O contratante poderá solicitar o cancelamento a qualquer momento, mediante comunicação por escrito. Aplicam-se as condições de reembolso conforme os Termos e Condições disponíveis em chronoseducation.com/termos.</p>
+  // 5. OBRIGACOES DO CONTRATANTE
+  drawSectionTitle(ctx, "5. OBRIGACOES DO CONTRATANTE");
+  drawBullet(ctx, "Efetuar o pagamento das parcelas nos prazos estabelecidos;");
+  drawBullet(ctx, "Garantir que o aluno dedique entre 1 a 2 horas semanais as atividades do programa;");
+  drawBullet(ctx, "Manter os dados cadastrais atualizados.");
 
-  <p class="section-title">8. PROTEÇÃO DE DADOS (LGPD)</p>
-  <p class="indent">Os dados pessoais recolhidos serão tratados em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), sendo utilizados exclusivamente para fins educacionais e administrativos.</p>
+  // 6. VALORES E PAGAMENTO
+  drawSectionTitle(ctx, "6. VALORES E PAGAMENTO");
+  drawParagraph(ctx, "As condicoes de pagamento, incluindo taxa de matricula e mensalidades, serao comunicadas pela equipe Chronos Education apos a confirmacao da matricula.");
 
-  <p class="section-title">9. FORO</p>
-  <p class="indent">As partes elegem o foro da Comarca de São Paulo/SP para dirimir quaisquer questões decorrentes deste contrato.</p>
+  // 7. CANCELAMENTO
+  drawSectionTitle(ctx, "7. CANCELAMENTO");
+  drawParagraph(ctx, "O contratante podera solicitar o cancelamento a qualquer momento, mediante comunicacao por escrito. Aplicam-se as condicoes de reembolso conforme os Termos e Condicoes disponiveis em chronoseducation.com/termos.");
 
-  <div class="signature-block">
-    <p class="check">✓ Contrato aceite digitalmente</p>
-    <p>Assinado por <strong>${guardian.fullName || "—"}</strong> em ${signedDate}</p>
-  </div>
-</body>
-</html>`;
+  // 8. LGPD
+  drawSectionTitle(ctx, "8. PROTECAO DE DADOS (LGPD)");
+  drawParagraph(ctx, "Os dados pessoais recolhidos serao tratados em conformidade com a Lei Geral de Protecao de Dados (Lei n. 13.709/2018), sendo utilizados exclusivamente para fins educacionais e administrativos.");
+
+  // 9. FORO
+  drawSectionTitle(ctx, "9. FORO");
+  drawParagraph(ctx, "As partes elegem o foro da Comarca de Sao Paulo/SP para dirimir quaisquer questoes decorrentes deste contrato.");
+
+  // Signature block
+  ensureSpace(ctx, 60);
+  ctx.y -= 20;
+  ctx.page.drawLine({ start: { x: 50, y: ctx.y }, end: { x: 545, y: ctx.y }, thickness: 0.5, color: GRAY });
+  ctx.y -= 24;
+  const checkText = "Contrato aceite digitalmente";
+  const checkW = fontBold.widthOfTextAtSize(checkText, 11);
+  ctx.page.drawText(checkText, { x: (595.28 - checkW) / 2, y: ctx.y, size: 11, font: fontBold, color: GREEN });
+  ctx.y -= 18;
+  const sigText = `Assinado por ${guardian.fullName || "\u2014"} em ${signedDate}`;
+  const sigW = font.widthOfTextAtSize(sigText, 10);
+  ctx.page.drawText(sigText, { x: (595.28 - sigW) / 2, y: ctx.y, size: 10, font, color: BLACK });
+
+  return await doc.save();
 }
 
 serve(async (req) => {
@@ -121,7 +203,7 @@ serve(async (req) => {
 
     if (!enrollmentId) {
       return new Response(
-        JSON.stringify({ error: "enrollmentId é obrigatório" }),
+        JSON.stringify({ error: "enrollmentId e obrigatorio" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -133,35 +215,7 @@ serve(async (req) => {
       year: "numeric",
     });
 
-    const html = buildContractHtml(guardian, student, signedDate);
-
-    // Use Lovable AI to convert HTML to PDF via a headless approach
-    // Since we can't run a browser in edge functions, we'll store the HTML
-    // and use a third-party API or generate a simple PDF
-
-    // Generate PDF using a free HTML-to-PDF API
-    const pdfResponse = await fetch("https://html2pdf.app/api/v1/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        html: html,
-        options: {
-          format: "A4",
-          margin: { top: "10mm", right: "10mm", bottom: "10mm", left: "10mm" },
-        },
-      }),
-    });
-
-    let pdfBytes: Uint8Array;
-
-    if (!pdfResponse.ok) {
-      // Fallback: store the contract as HTML content wrapped in a minimal PDF-like structure
-      // We'll use the Supabase storage to store the HTML file as the contract
-      console.warn("HTML-to-PDF API failed, storing as HTML contract");
-      pdfBytes = new TextEncoder().encode(html);
-    } else {
-      pdfBytes = new Uint8Array(await pdfResponse.arrayBuffer());
-    }
+    const pdfBytes = await buildContractPdf(guardian, student, signedDate);
 
     // Upload to Supabase Storage
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -174,7 +228,7 @@ serve(async (req) => {
     const { error: uploadError } = await supabase.storage
       .from("contracts")
       .upload(filePath, pdfBytes, {
-        contentType: pdfResponse.ok ? "application/pdf" : "text/html",
+        contentType: "application/pdf",
         upsert: true,
       });
 
@@ -202,7 +256,7 @@ serve(async (req) => {
       console.error("Update enrollment error:", updateError);
     }
 
-    // Return the contract as base64 for email attachment (chunked to avoid stack overflow)
+    // Convert to base64 for email attachment (chunked)
     const chunkSize = 8192;
     let binary = "";
     for (let i = 0; i < pdfBytes.length; i += chunkSize) {
@@ -218,7 +272,7 @@ serve(async (req) => {
         success: true,
         contractUrl,
         contractBase64: base64Content,
-        contentType: pdfResponse.ok ? "application/pdf" : "text/html",
+        contentType: "application/pdf",
         fileName,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
