@@ -118,7 +118,7 @@ const EnglishQuizPage = () => {
     );
   }
 
-
+  if (finished) {
     return (
       <div className="min-h-screen bg-background">
         <SEOHead title="Resultado — Teste de Inglês" description="Resultado do teste de nível de inglês." />
