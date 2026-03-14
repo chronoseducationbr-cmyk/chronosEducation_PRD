@@ -227,7 +227,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                      {/* English Test Section */}
                      <div className="mt-3 pt-3 border-t border-border">
                        <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
-                         <BookOpen size={14} className="text-[#97E50B]" />
+                         <BookOpen size={14} className="text-secondary" />
                          Teste de Inglês
                        </p>
                        {quizResults[e.id] ? (
