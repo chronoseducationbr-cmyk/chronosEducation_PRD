@@ -214,6 +214,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
               <input
                 type="date"
                 required
+                max={new Date().toISOString().split("T")[0]}
                 value={studentBirthDate}
                 onChange={(e) => setStudentBirthDate(e.target.value)}
                 className={`${inputClasses("studentBirthDate")} pl-10`}
