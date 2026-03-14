@@ -464,7 +464,7 @@ const DashboardPage = () => {
                         <button
                           onClick={handleSubmitEnrollment}
                           disabled={paying || !contractAccepted}
-                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="w-full bg-[#97E50B] text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {paying ? "Processando..." : "Confirmar matrícula"}
                         </button>
