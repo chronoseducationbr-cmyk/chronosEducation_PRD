@@ -123,7 +123,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
   return (
     <div>
       <h2 className="font-heading text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-        <GraduationCap size={20} className="text-[#97E50B]" />
+        <GraduationCap size={20} className="text-secondary" />
         Dados do Aluno
       </h2>
       <div className="bg-card rounded-xl border border-border shadow-card p-5">
