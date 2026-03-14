@@ -264,10 +264,14 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   );
 };
 
-const Detail = ({ label, value }: { label: string; value: string }) => (
+const Detail = ({ label, value, emptyText }: { label: string; value: string; emptyText?: string }) => (
   <div>
     <p className="text-muted-foreground text-xs">{label}</p>
-    <p className="text-foreground font-medium">{value || "—"}</p>
+    {value ? (
+      <p className="text-foreground font-medium">{value}</p>
+    ) : (
+      <p className="text-muted-foreground font-medium italic">{emptyText || "—"}</p>
+    )}
   </div>
 );
 
