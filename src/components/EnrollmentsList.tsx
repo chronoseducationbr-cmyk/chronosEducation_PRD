@@ -43,6 +43,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number }>>({});
+  const [studentPhotoUrl, setStudentPhotoUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -50,18 +51,27 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
     const load = async () => {
       if (!user) return;
       setLoading(true);
-      const { data } = await supabase
-        .from("enrollments")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-      setEnrollments((data as Enrollment[]) || []);
 
-      // Fetch quiz results for all enrollments
-      const { data: qr } = await supabase
-        .from("quiz_results" as any)
-        .select("enrollment_id, correct_count, total_questions")
-        .eq("user_id", user.id);
+      const [{ data }, { data: profile }, { data: qr }] = await Promise.all([
+        supabase
+          .from("enrollments")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("profiles")
+          .select("student_photo_url")
+          .eq("user_id", user.id)
+          .single(),
+        supabase
+          .from("quiz_results" as any)
+          .select("enrollment_id, correct_count, total_questions")
+          .eq("user_id", user.id),
+      ]);
+
+      setEnrollments((data as Enrollment[]) || []);
+      setStudentPhotoUrl(profile?.student_photo_url || null);
+
       const resultsMap: Record<string, { correct_count: number; total_questions: number }> = {};
       if (qr) {
         (qr as any[]).forEach((r: any) => {
@@ -127,9 +137,17 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                   className="w-full flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-4 text-left hover:bg-muted/30 transition-colors"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
-                      <GraduationCap size={20} />
-                    </div>
+                    {studentPhotoUrl ? (
+                      <img
+                        src={studentPhotoUrl}
+                        alt={e.student_name}
+                        className="w-10 h-10 rounded-full object-cover border-2 border-secondary/30 shrink-0"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                        <GraduationCap size={20} />
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-foreground">
                         {e.student_name || "Sem nome"}
