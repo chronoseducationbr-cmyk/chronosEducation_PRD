@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, ChevronRight, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ChevronRight, CheckCircle2, Volume2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { quizQuestions } from "@/data/englishQuizQuestions";
 import chronosLogo from "@/assets/chronos-logo-header.png";
