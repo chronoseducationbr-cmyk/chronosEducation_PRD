@@ -88,7 +88,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
   if (enrollments.length === 0) {
     return (
       <div className="bg-card rounded-xl border border-border shadow-card p-8 text-center">
-        <GraduationCap size={40} className="mx-auto text-muted-foreground mb-3" />
+        <GraduationCap size={40} className="mx-auto text-[#97E50B] mb-3" />
         <p className="text-muted-foreground">Sem matrículas para exibir pagamentos.</p>
       </div>
     );
