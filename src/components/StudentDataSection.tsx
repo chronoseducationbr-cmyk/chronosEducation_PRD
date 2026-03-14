@@ -149,7 +149,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-20 h-20 rounded-full border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center text-muted-foreground hover:border-secondary/50 hover:text-secondary transition-colors"
+                className="w-20 h-20 rounded-full border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center text-muted-foreground hover:border-[#97E50B]/50 hover:text-[#97E50B] transition-colors"
               >
                 <Camera size={20} />
               </button>
