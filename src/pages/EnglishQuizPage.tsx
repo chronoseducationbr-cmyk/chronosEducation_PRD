@@ -1,23 +1,35 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, ChevronRight, CheckCircle2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { quizQuestions } from "@/data/englishQuizQuestions";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const EnglishQuizPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const enrollmentId = searchParams.get("enrollment");
+  const { toast } = useToast();
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [finished, setFinished] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const total = quizQuestions.length;
   const current = quizQuestions[currentIndex];
   const progress = ((currentIndex + (finished ? 1 : 0)) / total) * 100;
+
+  const correctCount = Object.entries(answers).filter(([id, ans]) => {
+    const q = quizQuestions.find((q) => q.id === Number(id));
+    return q && q.correctAnswer === ans;
+  }).length;
 
   const handleSelect = (label: string) => {
     setSelectedAnswer(label);
@@ -33,13 +45,39 @@ const EnglishQuizPage = () => {
       setSelectedAnswer(null);
     } else {
       setFinished(true);
+      saveResults(updated);
     }
   };
 
-  const correctCount = Object.entries(answers).filter(([id, ans]) => {
-    const q = quizQuestions.find((q) => q.id === Number(id));
-    return q && q.correctAnswer === ans;
-  }).length;
+  const saveResults = async (finalAnswers: Record<number, string>) => {
+    if (!user || !enrollmentId) return;
+    setSaving(true);
+    const correct = Object.entries(finalAnswers).filter(([id, ans]) => {
+      const q = quizQuestions.find((q) => q.id === Number(id));
+      return q && q.correctAnswer === ans;
+    }).length;
+
+    const { error } = await supabase.from("quiz_results" as any).insert({
+      enrollment_id: enrollmentId,
+      user_id: user.id,
+      correct_count: correct,
+      total_questions: quizQuestions.length,
+    } as any);
+
+    if (error) {
+      console.error("Error saving quiz results:", error);
+      toast({ title: "Erro ao guardar resultado do teste", variant: "destructive" });
+    }
+    setSaving(false);
+  };
+
+  useEffect(() => {
+    if (!enrollmentId) {
+      navigate("/pagamentos");
+    }
+  }, [enrollmentId, navigate]);
+
+  if (!enrollmentId) return null;
 
   if (finished) {
     return (
@@ -61,9 +99,10 @@ const EnglishQuizPage = () => {
 
           <button
             onClick={() => navigate("/pagamentos")}
-            className="w-full bg-primary text-primary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity"
+            disabled={saving}
+            className="w-full bg-primary text-primary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            Voltar ao Painel
+            {saving ? "A guardar..." : "Voltar ao Painel"}
           </button>
         </div>
       </div>
@@ -82,7 +121,6 @@ const EnglishQuizPage = () => {
       </header>
 
       <div className="container-narrow px-4 md:px-8 py-8 max-w-xl mx-auto">
-        {/* Back link */}
         <button
           onClick={() => navigate("/pagamentos")}
           className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-6"
@@ -91,7 +129,6 @@ const EnglishQuizPage = () => {
           Voltar ao Painel
         </button>
 
-        {/* Progress header */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
             <h1 className="font-heading text-xl font-bold text-accent">English Level Test</h1>
@@ -102,13 +139,11 @@ const EnglishQuizPage = () => {
           <Progress value={progress} className="h-2 bg-muted [&>div]:bg-secondary" />
         </div>
 
-        {/* Question card */}
         <div className="bg-card border border-border rounded-xl p-6 mb-6">
           <p className="text-sm font-medium text-muted-foreground mb-1">Question {currentIndex + 1}</p>
           <h2 className="text-lg font-semibold text-foreground leading-relaxed">{current.question}</h2>
         </div>
 
-        {/* Options */}
         <div className="space-y-3 mb-8">
           {current.options.map((opt) => {
             const isSelected = selectedAnswer === opt.label;
@@ -139,7 +174,6 @@ const EnglishQuizPage = () => {
           })}
         </div>
 
-        {/* Next button */}
         <button
           onClick={handleNext}
           disabled={!selectedAnswer}
