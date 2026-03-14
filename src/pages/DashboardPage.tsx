@@ -409,7 +409,7 @@ const DashboardPage = () => {
                   {/* Step indicator */}
                   <div className="flex items-center gap-3 mb-6">
                     <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 1 ? "bg-secondary text-secondary-foreground" : "bg-secondary/20 text-secondary"}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 1 ? "bg-[#97E50B] text-secondary-foreground" : "bg-[#97E50B]/20 text-[#97E50B]"}`}>
                         1
                       </div>
                       <span className={`text-sm font-medium ${wizardStep === 1 ? "text-foreground" : "text-muted-foreground"}`}>
@@ -418,7 +418,7 @@ const DashboardPage = () => {
                     </div>
                     <div className="w-8 h-px bg-border" />
                     <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 2 ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 2 ? "bg-[#97E50B] text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>
                         2
                       </div>
                       <span className={`text-sm font-medium ${wizardStep === 2 ? "text-foreground" : "text-muted-foreground"}`}>
@@ -447,7 +447,7 @@ const DashboardPage = () => {
                               window.scrollTo({ top: 0, behavior: "smooth" });
                             }
                           }}
-                          className="w-full border-2 border-secondary text-primary bg-transparent font-semibold py-3.5 rounded-lg hover:bg-secondary/10 transition-colors"
+                          className="w-full border-2 border-[#97E50B] text-primary bg-transparent font-semibold py-3.5 rounded-lg hover:bg-[#97E50B]/10 transition-colors"
                         >
                           Continuar para Assinatura do Contrato
                         </button>
@@ -464,7 +464,7 @@ const DashboardPage = () => {
                         <button
                           onClick={handleSubmitEnrollment}
                           disabled={paying || !contractAccepted}
-                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="w-full bg-[#97E50B] text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {paying ? "Processando..." : "Confirmar matrícula"}
                         </button>

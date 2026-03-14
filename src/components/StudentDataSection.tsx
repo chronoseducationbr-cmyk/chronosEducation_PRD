@@ -110,7 +110,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
     setStudentPhotoUrl("");
   };
 
-  const inputClasses = (field?: string) => `w-full px-4 py-3 rounded-lg border ${field && validationErrors.includes(field) ? "border-destructive" : "border-border"} bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition`;
+  const inputClasses = (field?: string) => `w-full px-4 py-3 rounded-lg border ${field && validationErrors.includes(field) ? "border-destructive" : "border-border"} bg-background text-foreground text-sm focus:ring-2 focus:ring-[#97E50B] focus:border-transparent outline-none transition`;
 
   if (loading) {
     return (
@@ -123,7 +123,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
   return (
     <div>
       <h2 className="font-heading text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-        <GraduationCap size={20} className="text-secondary" />
+        <GraduationCap size={20} className="text-[#97E50B]" />
         Dados do Aluno
       </h2>
       <div className="bg-card rounded-xl border border-border shadow-card p-5">
@@ -149,7 +149,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-20 h-20 rounded-full border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center text-muted-foreground hover:border-secondary/50 hover:text-secondary transition-colors"
+                className="w-20 h-20 rounded-full border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center text-muted-foreground hover:border-[#97E50B]/50 hover:text-[#97E50B] transition-colors"
               >
                 <Camera size={20} />
               </button>
@@ -165,7 +165,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="text-xs text-secondary hover:underline"
+              className="text-xs text-[#97E50B] hover:underline"
             >
               {photoPreview ? "Alterar foto" : "Carregar foto"}
             </button>
