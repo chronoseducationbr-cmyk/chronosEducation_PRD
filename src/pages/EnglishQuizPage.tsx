@@ -156,7 +156,7 @@ const EnglishQuizPage = () => {
           disabled={!selectedAnswer}
           className="w-full flex items-center justify-center gap-2 bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {currentIndex < total - 1 ? "Próxima" : "Finalizar"}
+          {currentIndex < total - 1 ? "Next" : "Finish"}
           <ChevronRight size={18} />
         </button>
       </div>
