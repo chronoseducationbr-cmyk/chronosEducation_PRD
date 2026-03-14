@@ -441,32 +441,34 @@ const AdminEnrollmentsPage = () => {
                           <p className="text-muted-foreground text-xs">Documento</p>
                           <div className="flex items-center gap-2 mt-0.5">
                             {e.contract_url ? (
-                              <a
-                                href={e.contract_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    const res = await fetch(e.contract_url!);
+                                    const blob = await res.blob();
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = `contrato-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                    URL.revokeObjectURL(url);
+                                  } catch (err) {
+                                    console.error("Download error:", err);
+                                  }
+                                }}
                                 className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium text-sm"
                               >
                                 <Download size={14} />
-                                Ver contrato
-                              </a>
+                                Descarregar contrato
+                              </button>
                             ) : (
                               <span className="text-muted-foreground inline-flex items-center gap-1 text-sm italic">
                                 <FileText size={14} />
                                 Sem contrato
                               </span>
                             )}
-                            <button
-                              onClick={() => {
-                                setUploadTargetId(e.id);
-                                fileInputRef.current?.click();
-                              }}
-                              className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors text-sm"
-                              title="Upload contrato"
-                            >
-                              <Upload size={14} />
-                              Upload
-                            </button>
                           </div>
                         </div>
                       </div>
