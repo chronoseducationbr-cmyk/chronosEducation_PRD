@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Search, Upload, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard } from "lucide-react";
+import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard } from "lucide-react";
 import SetFinancialValuesDialog from "@/components/admin/SetFinancialValuesDialog";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
