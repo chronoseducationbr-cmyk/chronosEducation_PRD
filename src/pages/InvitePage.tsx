@@ -18,6 +18,7 @@ const InvitePage = () => {
   const [loading, setLoading] = useState(false);
   const [verified, setVerified] = useState<boolean | null>(null);
   const [verifying, setVerifying] = useState(false);
+  const [accountCreated, setAccountCreated] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
