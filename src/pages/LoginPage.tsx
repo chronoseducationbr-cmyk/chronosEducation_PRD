@@ -58,7 +58,7 @@ const LoginPage = () => {
     <>
       <SEOHead
         title="Entrar — Chronos Education"
-        description="Acesse a sua área privada do programa Dual Diploma da Chronos Education."
+        description="Acesse à sua área privada do programa Dual Diploma da Chronos Education."
         canonical="/login"
       />
       <div className="min-h-screen bg-background flex">
