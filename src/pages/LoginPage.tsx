@@ -84,7 +84,7 @@ const LoginPage = () => {
               Entrar
             </h2>
             <p className="text-muted-foreground mb-8">
-              Acesse a sua área privada
+              Acesse à sua área privada
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">
