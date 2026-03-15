@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Mail, Lock, User, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import chronosLogoHeader from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
+import PasswordStrength, { passwordIsValid } from "@/components/PasswordStrength";
 
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
