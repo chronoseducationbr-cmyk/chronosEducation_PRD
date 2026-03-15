@@ -295,14 +295,11 @@ const DashboardPage = () => {
     }
 
     if (s.studentGraduationYear) {
-      const now = new Date();
       const gradYear = parseInt(s.studentGraduationYear, 10);
-      const gradDate = new Date(gradYear, 10, 1);
-      const minDate = new Date(now.getFullYear(), now.getMonth() + 16, 1);
-      if (gradDate < minDate) {
-        const earliestYear = minDate.getMonth() >= 10 ? minDate.getFullYear() : minDate.getFullYear() + 1;
+      const currentYear = new Date().getFullYear();
+      if (gradYear <= currentYear) {
         setValidationErrors(["studentGraduationYear"]);
-        toast({ title: "Ano de conclusão inválido", description: `O ano previsto deve ser ${earliestYear} ou superior.`, variant: "destructive" });
+        toast({ title: "Ano de conclusão inválido", description: `O ano previsto deve ser superior a ${currentYear}.`, variant: "destructive" });
         return false;
       }
     }
