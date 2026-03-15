@@ -242,7 +242,7 @@ const InvitePage = () => {
                     <input
                       type={showPassword ? "text" : "password"}
                       required
-                      minLength={6}
+                      minLength={8}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="w-full pl-10 pr-10 py-3 rounded-lg border border-border bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition"
