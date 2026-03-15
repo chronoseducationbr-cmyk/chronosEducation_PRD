@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import InvitePage from "./pages/InvitePage";
+import ConfirmEmailPage from "./pages/ConfirmEmailPage";
 import DashboardPage from "./pages/DashboardPage";
 import EnglishQuizPage from "./pages/EnglishQuizPage";
 
