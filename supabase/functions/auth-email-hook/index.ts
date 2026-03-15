@@ -248,11 +248,14 @@ async function handleWebhook(req: Request): Promise<Response> {
   let confirmationUrl: string
   if (emailType === 'invite' && inviteCode) {
     confirmationUrl = `https://chronoseducation.com/convite`
+  } else if (emailType === 'signup' && payload.data.token) {
+    // Use frontend verification route to avoid old auth Site URL fallback on expired links
+    const tokenHash = encodeURIComponent(payload.data.token)
+    confirmationUrl = `https://chronoseducation.com/auth-redirect?token_hash=${tokenHash}&type=signup`
   } else if (emailType === 'signup' && payload.data.url) {
-    // Always redirect to chronoseducation.com/login after email verification
     try {
       const verifyUrl = new URL(payload.data.url)
-      verifyUrl.searchParams.set('redirect_to', 'https://chronoseducation.com/login')
+      verifyUrl.searchParams.set('redirect_to', 'https://chronoseducation.com/auth-redirect')
       confirmationUrl = verifyUrl.toString()
     } catch {
       confirmationUrl = payload.data.url
