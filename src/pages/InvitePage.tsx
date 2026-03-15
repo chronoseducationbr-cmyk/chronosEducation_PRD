@@ -255,8 +255,9 @@ const InvitePage = () => {
                     >
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
-                  </div>
-                </div>
+                   </div>
+                   <PasswordStrength password={password} />
+                 </div>
 
                 <button
                   type="submit"
