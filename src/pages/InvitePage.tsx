@@ -21,7 +21,7 @@ const InvitePage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Verify invite code + email
+  // Verify invite code + email (read-only check, does NOT mark as used)
   const handleVerify = async () => {
     if (!email || !inviteCode) return;
     setVerifying(true);
@@ -48,7 +48,6 @@ const InvitePage = () => {
         return;
       }
 
-      // Check expiry
       if (new Date(data.expires_at) < new Date()) {
         setVerified(false);
         toast({
@@ -58,11 +57,6 @@ const InvitePage = () => {
         });
         return;
       }
-
-      // Mark invite as used via edge function (service role)
-      await supabase.functions.invoke("mark-invite-used", {
-        body: { email: email.toLowerCase().trim(), invite_code: inviteCode.trim() },
-      });
 
       setVerified(true);
       toast({
