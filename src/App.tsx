@@ -39,6 +39,7 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/auth-redirect" element={<AuthRedirect />} />
             <Route path="/convite" element={<InvitePage />} />
+            <Route path="/confirm-email" element={<ConfirmEmailPage />} />
             <Route
               path="/gestao-matriculas"
               element={

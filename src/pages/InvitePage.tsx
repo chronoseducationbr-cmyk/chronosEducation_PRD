@@ -337,6 +337,7 @@ const InvitePage = () => {
           </div>
         </div>
       </div>
+      )}
     </>
   );
 };
