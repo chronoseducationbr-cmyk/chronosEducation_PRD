@@ -52,8 +52,12 @@ const DashboardPage = () => {
       return;
     }
 
-    // Validate student email format
+    // Validate email formats
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(g.email.trim())) {
+      toast({ title: "Email inválido", description: "O email do responsável não tem um formato válido.", variant: "destructive" });
+      return;
+    }
     if (!emailRegex.test(s.studentEmail.trim())) {
       toast({ title: "Email inválido", description: "O email do aluno não tem um formato válido.", variant: "destructive" });
       return;
