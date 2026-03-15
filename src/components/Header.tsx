@@ -86,7 +86,13 @@ const Header = () => {
               >
                 Agendar Reunião
               </a>
-              {/* Link "Minha Área" / "Entrar" oculto temporariamente */}
+              <Link
+                to="/login"
+                onClick={() => setIsOpen(false)}
+                className="text-sm font-semibold text-primary-foreground border border-primary-foreground/30 px-5 py-2.5 rounded-lg text-center hover:bg-primary-foreground/10 transition-colors"
+              >
+                Entrar
+              </Link>
             </nav>
           </motion.div>
         )}
