@@ -25,7 +25,7 @@ const benefits = [
   {
     icon: GraduationCap,
     title: "Acesso a Universidades",
-    description: "Facilidade no acesso a universidades: Estados Unidos, Inglaterra, Canadá, Australia...",
+    description: "Acesso a universidades sem necessidade das provas para estudantes internacionais",
   },
   {
     icon: Briefcase,
