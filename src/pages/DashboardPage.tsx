@@ -65,8 +65,8 @@ const DashboardPage = () => {
       if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
         age--;
       }
-      if (age < 13 || age > 17) {
-        toast({ title: "Idade inválida", description: "O aluno deve ter entre 13 e 17 anos na data da inscrição.", variant: "destructive" });
+      if (age < 13) {
+        toast({ title: "Idade inválida", description: "O aluno deve ter pelo menos 13 anos na data da inscrição.", variant: "destructive" });
         return;
       }
     }
@@ -293,9 +293,9 @@ const DashboardPage = () => {
       let age = today.getFullYear() - birthDate.getFullYear();
       const monthDiff = today.getMonth() - birthDate.getMonth();
       if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
-      if (age < 13 || age > 17) {
+      if (age < 13) {
         setValidationErrors(["studentBirthDate"]);
-        toast({ title: "Idade inválida", description: "O aluno deve ter entre 13 e 17 anos na data da inscrição.", variant: "destructive" });
+        toast({ title: "Idade inválida", description: "O aluno deve ter pelo menos 13 anos na data da inscrição.", variant: "destructive" });
         return false;
       }
     }
