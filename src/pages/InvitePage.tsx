@@ -92,7 +92,7 @@ const InvitePage = () => {
         password,
         options: {
           data: { full_name: fullName },
-          emailRedirectTo: `${window.location.origin}/login`,
+          emailRedirectTo: "https://chronoseducation.com/auth-redirect",
         },
       });
       if (error) throw error;

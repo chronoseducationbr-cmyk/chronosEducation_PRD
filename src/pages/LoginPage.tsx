@@ -19,9 +19,11 @@ const LoginPage = () => {
 
   // Redirect if user arrives already authenticated (e.g. after email verification)
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED')) {
-        await redirectByRole(session.user.id);
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user && (event === "SIGNED_IN" || event === "TOKEN_REFRESHED")) {
+        void redirectByRole(session.user.id);
       }
     });
     return () => subscription.unsubscribe();
@@ -50,8 +52,7 @@ const LoginPage = () => {
           password,
           options: {
             data: { full_name: fullName },
-            emailRedirectTo: `${window.location.origin}/login`,
-
+            emailRedirectTo: "https://chronoseducation.com/auth-redirect",
           },
         });
         if (error) throw error;
