@@ -44,7 +44,9 @@ const LoginPage = () => {
     } catch (error: any) {
       toast({
         title: "Erro",
-        description: error.message || "Ocorreu um erro. Tente novamente.",
+        description: error.message === "Invalid login credentials"
+          ? "O seu email de login e/ou senha estão errados."
+          : (error.message || "Ocorreu um erro. Tente novamente."),
         variant: "destructive",
       });
     } finally {
