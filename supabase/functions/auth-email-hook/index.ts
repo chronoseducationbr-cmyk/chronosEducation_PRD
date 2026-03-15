@@ -249,16 +249,11 @@ async function handleWebhook(req: Request): Promise<Response> {
   if (emailType === 'invite' && inviteCode) {
     confirmationUrl = `https://chronoseducation.com/convite`
   } else if (emailType === 'signup' && payload.data.url) {
-    // Ensure the redirect_to includes /login so users land on the login page after verification
+    // Always redirect to chronoseducation.com/login after email verification
     try {
       const verifyUrl = new URL(payload.data.url)
-      const currentRedirect = verifyUrl.searchParams.get('redirect_to') || ''
-      if (currentRedirect && !currentRedirect.endsWith('/login')) {
-        verifyUrl.searchParams.set('redirect_to', currentRedirect.replace(/\/$/, '') + '/login')
-        confirmationUrl = verifyUrl.toString()
-      } else {
-        confirmationUrl = payload.data.url
-      }
+      verifyUrl.searchParams.set('redirect_to', 'https://chronoseducation.com/login')
+      confirmationUrl = verifyUrl.toString()
     } catch {
       confirmationUrl = payload.data.url
     }
