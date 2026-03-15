@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Mail, Lock, User, Key, ArrowLeft, Eye, EyeOff, CheckCircle, XCircle } from "lucide-react";
 import chronosLogoHeader from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
+import PasswordStrength, { passwordIsValid } from "@/components/PasswordStrength";
 
 const InvitePage = () => {
   const [searchParams] = useSearchParams();
