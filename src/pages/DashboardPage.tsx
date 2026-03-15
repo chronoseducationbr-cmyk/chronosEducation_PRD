@@ -287,8 +287,13 @@ const DashboardPage = () => {
       return false;
     }
 
-    // Validate student email format
+    // Validate email formats
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (g.email.trim() && !emailRegex.test(g.email.trim())) {
+      setValidationErrors(["guardianEmail"]);
+      toast({ title: "Email inválido", description: "O email do responsável não tem um formato válido.", variant: "destructive" });
+      return false;
+    }
     if (s.studentEmail.trim() && !emailRegex.test(s.studentEmail.trim())) {
       setValidationErrors(["studentEmail"]);
       toast({ title: "Email inválido", description: "O email do aluno não tem um formato válido.", variant: "destructive" });
