@@ -70,6 +70,18 @@ export function AdminSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <NavLink
+                to="/gestao-matriculas"
+                className="hover:bg-muted/50"
+                activeClassName=""
+              >
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                {!collapsed && <span>Minha Área</span>}
+              </NavLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
             <SidebarMenuButton onClick={signOut} className="hover:bg-muted/50 cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
               {!collapsed && <span>Sair</span>}
