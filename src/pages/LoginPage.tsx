@@ -164,6 +164,13 @@ const LoginPage = () => {
               {!isLogin && <PasswordStrength password={password} />}
             </div>
 
+            {isLogin && (
+              <div className="flex justify-end">
+                <Link to="/forgot-password" className="text-sm text-secondary hover:underline">
+                  Esqueceu a senha?
+                </Link>
+              </div>
+            )}
             <button
               type="submit"
               disabled={loading || (!isLogin && !passwordIsValid(password))}
