@@ -242,7 +242,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
               type="number"
               required
               min={new Date().getFullYear() + 1}
-              max={new Date().getFullYear() + 5}
+              max={new Date().getFullYear() + 20}
               value={studentGraduationYear}
               onChange={(e) => setStudentGraduationYear(e.target.value)}
               className={inputClasses("studentGraduationYear")}
