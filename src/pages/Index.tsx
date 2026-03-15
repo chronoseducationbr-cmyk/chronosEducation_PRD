@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import WhatIsSection from "@/components/WhatIsSection";
@@ -10,8 +12,17 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import SEOHead from "@/components/SEOHead";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
+  const { user, loading, isAdmin } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigate(isAdmin ? "/admin" : "/gestao-matriculas", { replace: true });
+    }
+  }, [user, loading, isAdmin, navigate]);
   return (
     <div className="min-h-screen">
       <SEOHead
