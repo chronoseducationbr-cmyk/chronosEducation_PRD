@@ -99,20 +99,27 @@ const InvitePage = () => {
       if (fnError) throw fnError;
       if (fnData?.error) throw new Error(fnData.error);
 
-      // 2. Sign in immediately (email is already confirmed)
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: email.toLowerCase().trim(),
-        password,
-      });
+      // If fallback (link generation failed), sign in directly
+      if (fnData?.fallback) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: email.toLowerCase().trim(),
+          password,
+        });
+        if (signInError) throw signInError;
+        toast({
+          title: "Conta criada com sucesso!",
+          description: "Bem-vindo à Chronos Education.",
+        });
+        navigate("/gestao-matriculas");
+        return;
+      }
 
-      if (signInError) throw signInError;
-
+      // Normal flow: email confirmation required
+      setAccountCreated(true);
       toast({
-        title: "Conta criada com sucesso!",
-        description: "Bem-vindo à Chronos Education.",
+        title: "Conta criada!",
+        description: "Verifique o seu email para confirmar a conta.",
       });
-
-      navigate("/gestao-matriculas");
     } catch (error: any) {
       toast({
         title: "Erro",
