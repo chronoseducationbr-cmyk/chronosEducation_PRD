@@ -17,6 +17,16 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Redirect if user arrives already authenticated (e.g. after email verification)
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED')) {
+        await redirectByRole(session.user.id);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
   const redirectByRole = async (userId: string) => {
     const { data } = await supabase.rpc("has_role", {
       _user_id: userId,
