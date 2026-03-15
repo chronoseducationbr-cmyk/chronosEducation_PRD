@@ -184,7 +184,7 @@ const InvitePage = () => {
               Aceitar Convite
             </h2>
             <p className="text-muted-foreground mb-8">
-              Introduza o seu email e código de convite para verificar - - - - -
+              Introduza o seu email e código de convite para verificar
             </p>
 
             {/* Step 1: Verify code */}
