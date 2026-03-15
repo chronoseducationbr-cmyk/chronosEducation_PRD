@@ -84,7 +84,7 @@ const InvitePage = () => {
   // Create account after verification
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!verified) return;
+    if (!verified || !passwordIsValid(password)) return;
     setLoading(true);
 
     try {
