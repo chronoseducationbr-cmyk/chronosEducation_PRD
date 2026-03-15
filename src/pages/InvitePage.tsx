@@ -75,27 +75,43 @@ const InvitePage = () => {
     }
   };
 
-  // Create account after verification
+  // Create account via backend (email auto-confirmed) and log in
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!verified || !passwordIsValid(password)) return;
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      // 1. Create user via edge function (email auto-confirmed, invite marked as used)
+      const { data: fnData, error: fnError } = await supabase.functions.invoke(
+        "signup-with-invite",
+        {
+          body: {
+            email: email.toLowerCase().trim(),
+            password,
+            full_name: fullName,
+            invite_code: inviteCode.trim(),
+          },
+        }
+      );
+
+      if (fnError) throw fnError;
+      if (fnData?.error) throw new Error(fnData.error);
+
+      // 2. Sign in immediately (email is already confirmed)
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email: email.toLowerCase().trim(),
         password,
-        options: {
-          data: { full_name: fullName },
-          emailRedirectTo: "https://chronoseducation.com/auth-redirect",
-        },
       });
-      if (error) throw error;
+
+      if (signInError) throw signInError;
 
       toast({
-        title: "Conta criada!",
-        description: "Verifique o seu email para confirmar o registro.",
+        title: "Conta criada com sucesso!",
+        description: "Bem-vindo à Chronos Education.",
       });
+
+      navigate("/gestao-matriculas");
     } catch (error: any) {
       toast({
         title: "Erro",
