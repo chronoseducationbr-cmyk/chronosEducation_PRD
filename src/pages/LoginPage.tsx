@@ -181,6 +181,12 @@ const LoginPage = () => {
 
           <div className="mt-6">
             <p className="text-sm text-center text-muted-foreground">
+              {isLogin ? "Não tem conta?" : "Já tem conta?"}{" "}
+              <button type="button" onClick={() => setIsLogin(!isLogin)} className="text-secondary hover:underline font-medium">
+                {isLogin ? "Criar conta" : "Entrar"}
+              </button>
+            </p>
+          </div>
 
         </div>
       </div>
