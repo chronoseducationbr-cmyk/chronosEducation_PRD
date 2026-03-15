@@ -9,6 +9,8 @@ import AdminRoute from "@/components/AdminRoute";
 import AuthRedirect from "@/components/AuthRedirect";
 import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import InvitePage from "./pages/InvitePage";
 import DashboardPage from "./pages/DashboardPage";
 import EnglishQuizPage from "./pages/EnglishQuizPage";
