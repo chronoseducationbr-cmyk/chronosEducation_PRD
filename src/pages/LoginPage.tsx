@@ -161,11 +161,12 @@ const LoginPage = () => {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              {!isLogin && <PasswordStrength password={password} />}
             </div>
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || (!isLogin && !passwordIsValid(password))}
               className="w-full bg-gradient-lime text-primary font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
             >
               {loading ? "Aguarde..." : isLogin ? "Entrar" : "Criar Conta"}
