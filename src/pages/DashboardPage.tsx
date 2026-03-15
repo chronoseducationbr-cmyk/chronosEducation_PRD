@@ -65,8 +65,8 @@ const DashboardPage = () => {
       if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
         age--;
       }
-      if (age < 13 || age > 17) {
-        toast({ title: "Idade inválida", description: "O aluno deve ter entre 13 e 17 anos na data da inscrição.", variant: "destructive" });
+      if (age < 13) {
+        toast({ title: "Idade inválida", description: "O aluno deve ter pelo menos 13 anos na data da inscrição.", variant: "destructive" });
         return;
       }
     }
