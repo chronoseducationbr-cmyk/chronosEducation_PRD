@@ -49,26 +49,28 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 2. Create user with email already confirmed
+    // 2. Create user WITHOUT email confirmation (email must be confirmed via link)
     const { data: userData, error: createError } = await supabaseAdmin.auth.admin.createUser({
       email: email.toLowerCase().trim(),
       password,
-      email_confirm: true,
+      email_confirm: false,
       user_metadata: { full_name },
     });
 
+    let userId: string | undefined;
+
     if (createError) {
-      // If user already exists but email not confirmed, confirm and update password
       if (createError.message?.includes("already been registered")) {
-        const { data: { users }, error: listError } = await supabaseAdmin.auth.admin.listUsers();
+        const { data: { users } } = await supabaseAdmin.auth.admin.listUsers();
         const existingUser = users?.find(
           (u) => u.email?.toLowerCase() === email.toLowerCase().trim()
         );
 
         if (existingUser) {
+          userId = existingUser.id;
           const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
             existingUser.id,
-            { email_confirm: true, password, user_metadata: { full_name } }
+            { email_confirm: false, password, user_metadata: { full_name } }
           );
           if (updateError) {
             return new Response(
@@ -88,16 +90,65 @@ Deno.serve(async (req) => {
           { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
+    } else {
+      userId = userData.user.id;
     }
 
-    // 3. Mark invite as used
+    // 3. Generate a confirmation link (token_hash) via admin API
+    const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
+      type: "signup",
+      email: email.toLowerCase().trim(),
+      password,
+    });
+
+    if (linkError || !linkData) {
+      // If link generation fails, clean up by confirming the email so user isn't stuck
+      console.error("Failed to generate confirmation link:", linkError);
+      await supabaseAdmin.auth.admin.updateUserById(userId!, { email_confirm: true });
+
+      // Mark invite as used and allow direct login as fallback
+      await supabaseAdmin
+        .from("invitations")
+        .update({ status: "used", used_at: new Date().toISOString() })
+        .eq("id", invite.id);
+
+      return new Response(
+        JSON.stringify({ success: true, fallback: true }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const tokenHash = linkData.properties?.hashed_token;
+    const confirmUrl = `https://chronoseducation.com/confirm-email?token_hash=${tokenHash}&type=signup`;
+
+    // 4. Send confirmation email via Resend
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    if (resendApiKey) {
+      const emailHtml = buildConfirmationEmailHtml(full_name, confirmUrl);
+      
+      await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${resendApiKey}`,
+        },
+        body: JSON.stringify({
+          from: "Chronos Education <notify@info.chronoseducation.com>",
+          to: [email.toLowerCase().trim()],
+          subject: "Confirme o seu email — Chronos Education",
+          html: emailHtml,
+        }),
+      });
+    }
+
+    // 5. Mark invite as used
     await supabaseAdmin
       .from("invitations")
       .update({ status: "used", used_at: new Date().toISOString() })
       .eq("id", invite.id);
 
     return new Response(
-      JSON.stringify({ success: true }),
+      JSON.stringify({ success: true, requiresConfirmation: true }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
@@ -109,3 +160,57 @@ Deno.serve(async (req) => {
     );
   }
 });
+
+function buildConfirmationEmailHtml(name: string, confirmUrl: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" /></head>
+<body style="margin:0;padding:0;background-color:#f4f4f5;font-family:'DM Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f5;padding:40px 20px;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;overflow:hidden;">
+        <!-- Header -->
+        <tr>
+          <td style="background-color:#042D45;padding:32px 40px;text-align:center;">
+            <img src="https://qqgfqjpgxoourayjlrwc.supabase.co/storage/v1/object/public/email-assets/chronos-logo-header.png" alt="Chronos Education" height="40" />
+          </td>
+        </tr>
+        <!-- Body -->
+        <tr>
+          <td style="padding:40px;">
+            <h1 style="color:#042D45;font-family:'Playfair Display',Georgia,serif;font-size:24px;margin:0 0 16px;">
+              Confirme o seu email
+            </h1>
+            <p style="color:#55575d;font-size:15px;line-height:1.6;margin:0 0 12px;">
+              Olá ${name},
+            </p>
+            <p style="color:#55575d;font-size:15px;line-height:1.6;margin:0 0 24px;">
+              A sua conta na Chronos Education foi criada com sucesso. Para ativá-la, clique no botão abaixo para confirmar o seu endereço de email.
+            </p>
+            <table cellpadding="0" cellspacing="0" style="margin:0 auto 24px;">
+              <tr>
+                <td style="background-color:#97E50B;border-radius:8px;padding:14px 32px;text-align:center;">
+                  <a href="${confirmUrl}" style="color:#042D45;font-weight:700;font-size:15px;text-decoration:none;display:inline-block;">
+                    Confirmar Email
+                  </a>
+                </td>
+              </tr>
+            </table>
+            <p style="color:#999;font-size:13px;line-height:1.5;margin:0;">
+              ⚠️ Importante: clique no botão acima. Não copie o link diretamente — ele só funciona quando clicado manualmente.
+            </p>
+          </td>
+        </tr>
+        <!-- Footer -->
+        <tr>
+          <td style="background-color:#f9fafb;padding:20px 40px;text-align:center;border-top:1px solid #e5e7eb;">
+            <p style="color:#999;font-size:12px;margin:0;">© 2025 Chronos Education. Todos os direitos reservados.</p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
