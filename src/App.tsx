@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import InvitePage from "./pages/InvitePage";
+import ConfirmEmailPage from "./pages/ConfirmEmailPage";
 import DashboardPage from "./pages/DashboardPage";
 import EnglishQuizPage from "./pages/EnglishQuizPage";
 
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/auth-redirect" element={<AuthRedirect />} />
             <Route path="/convite" element={<InvitePage />} />
+            <Route path="/confirm-email" element={<ConfirmEmailPage />} />
             <Route
               path="/gestao-matriculas"
               element={

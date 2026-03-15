@@ -18,6 +18,7 @@ const InvitePage = () => {
   const [loading, setLoading] = useState(false);
   const [verified, setVerified] = useState<boolean | null>(null);
   const [verifying, setVerifying] = useState(false);
+  const [accountCreated, setAccountCreated] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -98,20 +99,27 @@ const InvitePage = () => {
       if (fnError) throw fnError;
       if (fnData?.error) throw new Error(fnData.error);
 
-      // 2. Sign in immediately (email is already confirmed)
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: email.toLowerCase().trim(),
-        password,
-      });
+      // If fallback (link generation failed), sign in directly
+      if (fnData?.fallback) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: email.toLowerCase().trim(),
+          password,
+        });
+        if (signInError) throw signInError;
+        toast({
+          title: "Conta criada com sucesso!",
+          description: "Bem-vindo à Chronos Education.",
+        });
+        navigate("/gestao-matriculas");
+        return;
+      }
 
-      if (signInError) throw signInError;
-
+      // Normal flow: email confirmation required
+      setAccountCreated(true);
       toast({
-        title: "Conta criada com sucesso!",
-        description: "Bem-vindo à Chronos Education.",
+        title: "Conta criada!",
+        description: "Verifique o seu email para confirmar a conta.",
       });
-
-      navigate("/gestao-matriculas");
     } catch (error: any) {
       toast({
         title: "Erro",
@@ -130,6 +138,29 @@ const InvitePage = () => {
         description="Aceite o seu convite e crie a sua conta na Chronos Education."
         canonical="/convite"
       />
+      {accountCreated ? (
+        <div className="min-h-screen bg-background flex items-center justify-center p-8">
+          <div className="w-full max-w-md text-center space-y-6">
+            <CheckCircle size={48} className="mx-auto text-secondary" />
+            <h2 className="font-heading text-2xl font-bold text-foreground">
+              Conta criada com sucesso!
+            </h2>
+            <p className="text-muted-foreground">
+              Enviámos um email de confirmação para <strong>{email}</strong>. 
+              Abra o email e clique no botão de confirmação para ativar a sua conta.
+            </p>
+            <div className="p-4 rounded-lg bg-muted text-sm text-muted-foreground">
+              💡 Se não encontrar o email, verifique a pasta de <strong>spam</strong> ou <strong>lixo eletrônico</strong>.
+            </div>
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-2 text-sm font-medium text-secondary hover:underline"
+            >
+              Ir para o login
+            </Link>
+          </div>
+        </div>
+      ) : (
       <div className="min-h-screen bg-background flex">
         {/* Left panel */}
         <div className="hidden lg:flex lg:w-1/2 bg-gradient-hero items-center justify-center p-12 relative">
@@ -306,6 +337,7 @@ const InvitePage = () => {
           </div>
         </div>
       </div>
+      )}
     </>
   );
 };
