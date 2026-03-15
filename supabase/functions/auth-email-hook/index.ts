@@ -244,10 +244,27 @@ async function handleWebhook(req: Request): Promise<Response> {
     }
   }
 
-  // For invites, build a custom confirmation URL with the invite code
-  const confirmationUrl = emailType === 'invite' && inviteCode
-    ? `https://chronoseducation.com/convite`
-    : payload.data.url
+  // Build confirmation URL based on email type
+  let confirmationUrl: string
+  if (emailType === 'invite' && inviteCode) {
+    confirmationUrl = `https://chronoseducation.com/convite`
+  } else if (emailType === 'signup' && payload.data.url) {
+    // Ensure the redirect_to includes /login so users land on the login page after verification
+    try {
+      const verifyUrl = new URL(payload.data.url)
+      const currentRedirect = verifyUrl.searchParams.get('redirect_to') || ''
+      if (currentRedirect && !currentRedirect.endsWith('/login')) {
+        verifyUrl.searchParams.set('redirect_to', currentRedirect.replace(/\/$/, '') + '/login')
+        confirmationUrl = verifyUrl.toString()
+      } else {
+        confirmationUrl = payload.data.url
+      }
+    } catch {
+      confirmationUrl = payload.data.url
+    }
+  } else {
+    confirmationUrl = payload.data.url
+  }
 
   const templateProps = {
     siteName: SITE_NAME,
