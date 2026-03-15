@@ -283,6 +283,14 @@ const DashboardPage = () => {
       return false;
     }
 
+    // Validate student email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (s.studentEmail.trim() && !emailRegex.test(s.studentEmail.trim())) {
+      setValidationErrors(["studentEmail"]);
+      toast({ title: "Email inválido", description: "O email do aluno não tem um formato válido.", variant: "destructive" });
+      return false;
+    }
+
     if (s.studentBirthDate) {
       const birthDate = new Date(s.studentBirthDate);
       const today = new Date();
