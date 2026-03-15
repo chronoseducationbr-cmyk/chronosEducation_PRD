@@ -9,6 +9,8 @@ import AdminRoute from "@/components/AdminRoute";
 import AuthRedirect from "@/components/AuthRedirect";
 import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import InvitePage from "./pages/InvitePage";
 import DashboardPage from "./pages/DashboardPage";
 import EnglishQuizPage from "./pages/EnglishQuizPage";
@@ -32,6 +34,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/auth-redirect" element={<AuthRedirect />} />
             <Route path="/convite" element={<InvitePage />} />
             <Route
