@@ -208,13 +208,6 @@ export type Database = {
             referencedRelation: "orders"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "order_items_plan_id_fkey"
-            columns: ["plan_id"]
-            isOneToOne: false
-            referencedRelation: "plans"
-            referencedColumns: ["id"]
-          },
         ]
       }
       orders: {
@@ -241,36 +234,6 @@ export type Database = {
           total_cents?: number
           updated_at?: string
           user_id?: string
-        }
-        Relationships: []
-      }
-      plans: {
-        Row: {
-          active: boolean
-          created_at: string
-          description: string | null
-          id: string
-          name: string
-          plan_type: string
-          price_cents: number
-        }
-        Insert: {
-          active?: boolean
-          created_at?: string
-          description?: string | null
-          id?: string
-          name: string
-          plan_type: string
-          price_cents: number
-        }
-        Update: {
-          active?: boolean
-          created_at?: string
-          description?: string | null
-          id?: string
-          name?: string
-          plan_type?: string
-          price_cents?: number
         }
         Relationships: []
       }
