@@ -52,7 +52,14 @@ const DashboardPage = () => {
       return;
     }
 
-    // Validate student age (must be between 13 and 17)
+    // Validate student email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(s.studentEmail.trim())) {
+      toast({ title: "Email inválido", description: "O email do aluno não tem um formato válido.", variant: "destructive" });
+      return;
+    }
+
+    // Validate student age
     if (s.studentBirthDate) {
       const birthDate = new Date(s.studentBirthDate);
       const today = new Date();
@@ -273,6 +280,14 @@ const DashboardPage = () => {
     if (errors.length > 0) {
       setValidationErrors(errors);
       toast({ title: "Campos obrigatórios em falta", description: missingFields.join(", "), variant: "destructive" });
+      return false;
+    }
+
+    // Validate student email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (s.studentEmail.trim() && !emailRegex.test(s.studentEmail.trim())) {
+      setValidationErrors(["studentEmail"]);
+      toast({ title: "Email inválido", description: "O email do aluno não tem um formato válido.", variant: "destructive" });
       return false;
     }
 
