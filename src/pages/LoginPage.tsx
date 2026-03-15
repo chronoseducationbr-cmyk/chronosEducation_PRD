@@ -182,9 +182,7 @@ const LoginPage = () => {
             disabled={loading}
             onClick={async () => {
               setLoading(true);
-              const { error } = await lovable.auth.signInWithOAuth("google", {
-                redirect_uri: `${window.location.origin}/login`,
-              });
+              const { error } = await signInWithGoogle("/auth-redirect");
               if (error) {
                 toast({ title: "Erro", description: error.message, variant: "destructive" });
                 setLoading(false);
