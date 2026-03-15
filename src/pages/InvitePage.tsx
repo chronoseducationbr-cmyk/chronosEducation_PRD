@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
+import { signInWithGoogle } from "@/lib/google-auth";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Lock, User, Key, ArrowLeft, Eye, EyeOff, CheckCircle, XCircle } from "lucide-react";
 import chronosLogoHeader from "@/assets/chronos-logo-header.png";
