@@ -261,7 +261,7 @@ const InvitePage = () => {
 
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !passwordIsValid(password)}
                   className="w-full bg-gradient-lime text-primary font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
                   {loading ? "A criar conta..." : "Criar Conta"}
