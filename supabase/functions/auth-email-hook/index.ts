@@ -35,6 +35,12 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
   reauthentication: ReauthenticationEmail,
 }
 
+function generateInviteCode(): string {
+  const bytes = new Uint8Array(6)
+  crypto.getRandomValues(bytes)
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')
+}
+
 // Configuration
 const SITE_NAME = "Chronos Education"
 const SENDER_DOMAIN = "notify.info.chronoseducation.com"
