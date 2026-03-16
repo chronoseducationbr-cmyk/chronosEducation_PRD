@@ -35,6 +35,12 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
   reauthentication: ReauthenticationEmail,
 }
 
+function generateInviteCode(): string {
+  const bytes = new Uint8Array(6)
+  crypto.getRandomValues(bytes)
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')
+}
+
 // Configuration
 const SITE_NAME = "Chronos Education"
 const SENDER_DOMAIN = "notify.info.chronoseducation.com"
@@ -226,19 +232,33 @@ async function handleWebhook(req: Request): Promise<Response> {
 
   let inviteCode: string | undefined
   if (emailType === 'invite' && payload.data.email) {
+    const normalizedEmail = payload.data.email.toLowerCase().trim()
     const { data: invitation, error: invitationError } = await supabase
       .from('invitations')
-      .select('invite_code')
-      .eq('email', payload.data.email)
+      .select('invite_code, expires_at')
+      .ilike('email', normalizedEmail)
       .eq('status', 'pending')
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle()
 
     if (invitationError) {
-      console.error('Failed to load invite code', { error: invitationError, run_id, email: payload.data.email })
+      console.error('Failed to load invite code', { error: invitationError, run_id, email: normalizedEmail })
+    } else if (invitation?.invite_code && new Date(invitation.expires_at) > new Date()) {
+      inviteCode = invitation.invite_code
     } else {
-      inviteCode = invitation?.invite_code
+      const generatedInviteCode = generateInviteCode()
+      const { error: createInvitationError } = await supabase.from('invitations').insert({
+        email: normalizedEmail,
+        invite_code: generatedInviteCode,
+        status: 'pending',
+      })
+
+      if (createInvitationError) {
+        console.error('Failed to create invite code', { error: createInvitationError, run_id, email: normalizedEmail })
+      } else {
+        inviteCode = generatedInviteCode
+      }
     }
   }
 
