@@ -40,7 +40,7 @@ export const InviteEmail = ({
           <Heading style={h1}>Você foi convidado</Heading>
           <Text style={text}>
             Você foi convidado para se registrar na{' '}
-            <Link href={siteUrl} style={link}>
+            <Link href="https://www.chronoseducation.com" style={link}>
               <strong>Chronos Education</strong>
             </Link>
             . Clique no botão abaixo para aceitar o convite e criar a sua conta.
