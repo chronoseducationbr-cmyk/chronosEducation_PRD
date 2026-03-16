@@ -51,7 +51,7 @@ export const SignupEmail = ({
             Por favor, confirme o seu endereço de email ({recipient}) clicando no botão abaixo:
           </Text>
           <Section style={{ textAlign: 'center' }}>
-            <Button style={button} href={confirmationUrl}>
+            <Button style={button} href="https://www.chronoseducation.com/login">
               Confirmar Email
             </Button>
           </Section>
