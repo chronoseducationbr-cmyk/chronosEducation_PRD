@@ -39,9 +39,11 @@ export const RecoveryEmail = ({
             Recebemos um pedido para recuperar a sua senha na Chronos Education.
             Clique no botão abaixo para definir uma nova senha.
           </Text>
-          <Button style={button} href={confirmationUrl}>
-            Redefinir Senha
-          </Button>
+          <Section style={{ textAlign: 'center' }}>
+            <Button style={button} href={confirmationUrl}>
+              Redefinir Senha
+            </Button>
+          </Section>
           <Text style={footer}>
             Se não solicitou a recuperação de senha, pode ignorar este email.
             A sua senha não será alterada.
