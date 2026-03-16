@@ -83,6 +83,10 @@ const AdminUsersPage = () => {
       toast({ title: "Email é obrigatório", variant: "destructive" });
       return;
     }
+    if (activeUserEmails.has(inviteEmail.trim().toLowerCase())) {
+      toast({ title: "Este utilizador já está registado", description: "Não é possível enviar convite a um utilizador que já efetuou login.", variant: "destructive" });
+      return;
+    }
     setSending(true);
     try {
       const { error } = await supabase.functions.invoke("create-invite", {
