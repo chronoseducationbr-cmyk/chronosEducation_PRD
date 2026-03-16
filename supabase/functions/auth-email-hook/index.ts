@@ -296,7 +296,7 @@ async function handleWebhook(req: Request): Promise<Response> {
   const emailPayload = {
     run_id,
     to: payload.data.email,
-    from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+    from: SITE_NAME,
     sender_domain: SENDER_DOMAIN,
     subject: EMAIL_SUBJECTS[emailType] || 'Notification',
     html,
