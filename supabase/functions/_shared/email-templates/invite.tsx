@@ -46,7 +46,7 @@ export const InviteEmail = ({
             . Clique no botão abaixo para aceitar o convite e criar a sua conta.
           </Text>
           <Section style={{ textAlign: 'center' }}>
-            <Button style={button} href={confirmationUrl}>
+            <Button style={button} href="https://www.chronoseducation.com/convite">
               Aceitar Convite
             </Button>
           </Section>
