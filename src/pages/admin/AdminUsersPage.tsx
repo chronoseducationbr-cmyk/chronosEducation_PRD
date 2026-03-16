@@ -44,6 +44,7 @@ const AdminUsersPage = () => {
   const [inviteEmail, setInviteEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [resendingId, setResendingId] = useState<string | null>(null);
+  const [resendingConfirmId, setResendingConfirmId] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -118,6 +119,21 @@ const AdminUsersPage = () => {
       toast({ title: "Erro ao reenviar convite", description: err.message || "Tente novamente", variant: "destructive" });
     } finally {
       setResendingId(null);
+    }
+  };
+
+  const handleResendConfirmation = async (email: string, invitationId: string) => {
+    setResendingConfirmId(invitationId);
+    try {
+      const { error } = await supabase.functions.invoke("resend-confirmation", {
+        body: { email },
+      });
+      if (error) throw error;
+      toast({ title: "Email de confirmação reenviado", description: `Email enviado para ${email}` });
+    } catch (err: any) {
+      toast({ title: "Erro ao reenviar confirmação", description: err.message || "Tente novamente", variant: "destructive" });
+    } finally {
+      setResendingConfirmId(null);
     }
   };
 
@@ -263,7 +279,19 @@ const AdminUsersPage = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="shrink-0">
+                    <div className="shrink-0 flex items-center gap-2">
+                      {isUsed(inv) && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleResendConfirmation(inv.email, inv.id)}
+                          disabled={resendingConfirmId === inv.id}
+                          className="flex items-center gap-1.5 text-xs"
+                        >
+                          <Mail size={12} className={resendingConfirmId === inv.id ? "animate-spin" : ""} />
+                          Reenviar confirmação
+                        </Button>
+                      )}
                       {canResend && !isUsed(inv) && (
                         <Button
                           variant="outline"
