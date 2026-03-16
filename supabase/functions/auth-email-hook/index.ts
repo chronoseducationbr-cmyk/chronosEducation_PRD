@@ -20,7 +20,7 @@ const EMAIL_SUBJECTS: Record<string, string> = {
   signup: 'Confirme o seu email',
   invite: 'Você foi convidado',
   magiclink: 'Your login link',
-  recovery: 'Reset your password',
+  recovery: 'Recuperar senha',
   email_change: 'Confirm your new email',
   reauthentication: 'Your verification code',
 }
