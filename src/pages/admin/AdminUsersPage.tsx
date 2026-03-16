@@ -44,6 +44,7 @@ const AdminUsersPage = () => {
   const [inviteEmail, setInviteEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [resendingId, setResendingId] = useState<string | null>(null);
+  const [resendingConfirmId, setResendingConfirmId] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
