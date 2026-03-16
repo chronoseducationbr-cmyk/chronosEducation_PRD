@@ -122,6 +122,21 @@ const AdminUsersPage = () => {
     }
   };
 
+  const handleResendConfirmation = async (email: string, invitationId: string) => {
+    setResendingConfirmId(invitationId);
+    try {
+      const { error } = await supabase.functions.invoke("resend-confirmation", {
+        body: { email },
+      });
+      if (error) throw error;
+      toast({ title: "Email de confirmação reenviado", description: `Email enviado para ${email}` });
+    } catch (err: any) {
+      toast({ title: "Erro ao reenviar confirmação", description: err.message || "Tente novamente", variant: "destructive" });
+    } finally {
+      setResendingConfirmId(null);
+    }
+  };
+
   const formatDate = (d: string | null) => {
     if (!d) return "—";
     const dt = new Date(d);
