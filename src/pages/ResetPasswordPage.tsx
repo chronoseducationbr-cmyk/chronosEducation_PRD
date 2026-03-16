@@ -42,9 +42,13 @@ const ResetPasswordPage = () => {
 
       setTimeout(() => navigate("/login"), 3000);
     } catch (error: any) {
+      let msg = error.message || "Erro ao atualizar a senha.";
+      if (/new password should be different/i.test(msg)) {
+        msg = "A nova senha deve ser diferente da senha antiga.";
+      }
       toast({
         title: "Erro",
-        description: error.message || "Erro ao atualizar a senha.",
+        description: msg,
         variant: "destructive",
       });
     } finally {
