@@ -45,6 +45,8 @@ const ResetPasswordPage = () => {
       let msg = error.message || "Erro ao atualizar a senha.";
       if (/new password should be different/i.test(msg)) {
         msg = "A nova senha deve ser diferente da senha antiga.";
+      } else if (/auth session missing/i.test(msg)) {
+        msg = "Sessão expirada. Por favor, solicite um novo pedido de recuperação.";
       }
       toast({
         title: "Erro",
