@@ -46,6 +46,8 @@ const LoginPage = () => {
         title: "Erro",
         description: error.message === "Invalid login credentials"
           ? "O seu email de login e/ou senha estão errados."
+          : error.message === "Email not confirmed"
+          ? "Email ainda não confirmado."
           : (error.message || "Ocorreu um erro. Tente novamente."),
         variant: "destructive",
       });
