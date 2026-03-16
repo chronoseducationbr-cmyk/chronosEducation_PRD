@@ -26,7 +26,9 @@ const ForgotPasswordPage = () => {
     } catch (error: any) {
       toast({
         title: "Erro",
-        description: error.message || "Erro ao enviar email de recuperação.",
+        description: error.message === "Unable to validate email address: invalid format"
+          ? "Não foi possível validar o email: formato inválido."
+          : (error.message || "Erro ao enviar email de recuperação."),
         variant: "destructive",
       });
     } finally {
