@@ -28,6 +28,8 @@ const ForgotPasswordPage = () => {
         title: "Erro",
         description: error.message === "Unable to validate email address: invalid format"
           ? "Não foi possível validar o email: formato inválido."
+          : /for security purposes, you can only request this after (\d+) seconds/i.test(error.message)
+          ? error.message.replace(/for security purposes, you can only request this after (\d+) seconds/i, "Por questões de segurança, podes voltar a realizar o pedido após $1 segundos.")
           : (error.message || "Erro ao enviar email de recuperação."),
         variant: "destructive",
       });
