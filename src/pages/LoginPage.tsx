@@ -48,6 +48,8 @@ const LoginPage = () => {
           ? "O seu email de login e/ou senha estão errados."
           : error.message === "Email not confirmed"
           ? "Email ainda não confirmado."
+          : /for security purposes, you can only request this after (\d+) seconds/i.test(error.message)
+          ? error.message.replace(/for security purposes, you can only request this after (\d+) seconds/i, "Por questões de segurança, podes voltar a realizar o pedido após $1 segundos.")
           : (error.message || "Ocorreu um erro. Tente novamente."),
         variant: "destructive",
       });
