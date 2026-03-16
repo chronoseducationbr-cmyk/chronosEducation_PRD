@@ -121,9 +121,13 @@ const InvitePage = () => {
         description: "Verifique o seu email para confirmar a conta.",
       });
     } catch (error: any) {
+      let msg = error.message || "Erro ao criar conta.";
+      if (/user already registered/i.test(msg)) {
+        msg = "Usuário já registrado.";
+      }
       toast({
         title: "Erro",
-        description: error.message || "Erro ao criar conta.",
+        description: msg,
         variant: "destructive",
       });
     } finally {
