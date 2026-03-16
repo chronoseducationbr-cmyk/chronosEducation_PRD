@@ -10,7 +10,6 @@ const corsHeaders = {
 }
 
 const SITE_NAME = 'Chronos Education'
-const SENDER_DOMAIN = 'notify.info.chronoseducation.com'
 const FROM_DOMAIN = 'info.chronoseducation.com'
 
 Deno.serve(async (req) => {
@@ -20,7 +19,15 @@ Deno.serve(async (req) => {
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!
   const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+  const resendApiKey = Deno.env.get('RESEND_API_KEY')
   const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
+
+  if (!resendApiKey) {
+    return new Response(JSON.stringify({ error: 'RESEND_API_KEY not configured' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
+  }
 
   // Verify the caller is authenticated
   const authHeader = req.headers.get('Authorization')
@@ -81,40 +88,28 @@ Deno.serve(async (req) => {
     }
 
     const html = await renderAsync(React.createElement(InviteEmail, templateProps))
-    const text = await renderAsync(React.createElement(InviteEmail, templateProps), {
-      plainText: true,
-    })
 
-    const messageId = crypto.randomUUID()
-
-    // Log pending
-    await supabaseAdmin.from('email_send_log').insert({
-      message_id: messageId,
-      template_name: 'invite',
-      recipient_email: email,
-      status: 'pending',
-    })
-
-    // Enqueue email for async processing
-    const { error: enqueueError } = await supabaseAdmin.rpc('enqueue_email', {
-      queue_name: 'transactional_emails',
-      payload: {
-      run_id: crypto.randomUUID(),
-      message_id: messageId,
-      to: email,
-      from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
-      sender_domain: SENDER_DOMAIN,
-      subject: 'Você foi convidado',
-      html,
-      text,
-      purpose: 'transactional',
-      label: 'invite',
-      queued_at: new Date().toISOString(),
+    // Send email via Resend
+    const resendRes = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+        to: [email],
+        subject: 'Você foi convidado',
+        html,
+      }),
     })
 
-    if (enqueueError) {
-      console.error('Failed to enqueue invite email:', enqueueError)
+    const resendData = await resendRes.json()
+    if (!resendRes.ok) {
+      console.error('Resend API error:', resendData)
+      // Still return success since the invite was created
+    } else {
+      console.log('Invite email sent successfully:', resendData.id)
     }
 
     return new Response(
