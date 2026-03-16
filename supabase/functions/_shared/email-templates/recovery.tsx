@@ -37,8 +37,11 @@ export const RecoveryEmail = ({
         <Section style={content}>
           <Heading style={h1}>Recuperar senha</Heading>
           <Text style={text}>
-            Recebemos um pedido para recuperar a sua senha na Chronos Education.
-            Clique no botão abaixo para definir uma nova senha.
+            Recebemos um pedido para recuperar a sua senha na{' '}
+            <Link href="https://www.chronoseducation.com" style={link}>
+              <strong>Chronos Education</strong>
+            </Link>
+            . Clique no botão abaixo para definir uma nova senha.
           </Text>
           <Section style={{ textAlign: 'center' }}>
             <Button style={button} href={confirmationUrl}>
