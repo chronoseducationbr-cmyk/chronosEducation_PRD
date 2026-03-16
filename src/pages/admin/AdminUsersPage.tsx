@@ -175,7 +175,7 @@ const AdminUsersPage = () => {
         <Input placeholder="Pesquisar..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
       </div>
 
-      <Tabs defaultValue="users">
+      <Tabs defaultValue="users" onValueChange={() => load()}>
         <TabsList className="mb-6 bg-transparent border-0 p-0 gap-10">
           <TabsTrigger
             value="users"
