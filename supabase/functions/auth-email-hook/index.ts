@@ -67,6 +67,7 @@ const SAMPLE_DATA: Record<string, object> = {
     siteName: SITE_NAME,
     siteUrl: SAMPLE_PROJECT_URL,
     confirmationUrl: SAMPLE_PROJECT_URL,
+    inviteCode: 'a1b2c3d4e5f6',
   },
   email_change: {
     siteName: SITE_NAME,
