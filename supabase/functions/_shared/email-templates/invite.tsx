@@ -83,4 +83,6 @@ const h1 = { fontSize: '22px', fontWeight: 'bold' as const, color: '#042D45', ma
 const text = { fontSize: '15px', color: '#476878', lineHeight: '1.6', margin: '0 0 25px' }
 const link = { color: '#042D45', textDecoration: 'underline' }
 const button = { backgroundColor: '#80ff00', color: '#042D45', fontSize: '14px', fontWeight: '600' as const, borderRadius: '12px', padding: '14px 24px', textDecoration: 'none', display: 'inline-block' as const }
+const codeBox = { backgroundColor: '#042D45', borderRadius: '8px', padding: '12px 24px', textAlign: 'center' as const, margin: '0 0 24px' }
+const codeText = { color: '#80ff00', fontSize: '20px', fontWeight: 'bold' as const, letterSpacing: '3px', margin: '0' }
 const footer = { fontSize: '12px', color: '#9aa8b5', margin: '30px 0 0' }
