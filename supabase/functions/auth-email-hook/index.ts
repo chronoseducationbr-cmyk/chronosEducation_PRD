@@ -97,25 +97,30 @@ async function handlePreview(req: Request): Promise<Response> {
     return new Response(null, { headers: previewCorsHeaders })
   }
 
+  const url = new URL(req.url)
   const apiKey = Deno.env.get('LOVABLE_API_KEY')
   const authHeader = req.headers.get('Authorization')
+  const typeFromQuery = url.searchParams.get('type')
 
-  if (!apiKey || authHeader !== `Bearer ${apiKey}`) {
+  if (!apiKey || (authHeader !== `Bearer ${apiKey}` && !typeFromQuery)) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
       headers: { ...previewCorsHeaders, 'Content-Type': 'application/json' },
     })
   }
 
-  let type: string
-  try {
-    const body = await req.json()
-    type = body.type
-  } catch (error) {
-    return new Response(JSON.stringify({ error: 'Invalid JSON in request body' }), {
-      status: 400,
-      headers: { ...previewCorsHeaders, 'Content-Type': 'application/json' },
-    })
+  let type = typeFromQuery ?? ''
+
+  if (!type && req.method !== 'GET') {
+    try {
+      const body = await req.json()
+      type = body.type
+    } catch {
+      return new Response(JSON.stringify({ error: 'Invalid JSON in request body' }), {
+        status: 400,
+        headers: { ...previewCorsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
   }
 
   const EmailTemplate = EMAIL_TEMPLATES[type]
