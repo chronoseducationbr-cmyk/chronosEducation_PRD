@@ -26,7 +26,7 @@ export const RecoveryEmail = ({
 }: RecoveryEmailProps) => (
   <Html lang="pt-BR" dir="ltr">
     <Head />
-    <Preview>Recuperar a sua palavra-passe — Chronos Education</Preview>
+    <Preview>Recuperar a sua senha — Chronos Education</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={header}>
@@ -34,17 +34,17 @@ export const RecoveryEmail = ({
         </Section>
         <Section style={accentBar} />
         <Section style={content}>
-          <Heading style={h1}>Recuperar palavra-passe</Heading>
+          <Heading style={h1}>Recuperar senha</Heading>
           <Text style={text}>
-            Recebemos um pedido para recuperar a sua palavra-passe na Chronos Education.
-            Clique no botão abaixo para definir uma nova palavra-passe.
+            Recebemos um pedido para recuperar a sua senha na Chronos Education.
+            Clique no botão abaixo para definir uma nova senha.
           </Text>
           <Button style={button} href={confirmationUrl}>
-            Redefinir Palavra-passe
+            Redefinir Senha
           </Button>
           <Text style={footer}>
-            Se não solicitou a recuperação de palavra-passe, pode ignorar este email.
-            A sua palavra-passe não será alterada.
+            Se não solicitou a recuperação de senha, pode ignorar este email.
+            A sua senha não será alterada.
           </Text>
         </Section>
       </Container>
