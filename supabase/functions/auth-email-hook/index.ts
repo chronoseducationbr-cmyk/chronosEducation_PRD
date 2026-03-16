@@ -22,7 +22,7 @@ const EMAIL_SUBJECTS: Record<string, string> = {
   magiclink: 'Your login link',
   recovery: 'Recuperar senha',
   email_change: 'Confirm your new email',
-  reauthentication: 'Your verification code',
+  reauthentication: 'Confirmar identidade',
 }
 
 // Template mapping
