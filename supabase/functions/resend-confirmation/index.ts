@@ -134,9 +134,8 @@ Deno.serve(async (req) => {
       }),
     });
 
-    if (!resendRes.ok) {
-      const errBody = await resendRes.text();
-      console.error("Resend error:", errBody);
+    const resendBody = await resendRes.text();
+    console.log("Resend response:", resendRes.status, resendBody);
       return new Response(
         JSON.stringify({ error: "Erro ao enviar email de confirmação." }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
