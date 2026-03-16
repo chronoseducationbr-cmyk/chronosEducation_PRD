@@ -45,8 +45,8 @@ export const RecoveryEmail = ({
             </Button>
           </Section>
           <Text style={footer}>
-            Se não solicitou a recuperação de senha, pode ignorar este email.
-            A sua senha não será alterada.
+            Se não solicitou a recuperação de senha, ignore este email. A sua senha não será alterada.<br />
+            Este é um email automático. Não responda!
           </Text>
         </Section>
       </Container>
