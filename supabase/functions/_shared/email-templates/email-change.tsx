@@ -45,13 +45,9 @@ export const EmailChangeEmail = ({
             <Link href="https://www.chronoseducation.com" style={link}>
               <strong>Chronos Education</strong>
             </Link>{' '}de{' '}
-            <Link href={`mailto:${email}`} style={link}>
-              {email}
-            </Link>{' '}
+            {email}{' '}
             para{' '}
-            <Link href={`mailto:${newEmail}`} style={link}>
-              {newEmail}
-            </Link>
+            {newEmail}
             .
           </Text>
           <Text style={text}>

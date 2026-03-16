@@ -48,11 +48,7 @@ export const SignupEmail = ({
             !
           </Text>
           <Text style={text}>
-            Por favor, confirme o seu endereço de email (
-            <Link href={`mailto:${recipient}`} style={link}>
-              {recipient}
-            </Link>
-            ) clicando no botão abaixo:
+            Por favor, confirme o seu endereço de email ({recipient}) clicando no botão abaixo:
           </Text>
           <Section style={{ textAlign: 'center' }}>
             <Button style={button} href={confirmationUrl}>
