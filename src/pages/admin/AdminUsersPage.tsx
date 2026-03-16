@@ -207,7 +207,16 @@ const AdminUsersPage = () => {
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-foreground truncate flex items-center gap-1.5">
                       {u.full_name || "Sem nome"}
-                      {u.is_admin && <ShieldCheck size={14} className="text-primary shrink-0" />}
+                      {u.is_admin && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <ShieldCheck size={14} className="text-primary shrink-0" />
+                            </TooltipTrigger>
+                            <TooltipContent>Administrador</TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
                     </p>
                     <p className="text-xs text-muted-foreground">{u.email || "—"}</p>
                   </div>
