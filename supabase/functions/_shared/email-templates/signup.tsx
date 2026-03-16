@@ -54,9 +54,11 @@ export const SignupEmail = ({
             </Link>
             ) clicando no botão abaixo:
           </Text>
-          <Button style={button} href={confirmationUrl}>
-            Confirmar Email
-          </Button>
+          <Section style={{ textAlign: 'center' }}>
+            <Button style={button} href={confirmationUrl}>
+              Confirmar Email
+            </Button>
+          </Section>
           <Text style={footer}>
             Se não criou uma conta, ignore este email.<br />
             Este é um email automático. Não responda!
