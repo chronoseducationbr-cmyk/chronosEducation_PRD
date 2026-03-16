@@ -218,6 +218,12 @@ async function handleWebhook(req: Request): Promise<Response> {
     )
   }
 
+  // Create Supabase client for DB queries and enqueuing
+  const supabase = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+  )
+
   let inviteCode: string | undefined
   if (emailType === 'invite' && payload.data.email) {
     const { data: invitation, error: invitationError } = await supabase
@@ -254,10 +260,6 @@ async function handleWebhook(req: Request): Promise<Response> {
   })
 
   // Enqueue email for async processing by the dispatcher (process-email-queue).
-  const supabase = createClient(
-    Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-  )
 
   const messageId = crypto.randomUUID()
 
