@@ -36,9 +36,13 @@ const ConfirmEmailPage = () => {
       setTimeout(() => navigate("/login", { replace: true }), 2500);
     } catch (error: any) {
       setStatus("error");
+      let msg = error.message || "Não foi possível confirmar o email. O link pode ter expirado.";
+      if (/token has expired or is invalid/i.test(msg)) {
+        msg = "Token já está expirado ou é inválido.";
+      }
       toast({
         title: "Erro na confirmação",
-        description: error.message || "Não foi possível confirmar o email. O link pode ter expirado.",
+        description: msg,
         variant: "destructive",
       });
     }
