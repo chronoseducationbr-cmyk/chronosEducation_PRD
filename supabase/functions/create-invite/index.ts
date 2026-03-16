@@ -57,6 +57,13 @@ Deno.serve(async (req) => {
       })
     }
 
+    // Cancel any existing pending invitations for this email
+    await supabaseAdmin
+      .from('invitations')
+      .update({ status: 'cancelled' })
+      .eq('email', email)
+      .eq('status', 'pending')
+
     // Generate invite code
     const array = new Uint8Array(6)
     crypto.getRandomValues(array)
