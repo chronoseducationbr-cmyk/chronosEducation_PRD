@@ -218,7 +218,24 @@ async function handleWebhook(req: Request): Promise<Response> {
     )
   }
 
-  // Build template props from payload.data (HookData structure)
+  let inviteCode: string | undefined
+  if (emailType === 'invite' && payload.data.email) {
+    const { data: invitation, error: invitationError } = await supabase
+      .from('invitations')
+      .select('invite_code')
+      .eq('email', payload.data.email)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    if (invitationError) {
+      console.error('Failed to load invite code', { error: invitationError, run_id, email: payload.data.email })
+    } else {
+      inviteCode = invitation?.invite_code
+    }
+  }
+
   const templateProps = {
     siteName: SITE_NAME,
     siteUrl: `https://${ROOT_DOMAIN}`,
@@ -227,6 +244,7 @@ async function handleWebhook(req: Request): Promise<Response> {
     token: payload.data.token,
     email: payload.data.email,
     newEmail: payload.data.new_email,
+    inviteCode,
   }
 
   // Render React Email to HTML and plain text
