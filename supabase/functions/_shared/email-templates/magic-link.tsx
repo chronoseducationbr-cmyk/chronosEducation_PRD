@@ -37,8 +37,11 @@ export const MagicLinkEmail = ({
         <Section style={content}>
           <Heading style={h1}>O seu link de acesso</Heading>
           <Text style={text}>
-            Clique no botão abaixo para acessar a sua conta na Chronos Education.
-            Este link expira em breve.
+            Clique no botão abaixo para acessar a sua conta na{' '}
+            <Link href="https://www.chronoseducation.com" style={link}>
+              <strong>Chronos Education</strong>
+            </Link>
+            . Este link expira em breve.
           </Text>
           <Section style={{ textAlign: 'center' }}>
             <Button style={button} href={confirmationUrl}>
