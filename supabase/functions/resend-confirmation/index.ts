@@ -78,15 +78,19 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Generate a new confirmation link
+    // Reset email confirmation so a new link can be generated
+    await supabaseAdmin.auth.admin.updateUserById(targetUser.id, { email_confirm: false });
+
+    // Generate a new confirmation link using invite type (no password needed)
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
-      type: "signup",
+      type: "invite",
       email: email.toLowerCase().trim(),
-      password: crypto.randomUUID(), // dummy, won't change existing password
     });
 
     if (linkError || !linkData) {
       console.error("Failed to generate confirmation link:", linkError);
+      // Re-confirm email so user isn't stuck
+      await supabaseAdmin.auth.admin.updateUserById(targetUser.id, { email_confirm: true });
       return new Response(
         JSON.stringify({ error: "Erro ao gerar link de confirmação." }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -94,8 +98,8 @@ Deno.serve(async (req) => {
     }
 
     const tokenHash = linkData.properties?.hashed_token;
-    const confirmUrl = `https://chronoseducation.com/confirm-email?token_hash=${tokenHash}&type=signup`;
-
+    const confirmUrl = `https://chronoseducation.com/confirm-email?token_hash=${tokenHash}&type=invite`;
+    console.log("Generated confirmation URL for:", email, "tokenHash exists:", !!tokenHash);
     // Get user's name from profile
     const { data: profile } = await supabaseAdmin
       .from("profiles")
@@ -130,9 +134,10 @@ Deno.serve(async (req) => {
       }),
     });
 
+    const resendBody = await resendRes.text();
+    console.log("Resend response:", resendRes.status, resendBody);
+
     if (!resendRes.ok) {
-      const errBody = await resendRes.text();
-      console.error("Resend error:", errBody);
       return new Response(
         JSON.stringify({ error: "Erro ao enviar email de confirmação." }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
