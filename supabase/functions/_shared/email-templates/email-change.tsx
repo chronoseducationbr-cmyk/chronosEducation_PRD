@@ -41,7 +41,10 @@ export const EmailChangeEmail = ({
         <Section style={content}>
           <Heading style={h1}>Confirmar mudança de email</Heading>
           <Text style={text}>
-            Você solicitou a alteração do seu email na Chronos Education de{' '}
+            Você solicitou a alteração do seu email na{' '}
+            <Link href="https://www.chronoseducation.com" style={link}>
+              <strong>Chronos Education</strong>
+            </Link>{' '}de{' '}
             <Link href={`mailto:${email}`} style={link}>
               {email}
             </Link>{' '}

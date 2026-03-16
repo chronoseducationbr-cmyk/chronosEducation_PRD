@@ -10,6 +10,7 @@ import {
   Heading,
   Html,
   Img,
+  Link,
   Preview,
   Section,
   Text,
@@ -36,8 +37,11 @@ export const MagicLinkEmail = ({
         <Section style={content}>
           <Heading style={h1}>O seu link de acesso</Heading>
           <Text style={text}>
-            Clique no botão abaixo para acessar a sua conta na Chronos Education.
-            Este link expira em breve.
+            Clique no botão abaixo para acessar a sua conta na{' '}
+            <Link href="https://www.chronoseducation.com" style={link}>
+              <strong>Chronos Education</strong>
+            </Link>
+            . Este link expira em breve.
           </Text>
           <Section style={{ textAlign: 'center' }}>
             <Button style={button} href={confirmationUrl}>
@@ -64,5 +68,6 @@ const accentBar = { background: 'linear-gradient(135deg, #80ff00 0%, #6de600 100
 const content = { backgroundColor: '#f7f8f9', padding: '40px', borderRadius: '0 0 16px 16px' }
 const h1 = { fontSize: '22px', fontWeight: 'bold' as const, color: '#042D45', margin: '0 0 20px', fontFamily: "'Playfair Display', Georgia, serif" }
 const text = { fontSize: '15px', color: '#476878', lineHeight: '1.6', margin: '0 0 25px' }
+const link = { color: '#042D45', textDecoration: 'underline' }
 const button = { backgroundColor: '#80ff00', color: '#042D45', fontSize: '14px', fontWeight: '600' as const, borderRadius: '12px', padding: '14px 24px', textDecoration: 'none', display: 'inline-block' as const }
 const footer = { fontSize: '12px', color: '#9aa8b5', margin: '30px 0 0' }
