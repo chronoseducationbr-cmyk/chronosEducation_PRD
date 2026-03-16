@@ -60,6 +60,9 @@ export const SignupEmail = ({
           <Text style={footer}>
             Se não criou uma conta, ignore este email.
           </Text>
+          <Text style={footer}>
+            Este é um email automático. Não responda!
+          </Text>
         </Section>
       </Container>
     </Body>
