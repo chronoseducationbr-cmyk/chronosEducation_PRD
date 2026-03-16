@@ -279,7 +279,19 @@ const AdminUsersPage = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="shrink-0">
+                    <div className="shrink-0 flex items-center gap-2">
+                      {isUsed(inv) && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleResendConfirmation(inv.email, inv.id)}
+                          disabled={resendingConfirmId === inv.id}
+                          className="flex items-center gap-1.5 text-xs"
+                        >
+                          <Mail size={12} className={resendingConfirmId === inv.id ? "animate-spin" : ""} />
+                          Reenviar confirmação
+                        </Button>
+                      )}
                       {canResend && !isUsed(inv) && (
                         <Button
                           variant="outline"
