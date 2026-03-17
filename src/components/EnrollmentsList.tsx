@@ -243,39 +243,58 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                         </div>
                       </div>
                      )}
-                     {/* Only show test section if enrollment has an active test */}
-                     {e.quiz_test_id && activeTestIds.has(e.quiz_test_id) && (
-                     <div className="mt-3 pt-3 border-t border-border">
-                       <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
-                         <BookOpen size={14} className="text-secondary" />
-                         Teste de Inglês
-                       </p>
-                       {quizResults[e.id] ? (() => {
-                          const cls = getClassification(quizResults[e.id].score_points, e.quiz_test_id ? testSlugMap[e.quiz_test_id] : undefined);
-                          return (
-                          <div className="flex flex-col gap-1 text-sm">
-                            <div className="flex items-center gap-2">
-                              <span className="text-foreground font-semibold">
-                                {cls.level}{cls.label ? ` (${cls.label})` : ""}
-                              </span>
-                              <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
-                            </div>
-                            <span className="text-muted-foreground text-xs">
-                              {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pontos · {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
-                            </span>
-                          </div>
-                          );
-                       })() : (
-                          <button
-                            onClick={() => navigate(`/teste-ingles?enrollment=${e.id}`)}
-                            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#F9B91D] hover:text-[#F9B91D]/80 transition-colors"
-                          >
-                            Realizar teste de inglês
-                            <ExternalLink size={14} className="text-[#042d44]" />
-                          </button>
-                       )}
-                     </div>
-                     )}
+                     {/* Quiz section: show results if taken, show link only if test is active, hide if disabled & not taken */}
+                     {(() => {
+                       const hasResult = !!quizResults[e.id];
+                       const testActive = e.quiz_test_id && activeTestIds.has(e.quiz_test_id);
+                       if (!hasResult && !testActive) return null;
+                       return (
+                         <div className="mt-3 pt-3 border-t border-border">
+                           <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
+                             <BookOpen size={14} className="text-secondary" />
+                             Teste de Inglês
+                           </p>
+                           {hasResult ? (() => {
+                             const cls = getClassification(quizResults[e.id].score_points, e.quiz_test_id ? testSlugMap[e.quiz_test_id] : undefined);
+                             const levelDescriptions: Record<string, string> = {
+                               "A0": "Os alunos neste nível estão começando a aprender as suas primeiras palavras.",
+                               "A1": "Os alunos que atingem o nível A1 conseguem comunicar usando expressões do dia a dia familiares e frases muito básicas.",
+                               "A2": "Os alunos que atingem o nível A2 conseguem comunicar usando expressões frequentes em situações do dia a dia.",
+                               "B1": "Os alunos que atingem o nível B1 conseguem compreender informação sobre temas familiares. Conseguem comunicar na maioria das situações enquanto viajam para países de língua inglesa.",
+                               "B2": "Os alunos que atingem o nível B2 conseguem compreender as principais ideias de textos complexos. Conseguem interagir com alguma fluência e comunicar facilmente.",
+                               "C1": "Os alunos que atingem o nível C1 conseguem compreender uma vasta gama de textos longos e complexos.",
+                               "C2": "Os alunos que atingem o nível C2 conseguem facilmente compreender quase tudo o que ouvem ou escrevem. Conseguem expressar-se de forma fluente e espontânea com precisão em situações complexas.",
+                             };
+                             return (
+                               <div className="flex flex-col gap-1 text-sm">
+                                 <div className="flex items-center gap-2">
+                                   <span className="text-foreground font-semibold">
+                                     {cls.level}{cls.label ? ` (${cls.label})` : ""}
+                                   </span>
+                                   <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
+                                 </div>
+                                 {levelDescriptions[cls.level] && (
+                                   <p className="text-muted-foreground text-xs leading-relaxed">
+                                     {levelDescriptions[cls.level]}
+                                   </p>
+                                 )}
+                                 <span className="text-muted-foreground text-xs">
+                                   {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pontos · {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
+                                 </span>
+                               </div>
+                             );
+                           })() : (
+                             <button
+                               onClick={() => navigate(`/teste-ingles?enrollment=${e.id}`)}
+                               className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#F9B91D] hover:text-[#F9B91D]/80 transition-colors"
+                             >
+                               Realizar teste de inglês
+                               <ExternalLink size={14} className="text-[#042d44]" />
+                             </button>
+                           )}
+                         </div>
+                       );
+                     })()}
                   </div>
                 )}
               </div>
