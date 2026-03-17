@@ -43,26 +43,61 @@ const AdminSettingsPage = () => {
     setLoading(false);
   };
 
-  const handleToggle = async (test: QuizTest) => {
-    setToggling(test.id);
-    const newActive = !test.is_active;
+  const quizEnabled = tests.some((t) => t.is_active);
+
+  const handleGeneralToggle = async () => {
+    if (quizEnabled) {
+      // Deactivate all tests
+      const { error } = await supabase
+        .from("quiz_tests")
+        .update({ is_active: false } as any)
+        .in("id", tests.map((t) => t.id));
+
+      if (error) {
+        toast({ title: "Erro ao desativar testes", variant: "destructive" });
+      } else {
+        setTests((prev) => prev.map((t) => ({ ...t, is_active: false })));
+        toast({ title: "Testes de inglês desativados" });
+      }
+    } else {
+      // Enable: activate the first test by default
+      const first = tests[0];
+      if (first) {
+        const { error } = await supabase
+          .from("quiz_tests")
+          .update({ is_active: true } as any)
+          .eq("id", first.id);
+
+        if (error) {
+          toast({ title: "Erro ao ativar teste", variant: "destructive" });
+        } else {
+          setTests((prev) => prev.map((t) => ({ ...t, is_active: t.id === first.id })));
+          toast({ title: "Testes de inglês ativados", description: `${first.name} selecionado.` });
+        }
+      }
+    }
+  };
+
+  const handleSelectTest = async (selectedTest: QuizTest) => {
+    if (selectedTest.is_active) return;
+    setToggling(selectedTest.id);
+
+    // Deactivate all, then activate the selected one
+    await supabase
+      .from("quiz_tests")
+      .update({ is_active: false } as any)
+      .in("id", tests.map((t) => t.id));
 
     const { error } = await supabase
       .from("quiz_tests")
-      .update({ is_active: newActive } as any)
-      .eq("id", test.id);
+      .update({ is_active: true } as any)
+      .eq("id", selectedTest.id);
 
     if (error) {
-      console.error("Error toggling test:", error);
-      toast({ title: "Erro ao atualizar teste", variant: "destructive" });
+      toast({ title: "Erro ao selecionar teste", variant: "destructive" });
     } else {
-      setTests((prev) =>
-        prev.map((t) => (t.id === test.id ? { ...t, is_active: newActive } : t))
-      );
-      toast({
-        title: newActive ? "Teste ativado" : "Teste desativado",
-        description: `${test.name} foi ${newActive ? "ativado" : "desativado"}.`,
-      });
+      setTests((prev) => prev.map((t) => ({ ...t, is_active: t.id === selectedTest.id })));
+      toast({ title: "Teste selecionado", description: `${selectedTest.name} é agora o teste ativo.` });
     }
     setToggling(null);
   };
