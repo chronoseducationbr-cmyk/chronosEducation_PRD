@@ -127,7 +127,7 @@ serve(async (req) => {
     const emailPayload: Record<string, unknown> = {
       from: "Chronos Education <contato@info.chronoseducation.com>",
       to: [email],
-      subject: "Matrícula confirmada — Dual Diploma | Chronos Education",
+      subject: "Matrícula confirmada",
       html: buildEmailHtml(name, studentName || ""),
       reply_to: "chronoseducationbr@gmail.com",
     };
