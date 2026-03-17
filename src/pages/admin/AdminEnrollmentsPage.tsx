@@ -129,6 +129,14 @@ const AdminEnrollmentsPage = () => {
     }
     setQuizResults(resultsMap);
 
+    // Load test slug map
+    const { data: tests } = await supabase.from("quiz_tests" as any).select("id, slug");
+    const slugMap: Record<string, string> = {};
+    if (tests) {
+      (tests as any[]).forEach((t: any) => { slugMap[t.id] = t.slug; });
+    }
+    setTestSlugMap(slugMap);
+
     setEnrollments(enrs);
     setLoading(false);
   };
