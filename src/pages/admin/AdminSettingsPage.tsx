@@ -135,107 +135,110 @@ const AdminSettingsPage = () => {
           )}
         </div>
 
-            {/* Test list (only when enabled) */}
-            {quizEnabled && (
-              <div className="space-y-3 pl-4 border-l-2 border-secondary/30">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Selecionar teste ativo</p>
-                {tests.map((test) => (
+        {loading ? (
+          <div className="animate-pulse h-20 bg-muted rounded-xl" />
+        ) : tests.length === 0 ? (
+          <p className="text-muted-foreground text-sm">Nenhum teste configurado.</p>
+        ) : quizEnabled ? (
+          <div className="space-y-3 pl-4 border-l-2 border-secondary/30">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Selecionar teste ativo</p>
+            {tests.map((test) => (
+              <div
+                key={test.id}
+                className={`p-4 bg-card border rounded-xl transition-colors ${test.is_active ? "border-secondary" : "border-border"}`}
+              >
+                <div className="flex items-center justify-between">
                   <div
-                    key={test.id}
-                    className={`p-4 bg-card border rounded-xl transition-colors ${test.is_active ? "border-secondary" : "border-border"}`}
+                    className="flex items-center gap-3 cursor-pointer flex-1"
+                    onClick={() => setExpandedId(expandedId === test.id ? null : test.id)}
                   >
-                    <div className="flex items-center justify-between">
-                      <div
-                        className="flex items-center gap-3 cursor-pointer flex-1"
-                        onClick={() => setExpandedId(expandedId === test.id ? null : test.id)}
-                      >
-                        {expandedId === test.id ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
-                        <div>
-                          <p className="font-medium text-foreground">{test.name}</p>
-                          {expandedId !== test.id && test.description && (
-                            <p className="text-xs text-muted-foreground truncate max-w-md">{test.description}</p>
-                          )}
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => handleSelectTest(test)}
-                        disabled={toggling === test.id}
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
-                          test.is_active
-                            ? "border-secondary bg-secondary"
-                            : "border-muted-foreground/40 hover:border-secondary"
-                        }`}
-                      >
-                        {test.is_active && <div className="w-2 h-2 rounded-full bg-secondary-foreground" />}
-                      </button>
+                    {expandedId === test.id ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
+                    <div>
+                      <p className="font-medium text-foreground">{test.name}</p>
+                      {expandedId !== test.id && test.description && (
+                        <p className="text-xs text-muted-foreground truncate max-w-md">{test.description}</p>
+                      )}
                     </div>
+                  </div>
+                  <button
+                    onClick={() => handleSelectTest(test)}
+                    disabled={toggling === test.id}
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                      test.is_active
+                        ? "border-secondary bg-secondary"
+                        : "border-muted-foreground/40 hover:border-secondary"
+                    }`}
+                  >
+                    {test.is_active && <div className="w-2 h-2 rounded-full bg-secondary-foreground" />}
+                  </button>
+                </div>
 
-                    {expandedId === test.id && (
-                      <div className="mt-3 space-y-3">
-                        {editingId === test.id ? (
-                          <div className="flex items-start gap-2">
-                            <textarea
-                              value={editValue}
-                              onChange={(e) => setEditValue(e.target.value)}
-                              className="flex-1 text-sm rounded-lg border border-border bg-background p-2 text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-secondary"
-                              rows={2}
-                              placeholder="Descrição do teste..."
-                            />
-                            <button onClick={() => handleSaveDescription(test)} className="p-1.5 rounded-md hover:bg-muted text-secondary">
-                              <Check size={16} />
-                            </button>
-                            <button onClick={() => setEditingId(null)} className="p-1.5 rounded-md hover:bg-muted text-muted-foreground">
-                              <X size={16} />
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="flex items-start gap-2">
-                            <p className="text-sm text-muted-foreground flex-1">
-                              {test.description || <span className="italic">Sem descrição</span>}
-                            </p>
-                            <button
-                              onClick={() => { setEditingId(test.id); setEditValue(test.description || ""); }}
-                              className="p-1.5 rounded-md hover:bg-muted text-muted-foreground shrink-0"
-                            >
-                              <Pencil size={14} />
-                            </button>
-                          </div>
-                        )}
+                {expandedId === test.id && (
+                  <div className="mt-3 space-y-3">
+                    {editingId === test.id ? (
+                      <div className="flex items-start gap-2">
+                        <textarea
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          className="flex-1 text-sm rounded-lg border border-border bg-background p-2 text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-secondary"
+                          rows={2}
+                          placeholder="Descrição do teste..."
+                        />
+                        <button onClick={() => handleSaveDescription(test)} className="p-1.5 rounded-md hover:bg-muted text-secondary">
+                          <Check size={16} />
+                        </button>
+                        <button onClick={() => setEditingId(null)} className="p-1.5 rounded-md hover:bg-muted text-muted-foreground">
+                          <X size={16} />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex items-start gap-2">
+                        <p className="text-sm text-muted-foreground flex-1">
+                          {test.description || <span className="italic">Sem descrição</span>}
+                        </p>
+                        <button
+                          onClick={() => { setEditingId(test.id); setEditValue(test.description || ""); }}
+                          className="p-1.5 rounded-md hover:bg-muted text-muted-foreground shrink-0"
+                        >
+                          <Pencil size={14} />
+                        </button>
+                      </div>
+                    )}
 
-                        {scoringConfigs[test.slug] && (
-                          <div className="bg-muted/50 rounded-lg p-3">
-                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Graus de Classificação</p>
-                            <div className="space-y-1">
-                              {(() => {
-                                const config = scoringConfigs[test.slug];
-                                const cls = [...config.classifications].reverse();
-                                return cls.map((c, i) => {
-                                  const nextMin = i < cls.length - 1 ? cls[i + 1].minPoints - 1 : config.maxPoints;
-                                  const rangeLabel = c.minPoints === 0
-                                    ? `0 – ${nextMin} pontos`
-                                    : i === cls.length - 1
-                                      ? `${c.minPoints} – ${config.maxPoints} pontos`
-                                      : `${c.minPoints} – ${nextMin} pontos`;
-                                  return (
-                                    <div key={c.level} className="flex items-center justify-between text-sm">
-                                      <span className="font-medium text-foreground">
-                                        {c.level}{c.label ? ` — ${c.label}` : ""}
-                                      </span>
-                                      <span className="text-muted-foreground text-xs">{rangeLabel}</span>
-                                    </div>
-                                  );
-                                });
-                              })()}
-                            </div>
-                          </div>
-                        )}
+                    {scoringConfigs[test.slug] && (
+                      <div className="bg-muted/50 rounded-lg p-3">
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Graus de Classificação</p>
+                        <div className="space-y-1">
+                          {(() => {
+                            const config = scoringConfigs[test.slug];
+                            const cls = [...config.classifications].reverse();
+                            return cls.map((c, i) => {
+                              const nextMin = i < cls.length - 1 ? cls[i + 1].minPoints - 1 : config.maxPoints;
+                              const rangeLabel = c.minPoints === 0
+                                ? `0 – ${nextMin} pontos`
+                                : i === cls.length - 1
+                                  ? `${c.minPoints} – ${config.maxPoints} pontos`
+                                  : `${c.minPoints} – ${nextMin} pontos`;
+                              return (
+                                <div key={c.level} className="flex items-center justify-between text-sm">
+                                  <span className="font-medium text-foreground">
+                                    {c.level}{c.label ? ` — ${c.label}` : ""}
+                                  </span>
+                                  <span className="text-muted-foreground text-xs">{rangeLabel}</span>
+                                </div>
+                              );
+                            });
+                          })()}
+                        </div>
                       </div>
                     )}
                   </div>
-                ))}
+                )}
               </div>
-            )}
+            ))}
           </div>
+        ) : (
+          <p className="text-sm text-muted-foreground italic">Testes de inglês desativados.</p>
         )}
       </div>
     </div>
