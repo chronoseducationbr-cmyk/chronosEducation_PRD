@@ -341,6 +341,22 @@ const DashboardPage = () => {
       }
     }
 
+    // Validate referral email if provided
+    const referralEmail = referralRef.current?.trim();
+    if (referralEmail) {
+      const { data: referralEnrollment } = await supabase
+        .from("enrollments")
+        .select("id")
+        .ilike("student_email", referralEmail)
+        .limit(1);
+
+      if (!referralEnrollment || referralEnrollment.length === 0) {
+        setValidationErrors(["referralEmail"]);
+        toast({ title: "Aluno indicado não encontrado", description: "O email indicado não corresponde a nenhum aluno matriculado.", variant: "destructive" });
+        return false;
+      }
+    }
+
     setValidationErrors([]);
     return true;
   };
