@@ -162,7 +162,7 @@ const AdminSettingsPage = () => {
                     {/* Classificações */}
                     {scoringConfigs[test.slug] && (
                       <div className="bg-muted/50 rounded-lg p-3">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Patamares de Classificação</p>
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Graus de Classificação</p>
                         <div className="space-y-1">
                           {(() => {
                             const config = scoringConfigs[test.slug];
