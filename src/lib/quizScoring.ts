@@ -1,21 +1,59 @@
 import type { QuizQuestion } from "@/data/englishQuizQuestions";
 
+interface TestScoringConfig {
+  getWeight: (questionId: number) => number;
+  classifications: { minPoints: number; level: string; label: string }[];
+}
+
+const scoringConfigs: Record<string, TestScoringConfig> = {
+  test1: {
+    getWeight: (id) => {
+      if (id >= 55) return 3;
+      if (id >= 47) return 2;
+      return 1;
+    },
+    classifications: [
+      { minPoints: 75, level: "C2", label: "Proficiente" },
+      { minPoints: 61, level: "C1", label: "Avançado" },
+      { minPoints: 51, level: "B2", label: "Intermédio Superior" },
+      { minPoints: 41, level: "B1", label: "Intermédio" },
+      { minPoints: 31, level: "A2", label: "Elementar" },
+      { minPoints: 21, level: "A1", label: "Iniciante" },
+      { minPoints: 0, level: "A0", label: "" },
+    ],
+  },
+  test2: {
+    getWeight: () => 1,
+    classifications: [
+      { minPoints: 54, level: "B2", label: "Intermédio Superior" },
+      { minPoints: 45, level: "B1", label: "Intermédio" },
+      { minPoints: 35, level: "A2", label: "Elementar" },
+      { minPoints: 0, level: "A1", label: "Iniciante" },
+    ],
+  },
+};
+
+const defaultConfig = scoringConfigs.test1;
+
+function getConfig(testSlug?: string): TestScoringConfig {
+  return (testSlug && scoringConfigs[testSlug]) || defaultConfig;
+}
+
 /**
  * Calculate weighted score for quiz answers.
- * - Questions 1-46: 1 point each
- * - Questions 47-54: 2 points each
- * - Questions 55-60: 3 points each
  */
 export function calculateQuizScore(
   questions: QuizQuestion[],
-  answers: Record<number, string>
+  answers: Record<number, string>,
+  testSlug?: string
 ): { scorePoints: number; maxPoints: number; correctCount: number } {
+  const config = getConfig(testSlug);
   let scorePoints = 0;
   let maxPoints = 0;
   let correctCount = 0;
 
   for (const q of questions) {
-    const weight = getQuestionWeight(q.id);
+    const weight = config.getWeight(q.id);
     maxPoints += weight;
 
     const userAnswer = answers[q.id];
@@ -28,12 +66,6 @@ export function calculateQuizScore(
   return { scorePoints, maxPoints, correctCount };
 }
 
-function getQuestionWeight(questionId: number): number {
-  if (questionId >= 55) return 3;
-  if (questionId >= 47) return 2;
-  return 1;
-}
-
 export interface Classification {
   level: string;
   label: string;
@@ -42,12 +74,12 @@ export interface Classification {
 /**
  * Get CEFR classification based on total score points.
  */
-export function getClassification(scorePoints: number): Classification {
-  if (scorePoints >= 75) return { level: "C2", label: "Proficiente" };
-  if (scorePoints >= 61) return { level: "C1", label: "Avançado" };
-  if (scorePoints >= 51) return { level: "B2", label: "Intermédio Superior" };
-  if (scorePoints >= 41) return { level: "B1", label: "Intermédio" };
-  if (scorePoints >= 31) return { level: "A2", label: "Elementar" };
-  if (scorePoints >= 21) return { level: "A1", label: "Iniciante" };
+export function getClassification(scorePoints: number, testSlug?: string): Classification {
+  const config = getConfig(testSlug);
+  for (const cls of config.classifications) {
+    if (scorePoints >= cls.minPoints) {
+      return { level: cls.level, label: cls.label };
+    }
+  }
   return { level: "A0", label: "" };
 }

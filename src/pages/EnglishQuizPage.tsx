@@ -25,6 +25,7 @@ const EnglishQuizPage = () => {
   const [finished, setFinished] = useState(false);
   const [saving, setSaving] = useState(false);
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
+  const [testSlug, setTestSlug] = useState<string>("test1");
   const [loadingTest, setLoadingTest] = useState(true);
 
   const total = quizQuestions.length;
@@ -54,7 +55,7 @@ const EnglishQuizPage = () => {
   const saveResults = async (finalAnswers: Record<number, string>) => {
     if (!user || !enrollmentId) return;
     setSaving(true);
-    const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, finalAnswers);
+    const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, finalAnswers, testSlug);
 
     const { error } = await supabase.from("quiz_results" as any).insert({
       enrollment_id: enrollmentId,
@@ -97,6 +98,7 @@ const EnglishQuizPage = () => {
           const slug = (test as any).slug as string;
           const questions = quizTestsMap[slug];
           if (questions) {
+            setTestSlug(slug);
             setQuizQuestions(questions);
             setLoadingTest(false);
             return;
@@ -165,8 +167,8 @@ const EnglishQuizPage = () => {
   }
 
   if (finished) {
-    const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, answers);
-    const cls = getClassification(scorePoints);
+    const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, answers, testSlug);
+    const cls = getClassification(scorePoints, testSlug);
 
     return (
       <div className="min-h-screen bg-background">

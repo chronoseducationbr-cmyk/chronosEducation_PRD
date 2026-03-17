@@ -59,6 +59,7 @@ interface Enrollment {
   contract_signed_at: string | null;
   tuition_start_date: string | null;
   summercamp_start_date: string | null;
+  quiz_test_id: string | null;
   guardian?: Guardian;
 }
 
@@ -84,6 +85,7 @@ const AdminEnrollmentsPage = () => {
   const { toast } = useToast();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }>>({});
+  const [testSlugMap, setTestSlugMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
@@ -126,6 +128,14 @@ const AdminEnrollmentsPage = () => {
       });
     }
     setQuizResults(resultsMap);
+
+    // Load test slug map
+    const { data: tests } = await supabase.from("quiz_tests" as any).select("id, slug");
+    const slugMap: Record<string, string> = {};
+    if (tests) {
+      (tests as any[]).forEach((t: any) => { slugMap[t.id] = t.slug; });
+    }
+    setTestSlugMap(slugMap);
 
     setEnrollments(enrs);
     setLoading(false);
@@ -453,7 +463,7 @@ const AdminEnrollmentsPage = () => {
                       {quizResults[e.id] ? (
                         <div className="flex items-center gap-2 text-sm">
                           {(() => {
-                            const cls = getClassification(quizResults[e.id].score_points);
+                            const cls = getClassification(quizResults[e.id].score_points, e.quiz_test_id ? testSlugMap[e.quiz_test_id] : undefined);
                             return (
                               <>
                                 <CheckCircle2 size={16} className="text-secondary" />
