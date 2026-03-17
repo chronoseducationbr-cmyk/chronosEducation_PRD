@@ -463,7 +463,7 @@ const AdminEnrollmentsPage = () => {
                       {quizResults[e.id] ? (
                         <div className="flex items-center gap-2 text-sm">
                           {(() => {
-                            const cls = getClassification(quizResults[e.id].score_points);
+                            const cls = getClassification(quizResults[e.id].score_points, e.quiz_test_id ? testSlugMap[e.quiz_test_id] : undefined);
                             return (
                               <>
                                 <CheckCircle2 size={16} className="text-secondary" />
