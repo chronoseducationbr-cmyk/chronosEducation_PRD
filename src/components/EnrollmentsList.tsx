@@ -237,7 +237,8 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                         </div>
                       </div>
                      )}
-                     {/* English Test Section */}
+                     {/* Only show test section if enrollment has an active test */}
+                     {e.quiz_test_id && activeTestIds.has(e.quiz_test_id) && (
                      <div className="mt-3 pt-3 border-t border-border">
                        <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
                          <BookOpen size={14} className="text-secondary" />
@@ -260,6 +261,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                           </button>
                        )}
                      </div>
+                     )}
                   </div>
                 )}
               </div>
