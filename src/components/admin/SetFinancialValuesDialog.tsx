@@ -341,7 +341,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
             </div>
           </div>
 
-          <DialogFooter className="flex-col sm:flex-row gap-2">
+          <DialogFooter className="flex-col sm:flex-row gap-2 pt-4 border-t border-border shrink-0">
             <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
             <Button variant="secondary" onClick={handleSave} disabled={saving}>
               {saving ? "A guardar..." : "Guardar"}
