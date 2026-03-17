@@ -1,0 +1,1 @@
+ALTER TABLE public.quiz_tests ADD COLUMN description text NOT NULL DEFAULT '';
