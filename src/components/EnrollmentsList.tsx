@@ -53,7 +53,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
       if (!user) return;
       setLoading(true);
 
-      const [{ data }, { data: qr }] = await Promise.all([
+      const [{ data }, { data: qr }, { data: activeTests }] = await Promise.all([
         supabase
           .from("enrollments")
           .select("*")
@@ -63,6 +63,10 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
           .from("quiz_results" as any)
           .select("enrollment_id, correct_count, total_questions")
           .eq("user_id", user.id),
+        supabase
+          .from("quiz_tests" as any)
+          .select("id")
+          .eq("is_active", true),
       ]);
 
       setEnrollments((data as Enrollment[]) || []);
