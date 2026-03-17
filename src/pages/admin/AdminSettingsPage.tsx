@@ -114,9 +114,9 @@ const AdminSettingsPage = () => {
                     {expandedId === test.id ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
                     <div>
                       <p className="font-medium text-foreground">{test.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        Slug: {test.slug} · {test.is_active ? "Ativo" : "Desativado"}
-                      </p>
+                      {expandedId !== test.id && test.description && (
+                        <p className="text-xs text-muted-foreground truncate max-w-md">{test.description}</p>
+                      )}
                     </div>
                   </div>
                   <Switch
