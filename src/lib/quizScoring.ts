@@ -6,7 +6,7 @@ export interface TestScoringConfig {
   maxPoints: number;
 }
 
-const scoringConfigs: Record<string, TestScoringConfig> = {
+export const scoringConfigs: Record<string, TestScoringConfig> = {
   test1: {
     maxPoints: 80,
     getWeight: (id) => {
