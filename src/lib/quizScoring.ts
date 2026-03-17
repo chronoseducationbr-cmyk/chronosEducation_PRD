@@ -1,8 +1,9 @@
 import type { QuizQuestion } from "@/data/englishQuizQuestions";
 
-interface TestScoringConfig {
+export interface TestScoringConfig {
   getWeight: (questionId: number) => number;
   classifications: { minPoints: number; level: string; label: string }[];
+  maxPoints: number;
 }
 
 const scoringConfigs: Record<string, TestScoringConfig> = {
