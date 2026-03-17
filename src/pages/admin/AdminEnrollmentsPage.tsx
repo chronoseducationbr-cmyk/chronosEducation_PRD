@@ -465,12 +465,35 @@ const AdminEnrollmentsPage = () => {
                         <div className="flex items-center gap-2 text-sm">
                           {(() => {
                             const cls = getClassification(quizResults[e.id].score_points, e.quiz_test_id ? testSlugMap[e.quiz_test_id] : undefined);
+                            const levelDescriptions: Record<string, string> = {
+                              "A0": "Os alunos neste nível estão começando a aprender as suas primeiras palavras.",
+                              "A1": "Os alunos que atingem o nível A1 conseguem comunicar usando expressões do dia a dia familiares e frases muito básicas.",
+                              "A2": "Os alunos que atingem o nível A2 conseguem comunicar usando expressões frequentes em situações do dia a dia.",
+                              "B1": "Os alunos que atingem o nível B1 conseguem compreender informação sobre temas familiares. Conseguem comunicar na maioria das situações enquanto viajam para países de língua inglesa.",
+                              "B2": "Os alunos que atingem o nível B2 conseguem compreender as principais ideias de textos complexos. Conseguem interagir com alguma fluência e comunicar facilmente.",
+                              "C1": "Os alunos que atingem o nível C1 conseguem compreender uma vasta gama de textos longos e complexos.",
+                              "C2": "Os alunos que atingem o nível C2 conseguem facilmente compreender quase tudo o que ouvem ou escrevem. Conseguem expressar-se de forma fluente e espontânea com precisão em situações complexas.",
+                            };
                             return (
                               <>
                                 <CheckCircle2 size={16} className="text-secondary" />
                                 <span className="text-foreground font-semibold">
                                   {cls.level}{cls.label ? ` (${cls.label})` : ""}
                                 </span>
+                                {levelDescriptions[cls.level] && (
+                                  <TooltipProvider delayDuration={200}>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <button type="button" className="text-muted-foreground hover:text-foreground transition-colors">
+                                          <Info size={14} />
+                                        </button>
+                                      </TooltipTrigger>
+                                      <TooltipContent side="top" className="max-w-xs text-xs leading-relaxed">
+                                        {levelDescriptions[cls.level]}
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                )}
                                 <span className="text-muted-foreground text-xs ml-1">
                                   {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pts · {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} certas
                                 </span>
