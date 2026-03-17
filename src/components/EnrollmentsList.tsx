@@ -62,7 +62,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
           .order("created_at", { ascending: false }),
         supabase
           .from("quiz_results" as any)
-          .select("enrollment_id, correct_count, total_questions")
+          .select("enrollment_id, correct_count, total_questions, score_points, max_points")
           .eq("user_id", user.id),
         supabase
           .from("quiz_tests" as any)
@@ -72,10 +72,10 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
 
       setEnrollments((data as Enrollment[]) || []);
 
-      const resultsMap: Record<string, { correct_count: number; total_questions: number }> = {};
+      const resultsMap: Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }> = {};
       if (qr) {
         (qr as any[]).forEach((r: any) => {
-          resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions };
+          resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions, score_points: r.score_points || 0, max_points: r.max_points || 0 };
         });
       }
       setQuizResults(resultsMap);
