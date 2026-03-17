@@ -101,11 +101,19 @@ const DashboardPage = () => {
     setPaying(true);
     try {
       // Check if student email is already enrolled
-      const { data: existingEnrollment } = await supabase
-        .from("enrollments")
-        .select("id")
-        .eq("student_email", s.studentEmail.trim())
-        .maybeSingle();
+      const [{ data: existingEnrollment }, { data: activeTest }] = await Promise.all([
+        supabase
+          .from("enrollments")
+          .select("id")
+          .eq("student_email", s.studentEmail.trim())
+          .maybeSingle(),
+        supabase
+          .from("quiz_tests" as any)
+          .select("id")
+          .eq("is_active", true)
+          .limit(1)
+          .maybeSingle(),
+      ]);
 
       if (existingEnrollment) {
         toast({ title: "Email já inscrito", description: "Já existe uma matrícula com este email de aluno.", variant: "destructive" });
