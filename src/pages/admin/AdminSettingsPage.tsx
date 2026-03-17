@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info } from "lucide-react";
+import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info, FileText, DollarSign } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { scoringConfigs } from "@/lib/quizScoring";
+import { Separator } from "@/components/ui/separator";
 
 interface QuizTest {
   id: string;
@@ -15,8 +16,29 @@ interface QuizTest {
   created_at: string;
 }
 
+interface AppSettings {
+  contract_enabled: boolean;
+  default_inscription_fee_cents: number;
+  default_tuition_installment_cents: number;
+  default_tuition_installments: number;
+  default_summercamp_installment_cents: number;
+  default_summercamp_installments: number;
+  contract_text: string;
+}
+
+const defaultSettings: AppSettings = {
+  contract_enabled: true,
+  default_inscription_fee_cents: 80000,
+  default_tuition_installment_cents: 45000,
+  default_tuition_installments: 16,
+  default_summercamp_installment_cents: 0,
+  default_summercamp_installments: 6,
+  contract_text: "",
+};
+
 const AdminSettingsPage = () => {
   const { toast } = useToast();
+  // Quiz state
   const [tests, setTests] = useState<QuizTest[]>([]);
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState<string | null>(null);
@@ -24,8 +46,24 @@ const AdminSettingsPage = () => {
   const [editValue, setEditValue] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
+  // Contract/settings state
+  const [settings, setSettings] = useState<AppSettings>(defaultSettings);
+  const [loadingSettings, setLoadingSettings] = useState(true);
+  const [savingSettings, setSavingSettings] = useState(false);
+  const [editingContract, setEditingContract] = useState(false);
+  const [contractDraft, setContractDraft] = useState("");
+  const [editingFinancials, setEditingFinancials] = useState(false);
+  const [financialDraft, setFinancialDraft] = useState({
+    inscription: 800,
+    tuition: 450,
+    tuitionInstallments: 16,
+    summercamp: 0,
+    summercampInstallments: 6,
+  });
+
   useEffect(() => {
     loadTests();
+    loadSettings();
   }, []);
 
   const loadTests = async () => {
@@ -44,16 +82,54 @@ const AdminSettingsPage = () => {
     setLoading(false);
   };
 
+  const loadSettings = async () => {
+    setLoadingSettings(true);
+    const { data, error } = await supabase
+      .from("app_settings" as any)
+      .select("*")
+      .eq("id", 1)
+      .single();
+
+    if (data && !error) {
+      const s = data as any;
+      setSettings({
+        contract_enabled: s.contract_enabled,
+        default_inscription_fee_cents: s.default_inscription_fee_cents,
+        default_tuition_installment_cents: s.default_tuition_installment_cents,
+        default_tuition_installments: s.default_tuition_installments,
+        default_summercamp_installment_cents: s.default_summercamp_installment_cents,
+        default_summercamp_installments: s.default_summercamp_installments,
+        contract_text: s.contract_text || "",
+      });
+    }
+    setLoadingSettings(false);
+  };
+
+  const updateSettings = async (partial: Partial<AppSettings>) => {
+    setSavingSettings(true);
+    const { error } = await supabase
+      .from("app_settings" as any)
+      .update({ ...partial, updated_at: new Date().toISOString() } as any)
+      .eq("id", 1);
+
+    if (error) {
+      toast({ title: "Erro ao guardar configuração", variant: "destructive" });
+    } else {
+      setSettings((prev) => ({ ...prev, ...partial }));
+      toast({ title: "Configuração guardada" });
+    }
+    setSavingSettings(false);
+  };
+
+  // Quiz handlers
   const quizEnabled = tests.some((t) => t.is_active);
 
   const handleGeneralToggle = async () => {
     if (quizEnabled) {
-      // Deactivate all tests
       const { error } = await supabase
         .from("quiz_tests")
         .update({ is_active: false } as any)
         .in("id", tests.map((t) => t.id));
-
       if (error) {
         toast({ title: "Erro ao desativar testes", variant: "destructive" });
       } else {
@@ -61,14 +137,12 @@ const AdminSettingsPage = () => {
         toast({ title: "Testes de inglês desativados" });
       }
     } else {
-      // Enable: activate the first test by default
       const first = tests[0];
       if (first) {
         const { error } = await supabase
           .from("quiz_tests")
           .update({ is_active: true } as any)
           .eq("id", first.id);
-
         if (error) {
           toast({ title: "Erro ao ativar teste", variant: "destructive" });
         } else {
@@ -82,18 +156,14 @@ const AdminSettingsPage = () => {
   const handleSelectTest = async (selectedTest: QuizTest) => {
     if (selectedTest.is_active) return;
     setToggling(selectedTest.id);
-
-    // Deactivate all, then activate the selected one
     await supabase
       .from("quiz_tests")
       .update({ is_active: false } as any)
       .in("id", tests.map((t) => t.id));
-
     const { error } = await supabase
       .from("quiz_tests")
       .update({ is_active: true } as any)
       .eq("id", selectedTest.id);
-
     if (error) {
       toast({ title: "Erro ao selecionar teste", variant: "destructive" });
     } else {
@@ -108,135 +178,155 @@ const AdminSettingsPage = () => {
       .from("quiz_tests")
       .update({ description: editValue } as any)
       .eq("id", test.id);
-
     if (error) {
       toast({ title: "Erro ao guardar descrição", variant: "destructive" });
     } else {
-      setTests((prev) =>
-        prev.map((t) => (t.id === test.id ? { ...t, description: editValue } : t))
-      );
+      setTests((prev) => prev.map((t) => (t.id === test.id ? { ...t, description: editValue } : t)));
       toast({ title: "Descrição atualizada" });
     }
     setEditingId(null);
   };
 
+  // Contract handlers
+  const handleContractToggle = () => {
+    updateSettings({ contract_enabled: !settings.contract_enabled });
+  };
+
+  const handleSaveContractText = () => {
+    updateSettings({ contract_text: contractDraft });
+    setEditingContract(false);
+  };
+
+  const handleSaveFinancials = () => {
+    updateSettings({
+      default_inscription_fee_cents: financialDraft.inscription * 100,
+      default_tuition_installment_cents: financialDraft.tuition * 100,
+      default_tuition_installments: financialDraft.tuitionInstallments,
+      default_summercamp_installment_cents: financialDraft.summercamp * 100,
+      default_summercamp_installments: financialDraft.summercampInstallments,
+    });
+    setEditingFinancials(false);
+  };
+
+  const levelDescriptions: Record<string, string> = {
+    "A0": "Os alunos neste nível estão começando a aprender as suas primeiras palavras.",
+    "A1": "Os alunos que atingem o nível A1 conseguem comunicar usando expressões do dia a dia familiares e frases muito básicas.",
+    "A2": "Os alunos que atingem o nível A2 conseguem comunicar usando expressões frequentes em situações do dia a dia.",
+    "B1": "Os alunos que atingem o nível B1 conseguem compreender informação sobre temas familiares. Conseguem comunicar na maioria das situações enquanto viajam para países de língua inglesa.",
+    "B2": "Os alunos que atingem o nível B2 conseguem compreender as principais ideias de textos complexos. Conseguem interagir com alguma fluência e comunicar facilmente.",
+    "C1": "Os alunos que atingem o nível C1 conseguem compreender uma vasta gama de textos longos e complexos.",
+    "C2": "Os alunos que atingem o nível C2 conseguem facilmente compreender quase tudo o que ouvem ou escrevem. Conseguem expressar-se de forma fluente e espontânea com precisão em situações complexas.",
+  };
+
   return (
     <div>
       <h1 className="font-heading text-2xl font-bold text-foreground mb-1">Configurações</h1>
-      <p className="text-muted-foreground mb-8">Gerir testes de inglês e outras configurações.</p>
+      <p className="text-muted-foreground mb-8">Gerir testes de inglês, contrato e valores padrão.</p>
 
-      <div className="max-w-2xl">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-heading text-lg font-semibold text-foreground flex items-center gap-2">
-            <BookOpen size={20} className="text-secondary" />
-            Testes de Inglês
-          </h2>
-          {!loading && tests.length > 0 && (
-            <Switch checked={quizEnabled} onCheckedChange={handleGeneralToggle} />
-          )}
-        </div>
+      <div className="max-w-2xl space-y-10">
+        {/* ─── Testes de Inglês ─── */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-heading text-lg font-semibold text-foreground flex items-center gap-2">
+              <BookOpen size={20} className="text-secondary" />
+              Testes de Inglês
+            </h2>
+            {!loading && tests.length > 0 && (
+              <Switch checked={quizEnabled} onCheckedChange={handleGeneralToggle} />
+            )}
+          </div>
 
-        {loading ? (
-          <div className="animate-pulse h-20 bg-muted rounded-xl" />
-        ) : tests.length === 0 ? (
-          <p className="text-muted-foreground text-sm">Nenhum teste configurado.</p>
-        ) : quizEnabled ? (
-          <div className="space-y-3 pl-4 border-l-2 border-secondary/30">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Selecionar teste ativo</p>
-            {tests.map((test) => (
-              <div
-                key={test.id}
-                className={`p-4 bg-card border rounded-xl transition-colors ${test.is_active ? "border-secondary" : "border-border"}`}
-              >
-                <div className="flex items-center justify-between">
-                  <div
-                    className="flex items-center gap-3 cursor-pointer flex-1"
-                    onClick={() => setExpandedId(expandedId === test.id ? null : test.id)}
-                  >
-                    {expandedId === test.id ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
-                    <div>
-                      <p className="font-medium text-foreground">{test.name}</p>
-                      {expandedId !== test.id && test.description && (
-                        <p className="text-xs text-muted-foreground truncate max-w-md">{test.description}</p>
-                      )}
+          {loading ? (
+            <div className="animate-pulse h-20 bg-muted rounded-xl" />
+          ) : tests.length === 0 ? (
+            <p className="text-muted-foreground text-sm">Nenhum teste configurado.</p>
+          ) : quizEnabled ? (
+            <div className="space-y-3 pl-4 border-l-2 border-secondary/30">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Selecionar teste ativo</p>
+              {tests.map((test) => (
+                <div
+                  key={test.id}
+                  className={`p-4 bg-card border rounded-xl transition-colors ${test.is_active ? "border-secondary" : "border-border"}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div
+                      className="flex items-center gap-3 cursor-pointer flex-1"
+                      onClick={() => setExpandedId(expandedId === test.id ? null : test.id)}
+                    >
+                      {expandedId === test.id ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
+                      <div>
+                        <p className="font-medium text-foreground">{test.name}</p>
+                        {expandedId !== test.id && test.description && (
+                          <p className="text-xs text-muted-foreground truncate max-w-md">{test.description}</p>
+                        )}
+                      </div>
                     </div>
+                    <button
+                      onClick={() => handleSelectTest(test)}
+                      disabled={toggling === test.id}
+                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                        test.is_active
+                          ? "border-secondary bg-secondary"
+                          : "border-muted-foreground/40 hover:border-secondary"
+                      }`}
+                    >
+                      {test.is_active && <div className="w-2 h-2 rounded-full bg-secondary-foreground" />}
+                    </button>
                   </div>
-                  <button
-                    onClick={() => handleSelectTest(test)}
-                    disabled={toggling === test.id}
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
-                      test.is_active
-                        ? "border-secondary bg-secondary"
-                        : "border-muted-foreground/40 hover:border-secondary"
-                    }`}
-                  >
-                    {test.is_active && <div className="w-2 h-2 rounded-full bg-secondary-foreground" />}
-                  </button>
-                </div>
 
-                {expandedId === test.id && (
-                  <div className="mt-3 space-y-3">
-                    {editingId === test.id ? (
-                      <div className="flex items-start gap-2">
-                        <textarea
-                          value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
-                          className="flex-1 text-sm rounded-lg border border-border bg-background p-2 text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-secondary"
-                          rows={2}
-                          placeholder="Descrição do teste..."
-                        />
-                        <button onClick={() => handleSaveDescription(test)} className="p-1.5 rounded-md hover:bg-muted text-secondary">
-                          <Check size={16} />
-                        </button>
-                        <button onClick={() => setEditingId(null)} className="p-1.5 rounded-md hover:bg-muted text-muted-foreground">
-                          <X size={16} />
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="flex items-start gap-2">
-                        <p className="text-sm text-muted-foreground flex-1">
-                          {test.description || <span className="italic">Sem descrição</span>}
-                        </p>
-                        <button
-                          onClick={() => { setEditingId(test.id); setEditValue(test.description || ""); }}
-                          className="p-1.5 rounded-md hover:bg-muted text-muted-foreground shrink-0"
-                        >
-                          <Pencil size={14} />
-                        </button>
-                      </div>
-                    )}
+                  {expandedId === test.id && (
+                    <div className="mt-3 space-y-3">
+                      {editingId === test.id ? (
+                        <div className="flex items-start gap-2">
+                          <textarea
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            className="flex-1 text-sm rounded-lg border border-border bg-background p-2 text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-secondary"
+                            rows={2}
+                            placeholder="Descrição do teste..."
+                          />
+                          <button onClick={() => handleSaveDescription(test)} className="p-1.5 rounded-md hover:bg-muted text-secondary">
+                            <Check size={16} />
+                          </button>
+                          <button onClick={() => setEditingId(null)} className="p-1.5 rounded-md hover:bg-muted text-muted-foreground">
+                            <X size={16} />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-start gap-2">
+                          <p className="text-sm text-muted-foreground flex-1">
+                            {test.description || <span className="italic">Sem descrição</span>}
+                          </p>
+                          <button
+                            onClick={() => { setEditingId(test.id); setEditValue(test.description || ""); }}
+                            className="p-1.5 rounded-md hover:bg-muted text-muted-foreground shrink-0"
+                          >
+                            <Pencil size={14} />
+                          </button>
+                        </div>
+                      )}
 
-                    {scoringConfigs[test.slug] && (
-                      <div className="bg-muted/50 rounded-lg p-3">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Graus de Classificação</p>
-                        <div className="space-y-1">
-                          {(() => {
-                            const config = scoringConfigs[test.slug];
-                            const cls = [...config.classifications].reverse();
-                            return cls.map((c, i) => {
-                              const nextMin = i < cls.length - 1 ? cls[i + 1].minPoints - 1 : config.maxPoints;
-                              const rangeLabel = c.minPoints === 0
-                                ? `0 – ${nextMin} pontos`
-                                : i === cls.length - 1
-                                  ? `${c.minPoints} – ${config.maxPoints} pontos`
-                                  : `${c.minPoints} – ${nextMin} pontos`;
-                              return (
-                                <div key={c.level} className="flex items-center justify-between text-sm">
-                                  <div className="flex items-center gap-1.5">
-                                    <span className="font-medium text-foreground">
-                                      {c.level}{c.label ? ` — ${c.label}` : ""}
-                                    </span>
-                                    {(() => {
-                                      const levelDescriptions: Record<string, string> = {
-                                        "A0": "Os alunos neste nível estão começando a aprender as suas primeiras palavras.",
-                                        "A1": "Os alunos que atingem o nível A1 conseguem comunicar usando expressões do dia a dia familiares e frases muito básicas.",
-                                        "A2": "Os alunos que atingem o nível A2 conseguem comunicar usando expressões frequentes em situações do dia a dia.",
-                                        "B1": "Os alunos que atingem o nível B1 conseguem compreender informação sobre temas familiares. Conseguem comunicar na maioria das situações enquanto viajam para países de língua inglesa.",
-                                        "B2": "Os alunos que atingem o nível B2 conseguem compreender as principais ideias de textos complexos. Conseguem interagir com alguma fluência e comunicar facilmente.",
-                                        "C1": "Os alunos que atingem o nível C1 conseguem compreender uma vasta gama de textos longos e complexos.",
-                                        "C2": "Os alunos que atingem o nível C2 conseguem facilmente compreender quase tudo o que ouvem ou escrevem. Conseguem expressar-se de forma fluente e espontânea com precisão em situações complexas.",
-                                      };
-                                      return levelDescriptions[c.level] ? (
+                      {scoringConfigs[test.slug] && (
+                        <div className="bg-muted/50 rounded-lg p-3">
+                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Graus de Classificação</p>
+                          <div className="space-y-1">
+                            {(() => {
+                              const config = scoringConfigs[test.slug];
+                              const cls = [...config.classifications].reverse();
+                              return cls.map((c, i) => {
+                                const nextMin = i < cls.length - 1 ? cls[i + 1].minPoints - 1 : config.maxPoints;
+                                const rangeLabel = c.minPoints === 0
+                                  ? `0 – ${nextMin} pontos`
+                                  : i === cls.length - 1
+                                    ? `${c.minPoints} – ${config.maxPoints} pontos`
+                                    : `${c.minPoints} – ${nextMin} pontos`;
+                                return (
+                                  <div key={c.level} className="flex items-center justify-between text-sm">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="font-medium text-foreground">
+                                        {c.level}{c.label ? ` — ${c.label}` : ""}
+                                      </span>
+                                      {levelDescriptions[c.level] && (
                                         <TooltipProvider delayDuration={200}>
                                           <Tooltip>
                                             <TooltipTrigger asChild>
@@ -249,25 +339,239 @@ const AdminSettingsPage = () => {
                                             </TooltipContent>
                                           </Tooltip>
                                         </TooltipProvider>
-                                      ) : null;
-                                    })()}
+                                      )}
+                                    </div>
+                                    <span className="text-muted-foreground text-xs">{rangeLabel}</span>
                                   </div>
-                                  <span className="text-muted-foreground text-xs">{rangeLabel}</span>
-                                </div>
-                              );
-                            });
-                          })()}
+                                );
+                              });
+                            })()}
+                          </div>
                         </div>
-                      </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground italic">Testes de inglês desativados.</p>
+          )}
+        </div>
+
+        <Separator />
+
+        {/* ─── Gestão do Contrato ─── */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-heading text-lg font-semibold text-foreground flex items-center gap-2">
+              <FileText size={20} className="text-secondary" />
+              Contrato
+            </h2>
+            {!loadingSettings && (
+              <Switch checked={settings.contract_enabled} onCheckedChange={handleContractToggle} disabled={savingSettings} />
+            )}
+          </div>
+
+          {loadingSettings ? (
+            <div className="animate-pulse h-20 bg-muted rounded-xl" />
+          ) : !settings.contract_enabled ? (
+            <p className="text-sm text-muted-foreground italic">Contrato desativado. Os alunos não precisarão assinar contrato na matrícula.</p>
+          ) : (
+            <div className="space-y-4 pl-4 border-l-2 border-secondary/30">
+              {/* Contract text */}
+              <div className="bg-card border border-border rounded-xl p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Texto do Contrato</p>
+                  {!editingContract && (
+                    <button
+                      onClick={() => { setEditingContract(true); setContractDraft(settings.contract_text); }}
+                      className="p-1.5 rounded-md hover:bg-muted text-muted-foreground"
+                    >
+                      <Pencil size={14} />
+                    </button>
+                  )}
+                </div>
+                {editingContract ? (
+                  <div className="space-y-3">
+                    <textarea
+                      value={contractDraft}
+                      onChange={(e) => setContractDraft(e.target.value)}
+                      className="w-full text-sm rounded-lg border border-border bg-background p-3 text-foreground resize-vertical focus:outline-none focus:ring-1 focus:ring-secondary min-h-[200px]"
+                      rows={10}
+                      placeholder="Insira o texto do contrato aqui. Pode usar parágrafos separados por linhas em branco..."
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Dica: Utilize linhas em branco para separar parágrafos. Os dados do responsável e do aluno são inseridos automaticamente.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleSaveContractText}
+                        disabled={savingSettings}
+                        className="inline-flex items-center gap-1.5 bg-secondary text-secondary-foreground font-semibold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity text-sm disabled:opacity-50"
+                      >
+                        <Check size={14} />
+                        Guardar
+                      </button>
+                      <button
+                        onClick={() => setEditingContract(false)}
+                        className="inline-flex items-center gap-1.5 text-muted-foreground font-medium py-2 px-4 rounded-lg hover:bg-muted transition-colors text-sm"
+                      >
+                        <X size={14} />
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-muted/30 border border-border rounded-lg p-3 max-h-[200px] overflow-y-auto">
+                    {settings.contract_text ? (
+                      <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">{settings.contract_text}</p>
+                    ) : (
+                      <p className="text-sm text-muted-foreground italic">Nenhum texto de contrato personalizado definido. O contrato padrão será utilizado.</p>
                     )}
                   </div>
                 )}
               </div>
-            ))}
+            </div>
+          )}
+        </div>
+
+        <Separator />
+
+        {/* ─── Valores Financeiros Padrão ─── */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-heading text-lg font-semibold text-foreground flex items-center gap-2">
+              <DollarSign size={20} className="text-secondary" />
+              Valores Financeiros Padrão
+            </h2>
+            {!loadingSettings && !editingFinancials && (
+              <button
+                onClick={() => {
+                  setEditingFinancials(true);
+                  setFinancialDraft({
+                    inscription: settings.default_inscription_fee_cents / 100,
+                    tuition: settings.default_tuition_installment_cents / 100,
+                    tuitionInstallments: settings.default_tuition_installments,
+                    summercamp: settings.default_summercamp_installment_cents / 100,
+                    summercampInstallments: settings.default_summercamp_installments,
+                  });
+                }}
+                className="p-1.5 rounded-md hover:bg-muted text-muted-foreground"
+              >
+                <Pencil size={14} />
+              </button>
+            )}
           </div>
-        ) : (
-          <p className="text-sm text-muted-foreground italic">Testes de inglês desativados.</p>
-        )}
+
+          {loadingSettings ? (
+            <div className="animate-pulse h-20 bg-muted rounded-xl" />
+          ) : editingFinancials ? (
+            <div className="bg-card border border-border rounded-xl p-4 space-y-4">
+              <p className="text-xs text-muted-foreground">Estes valores serão aplicados como padrão em novas matrículas.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Taxa de Matrícula ($)</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min={0}
+                      value={financialDraft.inscription}
+                      onChange={(e) => setFinancialDraft((d) => ({ ...d, inscription: parseInt(e.target.value) || 0 }))}
+                      className="w-full rounded-lg border border-border bg-background p-2 pr-12 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">,00</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Plataforma ($)</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min={0}
+                      value={financialDraft.tuition}
+                      onChange={(e) => setFinancialDraft((d) => ({ ...d, tuition: parseInt(e.target.value) || 0 }))}
+                      className="w-full rounded-lg border border-border bg-background p-2 pr-12 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">,00</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Nº Parcelas Plataforma</label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={financialDraft.tuitionInstallments}
+                    onChange={(e) => setFinancialDraft((d) => ({ ...d, tuitionInstallments: parseInt(e.target.value) || 1 }))}
+                    className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Summer Camp ($)</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min={0}
+                      value={financialDraft.summercamp}
+                      onChange={(e) => setFinancialDraft((d) => ({ ...d, summercamp: parseInt(e.target.value) || 0 }))}
+                      className="w-full rounded-lg border border-border bg-background p-2 pr-12 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">,00</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Nº Parcelas Summer Camp</label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={financialDraft.summercampInstallments}
+                    onChange={(e) => setFinancialDraft((d) => ({ ...d, summercampInstallments: parseInt(e.target.value) || 1 }))}
+                    className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center gap-2 pt-2">
+                <button
+                  onClick={handleSaveFinancials}
+                  disabled={savingSettings}
+                  className="inline-flex items-center gap-1.5 bg-secondary text-secondary-foreground font-semibold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity text-sm disabled:opacity-50"
+                >
+                  <Check size={14} />
+                  Guardar
+                </button>
+                <button
+                  onClick={() => setEditingFinancials(false)}
+                  className="inline-flex items-center gap-1.5 text-muted-foreground font-medium py-2 px-4 rounded-lg hover:bg-muted transition-colors text-sm"
+                >
+                  <X size={14} />
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-card border border-border rounded-xl p-4">
+              <p className="text-xs text-muted-foreground mb-3">Valores aplicados por padrão em novas matrículas.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p className="text-muted-foreground text-xs">Taxa de Matrícula</p>
+                  <p className="text-foreground font-medium">${(settings.default_inscription_fee_cents / 100).toFixed(2)}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Mensalidade Plataforma</p>
+                  <p className="text-foreground font-medium">${(settings.default_tuition_installment_cents / 100).toFixed(2)} × {settings.default_tuition_installments} parcelas</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Mensalidade Summer Camp</p>
+                  <p className="text-foreground font-medium">
+                    {settings.default_summercamp_installment_cents > 0
+                      ? `$${(settings.default_summercamp_installment_cents / 100).toFixed(2)} × ${settings.default_summercamp_installments} parcelas`
+                      : "Não definido"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

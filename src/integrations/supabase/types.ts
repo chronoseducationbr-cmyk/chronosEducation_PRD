@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_settings: {
+        Row: {
+          contract_enabled: boolean
+          contract_text: string
+          default_inscription_fee_cents: number
+          default_summercamp_installment_cents: number
+          default_summercamp_installments: number
+          default_tuition_installment_cents: number
+          default_tuition_installments: number
+          id: number
+          updated_at: string
+        }
+        Insert: {
+          contract_enabled?: boolean
+          contract_text?: string
+          default_inscription_fee_cents?: number
+          default_summercamp_installment_cents?: number
+          default_summercamp_installments?: number
+          default_tuition_installment_cents?: number
+          default_tuition_installments?: number
+          id?: number
+          updated_at?: string
+        }
+        Update: {
+          contract_enabled?: boolean
+          contract_text?: string
+          default_inscription_fee_cents?: number
+          default_summercamp_installment_cents?: number
+          default_summercamp_installments?: number
+          default_tuition_installment_cents?: number
+          default_tuition_installments?: number
+          id?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
