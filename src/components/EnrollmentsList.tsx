@@ -260,8 +260,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                             </span>
                           </div>
                           );
-                       })()
-                       ) : (
+                       }) : (
                           <button
                             onClick={() => navigate(`/teste-ingles?enrollment=${e.id}`)}
                             className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#F9B91D] hover:text-[#F9B91D]/80 transition-colors"
