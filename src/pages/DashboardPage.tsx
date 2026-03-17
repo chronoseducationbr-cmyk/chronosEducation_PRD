@@ -480,7 +480,7 @@ const DashboardPage = () => {
                       </div>
 
                       <div className="mt-8">
-                        <ReferralSection onChange={handleReferralChange} />
+                        <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
                       </div>
 
                       <div className="mt-8">
