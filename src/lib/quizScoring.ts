@@ -1,12 +1,14 @@
 import type { QuizQuestion } from "@/data/englishQuizQuestions";
 
-interface TestScoringConfig {
+export interface TestScoringConfig {
   getWeight: (questionId: number) => number;
   classifications: { minPoints: number; level: string; label: string }[];
+  maxPoints: number;
 }
 
-const scoringConfigs: Record<string, TestScoringConfig> = {
+export const scoringConfigs: Record<string, TestScoringConfig> = {
   test1: {
+    maxPoints: 80,
     getWeight: (id) => {
       if (id >= 55) return 3;
       if (id >= 47) return 2;
@@ -23,6 +25,7 @@ const scoringConfigs: Record<string, TestScoringConfig> = {
     ],
   },
   test2: {
+    maxPoints: 60,
     getWeight: () => 1,
     classifications: [
       { minPoints: 54, level: "B2", label: "Intermédio Superior" },
