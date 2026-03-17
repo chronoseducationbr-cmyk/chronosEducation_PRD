@@ -83,10 +83,15 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
 
       // Build active test IDs set
       const idsSet = new Set<string>();
+      const slugMap: Record<string, string> = {};
       if (activeTests) {
-        (activeTests as any[]).forEach((t: any) => idsSet.add(t.id));
+        (activeTests as any[]).forEach((t: any) => {
+          if (t.is_active) idsSet.add(t.id);
+          slugMap[t.id] = t.slug;
+        });
       }
       setActiveTestIds(idsSet);
+      setTestSlugMap(slugMap);
 
       setLoading(false);
     };
