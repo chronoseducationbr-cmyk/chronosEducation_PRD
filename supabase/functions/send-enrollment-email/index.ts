@@ -83,8 +83,14 @@ const buildEmailHtml = (userName: string, studentName: string) => `
                     <p style="margin:0 0 16px;font-size:13px;color:#5a6a78;">
                       📞 (11) 99949-1067
                     </p>
-                    <p style="margin:0;font-size:12px;color:#9aa8b5;">
+                    <p style="margin:0 0 12px;font-size:12px;color:#9aa8b5;">
                       © ${new Date().getFullYear()} Chronos Education. Todos os direitos reservados.
+                    </p>
+                    <p style="margin:0 0 4px;font-size:11px;color:#b0bac3;line-height:1.5;">
+                      Se não criou uma matrícula, ignore este email.
+                    </p>
+                    <p style="margin:0;font-size:11px;color:#b0bac3;font-style:italic;">
+                      Este é um email automático. Não responda!
                     </p>
                   </td>
                 </tr>
