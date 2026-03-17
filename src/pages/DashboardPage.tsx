@@ -274,7 +274,7 @@ const DashboardPage = () => {
     }
   };
 
-  const validateStep1 = (): boolean => {
+  const validateStep1 = async (): Promise<boolean> => {
     const g = guardianRef.current;
     const s = studentRef.current;
     const errors: string[] = [];
