@@ -274,7 +274,7 @@ const DashboardPage = () => {
     }
   };
 
-  const validateStep1 = (): boolean => {
+  const validateStep1 = async (): Promise<boolean> => {
     const g = guardianRef.current;
     const s = studentRef.current;
     const errors: string[] = [];
@@ -337,6 +337,22 @@ const DashboardPage = () => {
       if (gradYear <= currentYear) {
         setValidationErrors(["studentGraduationYear"]);
         toast({ title: "Ano de conclusão inválido", description: `O ano previsto deve ser superior a ${currentYear}.`, variant: "destructive" });
+        return false;
+      }
+    }
+
+    // Validate referral email if provided
+    const referralEmail = referralRef.current?.trim();
+    if (referralEmail) {
+      const { data: referralEnrollment } = await supabase
+        .from("enrollments")
+        .select("id")
+        .ilike("student_email", referralEmail)
+        .limit(1);
+
+      if (!referralEnrollment || referralEnrollment.length === 0) {
+        setValidationErrors(["referralEmail"]);
+        toast({ title: "Aluno indicado não encontrado", description: "O email indicado não corresponde a nenhum aluno matriculado.", variant: "destructive" });
         return false;
       }
     }
@@ -469,8 +485,9 @@ const DashboardPage = () => {
 
                       <div className="mt-8">
                         <button
-                          onClick={() => {
-                            if (validateStep1()) {
+                          onClick={async () => {
+                            const valid = await validateStep1();
+                            if (valid) {
                               setWizardStep(2);
                               window.scrollTo({ top: 0, behavior: "smooth" });
                             }
