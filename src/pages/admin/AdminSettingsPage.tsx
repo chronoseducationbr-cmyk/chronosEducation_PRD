@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp } from "lucide-react";
+import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { scoringConfigs } from "@/lib/quizScoring";
 
 interface QuizTest {
