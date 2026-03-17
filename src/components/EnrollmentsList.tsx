@@ -79,6 +79,13 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
       }
       setQuizResults(resultsMap);
 
+      // Build active test IDs set
+      const idsSet = new Set<string>();
+      if (activeTests) {
+        (activeTests as any[]).forEach((t: any) => idsSet.add(t.id));
+      }
+      setActiveTestIds(idsSet);
+
       setLoading(false);
     };
     load();
