@@ -271,13 +271,22 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                                    <span className="text-foreground font-semibold">
                                      {cls.level}{cls.label ? ` (${cls.label})` : ""}
                                    </span>
+                                   {levelDescriptions[cls.level] && (
+                                     <TooltipProvider delayDuration={200}>
+                                       <Tooltip>
+                                         <TooltipTrigger asChild>
+                                           <button type="button" className="text-muted-foreground hover:text-foreground transition-colors">
+                                             <Info size={14} />
+                                           </button>
+                                         </TooltipTrigger>
+                                         <TooltipContent side="top" className="max-w-xs text-xs leading-relaxed">
+                                           {levelDescriptions[cls.level]}
+                                         </TooltipContent>
+                                       </Tooltip>
+                                     </TooltipProvider>
+                                   )}
                                    <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
                                  </div>
-                                 {levelDescriptions[cls.level] && (
-                                   <p className="text-muted-foreground text-xs leading-relaxed">
-                                     {levelDescriptions[cls.level]}
-                                   </p>
-                                 )}
                                  <span className="text-muted-foreground text-xs">
                                    {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pontos · {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
                                  </span>
