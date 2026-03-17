@@ -453,7 +453,10 @@ const AdminEnrollmentsPage = () => {
                         <div className="flex items-center gap-2 text-sm">
                           <CheckCircle2 size={16} className="text-secondary" />
                           <span className="text-foreground font-medium">
-                            {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
+                            {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pontos
+                          </span>
+                          <span className="text-muted-foreground text-xs ml-1">
+                            ({quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} certas)
                           </span>
                         </div>
                       ) : (
