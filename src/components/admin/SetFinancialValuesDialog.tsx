@@ -225,7 +225,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>Valores Financeiros</DialogTitle>
             <DialogDescription>
@@ -233,7 +233,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4">
+          <div className="space-y-4 overflow-y-auto flex-1 pr-1">
             <div>
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula</Label>
               <div className="grid grid-cols-2 gap-3 mt-1">
@@ -341,7 +341,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
             </div>
           </div>
 
-          <DialogFooter className="flex-col sm:flex-row gap-2">
+          <DialogFooter className="flex-col sm:flex-row gap-2 pt-4 border-t border-border shrink-0">
             <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
             <Button variant="secondary" onClick={handleSave} disabled={saving}>
               {saving ? "A guardar..." : "Guardar"}
