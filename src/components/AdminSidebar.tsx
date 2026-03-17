@@ -20,6 +20,7 @@ const items = [
   { title: "Matrículas", url: "/admin/inscricoes", icon: GraduationCap },
   { title: "Pagamentos", url: "/admin/pagamentos", icon: CreditCard },
   { title: "Usuários", url: "/admin/utilizadores", icon: Users },
+  { title: "Configurações", url: "/admin/configuracoes", icon: Settings },
 ];
 
 export function AdminSidebar() {
