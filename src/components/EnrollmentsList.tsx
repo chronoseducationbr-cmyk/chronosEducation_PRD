@@ -24,6 +24,7 @@ interface Enrollment {
   contract_url: string | null;
   contract_sent_at: string | null;
   contract_signed_at: string | null;
+  quiz_test_id: string | null;
 }
 
 interface Props {
