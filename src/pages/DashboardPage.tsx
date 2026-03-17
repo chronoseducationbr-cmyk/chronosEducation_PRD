@@ -485,8 +485,9 @@ const DashboardPage = () => {
 
                       <div className="mt-8">
                         <button
-                          onClick={() => {
-                            if (validateStep1()) {
+                          onClick={async () => {
+                            const valid = await validateStep1();
+                            if (valid) {
                               setWizardStep(2);
                               window.scrollTo({ top: 0, behavior: "smooth" });
                             }
