@@ -221,7 +221,7 @@ const AdminSettingsPage = () => {
           </TabsTrigger>
           <TabsTrigger value="valores" className={tabTriggerClass}>
             <DollarSign size={18} className="mr-2" />
-            Valores
+            Valores Padrão
           </TabsTrigger>
         </TabsList>
 
