@@ -14,6 +14,14 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Settings } from "lucide-react";
 
+interface AppDefaults {
+  default_inscription_fee_cents: number;
+  default_tuition_installment_cents: number;
+  default_tuition_installments: number;
+  default_summercamp_installment_cents: number;
+  default_summercamp_installments: number;
+}
+
 interface Props {
   enrollmentId: string;
   studentName: string;
