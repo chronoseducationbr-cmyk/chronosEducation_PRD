@@ -299,7 +299,7 @@ const AdminEnrollmentsPage = () => {
                       return (
                         <span className="shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full bg-muted text-muted-foreground flex items-center gap-1">
                           <BookOpen size={12} />
-                          Não realizado
+                          —
                         </span>
                       );
                     }
