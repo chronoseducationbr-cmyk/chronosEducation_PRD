@@ -40,8 +40,9 @@ const ReferralSection = ({ onChange, validationErrors = [] }: Props) => {
     );
   }
 
+  const hasError = validationErrors.includes("referralEmail");
   const inputClasses =
-    "w-full pl-10 pr-4 py-3 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all text-sm";
+    `w-full pl-10 pr-4 py-3 rounded-lg border ${hasError ? "border-red-500" : "border-border"} bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all text-sm`;
 
   return (
     <div>
