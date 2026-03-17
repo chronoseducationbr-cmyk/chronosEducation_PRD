@@ -8,6 +8,7 @@ export interface TestScoringConfig {
 
 const scoringConfigs: Record<string, TestScoringConfig> = {
   test1: {
+    maxPoints: 80,
     getWeight: (id) => {
       if (id >= 55) return 3;
       if (id >= 47) return 2;
