@@ -22,6 +22,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminEnrollmentsPage from "./pages/admin/AdminEnrollmentsPage";
 import AdminPaymentsPage from "./pages/admin/AdminPaymentsPage";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
+import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 
 const queryClient = new QueryClient();
 
