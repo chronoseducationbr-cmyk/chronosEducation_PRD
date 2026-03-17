@@ -266,7 +266,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
 
             <div className="border-t border-border pt-3">
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Plataforma Online</Label>
-              <div className="grid grid-cols-2 gap-3 mt-1">
+              <div className="grid grid-cols-3 gap-3 mt-1">
                 <div>
                   <Label className="text-xs text-muted-foreground">Nº parcelas</Label>
                   <Input
@@ -278,7 +278,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Valor da mensalidade ($)</Label>
+                  <Label className="text-xs text-muted-foreground">Valor ($)</Label>
                   <Input
                     type="text"
                     inputMode="numeric"
@@ -290,15 +290,15 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                     className="h-9"
                   />
                 </div>
-              </div>
-              <div className="mt-2">
-                <Label className="text-xs text-muted-foreground">Data início das parcelas</Label>
-                <Input
-                  type="date"
-                  value={tuitionStartDate}
-                  onChange={(e) => setTuitionStartDate(e.target.value)}
-                  className="h-9"
-                />
+                <div>
+                  <Label className="text-xs text-muted-foreground">Data início</Label>
+                  <Input
+                    type="date"
+                    value={tuitionStartDate}
+                    onChange={(e) => setTuitionStartDate(e.target.value)}
+                    className="h-9"
+                  />
+                </div>
               </div>
             </div>
 
