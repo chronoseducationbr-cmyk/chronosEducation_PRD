@@ -68,8 +68,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
           .eq("user_id", user.id),
         supabase
           .from("quiz_tests" as any)
-          .select("id")
-          .eq("is_active", true),
+          .select("id, slug, is_active"),
       ]);
 
       setEnrollments((data as Enrollment[]) || []);
