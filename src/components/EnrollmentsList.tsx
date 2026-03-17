@@ -266,33 +266,37 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                                "C1": "Os alunos que atingem o nível C1 conseguem compreender uma vasta gama de textos longos e complexos.",
                                "C2": "Os alunos que atingem o nível C2 conseguem facilmente compreender quase tudo o que ouvem ou escrevem. Conseguem expressar-se de forma fluente e espontânea com precisão em situações complexas.",
                              };
-                             return (
-                               <div className="flex flex-col gap-1 text-sm">
-                                 <div className="flex items-center gap-2">
-                                   <span className="text-foreground font-semibold">
-                                     {cls.level}{cls.label ? ` (${cls.label})` : ""}
-                                   </span>
-                                   {levelDescriptions[cls.level] && (
-                                     <TooltipProvider delayDuration={200}>
-                                       <Tooltip>
-                                         <TooltipTrigger asChild>
-                                           <button type="button" className="text-muted-foreground hover:text-foreground transition-colors">
-                                             <Info size={14} />
-                                           </button>
-                                         </TooltipTrigger>
-                                         <TooltipContent side="top" className="max-w-xs text-xs leading-relaxed">
-                                           {levelDescriptions[cls.level]}
-                                         </TooltipContent>
-                                       </Tooltip>
-                                     </TooltipProvider>
-                                   )}
-                                   <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
-                                 </div>
-                                 <span className="text-muted-foreground text-xs">
-                                   {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pontos · {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
-                                 </span>
-                               </div>
-                             );
+                              const hiddenLevel = ["A0", "A1", "A2"].includes(cls.level);
+                              return (
+                                <div className="flex flex-col gap-1 text-sm">
+                                  <div className="flex items-center gap-2">
+                                    {hiddenLevel ? (
+                                      <span className="text-muted-foreground">Em breve serás informado sobre a nota do teste realizado.</span>
+                                    ) : (
+                                      <>
+                                        <span className="text-foreground font-semibold">
+                                          {cls.level}{cls.label ? ` (${cls.label})` : ""}
+                                        </span>
+                                        {levelDescriptions[cls.level] && (
+                                          <TooltipProvider delayDuration={200}>
+                                            <Tooltip>
+                                              <TooltipTrigger asChild>
+                                                <button type="button" className="text-muted-foreground hover:text-foreground transition-colors">
+                                                  <Info size={14} />
+                                                </button>
+                                              </TooltipTrigger>
+                                              <TooltipContent side="top" className="max-w-xs text-xs leading-relaxed">
+                                                {levelDescriptions[cls.level]}
+                                              </TooltipContent>
+                                            </Tooltip>
+                                          </TooltipProvider>
+                                        )}
+                                      </>
+                                    )}
+                                    <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
+                                  </div>
+                                </div>
+                              );
                            })() : (
                              <button
                                onClick={() => navigate(`/teste-ingles?enrollment=${e.id}`)}
