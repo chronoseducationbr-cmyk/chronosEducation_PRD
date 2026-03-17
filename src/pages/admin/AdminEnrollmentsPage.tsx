@@ -308,7 +308,7 @@ const AdminEnrollmentsPage = () => {
                     return (
                       <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 ${isLow ? "bg-destructive/10 text-destructive" : "bg-green-100 text-green-700"}`}>
                         <BookOpen size={12} />
-                        {cls.level}{cls.label ? ` – ${cls.label}` : ""}
+                        {cls.level}
                       </span>
                     );
                   })()}
