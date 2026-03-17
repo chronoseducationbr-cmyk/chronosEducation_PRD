@@ -166,8 +166,8 @@ const EnglishQuizPage = () => {
   }
 
   if (finished) {
-    const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, answers);
-    const cls = getClassification(scorePoints);
+    const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, answers, testSlug);
+    const cls = getClassification(scorePoints, testSlug);
 
     return (
       <div className="min-h-screen bg-background">
