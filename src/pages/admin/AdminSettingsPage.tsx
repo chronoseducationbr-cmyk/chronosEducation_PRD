@@ -479,10 +479,11 @@ const AdminSettingsPage = () => {
             ) : editingFinancials ? (
               <div className="bg-card border border-border rounded-xl p-4 space-y-4">
                 <p className="text-xs text-muted-foreground">Estes valores serão aplicados como padrão em novas matrículas.</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  {/* Taxa de Matrícula - sozinha */}
                   <div>
                     <label className="text-xs font-medium text-muted-foreground mb-1 block">Taxa de Matrícula ($)</label>
-                    <div className="relative">
+                    <div className="relative max-w-[240px]">
                       <input
                         type="number"
                         min={0}
@@ -493,51 +494,59 @@ const AdminSettingsPage = () => {
                       <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">,00</span>
                     </div>
                   </div>
-                  <div>
-                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Plataforma ($)</label>
-                    <div className="relative">
+
+                  {/* Plataforma - lado a lado */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground mb-1 block">Nº Parcelas Plataforma</label>
                       <input
                         type="number"
-                        min={0}
-                        value={financialDraft.tuition}
-                        onChange={(e) => setFinancialDraft((d) => ({ ...d, tuition: parseInt(e.target.value) || 0 }))}
-                        className="w-full rounded-lg border border-border bg-background p-2 pr-12 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                        min={1}
+                        value={financialDraft.tuitionInstallments}
+                        onChange={(e) => setFinancialDraft((d) => ({ ...d, tuitionInstallments: parseInt(e.target.value) || 1 }))}
+                        className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
                       />
-                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">,00</span>
+                    </div>
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Plataforma ($)</label>
+                      <div className="relative">
+                        <input
+                          type="number"
+                          min={0}
+                          value={financialDraft.tuition}
+                          onChange={(e) => setFinancialDraft((d) => ({ ...d, tuition: parseInt(e.target.value) || 0 }))}
+                          className="w-full rounded-lg border border-border bg-background p-2 pr-12 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">,00</span>
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Nº Parcelas Plataforma</label>
-                    <input
-                      type="number"
-                      min={1}
-                      value={financialDraft.tuitionInstallments}
-                      onChange={(e) => setFinancialDraft((d) => ({ ...d, tuitionInstallments: parseInt(e.target.value) || 1 }))}
-                      className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Summer Camp ($)</label>
-                    <div className="relative">
+
+                  {/* Summer Camp - lado a lado */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground mb-1 block">Nº Parcelas Summer Camp</label>
                       <input
                         type="number"
-                        min={0}
-                        value={financialDraft.summercamp}
-                        onChange={(e) => setFinancialDraft((d) => ({ ...d, summercamp: parseInt(e.target.value) || 0 }))}
-                        className="w-full rounded-lg border border-border bg-background p-2 pr-12 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                        min={1}
+                        value={financialDraft.summercampInstallments}
+                        onChange={(e) => setFinancialDraft((d) => ({ ...d, summercampInstallments: parseInt(e.target.value) || 1 }))}
+                        className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
                       />
-                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">,00</span>
                     </div>
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Nº Parcelas Summer Camp</label>
-                    <input
-                      type="number"
-                      min={1}
-                      value={financialDraft.summercampInstallments}
-                      onChange={(e) => setFinancialDraft((d) => ({ ...d, summercampInstallments: parseInt(e.target.value) || 1 }))}
-                      className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
-                    />
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Summer Camp ($)</label>
+                      <div className="relative">
+                        <input
+                          type="number"
+                          min={0}
+                          value={financialDraft.summercamp}
+                          onChange={(e) => setFinancialDraft((d) => ({ ...d, summercamp: parseInt(e.target.value) || 0 }))}
+                          className="w-full rounded-lg border border-border bg-background p-2 pr-12 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">,00</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 pt-2">
