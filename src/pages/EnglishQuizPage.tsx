@@ -169,6 +169,7 @@ const EnglishQuizPage = () => {
   if (finished) {
     const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, answers, testSlug);
     const cls = getClassification(scorePoints, testSlug);
+    const showResult = !["A0", "A1", "A2"].includes(cls.level);
 
     return (
       <div className="min-h-screen bg-background">
@@ -188,13 +189,18 @@ const EnglishQuizPage = () => {
           <h1 className="font-heading text-3xl font-bold text-foreground mb-4">Test Completed!</h1>
 
           <div className="bg-card border border-border rounded-xl p-6 mb-8">
-            <p className="text-sm text-muted-foreground mb-1">A tua classificação</p>
-            <p className="text-3xl font-bold text-accent mb-1">
-              {cls.level}{cls.label ? ` — ${cls.label}` : ""}
-            </p>
-            <p className="text-muted-foreground text-sm">
-              {scorePoints}/{maxPoints} pontos · {correctCount}/{quizQuestions.length} respostas certas
-            </p>
+            {showResult ? (
+              <>
+                <p className="text-sm text-muted-foreground mb-1">A tua classificação</p>
+                <p className="text-3xl font-bold text-accent mb-1">
+                  {cls.level}{cls.label ? ` — ${cls.label}` : ""}
+                </p>
+              </>
+            ) : (
+              <p className="text-muted-foreground">
+                Em breve serás informado sobre a nota do teste realizado.
+              </p>
+            )}
           </div>
 
           <button
