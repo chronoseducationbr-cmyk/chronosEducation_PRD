@@ -79,13 +79,24 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     placeCaretBeforeDecimals(event.currentTarget);
   };
 
-  const handleOpen = () => {
-    setInscriptionFee(currentValues.inscription_fee_cents > 0 ? String(currentValues.inscription_fee_cents / 100) : "800");
-    setTuitionValue(currentValues.tuition_installment_cents > 0 ? String(currentValues.tuition_installment_cents / 100) : "450");
-    setTuitionInstallments(String(currentValues.tuition_installments));
+  const handleOpen = async () => {
+    // Load app_settings defaults
+    let defaults: AppDefaults | null = null;
+    const { data } = await supabase.from("app_settings").select("default_inscription_fee_cents, default_tuition_installment_cents, default_tuition_installments, default_summercamp_installment_cents, default_summercamp_installments").eq("id", 1).single();
+    if (data) defaults = data as AppDefaults;
+
+    const dInscription = defaults?.default_inscription_fee_cents ?? 80000;
+    const dTuition = defaults?.default_tuition_installment_cents ?? 45000;
+    const dTuitionInst = defaults?.default_tuition_installments ?? 16;
+    const dSummer = defaults?.default_summercamp_installment_cents ?? 0;
+    const dSummerInst = defaults?.default_summercamp_installments ?? 6;
+
+    setInscriptionFee(currentValues.inscription_fee_cents > 0 ? String(currentValues.inscription_fee_cents / 100) : String(dInscription / 100));
+    setTuitionValue(currentValues.tuition_installment_cents > 0 ? String(currentValues.tuition_installment_cents / 100) : String(dTuition / 100));
+    setTuitionInstallments(currentValues.tuition_installments > 0 ? String(currentValues.tuition_installments) : String(dTuitionInst));
     setTuitionStartDate(currentValues.tuition_start_date || "");
-    setSummercampValue(currentValues.summercamp_installment_cents > 0 ? String(currentValues.summercamp_installment_cents / 100) : "");
-    setSummercampInstallments(String(currentValues.summercamp_installments));
+    setSummercampValue(currentValues.summercamp_installment_cents > 0 ? String(currentValues.summercamp_installment_cents / 100) : (dSummer > 0 ? String(dSummer / 100) : ""));
+    setSummercampInstallments(currentValues.summercamp_installments > 0 ? String(currentValues.summercamp_installments) : String(dSummerInst));
     setSummercampStartDate(currentValues.summercamp_start_date || "");
     setOpen(true);
   };
