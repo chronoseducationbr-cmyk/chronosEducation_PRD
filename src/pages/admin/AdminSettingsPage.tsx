@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Pencil, Check, X } from "lucide-react";
 
 interface QuizTest {
   id: string;
   name: string;
   slug: string;
+  description: string;
   is_active: boolean;
   created_at: string;
 }
@@ -17,6 +18,8 @@ const AdminSettingsPage = () => {
   const [tests, setTests] = useState<QuizTest[]>([]);
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
 
   useEffect(() => {
     loadTests();
@@ -62,6 +65,23 @@ const AdminSettingsPage = () => {
     setToggling(null);
   };
 
+  const handleSaveDescription = async (test: QuizTest) => {
+    const { error } = await supabase
+      .from("quiz_tests")
+      .update({ description: editValue } as any)
+      .eq("id", test.id);
+
+    if (error) {
+      toast({ title: "Erro ao guardar descrição", variant: "destructive" });
+    } else {
+      setTests((prev) =>
+        prev.map((t) => (t.id === test.id ? { ...t, description: editValue } : t))
+      );
+      toast({ title: "Descrição atualizada" });
+    }
+    setEditingId(null);
+  };
+
   return (
     <div>
       <h1 className="font-heading text-2xl font-bold text-foreground mb-1">Configurações</h1>
@@ -82,19 +102,51 @@ const AdminSettingsPage = () => {
             {tests.map((test) => (
               <div
                 key={test.id}
-                className="flex items-center justify-between p-4 bg-card border border-border rounded-xl"
+                className="p-4 bg-card border border-border rounded-xl"
               >
-                <div>
-                  <p className="font-medium text-foreground">{test.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Slug: {test.slug} · {test.is_active ? "Ativo" : "Desativado"}
-                  </p>
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <p className="font-medium text-foreground">{test.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Slug: {test.slug} · {test.is_active ? "Ativo" : "Desativado"}
+                    </p>
+                  </div>
+                  <Switch
+                    checked={test.is_active}
+                    onCheckedChange={() => handleToggle(test)}
+                    disabled={toggling === test.id}
+                  />
                 </div>
-                <Switch
-                  checked={test.is_active}
-                  onCheckedChange={() => handleToggle(test)}
-                  disabled={toggling === test.id}
-                />
+
+                {editingId === test.id ? (
+                  <div className="flex items-start gap-2 mt-2">
+                    <textarea
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      className="flex-1 text-sm rounded-lg border border-border bg-background p-2 text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-secondary"
+                      rows={2}
+                      placeholder="Descrição do teste..."
+                    />
+                    <button onClick={() => handleSaveDescription(test)} className="p-1.5 rounded-md hover:bg-muted text-secondary">
+                      <Check size={16} />
+                    </button>
+                    <button onClick={() => setEditingId(null)} className="p-1.5 rounded-md hover:bg-muted text-muted-foreground">
+                      <X size={16} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-start gap-2 mt-2">
+                    <p className="text-sm text-muted-foreground flex-1">
+                      {test.description || <span className="italic">Sem descrição</span>}
+                    </p>
+                    <button
+                      onClick={() => { setEditingId(test.id); setEditValue(test.description || ""); }}
+                      className="p-1.5 rounded-md hover:bg-muted text-muted-foreground shrink-0"
+                    >
+                      <Pencil size={14} />
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
