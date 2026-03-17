@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 interface Props {
   onChange?: (email: string) => void;
+  validationErrors?: string[];
 }
 
 const ReferralSection = ({ onChange }: Props) => {
