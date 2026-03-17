@@ -25,6 +25,7 @@ const EnglishQuizPage = () => {
   const [finished, setFinished] = useState(false);
   const [saving, setSaving] = useState(false);
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
+  const [testSlug, setTestSlug] = useState<string>("test1");
   const [loadingTest, setLoadingTest] = useState(true);
 
   const total = quizQuestions.length;
