@@ -117,11 +117,11 @@ const AdminEnrollmentsPage = () => {
     // Fetch quiz results
     const { data: qr } = await supabase
       .from("quiz_results" as any)
-      .select("enrollment_id, correct_count, total_questions");
-    const resultsMap: Record<string, { correct_count: number; total_questions: number }> = {};
+      .select("enrollment_id, correct_count, total_questions, score_points, max_points");
+    const resultsMap: Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }> = {};
     if (qr) {
       (qr as any[]).forEach((r: any) => {
-        resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions };
+        resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions, score_points: r.score_points || 0, max_points: r.max_points || 0 };
       });
     }
     setQuizResults(resultsMap);
