@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp } from "lucide-react";
+import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { scoringConfigs } from "@/lib/quizScoring";
 
 interface QuizTest {
@@ -221,9 +222,36 @@ const AdminSettingsPage = () => {
                                   : `${c.minPoints} – ${nextMin} pontos`;
                               return (
                                 <div key={c.level} className="flex items-center justify-between text-sm">
-                                  <span className="font-medium text-foreground">
-                                    {c.level}{c.label ? ` — ${c.label}` : ""}
-                                  </span>
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="font-medium text-foreground">
+                                      {c.level}{c.label ? ` — ${c.label}` : ""}
+                                    </span>
+                                    {(() => {
+                                      const levelDescriptions: Record<string, string> = {
+                                        "A0": "Os alunos neste nível estão começando a aprender as suas primeiras palavras.",
+                                        "A1": "Os alunos que atingem o nível A1 conseguem comunicar usando expressões do dia a dia familiares e frases muito básicas.",
+                                        "A2": "Os alunos que atingem o nível A2 conseguem comunicar usando expressões frequentes em situações do dia a dia.",
+                                        "B1": "Os alunos que atingem o nível B1 conseguem compreender informação sobre temas familiares. Conseguem comunicar na maioria das situações enquanto viajam para países de língua inglesa.",
+                                        "B2": "Os alunos que atingem o nível B2 conseguem compreender as principais ideias de textos complexos. Conseguem interagir com alguma fluência e comunicar facilmente.",
+                                        "C1": "Os alunos que atingem o nível C1 conseguem compreender uma vasta gama de textos longos e complexos.",
+                                        "C2": "Os alunos que atingem o nível C2 conseguem facilmente compreender quase tudo o que ouvem ou escrevem. Conseguem expressar-se de forma fluente e espontânea com precisão em situações complexas.",
+                                      };
+                                      return levelDescriptions[c.level] ? (
+                                        <TooltipProvider delayDuration={200}>
+                                          <Tooltip>
+                                            <TooltipTrigger asChild>
+                                              <button type="button" className="text-muted-foreground hover:text-foreground transition-colors">
+                                                <Info size={13} />
+                                              </button>
+                                            </TooltipTrigger>
+                                            <TooltipContent side="top" className="max-w-xs text-xs leading-relaxed">
+                                              {levelDescriptions[c.level]}
+                                            </TooltipContent>
+                                          </Tooltip>
+                                        </TooltipProvider>
+                                      ) : null;
+                                    })()}
+                                  </div>
                                   <span className="text-muted-foreground text-xs">{rangeLabel}</span>
                                 </div>
                               );
