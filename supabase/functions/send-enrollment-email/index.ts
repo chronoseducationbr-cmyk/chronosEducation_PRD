@@ -12,7 +12,7 @@ const buildEmailHtml = (userName: string, studentName: string) => `
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inscrição Confirmada</title>
+  <title>Matrícula Confirmada</title>
 </head>
 <body style="margin:0;padding:0;background-color:#ffffff;font-family:'Helvetica Neue',Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;">
@@ -47,10 +47,10 @@ const buildEmailHtml = (userName: string, studentName: string) => `
               </div>
 
               <h2 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#062a45;text-align:center;font-family:Georgia,'Times New Roman',serif;">
-                Inscrição Confirmada!
+                Matrícula confirmada!
               </h2>
               <p style="margin:0 0 24px;font-size:15px;color:#5a6a78;text-align:center;line-height:1.6;">
-                Parabéns, <strong style="color:#062a45;">${userName}</strong>! A inscrição de <strong style="color:#062a45;">${studentName}</strong> foi confirmada com sucesso.
+                Parabéns <strong style="color:#062a45;">${studentName}</strong>!
               </p>
 
               <!-- Card -->
@@ -58,17 +58,13 @@ const buildEmailHtml = (userName: string, studentName: string) => `
                 <tr>
                   <td style="padding:24px;">
                     <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
-                      A sua inscrição no programa <strong>Dual Diploma</strong> foi processada com sucesso. 
-                      Agradecemos a confiança nos nossos serviços.
+                      A matrícula no programa <strong>Dual Diploma</strong> da Chronos Education foi efetuada com sucesso.
                     </p>
                     <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
                       Em anexo, encontrará o contrato de prestação de serviços educacionais assinado digitalmente.
                     </p>
                     <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
-                      A partir de agora, a nossa equipa irá entrar em contacto consigo com os próximos passos para iniciar a sua jornada rumo ao diploma americano.
-                    </p>
-                    <p style="margin:0;font-size:15px;color:#333;line-height:1.7;">
-                      Se tiver alguma dúvida, não hesite em contactar-nos.
+                      Em dois dias receberá as credenciais de acesso à plataforma de ensino e iniciar a jornada rumo ao diploma High School. Fique atento à sua caixa de email.
                     </p>
                   </td>
                 </tr>
