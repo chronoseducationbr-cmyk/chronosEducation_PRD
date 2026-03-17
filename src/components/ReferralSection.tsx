@@ -9,7 +9,7 @@ interface Props {
   validationErrors?: string[];
 }
 
-const ReferralSection = ({ onChange }: Props) => {
+const ReferralSection = ({ onChange, validationErrors = [] }: Props) => {
   const { user } = useAuth();
   const [referralEmail, setReferralEmail] = useState("");
   const [loading, setLoading] = useState(true);
