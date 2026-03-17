@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, ChevronRight, CheckCircle2, Volume2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { quizQuestions } from "@/data/englishQuizQuestions";
+import quizTestsMap from "@/data/quizTestsMap";
+import type { QuizQuestion } from "@/data/englishQuizQuestions";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
@@ -22,6 +23,8 @@ const EnglishQuizPage = () => {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [finished, setFinished] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
+  const [loadingTest, setLoadingTest] = useState(true);
 
   const total = quizQuestions.length;
   const current = quizQuestions[currentIndex];
