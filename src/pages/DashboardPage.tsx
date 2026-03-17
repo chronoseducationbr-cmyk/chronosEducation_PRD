@@ -101,11 +101,19 @@ const DashboardPage = () => {
     setPaying(true);
     try {
       // Check if student email is already enrolled
-      const { data: existingEnrollment } = await supabase
-        .from("enrollments")
-        .select("id")
-        .eq("student_email", s.studentEmail.trim())
-        .maybeSingle();
+      const [{ data: existingEnrollment }, { data: activeTest }] = await Promise.all([
+        supabase
+          .from("enrollments")
+          .select("id")
+          .eq("student_email", s.studentEmail.trim())
+          .maybeSingle(),
+        supabase
+          .from("quiz_tests" as any)
+          .select("id")
+          .eq("is_active", true)
+          .limit(1)
+          .maybeSingle(),
+      ]);
 
       if (existingEnrollment) {
         toast({ title: "Email já inscrito", description: "Já existe uma matrícula com este email de aluno.", variant: "destructive" });
@@ -139,22 +147,27 @@ const DashboardPage = () => {
         .eq("user_id", user.id);
 
       // Create enrollment record
+      const insertData: any = {
+        user_id: user.id,
+        student_name: s.studentName.trim(),
+        student_email: s.studentEmail.trim(),
+        student_birth_date: s.studentBirthDate || null,
+        student_address: s.studentAddress.trim(),
+        student_school: s.studentSchool.trim(),
+        student_photo_url: s.studentPhotoUrl?.trim() || null,
+        student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
+        referred_by_email: referralRef.current.trim(),
+        status: "Contrato assinado",
+        contract_sent_at: new Date().toISOString(),
+        inscription_fee_cents: 80000,
+      };
+      if (activeTest) {
+        insertData.quiz_test_id = (activeTest as any).id;
+      }
+
       const { data: newEnrollment, error: enrollError } = await supabase
         .from("enrollments")
-        .insert({
-          user_id: user.id,
-          student_name: s.studentName.trim(),
-          student_email: s.studentEmail.trim(),
-          student_birth_date: s.studentBirthDate || null,
-          student_address: s.studentAddress.trim(),
-          student_school: s.studentSchool.trim(),
-          student_photo_url: s.studentPhotoUrl?.trim() || null,
-          student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
-          referred_by_email: referralRef.current.trim(),
-          status: "Contrato assinado",
-          contract_sent_at: new Date().toISOString(),
-          inscription_fee_cents: 80000,
-        } as any)
+        .insert(insertData)
         .select("id")
         .single();
       if (enrollError) throw enrollError;

@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, ChevronRight, CheckCircle2, Volume2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { quizQuestions } from "@/data/englishQuizQuestions";
+import quizTestsMap from "@/data/quizTestsMap";
+import type { QuizQuestion } from "@/data/englishQuizQuestions";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
@@ -22,6 +23,8 @@ const EnglishQuizPage = () => {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [finished, setFinished] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
+  const [loadingTest, setLoadingTest] = useState(true);
 
   const total = quizQuestions.length;
   const current = quizQuestions[currentIndex];
@@ -75,10 +78,49 @@ const EnglishQuizPage = () => {
   useEffect(() => {
     if (!enrollmentId) {
       navigate("/gestao-matriculas");
+      return;
     }
+    // Load the test slug from enrollment's quiz_test
+    const loadTest = async () => {
+      setLoadingTest(true);
+      const { data: enrollment } = await supabase
+        .from("enrollments")
+        .select("quiz_test_id")
+        .eq("id", enrollmentId)
+        .single();
+
+      if (enrollment?.quiz_test_id) {
+        const { data: test } = await supabase
+          .from("quiz_tests" as any)
+          .select("slug")
+          .eq("id", enrollment.quiz_test_id)
+          .single();
+
+        if (test) {
+          const slug = (test as any).slug as string;
+          const questions = quizTestsMap[slug];
+          if (questions) {
+            setQuizQuestions(questions);
+            setLoadingTest(false);
+            return;
+          }
+        }
+      }
+      // Fallback to test1
+      setQuizQuestions(quizTestsMap["test1"] || []);
+      setLoadingTest(false);
+    };
+    loadTest();
   }, [enrollmentId, navigate]);
 
   if (!enrollmentId) return null;
+  if (loadingTest) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-pulse text-muted-foreground">A carregar teste...</div>
+      </div>
+    );
+  }
   if (!started) {
     return (
       <div className="min-h-screen bg-background">

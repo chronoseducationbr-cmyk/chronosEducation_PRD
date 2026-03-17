@@ -24,6 +24,7 @@ interface Enrollment {
   contract_url: string | null;
   contract_sent_at: string | null;
   contract_signed_at: string | null;
+  quiz_test_id: string | null;
 }
 
 interface Props {
@@ -44,6 +45,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number }>>({});
+  const [activeTestIds, setActiveTestIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -52,7 +54,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
       if (!user) return;
       setLoading(true);
 
-      const [{ data }, { data: qr }] = await Promise.all([
+      const [{ data }, { data: qr }, { data: activeTests }] = await Promise.all([
         supabase
           .from("enrollments")
           .select("*")
@@ -62,6 +64,10 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
           .from("quiz_results" as any)
           .select("enrollment_id, correct_count, total_questions")
           .eq("user_id", user.id),
+        supabase
+          .from("quiz_tests" as any)
+          .select("id")
+          .eq("is_active", true),
       ]);
 
       setEnrollments((data as Enrollment[]) || []);
@@ -73,6 +79,13 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
         });
       }
       setQuizResults(resultsMap);
+
+      // Build active test IDs set
+      const idsSet = new Set<string>();
+      if (activeTests) {
+        (activeTests as any[]).forEach((t: any) => idsSet.add(t.id));
+      }
+      setActiveTestIds(idsSet);
 
       setLoading(false);
     };
@@ -224,7 +237,8 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                         </div>
                       </div>
                      )}
-                     {/* English Test Section */}
+                     {/* Only show test section if enrollment has an active test */}
+                     {e.quiz_test_id && activeTestIds.has(e.quiz_test_id) && (
                      <div className="mt-3 pt-3 border-t border-border">
                        <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
                          <BookOpen size={14} className="text-secondary" />
@@ -247,6 +261,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                           </button>
                        )}
                      </div>
+                     )}
                   </div>
                 )}
               </div>

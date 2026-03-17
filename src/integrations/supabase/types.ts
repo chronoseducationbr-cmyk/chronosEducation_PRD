@@ -109,6 +109,7 @@ export type Database = {
           created_at: string
           id: string
           inscription_fee_cents: number
+          quiz_test_id: string | null
           referred_by_email: string | null
           status: string
           student_address: string | null
@@ -134,6 +135,7 @@ export type Database = {
           created_at?: string
           id?: string
           inscription_fee_cents?: number
+          quiz_test_id?: string | null
           referred_by_email?: string | null
           status?: string
           student_address?: string | null
@@ -159,6 +161,7 @@ export type Database = {
           created_at?: string
           id?: string
           inscription_fee_cents?: number
+          quiz_test_id?: string | null
           referred_by_email?: string | null
           status?: string
           student_address?: string | null
@@ -177,7 +180,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "enrollments_quiz_test_id_fkey"
+            columns: ["quiz_test_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_tests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       installments: {
         Row: {
@@ -415,6 +426,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      quiz_tests: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+        }
+        Relationships: []
       }
       referrals: {
         Row: {
