@@ -44,7 +44,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number }>>({});
+  const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }>>({});
   const [activeTestIds, setActiveTestIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -62,7 +62,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
           .order("created_at", { ascending: false }),
         supabase
           .from("quiz_results" as any)
-          .select("enrollment_id, correct_count, total_questions")
+          .select("enrollment_id, correct_count, total_questions, score_points, max_points")
           .eq("user_id", user.id),
         supabase
           .from("quiz_tests" as any)
@@ -72,10 +72,10 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
 
       setEnrollments((data as Enrollment[]) || []);
 
-      const resultsMap: Record<string, { correct_count: number; total_questions: number }> = {};
+      const resultsMap: Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }> = {};
       if (qr) {
         (qr as any[]).forEach((r: any) => {
-          resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions };
+          resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions, score_points: r.score_points || 0, max_points: r.max_points || 0 };
         });
       }
       setQuizResults(resultsMap);
@@ -245,11 +245,16 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                          Teste de Inglês
                        </p>
                        {quizResults[e.id] ? (
-                          <div className="flex items-center gap-2 text-sm">
-                            <span className="text-foreground font-medium">
+                          <div className="flex flex-col gap-1 text-sm">
+                            <div className="flex items-center gap-2">
+                              <span className="text-foreground font-medium">
+                                {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pontos
+                              </span>
+                              <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
+                            </div>
+                            <span className="text-muted-foreground text-xs">
                               {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
                             </span>
-                            <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
                           </div>
                        ) : (
                           <button

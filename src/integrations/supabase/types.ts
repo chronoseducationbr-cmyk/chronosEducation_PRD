@@ -398,6 +398,8 @@ export type Database = {
           created_at: string
           enrollment_id: string
           id: string
+          max_points: number
+          score_points: number
           total_questions: number
           user_id: string
         }
@@ -406,6 +408,8 @@ export type Database = {
           created_at?: string
           enrollment_id: string
           id?: string
+          max_points?: number
+          score_points?: number
           total_questions?: number
           user_id: string
         }
@@ -414,6 +418,8 @@ export type Database = {
           created_at?: string
           enrollment_id?: string
           id?: string
+          max_points?: number
+          score_points?: number
           total_questions?: number
           user_id?: string
         }

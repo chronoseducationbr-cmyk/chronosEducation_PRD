@@ -82,7 +82,7 @@ const AdminEnrollmentsPage = () => {
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number }>>({});
+  const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }>>({});
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
@@ -117,11 +117,11 @@ const AdminEnrollmentsPage = () => {
     // Fetch quiz results
     const { data: qr } = await supabase
       .from("quiz_results" as any)
-      .select("enrollment_id, correct_count, total_questions");
-    const resultsMap: Record<string, { correct_count: number; total_questions: number }> = {};
+      .select("enrollment_id, correct_count, total_questions, score_points, max_points");
+    const resultsMap: Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }> = {};
     if (qr) {
       (qr as any[]).forEach((r: any) => {
-        resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions };
+        resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions, score_points: r.score_points || 0, max_points: r.max_points || 0 };
       });
     }
     setQuizResults(resultsMap);
@@ -453,7 +453,10 @@ const AdminEnrollmentsPage = () => {
                         <div className="flex items-center gap-2 text-sm">
                           <CheckCircle2 size={16} className="text-secondary" />
                           <span className="text-foreground font-medium">
-                            {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
+                            {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pontos
+                          </span>
+                          <span className="text-muted-foreground text-xs ml-1">
+                            ({quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} certas)
                           </span>
                         </div>
                       ) : (

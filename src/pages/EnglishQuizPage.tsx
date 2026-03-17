@@ -9,6 +9,7 @@ import SEOHead from "@/components/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { calculateQuizScore } from "@/lib/quizScoring";
 
 const EnglishQuizPage = () => {
   const { user } = useAuth();
@@ -30,10 +31,7 @@ const EnglishQuizPage = () => {
   const current = quizQuestions[currentIndex];
   const progress = ((currentIndex + (finished ? 1 : 0)) / total) * 100;
 
-  const correctCount = Object.entries(answers).filter(([id, ans]) => {
-    const q = quizQuestions.find((q) => q.id === Number(id));
-    return q && q.correctAnswer === ans;
-  }).length;
+  // Not used visually during quiz, but kept for reference
 
   const handleSelect = (label: string) => {
     setSelectedAnswer(label);
@@ -56,16 +54,15 @@ const EnglishQuizPage = () => {
   const saveResults = async (finalAnswers: Record<number, string>) => {
     if (!user || !enrollmentId) return;
     setSaving(true);
-    const correct = Object.entries(finalAnswers).filter(([id, ans]) => {
-      const q = quizQuestions.find((q) => q.id === Number(id));
-      return q && q.correctAnswer === ans;
-    }).length;
+    const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, finalAnswers);
 
     const { error } = await supabase.from("quiz_results" as any).insert({
       enrollment_id: enrollmentId,
       user_id: user.id,
-      correct_count: correct,
+      correct_count: correctCount,
       total_questions: quizQuestions.length,
+      score_points: scorePoints,
+      max_points: maxPoints,
     } as any);
 
     if (error) {
