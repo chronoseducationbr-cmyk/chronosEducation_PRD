@@ -47,6 +47,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }>>({});
   const [activeTestIds, setActiveTestIds] = useState<Set<string>>(new Set());
+  const [testSlugMap, setTestSlugMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
