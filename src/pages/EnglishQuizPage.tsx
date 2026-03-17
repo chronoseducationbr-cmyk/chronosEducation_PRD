@@ -55,7 +55,7 @@ const EnglishQuizPage = () => {
   const saveResults = async (finalAnswers: Record<number, string>) => {
     if (!user || !enrollmentId) return;
     setSaving(true);
-    const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, finalAnswers);
+    const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, finalAnswers, testSlug);
 
     const { error } = await supabase.from("quiz_results" as any).insert({
       enrollment_id: enrollmentId,
