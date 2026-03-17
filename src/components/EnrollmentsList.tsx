@@ -270,31 +270,31 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                               return (
                                 <div className="flex flex-col gap-1 text-sm">
                                   <div className="flex items-center gap-2">
-                                    {hiddenLevel ? (
-                                      <span className="text-muted-foreground">Em breve serás informado sobre a nota do teste realizado.</span>
-                                    ) : (
-                                      <>
-                                        <span className="text-foreground font-semibold">
-                                          {cls.level}{cls.label ? ` (${cls.label})` : ""}
-                                        </span>
-                                        {levelDescriptions[cls.level] && (
-                                          <TooltipProvider delayDuration={200}>
-                                            <Tooltip>
-                                              <TooltipTrigger asChild>
-                                                <button type="button" className="text-muted-foreground hover:text-foreground transition-colors">
-                                                  <Info size={14} />
-                                                </button>
-                                              </TooltipTrigger>
-                                              <TooltipContent side="top" className="max-w-xs text-xs leading-relaxed">
-                                                {levelDescriptions[cls.level]}
-                                              </TooltipContent>
-                                            </Tooltip>
-                                          </TooltipProvider>
-                                        )}
-                                      </>
-                                    )}
                                     <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
                                   </div>
+                                  {hiddenLevel ? (
+                                    <span className="text-muted-foreground text-xs">Em breve serás informado sobre a nota do teste realizado.</span>
+                                  ) : (
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-foreground font-semibold">
+                                        {cls.level}{cls.label ? ` (${cls.label})` : ""}
+                                      </span>
+                                      {levelDescriptions[cls.level] && (
+                                        <TooltipProvider delayDuration={200}>
+                                          <Tooltip>
+                                            <TooltipTrigger asChild>
+                                              <button type="button" className="text-muted-foreground hover:text-foreground transition-colors">
+                                                <Info size={14} />
+                                              </button>
+                                            </TooltipTrigger>
+                                            <TooltipContent side="top" className="max-w-xs text-xs leading-relaxed">
+                                              {levelDescriptions[cls.level]}
+                                            </TooltipContent>
+                                          </Tooltip>
+                                        </TooltipProvider>
+                                      )}
+                                    </div>
+                                  )}
                                 </div>
                               );
                            })() : (
