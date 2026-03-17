@@ -31,10 +31,7 @@ const EnglishQuizPage = () => {
   const current = quizQuestions[currentIndex];
   const progress = ((currentIndex + (finished ? 1 : 0)) / total) * 100;
 
-  const correctCount = Object.entries(answers).filter(([id, ans]) => {
-    const q = quizQuestions.find((q) => q.id === Number(id));
-    return q && q.correctAnswer === ans;
-  }).length;
+  // Not used visually during quiz, but kept for reference
 
   const handleSelect = (label: string) => {
     setSelectedAnswer(label);
