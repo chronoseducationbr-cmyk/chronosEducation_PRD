@@ -225,7 +225,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-md max-h-[90vh] flex flex-col">
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>Valores Financeiros</DialogTitle>
             <DialogDescription>
