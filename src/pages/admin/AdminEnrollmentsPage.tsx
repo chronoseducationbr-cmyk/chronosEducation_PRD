@@ -451,13 +451,20 @@ const AdminEnrollmentsPage = () => {
                       <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Teste de Inglês</p>
                       {quizResults[e.id] ? (
                         <div className="flex items-center gap-2 text-sm">
-                          <CheckCircle2 size={16} className="text-secondary" />
-                          <span className="text-foreground font-medium">
-                            {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pontos
-                          </span>
-                          <span className="text-muted-foreground text-xs ml-1">
-                            ({quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} certas)
-                          </span>
+                          {(() => {
+                            const cls = getClassification(quizResults[e.id].score_points);
+                            return (
+                              <>
+                                <CheckCircle2 size={16} className="text-secondary" />
+                                <span className="text-foreground font-semibold">
+                                  {cls.level}{cls.label ? ` (${cls.label})` : ""}
+                                </span>
+                                <span className="text-muted-foreground text-xs ml-1">
+                                  {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pts · {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} certas
+                                </span>
+                              </>
+                            );
+                          })()}
                         </div>
                       ) : (
                         <span className="text-muted-foreground text-sm italic">Teste não realizado</span>
