@@ -214,10 +214,16 @@ const AdminSettingsPage = () => {
           <TabsTrigger value="testes" className={tabTriggerClass}>
             <BookOpen size={18} className="mr-2" />
             Testes
+            <span className={`ml-2 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full ${quizEnabled ? "bg-secondary/20 text-secondary" : "bg-muted text-muted-foreground"}`}>
+              {quizEnabled ? "ON" : "OFF"}
+            </span>
           </TabsTrigger>
           <TabsTrigger value="contrato" className={tabTriggerClass}>
             <FileText size={18} className="mr-2" />
             Contrato
+            <span className={`ml-2 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full ${settings.contract_enabled ? "bg-secondary/20 text-secondary" : "bg-muted text-muted-foreground"}`}>
+              {settings.contract_enabled ? "ON" : "OFF"}
+            </span>
           </TabsTrigger>
           <TabsTrigger value="valores" className={tabTriggerClass}>
             <DollarSign size={18} className="mr-2" />
