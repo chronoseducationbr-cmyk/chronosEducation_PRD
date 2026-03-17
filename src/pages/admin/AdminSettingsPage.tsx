@@ -125,27 +125,15 @@ const AdminSettingsPage = () => {
       <p className="text-muted-foreground mb-8">Gerir testes de inglês e outras configurações.</p>
 
       <div className="max-w-2xl">
-        <h2 className="font-heading text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-          <BookOpen size={20} className="text-secondary" />
-          Testes de Inglês
-        </h2>
-
-        {loading ? (
-          <div className="animate-pulse h-20 bg-muted rounded-xl" />
-        ) : tests.length === 0 ? (
-          <p className="text-muted-foreground text-sm">Nenhum teste configurado.</p>
-        ) : (
-          <div className="space-y-4">
-            {/* Master toggle */}
-            <div className="flex items-center justify-between p-4 bg-card border border-border rounded-xl">
-              <div>
-                <p className="font-medium text-foreground">Teste de Inglês (Geral)</p>
-                <p className="text-xs text-muted-foreground">
-                  {quizEnabled ? "Ativo — os alunos realizam o teste selecionado" : "Desativado — nenhum aluno faz teste"}
-                </p>
-              </div>
-              <Switch checked={quizEnabled} onCheckedChange={handleGeneralToggle} />
-            </div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-heading text-lg font-semibold text-foreground flex items-center gap-2">
+            <BookOpen size={20} className="text-secondary" />
+            Testes de Inglês
+          </h2>
+          {!loading && tests.length > 0 && (
+            <Switch checked={quizEnabled} onCheckedChange={handleGeneralToggle} />
+          )}
+        </div>
 
             {/* Test list (only when enabled) */}
             {quizEnabled && (
