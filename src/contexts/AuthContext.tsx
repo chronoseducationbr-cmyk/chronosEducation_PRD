@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const SESSION_FLAG = "chronos_session_active";
+    let initialized = false;
 
     const initSession = async () => {
       // If sessionStorage flag is missing, this is a new browser session → sign out
@@ -44,6 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           await supabase.auth.signOut();
           setSession(null);
           setIsAdmin(false);
+          initialized = true;
           setLoading(false);
           return;
         }
@@ -55,10 +57,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         sessionStorage.setItem(SESSION_FLAG, "1");
         checkAdmin(session.user.id);
       }
+      initialized = true;
       setLoading(false);
     };
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      // Ignore auth events until initSession has finished its check
+      if (!initialized) return;
       setSession(session);
       if (session?.user) {
         sessionStorage.setItem(SESSION_FLAG, "1");
