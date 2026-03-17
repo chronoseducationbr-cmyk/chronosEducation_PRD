@@ -10,7 +10,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { calculateQuizScore, getClassification } from "@/lib/quizScoring";
-import { calculateQuizScore } from "@/lib/quizScoring";
 
 const EnglishQuizPage = () => {
   const { user } = useAuth();
