@@ -23,7 +23,7 @@ const buildEmailHtml = (userName: string, studentName: string) => `
           <!-- Header -->
           <tr>
             <td style="background:linear-gradient(135deg,#062a45 0%,#0d3d5e 100%);padding:32px 40px;border-radius:16px 16px 0 0;text-align:center;">
-              <img src="https://id-preview--7dbf840a-6321-4069-8c9e-133584e3a12c.lovable.app/chronos-logo-header.png" alt="Chronos Education" style="height:40px;margin-bottom:12px;" />
+              <img src="https://qqgfqjpgxoourayjlrwc.supabase.co/storage/v1/object/public/email-assets/chronos-logo-header.png" alt="Chronos Education" style="height:40px;margin-bottom:12px;" />
               <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;">
                 Dual Diploma Program
               </p>
