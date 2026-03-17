@@ -245,11 +245,16 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                          Teste de Inglês
                        </p>
                        {quizResults[e.id] ? (
-                          <div className="flex items-center gap-2 text-sm">
-                            <span className="text-foreground font-medium">
+                          <div className="flex flex-col gap-1 text-sm">
+                            <div className="flex items-center gap-2">
+                              <span className="text-foreground font-medium">
+                                {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pontos
+                              </span>
+                              <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
+                            </div>
+                            <span className="text-muted-foreground text-xs">
                               {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
                             </span>
-                            <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
                           </div>
                        ) : (
                           <button
