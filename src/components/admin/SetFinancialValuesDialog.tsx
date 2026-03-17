@@ -145,7 +145,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     <>
       <button
         onClick={(ev) => { ev.stopPropagation(); handleOpen(); }}
-        className={`inline-flex items-center gap-1 text-[11px] font-medium transition-colors ${hasValues ? "text-muted-foreground hover:text-foreground" : "text-accent hover:text-accent/80"}`}
+        className={`inline-flex items-center gap-1 text-[11px] font-medium transition-colors ${hasValues ? "text-[#F9B91D] hover:text-[#F9B91D]/80" : "text-accent hover:text-accent/80"}`}
         title={hasValues ? "Editar valores financeiros" : "Definir valores financeiros"}
       >
         <Settings size={12} />
