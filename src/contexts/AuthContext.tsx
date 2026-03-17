@@ -34,23 +34,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    const SESSION_FLAG = "chronos_session_active";
+
+    const initSession = async () => {
+      // If sessionStorage flag is missing, this is a new browser session → sign out
+      if (!sessionStorage.getItem(SESSION_FLAG)) {
+        const { data: { session: existing } } = await supabase.auth.getSession();
+        if (existing) {
+          await supabase.auth.signOut();
+          setSession(null);
+          setIsAdmin(false);
+          setLoading(false);
+          return;
+        }
+      }
+
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+      if (session?.user) {
+        sessionStorage.setItem(SESSION_FLAG, "1");
+        checkAdmin(session.user.id);
+      }
+      setLoading(false);
+    };
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session?.user) {
+        sessionStorage.setItem(SESSION_FLAG, "1");
         checkAdmin(session.user.id);
       } else {
+        sessionStorage.removeItem(SESSION_FLAG);
         setIsAdmin(false);
       }
       setLoading(false);
     });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session?.user) {
-        checkAdmin(session.user.id);
-      }
-      setLoading(false);
-    });
+    initSession();
 
     return () => subscription.unsubscribe();
   }, []);
