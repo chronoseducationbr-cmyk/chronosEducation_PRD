@@ -54,16 +54,15 @@ const EnglishQuizPage = () => {
   const saveResults = async (finalAnswers: Record<number, string>) => {
     if (!user || !enrollmentId) return;
     setSaving(true);
-    const correct = Object.entries(finalAnswers).filter(([id, ans]) => {
-      const q = quizQuestions.find((q) => q.id === Number(id));
-      return q && q.correctAnswer === ans;
-    }).length;
+    const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, finalAnswers);
 
     const { error } = await supabase.from("quiz_results" as any).insert({
       enrollment_id: enrollmentId,
       user_id: user.id,
-      correct_count: correct,
+      correct_count: correctCount,
       total_questions: quizQuestions.length,
+      score_points: scorePoints,
+      max_points: maxPoints,
     } as any);
 
     if (error) {
