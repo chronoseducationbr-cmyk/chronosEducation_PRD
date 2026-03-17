@@ -28,6 +28,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+import { getClassification } from "@/lib/quizScoring";
 
 interface Guardian {
   full_name: string;
