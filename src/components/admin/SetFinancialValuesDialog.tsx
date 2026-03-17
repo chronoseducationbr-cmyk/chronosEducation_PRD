@@ -101,20 +101,18 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     setOpen(true);
   };
 
-  const handleSave = async () => {
+  const getFormValues = () => {
     const fee = Math.round(parseFloat(inscriptionFee || "0")) * 100;
     const tuition = Math.round(parseFloat(tuitionValue || "0")) * 100;
     const tInstallments = parseInt(tuitionInstallments) || 16;
     const summer = Math.round(parseFloat(summercampValue || "0")) * 100;
     const sInstallments = parseInt(summercampInstallments) || 6;
+    return { fee, tuition, tInstallments, summer, sInstallments };
+  };
 
-    if (fee < 0 || tuition < 0 || summer < 0) {
-      toast({ title: "Valores não podem ser negativos", variant: "destructive" });
-      return;
-    }
-
-    setSaving(true);
-    const updates: Record<string, any> = {
+  const buildUpdates = () => {
+    const { fee, tuition, tInstallments, summer, sInstallments } = getFormValues();
+    return {
       inscription_fee_cents: fee,
       tuition_installment_cents: tuition,
       tuition_installments: tInstallments,
@@ -123,19 +121,93 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
       tuition_start_date: tuitionStartDate || null,
       summercamp_start_date: summercampStartDate || null,
     };
+  };
 
+  const saveEnrollment = async (): Promise<Record<string, any> | null> => {
+    const { fee, tuition, summer } = getFormValues();
+    if (fee < 0 || tuition < 0 || summer < 0) {
+      toast({ title: "Valores não podem ser negativos", variant: "destructive" });
+      return null;
+    }
+    const updates = buildUpdates();
     const { error } = await supabase
       .from("enrollments")
       .update(updates as any)
       .eq("id", enrollmentId);
-
     if (error) {
       toast({ title: "Erro ao guardar valores", variant: "destructive" });
-    } else {
+      return null;
+    }
+    return updates;
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    const updates = await saveEnrollment();
+    if (updates) {
       toast({ title: "Valores financeiros atualizados" });
       onSaved(updates);
       setOpen(false);
     }
+    setSaving(false);
+  };
+
+  const handleSaveAndGenerate = async () => {
+    setSaving(true);
+    const updates = await saveEnrollment();
+    if (!updates) { setSaving(false); return; }
+
+    const { tuition_installment_cents, tuition_installments: tCount, tuition_start_date,
+            summercamp_installment_cents, summercamp_installments: sCount, summercamp_start_date } = updates;
+
+    // Delete existing tuition & summercamp installments before regenerating
+    await supabase.from("installments").delete().eq("enrollment_id", enrollmentId).in("type", ["tuition", "summercamp"] as any);
+
+    const rows: any[] = [];
+
+    if (tuition_installment_cents > 0 && tuition_start_date) {
+      for (let i = 0; i < tCount; i++) {
+        const date = new Date(tuition_start_date);
+        date.setMonth(date.getMonth() + i);
+        rows.push({
+          enrollment_id: enrollmentId,
+          type: "tuition",
+          installment_number: i + 1,
+          due_date: date.toISOString().split("T")[0],
+          status: "pending",
+          amount_cents: tuition_installment_cents,
+        });
+      }
+    }
+
+    if (summercamp_installment_cents > 0 && summercamp_start_date) {
+      for (let i = 0; i < sCount; i++) {
+        const date = new Date(summercamp_start_date);
+        date.setMonth(date.getMonth() + i);
+        rows.push({
+          enrollment_id: enrollmentId,
+          type: "summercamp",
+          installment_number: i + 1,
+          due_date: date.toISOString().split("T")[0],
+          status: "pending",
+          amount_cents: summercamp_installment_cents,
+        });
+      }
+    }
+
+    if (rows.length > 0) {
+      const { error } = await supabase.from("installments").insert(rows as any);
+      if (error) {
+        toast({ title: "Erro ao gerar parcelas", description: error.message, variant: "destructive" });
+      } else {
+        toast({ title: `${rows.length} parcelas geradas com sucesso` });
+      }
+    } else {
+      toast({ title: "Valores guardados. Preencha datas de início para gerar parcelas.", variant: "destructive" });
+    }
+
+    onSaved(updates);
+    setOpen(false);
     setSaving(false);
   };
 
@@ -269,10 +341,13 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
-            <Button onClick={handleSave} disabled={saving}>
+            <Button variant="secondary" onClick={handleSave} disabled={saving}>
               {saving ? "A guardar..." : "Guardar"}
+            </Button>
+            <Button onClick={handleSaveAndGenerate} disabled={saving}>
+              {saving ? "A processar..." : "Guardar e gerar pagamentos"}
             </Button>
           </DialogFooter>
         </DialogContent>
