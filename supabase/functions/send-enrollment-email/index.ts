@@ -77,12 +77,6 @@ const buildEmailHtml = (userName: string, studentName: string) => `
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="text-align:center;">
-                    <p style="margin:0 0 4px;font-size:13px;color:#5a6a78;">
-                      📧 chronoseducationbr@gmail.com
-                    </p>
-                    <p style="margin:0 0 16px;font-size:13px;color:#5a6a78;">
-                      📞 (11) 99949-1067
-                    </p>
                     <p style="margin:0 0 12px;font-size:12px;color:#9aa8b5;">
                       © ${new Date().getFullYear()} Chronos Education. Todos os direitos reservados.
                     </p>
