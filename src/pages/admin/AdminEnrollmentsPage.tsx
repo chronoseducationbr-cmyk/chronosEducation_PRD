@@ -59,6 +59,7 @@ interface Enrollment {
   contract_signed_at: string | null;
   tuition_start_date: string | null;
   summercamp_start_date: string | null;
+  quiz_test_id: string | null;
   guardian?: Guardian;
 }
 
