@@ -570,22 +570,34 @@ const AdminSettingsPage = () => {
             ) : (
               <div className="bg-card border border-border rounded-xl p-4">
                 <p className="text-xs text-muted-foreground mb-3">Valores aplicados por padrão em novas matrículas.</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <div className="space-y-3 text-sm">
                   <div>
                     <p className="text-muted-foreground text-xs">Taxa de Matrícula</p>
                     <p className="text-foreground font-medium">${(settings.default_inscription_fee_cents / 100).toFixed(2)}</p>
                   </div>
-                  <div>
-                    <p className="text-muted-foreground text-xs">Mensalidade Plataforma</p>
-                    <p className="text-foreground font-medium">${(settings.default_tuition_installment_cents / 100).toFixed(2)} × {settings.default_tuition_installments} parcelas</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-muted-foreground text-xs">Nº Parcelas Plataforma</p>
+                      <p className="text-foreground font-medium">{settings.default_tuition_installments}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">Mensalidade Plataforma</p>
+                      <p className="text-foreground font-medium">${(settings.default_tuition_installment_cents / 100).toFixed(2)}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-muted-foreground text-xs">Mensalidade Summer Camp</p>
-                    <p className="text-foreground font-medium">
-                      {settings.default_summercamp_installment_cents > 0
-                        ? `$${(settings.default_summercamp_installment_cents / 100).toFixed(2)} × ${settings.default_summercamp_installments} parcelas`
-                        : "Não definido"}
-                    </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-muted-foreground text-xs">Nº Parcelas Summer Camp</p>
+                      <p className="text-foreground font-medium">{settings.default_summercamp_installments}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">Mensalidade Summer Camp</p>
+                      <p className="text-foreground font-medium">
+                        {settings.default_summercamp_installment_cents > 0
+                          ? `$${(settings.default_summercamp_installment_cents / 100).toFixed(2)}`
+                          : "Não definido"}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
