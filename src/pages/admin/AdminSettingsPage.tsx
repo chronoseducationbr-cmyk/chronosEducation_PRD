@@ -21,6 +21,7 @@ const AdminSettingsPage = () => {
   const [toggling, setToggling] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   useEffect(() => {
     loadTests();
