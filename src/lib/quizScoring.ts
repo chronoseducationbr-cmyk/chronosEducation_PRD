@@ -25,6 +25,7 @@ const scoringConfigs: Record<string, TestScoringConfig> = {
     ],
   },
   test2: {
+    maxPoints: 60,
     getWeight: () => 1,
     classifications: [
       { minPoints: 54, level: "B2", label: "Intermédio Superior" },
