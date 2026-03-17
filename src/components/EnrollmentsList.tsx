@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { GraduationCap, Clock, Plus, ChevronDown, ChevronUp, FileText, Download, BookOpen, Check, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { getClassification } from "@/lib/quizScoring";
 
 interface Enrollment {
   id: string;
@@ -244,19 +245,22 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                          <BookOpen size={14} className="text-secondary" />
                          Teste de Inglês
                        </p>
-                       {quizResults[e.id] ? (
+                       {quizResults[e.id] ? (() => {
+                          const cls = getClassification(quizResults[e.id].score_points);
+                          return (
                           <div className="flex flex-col gap-1 text-sm">
                             <div className="flex items-center gap-2">
-                              <span className="text-foreground font-medium">
-                                {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pontos
+                              <span className="text-foreground font-semibold">
+                                {cls.level}{cls.label ? ` (${cls.label})` : ""}
                               </span>
                               <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
                             </div>
                             <span className="text-muted-foreground text-xs">
-                              {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
+                              {quizResults[e.id].score_points}/{quizResults[e.id].max_points} pontos · {quizResults[e.id].correct_count}/{quizResults[e.id].total_questions} respostas certas
                             </span>
                           </div>
-                       ) : (
+                          );
+                       })() : (
                           <button
                             onClick={() => navigate(`/teste-ingles?enrollment=${e.id}`)}
                             className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#F9B91D] hover:text-[#F9B91D]/80 transition-colors"

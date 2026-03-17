@@ -9,7 +9,7 @@ import SEOHead from "@/components/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { calculateQuizScore } from "@/lib/quizScoring";
+import { calculateQuizScore, getClassification } from "@/lib/quizScoring";
 
 const EnglishQuizPage = () => {
   const { user } = useAuth();
@@ -165,6 +165,9 @@ const EnglishQuizPage = () => {
   }
 
   if (finished) {
+    const { scorePoints, maxPoints, correctCount } = calculateQuizScore(quizQuestions, answers);
+    const cls = getClassification(scorePoints);
+
     return (
       <div className="min-h-screen bg-background">
         <SEOHead title="Resultado — Teste de Inglês" description="Resultado do teste de nível de inglês." />
@@ -180,7 +183,17 @@ const EnglishQuizPage = () => {
           <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-8 h-8 text-secondary" />
           </div>
-          <h1 className="font-heading text-3xl font-bold text-foreground mb-8">Test Completed!</h1>
+          <h1 className="font-heading text-3xl font-bold text-foreground mb-4">Test Completed!</h1>
+
+          <div className="bg-card border border-border rounded-xl p-6 mb-8">
+            <p className="text-sm text-muted-foreground mb-1">A tua classificação</p>
+            <p className="text-3xl font-bold text-accent mb-1">
+              {cls.level}{cls.label ? ` — ${cls.label}` : ""}
+            </p>
+            <p className="text-muted-foreground text-sm">
+              {scorePoints}/{maxPoints} pontos · {correctCount}/{quizQuestions.length} respostas certas
+            </p>
+          </div>
 
           <button
              onClick={() => navigate("/gestao-matriculas")}
