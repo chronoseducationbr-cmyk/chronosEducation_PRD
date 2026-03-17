@@ -98,6 +98,7 @@ const EnglishQuizPage = () => {
           const slug = (test as any).slug as string;
           const questions = quizTestsMap[slug];
           if (questions) {
+            setTestSlug(slug);
             setQuizQuestions(questions);
             setLoadingTest(false);
             return;
