@@ -4,6 +4,7 @@ import { GraduationCap, Clock, Plus, ChevronDown, ChevronUp, FileText, Download,
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { getClassification } from "@/lib/quizScoring";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Enrollment {
   id: string;
