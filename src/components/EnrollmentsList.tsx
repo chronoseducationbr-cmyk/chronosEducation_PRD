@@ -251,7 +251,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                          Teste de Inglês
                        </p>
                        {quizResults[e.id] ? (() => {
-                          const cls = getClassification(quizResults[e.id].score_points);
+                          const cls = getClassification(quizResults[e.id].score_points, e.quiz_test_id ? testSlugMap[e.quiz_test_id] : undefined);
                           return (
                           <div className="flex flex-col gap-1 text-sm">
                             <div className="flex items-center gap-2">
