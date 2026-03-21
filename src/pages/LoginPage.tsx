@@ -71,7 +71,7 @@ const LoginPage = () => {
           <div className="max-w-md">
             <img src={chronosLogoHeader} alt="Chronos Education" className="h-12 mb-6" />
             <p className="text-primary-foreground/70 text-lg leading-relaxed">
-              Acesse à sua área privada para fazer a matrícula
+              Acesse à sua área privada para consultar as suas informações
             </p>
           </div>
         </div>
