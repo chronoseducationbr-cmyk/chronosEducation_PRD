@@ -51,7 +51,16 @@ const AdminSettingsPage = () => {
   const [editingContract, setEditingContract] = useState(false);
   const [contractDraft, setContractDraft] = useState("");
   const [editingFinancials, setEditingFinancials] = useState(false);
-  const [financialDraft, setFinancialDraft] = useState({
+  const [financialDraft, setFinancialDraft] = useState<{
+    inscription: number;
+    tuition: number;
+    tuitionInstallments: number;
+    summercamp: number;
+    summercampInstallments: number;
+    inscriptionDisplay?: string;
+    tuitionDisplay?: string;
+    summercampDisplay?: string;
+  }>({
     inscription: 800,
     tuition: 450,
     tuitionInstallments: 16,
