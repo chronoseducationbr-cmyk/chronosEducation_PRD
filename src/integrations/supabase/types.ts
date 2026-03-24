@@ -610,6 +610,7 @@ export type Database = {
         Returns: {
           created_at: string
           email: string
+          email_confirmed_at: string
           last_sign_in_at: string
           user_id: string
         }[]
