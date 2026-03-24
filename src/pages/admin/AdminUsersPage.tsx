@@ -70,6 +70,7 @@ const AdminUsersPage = () => {
       email: u.email,
       last_sign_in_at: u.last_sign_in_at,
       created_at: u.created_at,
+      email_confirmed_at: u.email_confirmed_at,
       full_name: profileMap[u.user_id]?.full_name || "",
       phone: profileMap[u.user_id]?.phone || null,
       is_admin: adminSet.has(u.user_id),
