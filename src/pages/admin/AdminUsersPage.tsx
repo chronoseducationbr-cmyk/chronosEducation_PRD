@@ -163,6 +163,8 @@ const AdminUsersPage = () => {
   // Users: only those who have logged in at least once
   const activeUsers = users.filter((u) => u.last_sign_in_at !== null);
   const activeUserEmails = new Set(activeUsers.map((u) => u.email?.toLowerCase()));
+  // All auth user emails (for cross-referencing with invites)
+  const allAuthUserEmails = new Map(users.map((u) => [u.email?.toLowerCase(), u]));
 
   const filteredUsers = activeUsers.filter(
     (u) =>
