@@ -19,6 +19,7 @@ interface UserData {
   email: string | null;
   last_sign_in_at: string | null;
   created_at: string;
+  email_confirmed_at: string | null;
   full_name: string;
   phone: string | null;
   is_admin: boolean;
