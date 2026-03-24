@@ -183,10 +183,10 @@ const AdminSettingsPage = () => {
 
   const handleSaveFinancials = () => {
     updateSettings({
-      default_inscription_fee_cents: financialDraft.inscription * 100,
-      default_tuition_installment_cents: financialDraft.tuition * 100,
+      default_inscription_fee_cents: Math.round(financialDraft.inscription * 100),
+      default_tuition_installment_cents: Math.round(financialDraft.tuition * 100),
       default_tuition_installments: financialDraft.tuitionInstallments,
-      default_summercamp_installment_cents: financialDraft.summercamp * 100,
+      default_summercamp_installment_cents: Math.round(financialDraft.summercamp * 100),
       default_summercamp_installments: financialDraft.summercampInstallments,
     });
     setEditingFinancials(false);
