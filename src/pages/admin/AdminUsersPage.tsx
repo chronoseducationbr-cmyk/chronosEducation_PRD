@@ -284,7 +284,10 @@ const AdminUsersPage = () => {
                       </div>
                     </div>
                     <div className="shrink-0 flex items-center gap-2">
-                      {isUsed(inv) && (
+                      {isUsed(inv) && (() => {
+                        const authUser = allAuthUserEmails.get(inv.email.toLowerCase());
+                        return authUser && !authUser.email_confirmed_at;
+                      })() && (
                         <Button
                           variant="outline"
                           size="sm"
