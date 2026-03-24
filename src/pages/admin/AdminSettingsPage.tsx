@@ -479,17 +479,21 @@ const AdminSettingsPage = () => {
             ) : editingFinancials ? (
               <div className="bg-card border border-border rounded-xl p-4 space-y-4">
                 <p className="text-xs text-muted-foreground">Estes valores serão aplicados como padrão em novas matrículas.</p>
+                <p className="text-[11px] text-muted-foreground/70 italic">Utilize ponto (.) como separador decimal — ex: 450.50</p>
                 <div className="space-y-4">
                   {/* Taxa de Matrícula - sozinha */}
                   <div>
                     <label className="text-xs font-medium text-muted-foreground mb-1 block">Taxa de Matrícula ($)</label>
                     <div className="relative max-w-[240px]">
                       <input
-                        type="number"
-                        min={0}
-                        step={0.01}
-                        value={financialDraft.inscription}
-                        onChange={(e) => setFinancialDraft((d) => ({ ...d, inscription: parseFloat(e.target.value) || 0 }))}
+                        type="text"
+                        inputMode="decimal"
+                        value={financialDraft.inscriptionDisplay ?? financialDraft.inscription.toFixed(2)}
+                        onChange={(e) => {
+                          const raw = e.target.value.replace(/[^0-9.]/g, "");
+                          setFinancialDraft((d) => ({ ...d, inscriptionDisplay: raw, inscription: parseFloat(raw) || 0 }));
+                        }}
+                        onBlur={() => setFinancialDraft((d) => ({ ...d, inscriptionDisplay: undefined, inscription: parseFloat(String(d.inscription)) || 0 }))}
                         className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
                       />
                     </div>
@@ -510,11 +514,14 @@ const AdminSettingsPage = () => {
                     <div>
                       <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Plataforma ($)</label>
                       <input
-                        type="number"
-                        min={0}
-                        step={0.01}
-                        value={financialDraft.tuition}
-                        onChange={(e) => setFinancialDraft((d) => ({ ...d, tuition: parseFloat(e.target.value) || 0 }))}
+                        type="text"
+                        inputMode="decimal"
+                        value={financialDraft.tuitionDisplay ?? financialDraft.tuition.toFixed(2)}
+                        onChange={(e) => {
+                          const raw = e.target.value.replace(/[^0-9.]/g, "");
+                          setFinancialDraft((d) => ({ ...d, tuitionDisplay: raw, tuition: parseFloat(raw) || 0 }));
+                        }}
+                        onBlur={() => setFinancialDraft((d) => ({ ...d, tuitionDisplay: undefined, tuition: parseFloat(String(d.tuition)) || 0 }))}
                         className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
                       />
                     </div>
@@ -535,11 +542,14 @@ const AdminSettingsPage = () => {
                     <div>
                       <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Summer Camp ($)</label>
                       <input
-                        type="number"
-                        min={0}
-                        step={0.01}
-                        value={financialDraft.summercamp}
-                        onChange={(e) => setFinancialDraft((d) => ({ ...d, summercamp: parseFloat(e.target.value) || 0 }))}
+                        type="text"
+                        inputMode="decimal"
+                        value={financialDraft.summercampDisplay ?? financialDraft.summercamp.toFixed(2)}
+                        onChange={(e) => {
+                          const raw = e.target.value.replace(/[^0-9.]/g, "");
+                          setFinancialDraft((d) => ({ ...d, summercampDisplay: raw, summercamp: parseFloat(raw) || 0 }));
+                        }}
+                        onBlur={() => setFinancialDraft((d) => ({ ...d, summercampDisplay: undefined, summercamp: parseFloat(String(d.summercamp)) || 0 }))}
                         className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
                       />
                     </div>
