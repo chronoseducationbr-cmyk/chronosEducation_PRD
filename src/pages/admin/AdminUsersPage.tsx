@@ -19,6 +19,7 @@ interface UserData {
   email: string | null;
   last_sign_in_at: string | null;
   created_at: string;
+  email_confirmed_at: string | null;
   full_name: string;
   phone: string | null;
   is_admin: boolean;
@@ -69,6 +70,7 @@ const AdminUsersPage = () => {
       email: u.email,
       last_sign_in_at: u.last_sign_in_at,
       created_at: u.created_at,
+      email_confirmed_at: u.email_confirmed_at,
       full_name: profileMap[u.user_id]?.full_name || "",
       phone: profileMap[u.user_id]?.phone || null,
       is_admin: adminSet.has(u.user_id),
@@ -161,6 +163,8 @@ const AdminUsersPage = () => {
   // Users: only those who have logged in at least once
   const activeUsers = users.filter((u) => u.last_sign_in_at !== null);
   const activeUserEmails = new Set(activeUsers.map((u) => u.email?.toLowerCase()));
+  // All auth user emails (for cross-referencing with invites)
+  const allAuthUserEmails = new Map(users.map((u) => [u.email?.toLowerCase(), u]));
 
   const filteredUsers = activeUsers.filter(
     (u) =>
@@ -280,7 +284,10 @@ const AdminUsersPage = () => {
                       </div>
                     </div>
                     <div className="shrink-0 flex items-center gap-2">
-                      {isUsed(inv) && (
+                      {isUsed(inv) && (() => {
+                        const authUser = allAuthUserEmails.get(inv.email.toLowerCase());
+                        return authUser && !authUser.email_confirmed_at;
+                      })() && (
                         <Button
                           variant="outline"
                           size="sm"
