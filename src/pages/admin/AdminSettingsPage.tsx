@@ -183,10 +183,10 @@ const AdminSettingsPage = () => {
 
   const handleSaveFinancials = () => {
     updateSettings({
-      default_inscription_fee_cents: financialDraft.inscription * 100,
-      default_tuition_installment_cents: financialDraft.tuition * 100,
+      default_inscription_fee_cents: Math.round(financialDraft.inscription * 100),
+      default_tuition_installment_cents: Math.round(financialDraft.tuition * 100),
       default_tuition_installments: financialDraft.tuitionInstallments,
-      default_summercamp_installment_cents: financialDraft.summercamp * 100,
+      default_summercamp_installment_cents: Math.round(financialDraft.summercamp * 100),
       default_summercamp_installments: financialDraft.summercampInstallments,
     });
     setEditingFinancials(false);
@@ -487,11 +487,11 @@ const AdminSettingsPage = () => {
                       <input
                         type="number"
                         min={0}
+                        step={0.01}
                         value={financialDraft.inscription}
-                        onChange={(e) => setFinancialDraft((d) => ({ ...d, inscription: parseInt(e.target.value) || 0 }))}
-                        className="w-full rounded-lg border border-border bg-background p-2 pr-12 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                        onChange={(e) => setFinancialDraft((d) => ({ ...d, inscription: parseFloat(e.target.value) || 0 }))}
+                        className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
                       />
-                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">,00</span>
                     </div>
                   </div>
 
@@ -509,16 +509,14 @@ const AdminSettingsPage = () => {
                     </div>
                     <div>
                       <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Plataforma ($)</label>
-                      <div className="relative">
-                        <input
-                          type="number"
-                          min={0}
-                          value={financialDraft.tuition}
-                          onChange={(e) => setFinancialDraft((d) => ({ ...d, tuition: parseInt(e.target.value) || 0 }))}
-                          className="w-full rounded-lg border border-border bg-background p-2 pr-12 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
-                        />
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">,00</span>
-                      </div>
+                      <input
+                        type="number"
+                        min={0}
+                        step={0.01}
+                        value={financialDraft.tuition}
+                        onChange={(e) => setFinancialDraft((d) => ({ ...d, tuition: parseFloat(e.target.value) || 0 }))}
+                        className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                      />
                     </div>
                   </div>
 
@@ -536,16 +534,14 @@ const AdminSettingsPage = () => {
                     </div>
                     <div>
                       <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Summer Camp ($)</label>
-                      <div className="relative">
-                        <input
-                          type="number"
-                          min={0}
-                          value={financialDraft.summercamp}
-                          onChange={(e) => setFinancialDraft((d) => ({ ...d, summercamp: parseInt(e.target.value) || 0 }))}
-                          className="w-full rounded-lg border border-border bg-background p-2 pr-12 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
-                        />
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">,00</span>
-                      </div>
+                      <input
+                        type="number"
+                        min={0}
+                        step={0.01}
+                        value={financialDraft.summercamp}
+                        onChange={(e) => setFinancialDraft((d) => ({ ...d, summercamp: parseFloat(e.target.value) || 0 }))}
+                        className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                      />
                     </div>
                   </div>
                 </div>
