@@ -76,7 +76,7 @@ const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="mt-16 flex flex-wrap gap-8 md:gap-12"
+            className="mt-16 flex flex-wrap justify-center gap-8 md:gap-12"
           >
             {[
               { value: "100%", label: "Online" },
