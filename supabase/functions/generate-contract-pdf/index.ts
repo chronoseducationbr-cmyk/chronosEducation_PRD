@@ -251,6 +251,25 @@ serve(async (req) => {
       );
     }
 
+    // Fetch financial data from enrollment
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    const { data: enrollment } = await supabase
+      .from("enrollments")
+      .select("inscription_fee_cents, tuition_installment_cents, tuition_installments, summercamp_installment_cents, summercamp_installments")
+      .eq("id", enrollmentId)
+      .single();
+
+    const financial = {
+      inscriptionFeeCents: enrollment?.inscription_fee_cents ?? 0,
+      tuitionInstallmentCents: enrollment?.tuition_installment_cents ?? 0,
+      tuitionInstallments: enrollment?.tuition_installments ?? 0,
+      summercampInstallmentCents: enrollment?.summercamp_installment_cents ?? 0,
+      summercampInstallments: enrollment?.summercamp_installments ?? 0,
+    };
+
     const now = new Date();
     const signedDate = now.toLocaleDateString("pt-BR", {
       day: "2-digit",
@@ -258,7 +277,7 @@ serve(async (req) => {
       year: "numeric",
     });
 
-    const pdfBytes = await buildContractPdf(guardian, student, signedDate);
+    const pdfBytes = await buildContractPdf(guardian, student, financial, signedDate);
 
     // Upload to Supabase Storage
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
