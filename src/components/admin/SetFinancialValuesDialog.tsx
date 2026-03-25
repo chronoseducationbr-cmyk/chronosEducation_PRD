@@ -36,9 +36,10 @@ interface Props {
     summercamp_start_date: string | null;
   };
   onSaved: (updates: Record<string, any>) => void;
+  disabled?: boolean;
 }
 
-const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt, currentValues, onSaved }: Props) => {
+const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt, currentValues, onSaved, disabled = false }: Props) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
