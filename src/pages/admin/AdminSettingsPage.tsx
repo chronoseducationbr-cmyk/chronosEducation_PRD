@@ -191,10 +191,6 @@ const AdminSettingsPage = () => {
               {settings.contract_enabled ? "ON" : "OFF"}
             </span>
           </TabsTrigger>
-          <TabsTrigger value="valores" className={tabTriggerClass}>
-            <DollarSign size={18} className="mr-2" />
-            Valores Padrão
-          </TabsTrigger>
         </TabsList>
 
         {/* ─── Testes de Inglês ─── */}
