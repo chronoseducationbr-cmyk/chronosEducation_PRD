@@ -417,26 +417,6 @@ const DashboardPage = () => {
                     Nova Matrícula
                   </h2>
 
-                  {/* Step indicator */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 1 ? "bg-secondary text-secondary-foreground" : "bg-secondary/20 text-secondary"}`}>
-                        1
-                      </div>
-                      <span className={`text-sm font-medium ${wizardStep === 1 ? "text-foreground" : "text-muted-foreground"}`}>
-                        Dados do Aluno
-                      </span>
-                    </div>
-                    <div className="w-8 h-px bg-border" />
-                    <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 2 ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>
-                        2
-                      </div>
-                      <span className={`text-sm font-medium ${wizardStep === 2 ? "text-foreground" : "text-muted-foreground"}`}>
-                        Assinatura de Contrato
-                      </span>
-                    </div>
-                  </div>
 
                   {/* Step 1: Student Data */}
                   {wizardStep === 1 && (
