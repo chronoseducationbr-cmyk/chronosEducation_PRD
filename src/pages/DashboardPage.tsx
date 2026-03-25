@@ -158,7 +158,11 @@ const DashboardPage = () => {
         student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
         referred_by_email: referralRef.current.trim(),
         status: "Matrícula confirmada",
-        inscription_fee_cents: 80000,
+        inscription_fee_cents: 0,
+        tuition_installments: 16,
+        summercamp_installments: 6,
+        tuition_installment_cents: 0,
+        summercamp_installment_cents: 0,
       };
       if (activeTest) {
         insertData.quiz_test_id = (activeTest as any).id;
