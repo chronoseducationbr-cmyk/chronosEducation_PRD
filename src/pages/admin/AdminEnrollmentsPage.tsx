@@ -301,6 +301,7 @@ const AdminEnrollmentsPage = () => {
                             prev.map((en) => (en.id === e.id ? { ...en, ...updates } : en))
                           );
                         }}
+                        disabled={!!e.has_installments}
                       />
                     </div>
                   </div>
