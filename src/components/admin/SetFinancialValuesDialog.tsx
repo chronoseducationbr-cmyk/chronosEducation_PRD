@@ -314,17 +314,18 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Summer Camp</Label>
               <div className="grid grid-cols-3 gap-3 mt-1">
                 <div>
-                  <Label className="text-xs text-muted-foreground">Nº parcelas</Label>
+                  <Label className="text-xs text-muted-foreground">Nº parcelas <span className="text-destructive">*</span></Label>
                   <Input
                     type="number"
                     min="1"
                     value={summercampInstallments}
                     onChange={(e) => setSummercampInstallments(e.target.value)}
                     className="h-9"
+                    required
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Valor ($)</Label>
+                  <Label className="text-xs text-muted-foreground">Valor ($) <span className="text-destructive">*</span></Label>
                   <Input
                     type="text"
                     inputMode="decimal"
@@ -333,10 +334,11 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                     onChange={(e) => handleMoneyChange(e, setSummercampValue)}
                     onBlur={() => handleMoneyBlur(summercampValue, setSummercampValue)}
                     className="h-9"
+                    required
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Data início</Label>
+                  <Label className="text-xs text-muted-foreground">Data início <span className="text-destructive">*</span></Label>
                   <Input
                     type="date"
                     value={summercampStartDate}
