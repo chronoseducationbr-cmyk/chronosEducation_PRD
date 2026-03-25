@@ -51,32 +51,36 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
   const [summercampInstallments, setSummercampInstallments] = useState("6");
   const [summercampStartDate, setSummercampStartDate] = useState("");
 
-  const formatMoneyInput = (value: string) => (value ? `${value},00` : "");
-
-  const parseMoneyInput = (value: string) => {
-    const [integerPart = ""] = value.split(",");
-    return integerPart.replace(/\D/g, "");
+  const formatMoneyDisplay = (value: string) => {
+    if (!value) return "";
+    // If already contains comma, show as-is
+    if (value.includes(",")) return value;
+    // Otherwise show with comma decimal
+    const num = parseFloat(value);
+    if (isNaN(num)) return value;
+    const [int, dec] = num.toFixed(2).split(".");
+    return `${int},${dec}`;
   };
 
-  const placeCaretBeforeDecimals = (input: HTMLInputElement) => {
-    const caretPosition = parseMoneyInput(input.value).length;
-    requestAnimationFrame(() => {
-      input.setSelectionRange(caretPosition, caretPosition);
-    });
+  const parseMoneyToNumber = (value: string): number => {
+    // Replace comma with dot for parsing
+    const normalized = value.replace(",", ".");
+    return parseFloat(normalized) || 0;
   };
 
   const handleMoneyChange = (event: ChangeEvent<HTMLInputElement>, setValue: (value: string) => void) => {
-    const integerPart = parseMoneyInput(event.target.value);
-    setValue(integerPart);
-    placeCaretBeforeDecimals(event.target);
-  };
-
-  const handleMoneyFocus = (event: FocusEvent<HTMLInputElement>) => {
-    placeCaretBeforeDecimals(event.currentTarget);
-  };
-
-  const handleMoneyClick = (event: MouseEvent<HTMLInputElement>) => {
-    placeCaretBeforeDecimals(event.currentTarget);
+    // Allow digits and one comma as decimal separator
+    const raw = event.target.value.replace(/[^0-9,]/g, "");
+    // Ensure only one comma
+    const parts = raw.split(",");
+    const sanitized = parts.length > 2 ? `${parts[0]},${parts.slice(1).join("")}` : raw;
+    // Limit decimal to 2 digits
+    if (sanitized.includes(",")) {
+      const [intPart, decPart] = sanitized.split(",");
+      setValue(`${intPart},${decPart.slice(0, 2)}`);
+    } else {
+      setValue(sanitized);
+    }
   };
 
   const handleOpen = async () => {
