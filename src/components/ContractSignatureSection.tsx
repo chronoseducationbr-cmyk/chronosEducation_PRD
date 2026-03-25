@@ -104,6 +104,11 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData, f
     return new Date(date + "T00:00:00").toLocaleDateString("pt-BR");
   };
 
+  const fmtCurrency = (cents: number) => {
+    if (!cents || cents <= 0) return "A definir";
+    return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  };
+
   const sections = parseContractSections(contractText);
 
   return (
