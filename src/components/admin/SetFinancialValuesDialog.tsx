@@ -315,8 +315,9 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                     type="text"
                     inputMode="decimal"
                     placeholder="0,00"
-                    value={formatMoneyDisplay(summercampValue)}
+                    value={summercampValue}
                     onChange={(e) => handleMoneyChange(e, setSummercampValue)}
+                    onBlur={() => handleMoneyBlur(summercampValue, setSummercampValue)}
                     className="h-9"
                   />
                 </div>
