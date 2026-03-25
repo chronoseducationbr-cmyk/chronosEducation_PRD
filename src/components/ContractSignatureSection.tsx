@@ -4,10 +4,19 @@ import { supabase } from "@/integrations/supabase/client";
 import type { GuardianData } from "@/components/GuardianDataSection";
 import type { StudentData } from "@/components/StudentDataSection";
 
+interface FinancialData {
+  inscriptionFeeCents: number;
+  tuitionInstallmentCents: number;
+  tuitionInstallments: number;
+  summercampInstallmentCents: number;
+  summercampInstallments: number;
+}
+
 interface Props {
   onAcceptChange: (accepted: boolean) => void;
   guardianData: GuardianData;
   studentData: StudentData;
+  financialData?: FinancialData;
 }
 
 /**
@@ -46,7 +55,7 @@ function parseContractSections(text: string) {
   return sections;
 }
 
-const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }: Props) => {
+const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData, financialData }: Props) => {
   const [accepted, setAccepted] = useState(false);
   const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
   const [contractText, setContractText] = useState("");
@@ -93,6 +102,11 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }:
   const formatBirthDate = (date: string) => {
     if (!date) return "—";
     return new Date(date + "T00:00:00").toLocaleDateString("pt-BR");
+  };
+
+  const fmtCurrency = (cents: number) => {
+    if (!cents || cents <= 0) return "A definir";
+    return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   };
 
   const sections = parseContractSections(contractText);
@@ -174,6 +188,44 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }:
                 )}
               </div>
             ))}
+
+            {/* Financial values section */}
+            {financialData && (
+              <div>
+                <p className="font-semibold mb-2">Valores e Pagamento</p>
+                <div className="pl-3 space-y-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
+                    <p>Taxa de Matrícula: <span className="font-medium">{fmtCurrency(financialData.inscriptionFeeCents)}</span></p>
+                  </div>
+
+                  <div>
+                    <p className="font-medium text-muted-foreground text-xs uppercase tracking-wide mb-1">Plataforma Online</p>
+                    {financialData.tuitionInstallmentCents > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
+                        <p>Valor da parcela: <span className="font-medium">{fmtCurrency(financialData.tuitionInstallmentCents)}</span></p>
+                        <p>Nº de parcelas: <span className="font-medium">{financialData.tuitionInstallments}</span></p>
+                        <p>Total: <span className="font-medium">{fmtCurrency(financialData.tuitionInstallmentCents * financialData.tuitionInstallments)}</span></p>
+                      </div>
+                    ) : (
+                      <p className="italic text-muted-foreground">Valores a definir pela equipa Chronos Education.</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <p className="font-medium text-muted-foreground text-xs uppercase tracking-wide mb-1">Summer Camp</p>
+                    {financialData.summercampInstallmentCents > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
+                        <p>Valor da parcela: <span className="font-medium">{fmtCurrency(financialData.summercampInstallmentCents)}</span></p>
+                        <p>Nº de parcelas: <span className="font-medium">{financialData.summercampInstallments}</span></p>
+                        <p>Total: <span className="font-medium">{fmtCurrency(financialData.summercampInstallmentCents * financialData.summercampInstallments)}</span></p>
+                      </div>
+                    ) : (
+                      <p className="italic text-muted-foreground">Valores a definir pela equipa Chronos Education.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>
