@@ -62,6 +62,7 @@ interface Enrollment {
   summercamp_start_date: string | null;
   quiz_test_id: string | null;
   guardian?: Guardian;
+  has_installments?: boolean;
 }
 
 const statuses = [
