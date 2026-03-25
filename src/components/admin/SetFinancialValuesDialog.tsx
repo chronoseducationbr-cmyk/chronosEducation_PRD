@@ -247,7 +247,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula</Label>
               <div className="grid grid-cols-2 gap-3 mt-1">
                 <div>
-                  <Label className="text-xs text-muted-foreground">Valor ($)</Label>
+                  <Label className="text-xs text-muted-foreground">Valor ($) <span className="text-destructive">*</span></Label>
                   <Input
                     type="text"
                     inputMode="decimal"
@@ -256,10 +256,11 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                     onChange={(e) => handleMoneyChange(e, setInscriptionFee)}
                     onBlur={() => handleMoneyBlur(inscriptionFee, setInscriptionFee)}
                     className="h-9"
+                    required
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Data de vencimento</Label>
+                  <Label className="text-xs text-muted-foreground">Data de vencimento <span className="text-destructive">*</span></Label>
                   <Input
                     type="date"
                     value={inscriptionDueDate}
