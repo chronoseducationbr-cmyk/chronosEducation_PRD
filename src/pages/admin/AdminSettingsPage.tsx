@@ -354,7 +354,17 @@ const AdminSettingsPage = () => {
                   </div>
                 </div>
 
-                {/* Contract text */}
+                {/* Financial section info */}
+                <div className="bg-muted/40 border border-border rounded-xl p-4 flex items-start gap-3">
+                  <Info size={16} className="text-secondary shrink-0 mt-0.5" />
+                  <div className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="font-medium text-foreground mb-1">Valores e Pagamento — Secção dinâmica</p>
+                    <p>
+                      Esta secção é preenchida automaticamente com os valores financeiros atribuídos ao aluno: taxa de matrícula, parcelas da Plataforma Online (valor e quantidade) e parcelas do Summer Camp (valor e quantidade). Quando os valores ainda não foram definidos, aparece "Valores a definir pela equipa Chronos Education".
+                    </p>
+                  </div>
+                </div>
+
                 <div className="bg-card border border-border rounded-xl p-4">
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Texto do Contrato</p>
