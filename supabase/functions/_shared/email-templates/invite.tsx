@@ -50,7 +50,7 @@ export const InviteEmail = ({
           {inviteCode && (
             <>
               <Text style={{ ...text, margin: '0 0 8px' }}>
-                O seu código de convite:
+                Código de convite:
               </Text>
               <Section style={codeBox}>
                 <Text style={codeText}>{inviteCode}</Text>
