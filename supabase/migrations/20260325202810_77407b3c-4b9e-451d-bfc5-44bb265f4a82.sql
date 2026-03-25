@@ -1,0 +1,1 @@
+DROP TRIGGER IF EXISTS trg_create_inscription_installment ON public.enrollments;
