@@ -95,11 +95,12 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     const dSummer = defaults?.default_summercamp_installment_cents ?? 0;
     const dSummerInst = defaults?.default_summercamp_installments ?? 6;
 
-    setInscriptionFee(currentValues.inscription_fee_cents > 0 ? String(currentValues.inscription_fee_cents / 100) : String(dInscription / 100));
-    setTuitionValue(currentValues.tuition_installment_cents > 0 ? String(currentValues.tuition_installment_cents / 100) : String(dTuition / 100));
+    const toComma = (v: number) => v.toFixed(2).replace(".", ",");
+    setInscriptionFee(currentValues.inscription_fee_cents > 0 ? toComma(currentValues.inscription_fee_cents / 100) : toComma(dInscription / 100));
+    setTuitionValue(currentValues.tuition_installment_cents > 0 ? toComma(currentValues.tuition_installment_cents / 100) : toComma(dTuition / 100));
     setTuitionInstallments(currentValues.tuition_installments > 0 ? String(currentValues.tuition_installments) : String(dTuitionInst));
     setTuitionStartDate(currentValues.tuition_start_date || "");
-    setSummercampValue(currentValues.summercamp_installment_cents > 0 ? String(currentValues.summercamp_installment_cents / 100) : (dSummer > 0 ? String(dSummer / 100) : ""));
+    setSummercampValue(currentValues.summercamp_installment_cents > 0 ? toComma(currentValues.summercamp_installment_cents / 100) : (dSummer > 0 ? toComma(dSummer / 100) : ""));
     setSummercampInstallments(currentValues.summercamp_installments > 0 ? String(currentValues.summercamp_installments) : String(dSummerInst));
     setSummercampStartDate(currentValues.summercamp_start_date || "");
     setOpen(true);
