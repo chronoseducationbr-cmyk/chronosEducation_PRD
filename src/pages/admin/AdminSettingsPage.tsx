@@ -72,11 +72,6 @@ const AdminSettingsPage = () => {
       const s = data as any;
       setSettings({
         contract_enabled: s.contract_enabled,
-        default_inscription_fee_cents: s.default_inscription_fee_cents,
-        default_tuition_installment_cents: s.default_tuition_installment_cents,
-        default_tuition_installments: s.default_tuition_installments,
-        default_summercamp_installment_cents: s.default_summercamp_installment_cents,
-        default_summercamp_installments: s.default_summercamp_installments,
         contract_text: s.contract_text || "",
       });
     }
