@@ -21,7 +21,7 @@ const DashboardPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [wizardStep, setWizardStep] = useState(1);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [contractAccepted, setContractAccepted] = useState(false);
+  
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
