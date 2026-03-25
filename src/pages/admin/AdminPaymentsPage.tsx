@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import SetFinancialValuesDialog from "@/components/admin/SetFinancialValuesDialog";
 
 interface Enrollment {
   id: string;
