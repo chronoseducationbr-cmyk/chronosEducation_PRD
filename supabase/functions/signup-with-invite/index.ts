@@ -198,7 +198,7 @@ function buildConfirmationEmailHtml(name: string, confirmUrl: string): string {
               </tr>
             </table>
             <p style="color:#999;font-size:13px;line-height:1.5;margin:0;">
-              ⚠️ Importante: clique no botão acima. Não copie o link diretamente — ele só funciona quando clicado manualmente.
+              Importante: clique no botão acima. Não copie o link diretamente, só funciona quando clicado manualmente.
             </p>
           </td>
         </tr>
