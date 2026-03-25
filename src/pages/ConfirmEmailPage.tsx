@@ -130,7 +130,7 @@ const ConfirmEmailPage = () => {
                   {status === "loading" ? "A confirmar..." : "Confirmar o meu email"}
                 </button>
                 <p className="text-xs text-muted-foreground">
-                  Este botão é necessário para garantir que é realmente você — e não um bot de email — a confirmar a conta.
+                  Este botão é necessário para garantir que é realmente você a confirmar a conta.
                 </p>
               </div>
             )}
