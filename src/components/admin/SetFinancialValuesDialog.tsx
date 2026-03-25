@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FocusEvent, type MouseEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,32 +51,36 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
   const [summercampInstallments, setSummercampInstallments] = useState("6");
   const [summercampStartDate, setSummercampStartDate] = useState("");
 
-  const formatMoneyInput = (value: string) => (value ? `${value},00` : "");
-
-  const parseMoneyInput = (value: string) => {
-    const [integerPart = ""] = value.split(",");
-    return integerPart.replace(/\D/g, "");
+  const formatMoneyDisplay = (value: string) => {
+    if (!value) return "";
+    // If already contains comma, show as-is
+    if (value.includes(",")) return value;
+    // Otherwise show with comma decimal
+    const num = parseFloat(value);
+    if (isNaN(num)) return value;
+    const [int, dec] = num.toFixed(2).split(".");
+    return `${int},${dec}`;
   };
 
-  const placeCaretBeforeDecimals = (input: HTMLInputElement) => {
-    const caretPosition = parseMoneyInput(input.value).length;
-    requestAnimationFrame(() => {
-      input.setSelectionRange(caretPosition, caretPosition);
-    });
+  const parseMoneyToNumber = (value: string): number => {
+    // Replace comma with dot for parsing
+    const normalized = value.replace(",", ".");
+    return parseFloat(normalized) || 0;
   };
 
   const handleMoneyChange = (event: ChangeEvent<HTMLInputElement>, setValue: (value: string) => void) => {
-    const integerPart = parseMoneyInput(event.target.value);
-    setValue(integerPart);
-    placeCaretBeforeDecimals(event.target);
-  };
-
-  const handleMoneyFocus = (event: FocusEvent<HTMLInputElement>) => {
-    placeCaretBeforeDecimals(event.currentTarget);
-  };
-
-  const handleMoneyClick = (event: MouseEvent<HTMLInputElement>) => {
-    placeCaretBeforeDecimals(event.currentTarget);
+    // Allow digits and one comma as decimal separator
+    const raw = event.target.value.replace(/[^0-9,]/g, "");
+    // Ensure only one comma
+    const parts = raw.split(",");
+    const sanitized = parts.length > 2 ? `${parts[0]},${parts.slice(1).join("")}` : raw;
+    // Limit decimal to 2 digits
+    if (sanitized.includes(",")) {
+      const [intPart, decPart] = sanitized.split(",");
+      setValue(`${intPart},${decPart.slice(0, 2)}`);
+    } else {
+      setValue(sanitized);
+    }
   };
 
   const handleOpen = async () => {
@@ -91,21 +95,22 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     const dSummer = defaults?.default_summercamp_installment_cents ?? 0;
     const dSummerInst = defaults?.default_summercamp_installments ?? 6;
 
-    setInscriptionFee(currentValues.inscription_fee_cents > 0 ? String(currentValues.inscription_fee_cents / 100) : String(dInscription / 100));
-    setTuitionValue(currentValues.tuition_installment_cents > 0 ? String(currentValues.tuition_installment_cents / 100) : String(dTuition / 100));
+    const toComma = (v: number) => v.toFixed(2).replace(".", ",");
+    setInscriptionFee(currentValues.inscription_fee_cents > 0 ? toComma(currentValues.inscription_fee_cents / 100) : toComma(dInscription / 100));
+    setTuitionValue(currentValues.tuition_installment_cents > 0 ? toComma(currentValues.tuition_installment_cents / 100) : toComma(dTuition / 100));
     setTuitionInstallments(currentValues.tuition_installments > 0 ? String(currentValues.tuition_installments) : String(dTuitionInst));
     setTuitionStartDate(currentValues.tuition_start_date || "");
-    setSummercampValue(currentValues.summercamp_installment_cents > 0 ? String(currentValues.summercamp_installment_cents / 100) : (dSummer > 0 ? String(dSummer / 100) : ""));
+    setSummercampValue(currentValues.summercamp_installment_cents > 0 ? toComma(currentValues.summercamp_installment_cents / 100) : (dSummer > 0 ? toComma(dSummer / 100) : ""));
     setSummercampInstallments(currentValues.summercamp_installments > 0 ? String(currentValues.summercamp_installments) : String(dSummerInst));
     setSummercampStartDate(currentValues.summercamp_start_date || "");
     setOpen(true);
   };
 
   const getFormValues = () => {
-    const fee = Math.round(parseFloat(inscriptionFee || "0")) * 100;
-    const tuition = Math.round(parseFloat(tuitionValue || "0")) * 100;
+    const fee = Math.round(parseMoneyToNumber(inscriptionFee) * 100);
+    const tuition = Math.round(parseMoneyToNumber(tuitionValue) * 100);
     const tInstallments = parseInt(tuitionInstallments) || 16;
-    const summer = Math.round(parseFloat(summercampValue || "0")) * 100;
+    const summer = Math.round(parseMoneyToNumber(summercampValue) * 100);
     const sInstallments = parseInt(summercampInstallments) || 6;
     return { fee, tuition, tInstallments, summer, sInstallments };
   };
@@ -241,12 +246,10 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                   <Label className="text-xs text-muted-foreground">Valor ($)</Label>
                   <Input
                     type="text"
-                    inputMode="numeric"
+                    inputMode="decimal"
                     placeholder="0,00"
-                    value={formatMoneyInput(inscriptionFee)}
+                    value={formatMoneyDisplay(inscriptionFee)}
                     onChange={(e) => handleMoneyChange(e, setInscriptionFee)}
-                    onFocus={handleMoneyFocus}
-                    onClick={handleMoneyClick}
                     className="h-9"
                   />
                 </div>
@@ -281,12 +284,10 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                   <Label className="text-xs text-muted-foreground">Valor ($)</Label>
                   <Input
                     type="text"
-                    inputMode="numeric"
+                    inputMode="decimal"
                     placeholder="0,00"
-                    value={formatMoneyInput(tuitionValue)}
+                    value={formatMoneyDisplay(tuitionValue)}
                     onChange={(e) => handleMoneyChange(e, setTuitionValue)}
-                    onFocus={handleMoneyFocus}
-                    onClick={handleMoneyClick}
                     className="h-9"
                   />
                 </div>
@@ -319,12 +320,10 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                   <Label className="text-xs text-muted-foreground">Valor ($)</Label>
                   <Input
                     type="text"
-                    inputMode="numeric"
+                    inputMode="decimal"
                     placeholder="0,00"
-                    value={formatMoneyInput(summercampValue)}
+                    value={formatMoneyDisplay(summercampValue)}
                     onChange={(e) => handleMoneyChange(e, setSummercampValue)}
-                    onFocus={handleMoneyFocus}
-                    onClick={handleMoneyClick}
                     className="h-9"
                   />
                 </div>
