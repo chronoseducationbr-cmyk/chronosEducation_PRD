@@ -386,7 +386,6 @@ const DashboardPage = () => {
                         studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
                         referralRef.current = "";
                         setValidationErrors([]);
-                        setContractAccepted(false);
                         setWizardStep(1);
                         setShowForm(true);
                       }}
