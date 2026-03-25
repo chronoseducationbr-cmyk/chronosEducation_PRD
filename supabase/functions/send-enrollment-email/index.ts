@@ -64,7 +64,7 @@ const buildEmailHtml = (userName: string, studentName: string) => `
                       Em anexo, encontrará o contrato de prestação de serviços educacionais assinado digitalmente.
                     </p>
                     <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
-                      Em dois dias receberá as credenciais de acesso à plataforma de ensino e iniciar a jornada rumo ao diploma High School. Fique atento à sua caixa de email.
+                      Brevemente receberá as credenciais de acesso à plataforma de ensino e iniciar a jornada rumo ao diploma High School. Fique atento à sua caixa de email.
                     </p>
                   </td>
                 </tr>
