@@ -129,17 +129,6 @@ serve(async (req) => {
       reply_to: "chronoseducationbr@gmail.com",
     };
 
-    // Attach contract PDF if provided
-    if (contractBase64 && contractFileName) {
-      emailPayload.attachments = [
-        {
-          filename: contractFileName,
-          content: contractBase64,
-          type: contractContentType || "application/pdf",
-        },
-      ];
-    }
-
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
