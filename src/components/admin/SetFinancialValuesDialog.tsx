@@ -155,13 +155,24 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     const updates = await saveEnrollment();
     if (!updates) { setSaving(false); return; }
 
-    const { tuition_installment_cents, tuition_installments: tCount, tuition_start_date,
+    const { inscription_fee_cents, tuition_installment_cents, tuition_installments: tCount, tuition_start_date,
             summercamp_installment_cents, summercamp_installments: sCount, summercamp_start_date } = updates;
 
-    // Delete existing tuition & summercamp installments before regenerating
-    await supabase.from("installments").delete().eq("enrollment_id", enrollmentId).in("type", ["tuition", "summercamp"] as any);
+    // Delete existing installments before regenerating
+    await supabase.from("installments").delete().eq("enrollment_id", enrollmentId).in("type", ["inscription_fee", "tuition", "summercamp"] as any);
 
     const rows: any[] = [];
+
+    if (inscription_fee_cents > 0 && inscriptionDueDate) {
+      rows.push({
+        enrollment_id: enrollmentId,
+        type: "inscription_fee",
+        installment_number: 1,
+        due_date: inscriptionDueDate,
+        status: "pending",
+        amount_cents: inscription_fee_cents,
+      });
+    }
 
     if (tuition_installment_cents > 0 && tuition_start_date) {
       for (let i = 0; i < tCount; i++) {
