@@ -5,7 +5,7 @@ import { LogOut, ArrowLeft } from "lucide-react";
 import GuardianDataSection, { type GuardianData } from "@/components/GuardianDataSection";
 import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
 import ReferralSection from "@/components/ReferralSection";
-import ContractSignatureSection from "@/components/ContractSignatureSection";
+
 import EnrollmentsList from "@/components/EnrollmentsList";
 import PaymentsList from "@/components/PaymentsList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,7 +21,7 @@ const DashboardPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [wizardStep, setWizardStep] = useState(1);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [contractAccepted, setContractAccepted] = useState(false);
+  
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
@@ -157,8 +157,7 @@ const DashboardPage = () => {
         student_photo_url: s.studentPhotoUrl?.trim() || null,
         student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
         referred_by_email: referralRef.current.trim(),
-        status: "Contrato assinado",
-        contract_sent_at: new Date().toISOString(),
+        status: "Matrícula confirmada",
         inscription_fee_cents: 80000,
       };
       if (activeTest) {
@@ -192,36 +191,6 @@ const DashboardPage = () => {
 
       const guardianName = g.fullName?.trim() || userName;
 
-      // Generate contract PDF
-      let contractBase64 = "";
-      let contractFileName = "";
-      let contractContentType = "";
-      try {
-        const { data: contractData, error: contractError } = await supabase.functions.invoke("generate-contract-pdf", {
-          body: {
-            guardian: { fullName: g.fullName, email: g.email, phone: g.phone },
-            student: {
-              studentName: s.studentName,
-              studentBirthDate: s.studentBirthDate,
-              studentEmail: s.studentEmail,
-              studentAddress: s.studentAddress,
-              studentSchool: s.studentSchool,
-              studentGraduationYear: s.studentGraduationYear,
-            },
-            enrollmentId: newEnrollment.id,
-          },
-        });
-        if (contractError) {
-          console.error("Contract PDF error:", contractError);
-        } else if (contractData) {
-          contractBase64 = contractData.contractBase64 || "";
-          contractFileName = contractData.fileName || "";
-          contractContentType = contractData.contentType || "application/pdf";
-        }
-      } catch (pdfErr) {
-        console.error("Contract PDF generation failed:", pdfErr);
-      }
-
       // Send both emails
       const [enrollmentResult, notificationResult] = await Promise.all([
         supabase.functions.invoke("send-enrollment-email", {
@@ -229,9 +198,6 @@ const DashboardPage = () => {
             email: targetEmail,
             name: guardianName,
             studentName: s.studentName?.trim() || "",
-            contractBase64,
-            contractFileName,
-            contractContentType,
           },
         }),
         supabase.functions.invoke("send-purchase-notification", {
@@ -261,7 +227,7 @@ const DashboardPage = () => {
       toast({ title: "Matrícula enviada!", description: "A equipa Chronos foi notificada e entrará em contacto em breve." });
       setShowForm(false);
       setWizardStep(1);
-      setContractAccepted(false);
+      setRefreshKey((k) => k + 1);
       setRefreshKey((k) => k + 1);
       // Reset student refs
       studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
@@ -420,7 +386,6 @@ const DashboardPage = () => {
                         studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
                         referralRef.current = "";
                         setValidationErrors([]);
-                        setContractAccepted(false);
                         setWizardStep(1);
                         setShowForm(true);
                       }}
@@ -432,95 +397,43 @@ const DashboardPage = () => {
                 <>
                   <button
                     onClick={() => {
-                      if (wizardStep === 2) {
-                        setWizardStep(1);
-                      } else {
-                        setShowForm(false);
-                        setWizardStep(1);
-                        setContractAccepted(false);
-                      }
+                      setShowForm(false);
+                      setWizardStep(1);
                     }}
                     className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
                   >
                     <ArrowLeft size={16} />
-                    {wizardStep === 2 ? "Voltar aos dados do aluno" : "Voltar às matrículas"}
+                    Voltar às matrículas
                   </button>
 
                   <h2 className="font-heading text-xl font-semibold text-foreground mb-2">
                     Nova Matrícula
                   </h2>
 
-                  {/* Step indicator */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 1 ? "bg-secondary text-secondary-foreground" : "bg-secondary/20 text-secondary"}`}>
-                        1
-                      </div>
-                      <span className={`text-sm font-medium ${wizardStep === 1 ? "text-foreground" : "text-muted-foreground"}`}>
-                        Dados do Aluno
-                      </span>
-                    </div>
-                    <div className="w-8 h-px bg-border" />
-                    <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${wizardStep === 2 ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>
-                        2
-                      </div>
-                      <span className={`text-sm font-medium ${wizardStep === 2 ? "text-foreground" : "text-muted-foreground"}`}>
-                        Assinatura de Contrato
-                      </span>
-                    </div>
+
+                  <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} initialData={guardianRef.current} />
+                  <div className="mt-6">
+                    <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
                   </div>
 
-                  {/* Step 1: Student Data */}
-                  {wizardStep === 1 && (
-                    <>
-                      <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} initialData={guardianRef.current} />
-                      <div className="mt-6">
-                        <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
-                      </div>
+                  <div className="mt-8">
+                    <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
+                  </div>
 
-                      <div className="mt-8">
-                        <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
-                      </div>
-
-                      <div className="mt-8">
-                        <button
-                          onClick={async () => {
-                            const valid = await validateStep1();
-                            if (valid) {
-                              setWizardStep(2);
-                              window.scrollTo({ top: 0, behavior: "smooth" });
-                            }
-                          }}
-                          className="w-full border-2 border-secondary text-primary bg-transparent font-semibold py-3.5 rounded-lg hover:bg-secondary/10 transition-colors"
-                        >
-                          Continuar para Assinatura do Contrato
-                        </button>
-                      </div>
-                    </>
-                  )}
-
-                  {/* Step 2: Contract Signature */}
-                  {wizardStep === 2 && (
-                    <>
-                      <ContractSignatureSection onAcceptChange={setContractAccepted} guardianData={guardianRef.current} studentData={studentRef.current} />
-
-                      <div className="mt-8">
-                        <button
-                          onClick={handleSubmitEnrollment}
-                          disabled={paying || !contractAccepted}
-                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {paying ? "Processando..." : "Confirmar matrícula"}
-                        </button>
-                        {!contractAccepted && (
-                          <p className="text-xs text-muted-foreground text-center mt-2">
-                            É necessário aceitar e assinar o contrato para prosseguir.
-                          </p>
-                        )}
-                      </div>
-                    </>
-                  )}
+                  <div className="mt-8">
+                    <button
+                      onClick={async () => {
+                        const valid = await validateStep1();
+                        if (valid) {
+                          await handleSubmitEnrollment();
+                        }
+                      }}
+                      disabled={paying}
+                      className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {paying ? "Processando..." : "Confirmar matrícula"}
+                    </button>
+                  </div>
                 </>
               )}
             </div>

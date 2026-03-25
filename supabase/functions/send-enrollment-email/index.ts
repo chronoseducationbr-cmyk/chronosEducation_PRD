@@ -61,9 +61,6 @@ const buildEmailHtml = (userName: string, studentName: string) => `
                       A matrícula no programa <strong>Dual Diploma</strong> da Chronos Education foi efetuada com sucesso.
                     </p>
                     <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
-                      Em anexo, encontrará o contrato de prestação de serviços educacionais assinado digitalmente.
-                    </p>
-                    <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
                       Brevemente receberá as credenciais de acesso à plataforma de ensino e iniciar a jornada rumo ao diploma High School. Fique atento à sua caixa de email.
                     </p>
                   </td>
@@ -115,7 +112,7 @@ serve(async (req) => {
   }
 
   try {
-    const { email, name, studentName, contractBase64, contractFileName, contractContentType } = await req.json();
+    const { email, name, studentName } = await req.json();
 
     if (!email || !name) {
       return new Response(
@@ -131,17 +128,6 @@ serve(async (req) => {
       html: buildEmailHtml(name, studentName || ""),
       reply_to: "chronoseducationbr@gmail.com",
     };
-
-    // Attach contract PDF if provided
-    if (contractBase64 && contractFileName) {
-      emailPayload.attachments = [
-        {
-          filename: contractFileName,
-          content: contractBase64,
-          type: contractContentType || "application/pdf",
-        },
-      ];
-    }
 
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
