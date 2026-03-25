@@ -4,10 +4,19 @@ import { supabase } from "@/integrations/supabase/client";
 import type { GuardianData } from "@/components/GuardianDataSection";
 import type { StudentData } from "@/components/StudentDataSection";
 
+interface FinancialData {
+  inscriptionFeeCents: number;
+  tuitionInstallmentCents: number;
+  tuitionInstallments: number;
+  summercampInstallmentCents: number;
+  summercampInstallments: number;
+}
+
 interface Props {
   onAcceptChange: (accepted: boolean) => void;
   guardianData: GuardianData;
   studentData: StudentData;
+  financialData?: FinancialData;
 }
 
 /**
