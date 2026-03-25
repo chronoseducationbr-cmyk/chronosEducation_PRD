@@ -250,13 +250,11 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                 <div>
                   <Label className="text-xs text-muted-foreground">Data de vencimento</Label>
                   <Input
-                    type="text"
-                    readOnly
-                    value={contractSignedAt ? new Date(contractSignedAt).toLocaleDateString("pt-BR") : "Data da assinatura"}
-                    className="h-9 bg-muted cursor-not-allowed"
-                    title="Igual à data de assinatura do contrato"
+                    type="date"
+                    value={inscriptionDueDate}
+                    onChange={(e) => setInscriptionDueDate(e.target.value)}
+                    className="h-9"
                   />
-                  <p className="text-[10px] text-muted-foreground mt-0.5">Igual à data de assinatura do contrato</p>
                 </div>
               </div>
             </div>
