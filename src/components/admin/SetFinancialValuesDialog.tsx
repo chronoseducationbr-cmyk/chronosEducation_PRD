@@ -95,6 +95,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     setSummercampValue(currentValues.summercamp_installment_cents > 0 ? toComma(currentValues.summercamp_installment_cents / 100) : (dSummer > 0 ? toComma(dSummer / 100) : ""));
     setSummercampInstallments(currentValues.summercamp_installments > 0 ? String(currentValues.summercamp_installments) : String(dSummerInst));
     setSummercampStartDate(currentValues.summercamp_start_date || "");
+    setInscriptionDueDate(contractSignedAt ? contractSignedAt.split("T")[0] : "");
     setOpen(true);
   };
 
