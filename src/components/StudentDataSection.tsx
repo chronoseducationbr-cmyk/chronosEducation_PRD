@@ -53,7 +53,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
         setStudentEmail((data as any).student_email || "");
         setStudentAddress((data as any).student_address || "");
         setStudentSchool(data.student_school || "");
-        setStudentGraduationYear((data as any).student_graduation_year?.toString() || "");
+        setStudentGraduationYear((data as any).student_graduation_year?.toString() || String(new Date().getFullYear() + 3));
       }
       setLoading(false);
     };
