@@ -106,10 +106,10 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
   };
 
   const getFormValues = () => {
-    const fee = Math.round(parseFloat(inscriptionFee || "0")) * 100;
-    const tuition = Math.round(parseFloat(tuitionValue || "0")) * 100;
+    const fee = Math.round(parseMoneyToNumber(inscriptionFee) * 100);
+    const tuition = Math.round(parseMoneyToNumber(tuitionValue) * 100);
     const tInstallments = parseInt(tuitionInstallments) || 16;
-    const summer = Math.round(parseFloat(summercampValue || "0")) * 100;
+    const summer = Math.round(parseMoneyToNumber(summercampValue) * 100);
     const sInstallments = parseInt(summercampInstallments) || 6;
     return { fee, tuition, tInstallments, summer, sInstallments };
   };
