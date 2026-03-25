@@ -418,56 +418,29 @@ const DashboardPage = () => {
                   </h2>
 
 
-                  {/* Step 1: Student Data */}
-                  {wizardStep === 1 && (
-                    <>
-                      <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} initialData={guardianRef.current} />
-                      <div className="mt-6">
-                        <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
-                      </div>
+                  <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} initialData={guardianRef.current} />
+                  <div className="mt-6">
+                    <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
+                  </div>
 
-                      <div className="mt-8">
-                        <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
-                      </div>
+                  <div className="mt-8">
+                    <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
+                  </div>
 
-                      <div className="mt-8">
-                        <button
-                          onClick={async () => {
-                            const valid = await validateStep1();
-                            if (valid) {
-                              setWizardStep(2);
-                              window.scrollTo({ top: 0, behavior: "smooth" });
-                            }
-                          }}
-                          className="w-full border-2 border-secondary text-primary bg-transparent font-semibold py-3.5 rounded-lg hover:bg-secondary/10 transition-colors"
-                        >
-                          Continuar para Assinatura do Contrato
-                        </button>
-                      </div>
-                    </>
-                  )}
-
-                  {/* Step 2: Contract Signature */}
-                  {wizardStep === 2 && (
-                    <>
-                      <ContractSignatureSection onAcceptChange={setContractAccepted} guardianData={guardianRef.current} studentData={studentRef.current} />
-
-                      <div className="mt-8">
-                        <button
-                          onClick={handleSubmitEnrollment}
-                          disabled={paying || !contractAccepted}
-                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {paying ? "Processando..." : "Confirmar matrícula"}
-                        </button>
-                        {!contractAccepted && (
-                          <p className="text-xs text-muted-foreground text-center mt-2">
-                            É necessário aceitar e assinar o contrato para prosseguir.
-                          </p>
-                        )}
-                      </div>
-                    </>
-                  )}
+                  <div className="mt-8">
+                    <button
+                      onClick={async () => {
+                        const valid = await validateStep1();
+                        if (valid) {
+                          await handleSubmitEnrollment();
+                        }
+                      }}
+                      disabled={paying}
+                      className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {paying ? "Processando..." : "Confirmar matrícula"}
+                    </button>
+                  </div>
                 </>
               )}
             </div>
