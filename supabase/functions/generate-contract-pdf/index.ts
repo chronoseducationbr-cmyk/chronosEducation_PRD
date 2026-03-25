@@ -105,6 +105,13 @@ async function buildContractPdf(
     studentSchool: string;
     studentGraduationYear: string;
   },
+  financial: {
+    inscriptionFeeCents: number;
+    tuitionInstallmentCents: number;
+    tuitionInstallments: number;
+    summercampInstallmentCents: number;
+    summercampInstallments: number;
+  },
   signedDate: string
 ): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
