@@ -245,12 +245,10 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                   <Label className="text-xs text-muted-foreground">Valor ($)</Label>
                   <Input
                     type="text"
-                    inputMode="numeric"
+                    inputMode="decimal"
                     placeholder="0,00"
-                    value={formatMoneyInput(inscriptionFee)}
+                    value={formatMoneyDisplay(inscriptionFee)}
                     onChange={(e) => handleMoneyChange(e, setInscriptionFee)}
-                    onFocus={handleMoneyFocus}
-                    onClick={handleMoneyClick}
                     className="h-9"
                   />
                 </div>
