@@ -44,6 +44,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
   const [saving, setSaving] = useState(false);
 
   const [inscriptionFee, setInscriptionFee] = useState("");
+  const [inscriptionDueDate, setInscriptionDueDate] = useState("");
   const [tuitionValue, setTuitionValue] = useState("");
   const [tuitionInstallments, setTuitionInstallments] = useState("16");
   const [tuitionStartDate, setTuitionStartDate] = useState("");
