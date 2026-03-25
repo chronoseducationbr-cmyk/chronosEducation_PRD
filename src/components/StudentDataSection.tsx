@@ -30,7 +30,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
   const [studentEmail, setStudentEmail] = useState(initialData?.studentEmail || "");
   const [studentAddress, setStudentAddress] = useState(initialData?.studentAddress || "");
   const [studentSchool, setStudentSchool] = useState(initialData?.studentSchool || "");
-  const [studentGraduationYear, setStudentGraduationYear] = useState(initialData?.studentGraduationYear || "");
+  const [studentGraduationYear, setStudentGraduationYear] = useState(initialData?.studentGraduationYear || String(new Date().getFullYear() + 3));
   const [studentPhotoUrl, setStudentPhotoUrl] = useState(initialData?.studentPhotoUrl || "");
   const [photoPreview, setPhotoPreview] = useState<string | null>(initialData?.studentPhotoUrl || null);
   const [uploading, setUploading] = useState(false);
@@ -53,7 +53,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
         setStudentEmail((data as any).student_email || "");
         setStudentAddress((data as any).student_address || "");
         setStudentSchool(data.student_school || "");
-        setStudentGraduationYear((data as any).student_graduation_year?.toString() || "");
+        setStudentGraduationYear((data as any).student_graduation_year?.toString() || String(new Date().getFullYear() + 3));
       }
       setLoading(false);
     };
