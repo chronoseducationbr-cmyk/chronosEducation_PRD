@@ -170,7 +170,43 @@ async function buildContractPdf(
 
   // 6. VALORES E PAGAMENTO
   drawSectionTitle(ctx, "6. VALORES E PAGAMENTO");
-  drawParagraph(ctx, "As condicoes de pagamento, incluindo taxa de matricula e mensalidades, serao comunicadas pela equipe Chronos Education apos a confirmacao da matricula.");
+
+  const fmtCurrency = (cents: number) => {
+    if (!cents || cents <= 0) return "A definir";
+    return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  };
+
+  drawParagraph(ctx, "Os valores acordados para o presente contrato sao os seguintes:");
+  ctx.y -= 4;
+
+  // Inscription fee
+  drawField(ctx, "Taxa de Matricula:", fmtCurrency(financial.inscriptionFeeCents), 60);
+  ctx.y -= 4;
+
+  // Tuition (Plataforma Online)
+  ctx.page.drawText("Plataforma Online", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
+  ctx.y -= 16;
+  if (financial.tuitionInstallmentCents > 0) {
+    drawField(ctx, "Valor da parcela:", fmtCurrency(financial.tuitionInstallmentCents), 60);
+    drawField(ctx, "Numero de parcelas:", String(financial.tuitionInstallments), 60);
+    const totalTuition = financial.tuitionInstallmentCents * financial.tuitionInstallments;
+    drawField(ctx, "Total:", fmtCurrency(totalTuition), 60);
+  } else {
+    drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
+  }
+  ctx.y -= 4;
+
+  // Summer Camp
+  ctx.page.drawText("Summer Camp", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
+  ctx.y -= 16;
+  if (financial.summercampInstallmentCents > 0) {
+    drawField(ctx, "Valor da parcela:", fmtCurrency(financial.summercampInstallmentCents), 60);
+    drawField(ctx, "Numero de parcelas:", String(financial.summercampInstallments), 60);
+    const totalCamp = financial.summercampInstallmentCents * financial.summercampInstallments;
+    drawField(ctx, "Total:", fmtCurrency(totalCamp), 60);
+  } else {
+    drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
+  }
 
   // 7. CANCELAMENTO
   drawSectionTitle(ctx, "7. CANCELAMENTO");
