@@ -55,7 +55,7 @@ function parseContractSections(text: string) {
   return sections;
 }
 
-const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }: Props) => {
+const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData, financialData }: Props) => {
   const [accepted, setAccepted] = useState(false);
   const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
   const [contractText, setContractText] = useState("");
