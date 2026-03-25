@@ -62,6 +62,7 @@ interface Enrollment {
   summercamp_start_date: string | null;
   quiz_test_id: string | null;
   guardian?: Guardian;
+  has_installments?: boolean;
 }
 
 const statuses = [
@@ -137,6 +138,17 @@ const AdminEnrollmentsPage = () => {
       (tests as any[]).forEach((t: any) => { slugMap[t.id] = t.slug; });
     }
     setTestSlugMap(slugMap);
+
+    // Check which enrollments have installments
+    const enrollmentIds = enrs.map((e) => e.id);
+    if (enrollmentIds.length > 0) {
+      const { data: instData } = await supabase
+        .from("installments")
+        .select("enrollment_id")
+        .in("enrollment_id", enrollmentIds);
+      const idsWithInst = new Set((instData || []).map((i: any) => i.enrollment_id));
+      enrs.forEach((e) => { e.has_installments = idsWithInst.has(e.id); });
+    }
 
     setEnrollments(enrs);
     setLoading(false);
@@ -289,6 +301,7 @@ const AdminEnrollmentsPage = () => {
                             prev.map((en) => (en.id === e.id ? { ...en, ...updates } : en))
                           );
                         }}
+                        disabled={!!e.has_installments}
                       />
                     </div>
                   </div>
