@@ -18,21 +18,11 @@ interface QuizTest {
 
 interface AppSettings {
   contract_enabled: boolean;
-  default_inscription_fee_cents: number;
-  default_tuition_installment_cents: number;
-  default_tuition_installments: number;
-  default_summercamp_installment_cents: number;
-  default_summercamp_installments: number;
   contract_text: string;
 }
 
 const defaultSettings: AppSettings = {
   contract_enabled: true,
-  default_inscription_fee_cents: 80000,
-  default_tuition_installment_cents: 45000,
-  default_tuition_installments: 16,
-  default_summercamp_installment_cents: 0,
-  default_summercamp_installments: 6,
   contract_text: "",
 };
 
