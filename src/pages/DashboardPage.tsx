@@ -157,8 +157,7 @@ const DashboardPage = () => {
         student_photo_url: s.studentPhotoUrl?.trim() || null,
         student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
         referred_by_email: referralRef.current.trim(),
-        status: "Contrato assinado",
-        contract_sent_at: new Date().toISOString(),
+        status: "Matrícula confirmada",
         inscription_fee_cents: 80000,
       };
       if (activeTest) {
