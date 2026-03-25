@@ -280,9 +280,6 @@ serve(async (req) => {
     const pdfBytes = await buildContractPdf(guardian, student, financial, signedDate);
 
     // Upload to Supabase Storage
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const fileName = `contrato-${enrollmentId}.pdf`;
     const filePath = `signed/${fileName}`;
