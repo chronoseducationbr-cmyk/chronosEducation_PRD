@@ -51,36 +51,27 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
   const [summercampInstallments, setSummercampInstallments] = useState("6");
   const [summercampStartDate, setSummercampStartDate] = useState("");
 
-  const formatMoneyDisplay = (value: string) => {
-    if (!value) return "";
-    // If already contains comma, show as-is
-    if (value.includes(",")) return value;
-    // Otherwise show with comma decimal
-    const num = parseFloat(value);
-    if (isNaN(num)) return value;
-    const [int, dec] = num.toFixed(2).split(".");
-    return `${int},${dec}`;
-  };
-
   const parseMoneyToNumber = (value: string): number => {
-    // Replace comma with dot for parsing
     const normalized = value.replace(",", ".");
     return parseFloat(normalized) || 0;
   };
 
   const handleMoneyChange = (event: ChangeEvent<HTMLInputElement>, setValue: (value: string) => void) => {
-    // Allow digits and one comma as decimal separator
     const raw = event.target.value.replace(/[^0-9,]/g, "");
-    // Ensure only one comma
     const parts = raw.split(",");
     const sanitized = parts.length > 2 ? `${parts[0]},${parts.slice(1).join("")}` : raw;
-    // Limit decimal to 2 digits
     if (sanitized.includes(",")) {
       const [intPart, decPart] = sanitized.split(",");
       setValue(`${intPart},${decPart.slice(0, 2)}`);
     } else {
       setValue(sanitized);
     }
+  };
+
+  const handleMoneyBlur = (value: string, setValue: (value: string) => void) => {
+    if (!value) return;
+    const num = parseMoneyToNumber(value);
+    setValue(num.toFixed(2).replace(".", ","));
   };
 
   const handleOpen = async () => {
