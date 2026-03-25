@@ -158,17 +158,6 @@ const AdminSettingsPage = () => {
     setEditingContract(false);
   };
 
-  const handleSaveFinancials = () => {
-    updateSettings({
-      default_inscription_fee_cents: Math.round(financialDraft.inscription * 100),
-      default_tuition_installment_cents: Math.round(financialDraft.tuition * 100),
-      default_tuition_installments: financialDraft.tuitionInstallments,
-      default_summercamp_installment_cents: Math.round(financialDraft.summercamp * 100),
-      default_summercamp_installments: financialDraft.summercampInstallments,
-    });
-    setEditingFinancials(false);
-  };
-
   const levelDescriptions: Record<string, string> = {
     "A0": "Os alunos neste nível estão começando a aprender as suas primeiras palavras.",
     "A1": "Os alunos que atingem o nível A1 conseguem comunicar usando expressões do dia a dia familiares e frases muito básicas.",
