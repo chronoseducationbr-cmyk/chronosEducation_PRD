@@ -188,6 +188,44 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData, f
                 )}
               </div>
             ))}
+
+            {/* Financial values section */}
+            {financialData && (
+              <div>
+                <p className="font-semibold mb-2">Valores e Pagamento</p>
+                <div className="pl-3 space-y-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
+                    <p>Taxa de Matrícula: <span className="font-medium">{fmtCurrency(financialData.inscriptionFeeCents)}</span></p>
+                  </div>
+
+                  <div>
+                    <p className="font-medium text-muted-foreground text-xs uppercase tracking-wide mb-1">Plataforma Online</p>
+                    {financialData.tuitionInstallmentCents > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
+                        <p>Valor da parcela: <span className="font-medium">{fmtCurrency(financialData.tuitionInstallmentCents)}</span></p>
+                        <p>Nº de parcelas: <span className="font-medium">{financialData.tuitionInstallments}</span></p>
+                        <p>Total: <span className="font-medium">{fmtCurrency(financialData.tuitionInstallmentCents * financialData.tuitionInstallments)}</span></p>
+                      </div>
+                    ) : (
+                      <p className="italic text-muted-foreground">Valores a definir pela equipa Chronos Education.</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <p className="font-medium text-muted-foreground text-xs uppercase tracking-wide mb-1">Summer Camp</p>
+                    {financialData.summercampInstallmentCents > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
+                        <p>Valor da parcela: <span className="font-medium">{fmtCurrency(financialData.summercampInstallmentCents)}</span></p>
+                        <p>Nº de parcelas: <span className="font-medium">{financialData.summercampInstallments}</span></p>
+                        <p>Total: <span className="font-medium">{fmtCurrency(financialData.summercampInstallmentCents * financialData.summercampInstallments)}</span></p>
+                      </div>
+                    ) : (
+                      <p className="italic text-muted-foreground">Valores a definir pela equipa Chronos Education.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>
