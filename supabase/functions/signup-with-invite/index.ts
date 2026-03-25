@@ -205,7 +205,7 @@ function buildConfirmationEmailHtml(name: string, confirmUrl: string): string {
         <!-- Footer -->
         <tr>
           <td style="background-color:#f9fafb;padding:20px 40px;text-align:center;border-top:1px solid #e5e7eb;">
-            <p style="color:#999;font-size:12px;margin:0;">© 2025 Chronos Education. Todos os direitos reservados.</p>
+            <p style="color:#999;font-size:12px;margin:0;">© Chronos Education. Todos os direitos reservados.</p>
           </td>
         </tr>
       </table>
