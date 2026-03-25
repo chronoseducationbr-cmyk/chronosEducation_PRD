@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FocusEvent, type MouseEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
