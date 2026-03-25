@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import SetFinancialValuesDialog from "@/components/admin/SetFinancialValuesDialog";
 
 interface Enrollment {
   id: string;
@@ -30,6 +31,9 @@ interface Enrollment {
   tuition_installments: number;
   summercamp_installment_cents: number;
   summercamp_installments: number;
+  tuition_start_date: string | null;
+  summercamp_start_date: string | null;
+  contract_signed_at: string | null;
   user_id: string;
   guardian_name?: string;
   has_installments?: boolean;
@@ -356,7 +360,27 @@ const AdminPaymentsPage = () => {
                 {isExpanded && (
                   <div className="px-4 pb-4 border-t border-border">
                     <div className="flex items-center justify-between mt-3 mb-3">
-                      <p className="text-sm font-bold text-foreground uppercase tracking-wide">Mensalidades</p>
+                      <div className="flex items-center gap-3">
+                        <p className="text-sm font-bold text-foreground uppercase tracking-wide">Mensalidades</p>
+                        <SetFinancialValuesDialog
+                          enrollmentId={e.id}
+                          studentName={e.student_name}
+                          contractSignedAt={e.contract_signed_at}
+                          currentValues={{
+                            inscription_fee_cents: e.inscription_fee_cents,
+                            tuition_installment_cents: e.tuition_installment_cents,
+                            tuition_installments: e.tuition_installments,
+                            summercamp_installment_cents: e.summercamp_installment_cents,
+                            summercamp_installments: e.summercamp_installments,
+                            tuition_start_date: e.tuition_start_date,
+                            summercamp_start_date: e.summercamp_start_date,
+                          }}
+                          onSaved={(updates) => {
+                            setEnrollments((prev) => prev.map((en) => en.id === e.id ? { ...en, ...updates } : en));
+                            loadInstallments(e.id);
+                          }}
+                        />
+                      </div>
                       <Button
                         size="sm"
                         variant="outline"

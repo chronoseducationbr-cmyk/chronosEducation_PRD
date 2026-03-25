@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info, FileText, DollarSign } from "lucide-react";
+import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info, FileText } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { scoringConfigs } from "@/lib/quizScoring";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,21 +18,11 @@ interface QuizTest {
 
 interface AppSettings {
   contract_enabled: boolean;
-  default_inscription_fee_cents: number;
-  default_tuition_installment_cents: number;
-  default_tuition_installments: number;
-  default_summercamp_installment_cents: number;
-  default_summercamp_installments: number;
   contract_text: string;
 }
 
 const defaultSettings: AppSettings = {
   contract_enabled: true,
-  default_inscription_fee_cents: 80000,
-  default_tuition_installment_cents: 45000,
-  default_tuition_installments: 16,
-  default_summercamp_installment_cents: 0,
-  default_summercamp_installments: 6,
   contract_text: "",
 };
 
@@ -50,23 +40,6 @@ const AdminSettingsPage = () => {
   const [savingSettings, setSavingSettings] = useState(false);
   const [editingContract, setEditingContract] = useState(false);
   const [contractDraft, setContractDraft] = useState("");
-  const [editingFinancials, setEditingFinancials] = useState(false);
-  const [financialDraft, setFinancialDraft] = useState<{
-    inscription: number;
-    tuition: number;
-    tuitionInstallments: number;
-    summercamp: number;
-    summercampInstallments: number;
-    inscriptionDisplay?: string;
-    tuitionDisplay?: string;
-    summercampDisplay?: string;
-  }>({
-    inscription: 800,
-    tuition: 450,
-    tuitionInstallments: 16,
-    summercamp: 0,
-    summercampInstallments: 6,
-  });
 
   useEffect(() => {
     loadTests();
@@ -99,11 +72,6 @@ const AdminSettingsPage = () => {
       const s = data as any;
       setSettings({
         contract_enabled: s.contract_enabled,
-        default_inscription_fee_cents: s.default_inscription_fee_cents,
-        default_tuition_installment_cents: s.default_tuition_installment_cents,
-        default_tuition_installments: s.default_tuition_installments,
-        default_summercamp_installment_cents: s.default_summercamp_installment_cents,
-        default_summercamp_installments: s.default_summercamp_installments,
         contract_text: s.contract_text || "",
       });
     }
@@ -190,17 +158,6 @@ const AdminSettingsPage = () => {
     setEditingContract(false);
   };
 
-  const handleSaveFinancials = () => {
-    updateSettings({
-      default_inscription_fee_cents: Math.round(financialDraft.inscription * 100),
-      default_tuition_installment_cents: Math.round(financialDraft.tuition * 100),
-      default_tuition_installments: financialDraft.tuitionInstallments,
-      default_summercamp_installment_cents: Math.round(financialDraft.summercamp * 100),
-      default_summercamp_installments: financialDraft.summercampInstallments,
-    });
-    setEditingFinancials(false);
-  };
-
   const levelDescriptions: Record<string, string> = {
     "A0": "Os alunos neste nível estão começando a aprender as suas primeiras palavras.",
     "A1": "Os alunos que atingem o nível A1 conseguem comunicar usando expressões do dia a dia familiares e frases muito básicas.",
@@ -216,7 +173,7 @@ const AdminSettingsPage = () => {
   return (
     <div>
       <h1 className="font-heading text-2xl font-bold text-foreground mb-1">Configurações</h1>
-      <p className="text-muted-foreground mb-6">Gerir testes de inglês, contrato e valores padrão.</p>
+      <p className="text-muted-foreground mb-6">Gerir testes de inglês e contrato.</p>
 
       <Tabs defaultValue="testes" className="w-full">
         <TabsList className="mb-8 bg-transparent border-0 border-b border-border p-0 gap-10 pb-0">
@@ -233,10 +190,6 @@ const AdminSettingsPage = () => {
             <span className={`ml-2 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full ${settings.contract_enabled ? "bg-secondary/20 text-secondary" : "bg-muted text-muted-foreground"}`}>
               {settings.contract_enabled ? "ON" : "OFF"}
             </span>
-          </TabsTrigger>
-          <TabsTrigger value="valores" className={tabTriggerClass}>
-            <DollarSign size={18} className="mr-2" />
-            Valores Padrão
           </TabsTrigger>
         </TabsList>
 
@@ -459,166 +412,6 @@ const AdminSettingsPage = () => {
           </div>
         </TabsContent>
 
-        {/* ─── Valores Financeiros ─── */}
-        <TabsContent value="valores">
-          <div className="max-w-2xl">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-heading text-lg font-semibold text-foreground">Valores Financeiros Padrão</h2>
-              {!loadingSettings && !editingFinancials && (
-                <button
-                  onClick={() => {
-                    setEditingFinancials(true);
-                    setFinancialDraft({
-                      inscription: settings.default_inscription_fee_cents / 100,
-                      tuition: settings.default_tuition_installment_cents / 100,
-                      tuitionInstallments: settings.default_tuition_installments,
-                      summercamp: settings.default_summercamp_installment_cents / 100,
-                      summercampInstallments: settings.default_summercamp_installments,
-                    });
-                  }}
-                  className="p-1.5 rounded-md hover:bg-muted text-muted-foreground"
-                >
-                  <Pencil size={14} />
-                </button>
-              )}
-            </div>
-
-            {loadingSettings ? (
-              <div className="animate-pulse h-20 bg-muted rounded-xl" />
-            ) : editingFinancials ? (
-              <div className="bg-card border border-border rounded-xl p-4 space-y-4">
-                <p className="text-xs text-muted-foreground">Estes valores serão aplicados como padrão em novas matrículas.</p>
-                <p className="text-[11px] text-muted-foreground/70 italic">Utilize ponto (.) como separador decimal — ex: 450.50</p>
-                <div className="space-y-4">
-                  {/* Taxa de Matrícula - sozinha */}
-                  <div>
-                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Taxa de Matrícula ($)</label>
-                    <div className="relative max-w-[240px]">
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        value={financialDraft.inscriptionDisplay ?? financialDraft.inscription.toFixed(2)}
-                        onChange={(e) => {
-                          const raw = e.target.value.replace(/[^0-9.]/g, "");
-                          setFinancialDraft((d) => ({ ...d, inscriptionDisplay: raw, inscription: parseFloat(raw) || 0 }));
-                        }}
-                        onBlur={() => setFinancialDraft((d) => ({ ...d, inscriptionDisplay: undefined, inscription: parseFloat(String(d.inscription)) || 0 }))}
-                        className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Plataforma - lado a lado */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground mb-1 block">Nº Parcelas Plataforma</label>
-                      <input
-                        type="number"
-                        min={1}
-                        value={financialDraft.tuitionInstallments}
-                        onChange={(e) => setFinancialDraft((d) => ({ ...d, tuitionInstallments: parseInt(e.target.value) || 1 }))}
-                        className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Plataforma ($)</label>
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        value={financialDraft.tuitionDisplay ?? financialDraft.tuition.toFixed(2)}
-                        onChange={(e) => {
-                          const raw = e.target.value.replace(/[^0-9.]/g, "");
-                          setFinancialDraft((d) => ({ ...d, tuitionDisplay: raw, tuition: parseFloat(raw) || 0 }));
-                        }}
-                        onBlur={() => setFinancialDraft((d) => ({ ...d, tuitionDisplay: undefined, tuition: parseFloat(String(d.tuition)) || 0 }))}
-                        className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Summer Camp - lado a lado */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground mb-1 block">Nº Parcelas Summer Camp</label>
-                      <input
-                        type="number"
-                        min={1}
-                        value={financialDraft.summercampInstallments}
-                        onChange={(e) => setFinancialDraft((d) => ({ ...d, summercampInstallments: parseInt(e.target.value) || 1 }))}
-                        className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground mb-1 block">Mensalidade Summer Camp ($)</label>
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        value={financialDraft.summercampDisplay ?? financialDraft.summercamp.toFixed(2)}
-                        onChange={(e) => {
-                          const raw = e.target.value.replace(/[^0-9.]/g, "");
-                          setFinancialDraft((d) => ({ ...d, summercampDisplay: raw, summercamp: parseFloat(raw) || 0 }));
-                        }}
-                        onBlur={() => setFinancialDraft((d) => ({ ...d, summercampDisplay: undefined, summercamp: parseFloat(String(d.summercamp)) || 0 }))}
-                        className="w-full rounded-lg border border-border bg-background p-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 pt-2">
-                  <button
-                    onClick={handleSaveFinancials}
-                    disabled={savingSettings}
-                    className="inline-flex items-center gap-1.5 bg-secondary text-secondary-foreground font-semibold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity text-sm disabled:opacity-50"
-                  >
-                    <Check size={14} />
-                    Guardar
-                  </button>
-                  <button
-                    onClick={() => setEditingFinancials(false)}
-                    className="inline-flex items-center gap-1.5 text-muted-foreground font-medium py-2 px-4 rounded-lg hover:bg-muted transition-colors text-sm"
-                  >
-                    <X size={14} />
-                    Cancelar
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="bg-card border border-border rounded-xl p-4">
-                <p className="text-xs text-muted-foreground mb-3">Valores aplicados por padrão em novas matrículas.</p>
-                <div className="space-y-3 text-sm">
-                  <div>
-                    <p className="text-muted-foreground text-xs">Taxa de Matrícula</p>
-                    <p className="text-foreground font-medium">${(settings.default_inscription_fee_cents / 100).toFixed(2)}</p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <p className="text-muted-foreground text-xs">Nº Parcelas Plataforma</p>
-                      <p className="text-foreground font-medium">{settings.default_tuition_installments}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground text-xs">Mensalidade Plataforma</p>
-                      <p className="text-foreground font-medium">${(settings.default_tuition_installment_cents / 100).toFixed(2)}</p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <p className="text-muted-foreground text-xs">Nº Parcelas Summer Camp</p>
-                      <p className="text-foreground font-medium">{settings.default_summercamp_installments}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground text-xs">Mensalidade Summer Camp</p>
-                      <p className="text-foreground font-medium">
-                        {settings.default_summercamp_installment_cents > 0
-                          ? `$${(settings.default_summercamp_installment_cents / 100).toFixed(2)}`
-                          : "Não definido"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </TabsContent>
       </Tabs>
     </div>
   );
