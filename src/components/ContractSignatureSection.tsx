@@ -77,7 +77,7 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData }:
   }, [hasScrolledToEnd]);
 
   const handleToggle = () => {
-    if (!hasScrolledToEnd) return;
+    
     const next = !accepted;
     setAccepted(next);
     onAcceptChange(next);
