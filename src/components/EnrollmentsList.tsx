@@ -46,6 +46,7 @@ const statusColors: Record<string, { bg: string; text: string }> = {
 
 const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }>>({});
@@ -53,6 +54,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const [testSlugMap, setTestSlugMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [acceptingContract, setAcceptingContract] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
