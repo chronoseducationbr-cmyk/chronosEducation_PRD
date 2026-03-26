@@ -289,15 +289,16 @@ serve(async (req) => {
     let studentData = student;
 
     if (!guardianData || !studentData) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("full_name, email, phone")
-        .eq("user_id", enrollment.user_id)
-        .single();
+      const [{ data: profile }, { data: authUser }] = await Promise.all([
+        supabase.from("profiles").select("full_name, email, phone").eq("user_id", enrollment.user_id).single(),
+        supabase.auth.admin.getUserById(enrollment.user_id),
+      ]);
+
+      const guardianEmail = enrollment.guardian_email || profile?.email || authUser?.user?.email || "";
 
       guardianData = guardianData || {
         fullName: profile?.full_name || "",
-        email: enrollment.guardian_email || profile?.email || "",
+        email: guardianEmail,
         phone: profile?.phone || "",
       };
 
