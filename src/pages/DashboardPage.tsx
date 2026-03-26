@@ -157,6 +157,7 @@ const DashboardPage = () => {
         student_photo_url: s.studentPhotoUrl?.trim() || null,
         student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
         referred_by_email: referralRef.current.trim(),
+        guardian_email: g.email?.trim() || user?.email || "",
         status: "Matrícula confirmada",
         inscription_fee_cents: 0,
         tuition_installments: 16,

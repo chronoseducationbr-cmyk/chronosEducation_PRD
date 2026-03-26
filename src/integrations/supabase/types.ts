@@ -143,6 +143,7 @@ export type Database = {
           contract_signed_at: string | null
           contract_url: string | null
           created_at: string
+          guardian_email: string | null
           id: string
           inscription_fee_cents: number
           quiz_test_id: string | null
@@ -169,6 +170,7 @@ export type Database = {
           contract_signed_at?: string | null
           contract_url?: string | null
           created_at?: string
+          guardian_email?: string | null
           id?: string
           inscription_fee_cents?: number
           quiz_test_id?: string | null
@@ -195,6 +197,7 @@ export type Database = {
           contract_signed_at?: string | null
           contract_url?: string | null
           created_at?: string
+          guardian_email?: string | null
           id?: string
           inscription_fee_cents?: number
           quiz_test_id?: string | null
