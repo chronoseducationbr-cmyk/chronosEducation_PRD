@@ -365,6 +365,7 @@ serve(async (req) => {
       updateFields.contract_signed_at = now.toISOString();
     } else {
       updateFields.contract_sent_at = now.toISOString();
+      updateFields.contract_signed_at = null;
     }
 
     const { error: updateError } = await supabase

@@ -1,0 +1,1 @@
+UPDATE public.enrollments SET contract_signed_at = NULL WHERE contract_sent_at > contract_signed_at AND status != 'Contrato assinado';

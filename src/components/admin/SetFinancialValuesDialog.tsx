@@ -257,6 +257,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
         // Update local state with contract info
         updates.contract_url = pdfResult.contractUrl;
         updates.contract_sent_at = new Date().toISOString();
+        updates.contract_signed_at = null;
       }
     } catch (err) {
       console.error("Contract generation error:", err);
