@@ -126,11 +126,15 @@ serve(async (req) => {
   }
 
   try {
-    const { email, guardianName, studentName, contractUrl } = await req.json();
+    const body = await req.json();
+    const email = (body.email || "").trim();
+    const guardianName = (body.guardianName || "Responsável").trim();
+    const studentName = (body.studentName || "").trim();
+    const contractUrl = body.contractUrl || "";
 
-    if (!email || !guardianName || !studentName) {
+    if (!email || !studentName) {
       return new Response(
-        JSON.stringify({ error: "Email, nome do responsável e nome do aluno são obrigatórios" }),
+        JSON.stringify({ error: "Email e nome do aluno são obrigatórios" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
