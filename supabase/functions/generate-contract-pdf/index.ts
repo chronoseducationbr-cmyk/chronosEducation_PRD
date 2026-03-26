@@ -385,6 +385,12 @@ serve(async (req) => {
     }
     const base64Content = btoa(binary);
 
+    console.log("Contract PDF response payload:", JSON.stringify({
+      guardianEmail: guardianData.email,
+      guardianName: guardianData.fullName,
+      studentName: studentData.studentName,
+    }));
+
     return new Response(
       JSON.stringify({
         success: true,
