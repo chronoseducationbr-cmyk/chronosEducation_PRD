@@ -358,7 +358,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
               {saving ? "A guardar..." : "Guardar"}
             </Button>
             <Button onClick={handleSaveAndGenerate} disabled={saving}>
-              {saving ? "A processar..." : "Guardar e gerar pagamentos"}
+              {saving ? "A processar..." : "Guardar e gerar contrato"}
             </Button>
           </DialogFooter>
         </DialogContent>
