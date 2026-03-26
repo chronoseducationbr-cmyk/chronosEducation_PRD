@@ -297,7 +297,7 @@ serve(async (req) => {
 
       guardianData = guardianData || {
         fullName: profile?.full_name || "",
-        email: profile?.email || "",
+        email: enrollment.guardian_email || profile?.email || "",
         phone: profile?.phone || "",
       };
 
