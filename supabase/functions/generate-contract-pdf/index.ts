@@ -296,8 +296,10 @@ serve(async (req) => {
 
       const guardianEmail = enrollment.guardian_email || profile?.email || authUser?.user?.email || "";
 
+      const guardianName = profile?.full_name || authUser?.user?.user_metadata?.full_name || "";
+
       guardianData = guardianData || {
-        fullName: profile?.full_name || "",
+        fullName: guardianName,
         email: guardianEmail,
         phone: profile?.phone || "",
       };
