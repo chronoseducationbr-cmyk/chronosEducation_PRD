@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { GraduationCap, Clock, Plus, ChevronDown, ChevronUp, FileText, Download, BookOpen, Check, ExternalLink, Info } from "lucide-react";
+import { GraduationCap, Clock, Plus, ChevronDown, ChevronUp, FileText, Download, BookOpen, Check, ExternalLink, Info, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { getClassification } from "@/lib/quizScoring";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface Enrollment {
   id: string;
@@ -44,6 +46,7 @@ const statusColors: Record<string, { bg: string; text: string }> = {
 
 const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }>>({});
@@ -51,6 +54,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const [testSlugMap, setTestSlugMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [acceptingContract, setAcceptingContract] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -233,6 +237,60 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                            )}
                          </div>
                        </div>
+                       {/* Accept contract button - show when contract exists but not signed */}
+                       {e.contract_url && !e.contract_signed_at && (
+                         <div className="mt-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                           <p className="text-sm text-amber-800 dark:text-amber-200 mb-2">
+                             O contrato está disponível e aguarda a sua aceitação para prosseguir com a matrícula.
+                           </p>
+                           <Button
+                             size="sm"
+                             onClick={async () => {
+                               setAcceptingContract(e.id);
+                               try {
+                                 // Generate signed version of the PDF
+                                 const { data: pdfResult, error: pdfError } = await supabase.functions.invoke("generate-contract-pdf", {
+                                   body: { enrollmentId: e.id, signed: true },
+                                 });
+
+                                 if (pdfError || !pdfResult?.success) {
+                                   toast({ title: "Erro ao aceitar contrato", variant: "destructive" });
+                                   return;
+                                 }
+
+                                 // Update local state
+                                 setEnrollments(prev => prev.map(en =>
+                                   en.id === e.id
+                                     ? { ...en, contract_signed_at: new Date().toISOString(), contract_url: pdfResult.contractUrl, status: "Contrato assinado" }
+                                     : en
+                                 ));
+
+                                 // Update status in DB
+                                 await supabase.from("enrollments").update({ status: "Contrato assinado" } as any).eq("id", e.id);
+
+                                 toast({ title: "Contrato aceite com sucesso!" });
+                               } catch (err) {
+                                 console.error("Accept contract error:", err);
+                                 toast({ title: "Erro ao aceitar contrato", variant: "destructive" });
+                               } finally {
+                                 setAcceptingContract(null);
+                               }
+                             }}
+                             disabled={acceptingContract === e.id}
+                             className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+                           >
+                             <ShieldCheck size={16} className="mr-1.5" />
+                             {acceptingContract === e.id ? "A processar..." : "Aceitar contrato"}
+                           </Button>
+                         </div>
+                       )}
+                       {/* Signed confirmation */}
+                       {e.contract_signed_at && (
+                         <div className="mt-3 p-3 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-2">
+                           <Check size={16} className="text-green-600 shrink-0" />
+                           <p className="text-sm text-green-800 dark:text-green-200 font-medium">Contrato aceite digitalmente</p>
+                         </div>
+                       )}
                      </div>
                      {(e.inscription_fee_cents > 0 || e.tuition_installment_cents > 0 || e.summercamp_installment_cents > 0) && (
                       <div className="mt-3 pt-3 border-t border-border">

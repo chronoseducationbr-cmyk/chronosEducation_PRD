@@ -216,6 +216,53 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
       toast({ title: "Valores guardados. Preencha datas de início para gerar parcelas.", variant: "destructive" });
     }
 
+    // Generate contract PDF
+    try {
+      toast({ title: "A gerar contrato PDF..." });
+      const { data: pdfResult, error: pdfError } = await supabase.functions.invoke("generate-contract-pdf", {
+        body: { enrollmentId, signed: false },
+      });
+
+      if (pdfError) {
+        console.error("PDF generation error:", pdfError);
+        toast({ title: "Erro ao gerar contrato PDF", variant: "destructive" });
+      } else if (pdfResult?.success) {
+        toast({ title: "Contrato PDF gerado com sucesso" });
+
+        // Send email to guardian
+        if (pdfResult.guardianEmail) {
+          try {
+            const { error: emailError } = await supabase.functions.invoke("send-contract-email", {
+              body: {
+                email: pdfResult.guardianEmail,
+                guardianName: pdfResult.guardianName,
+                studentName: pdfResult.studentName || studentName,
+                contractUrl: pdfResult.contractUrl,
+              },
+            });
+            if (emailError) {
+              console.error("Email send error:", emailError);
+              toast({ title: "Contrato gerado, mas erro ao enviar email", variant: "destructive" });
+            } else {
+              toast({ title: "Email enviado ao responsável com o contrato" });
+            }
+          } catch (emailErr) {
+            console.error("Email error:", emailErr);
+            toast({ title: "Contrato gerado, mas erro ao enviar email", variant: "destructive" });
+          }
+        } else {
+          toast({ title: "Contrato gerado. Email do responsável não encontrado.", variant: "destructive" });
+        }
+
+        // Update local state with contract info
+        updates.contract_url = pdfResult.contractUrl;
+        updates.contract_sent_at = new Date().toISOString();
+      }
+    } catch (err) {
+      console.error("Contract generation error:", err);
+      toast({ title: "Erro ao gerar contrato", variant: "destructive" });
+    }
+
     onSaved(updates);
     setOpen(false);
     setSaving(false);
