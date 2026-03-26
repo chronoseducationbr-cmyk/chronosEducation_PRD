@@ -17,6 +17,7 @@ const PRIMARY = rgb(6 / 255, 42 / 255, 69 / 255);
 const GRAY = rgb(90 / 255, 106 / 255, 120 / 255);
 const BLACK = rgb(0, 0, 0);
 const GREEN = rgb(42 / 255, 125 / 255, 42 / 255);
+const AMBER = rgb(180 / 255, 140 / 255, 20 / 255);
 
 interface DrawCtx {
   page: ReturnType<PDFDocument["addPage"]>;
@@ -112,7 +113,9 @@ async function buildContractPdf(
     summercampInstallmentCents: number;
     summercampInstallments: number;
   },
-  signedDate: string
+  dateLabel: string,
+  signed: boolean,
+  signedDate?: string
 ): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
@@ -125,7 +128,7 @@ async function buildContractPdf(
   drawTitle(ctx, "CONTRATO DE PRESTACAO DE SERVICOS EDUCACIONAIS", 13);
   drawTitle(ctx, "Programa Dual Diploma - Chronos Education", 11);
   ctx.y -= 4;
-  const dateStr = `Data: ${signedDate}`;
+  const dateStr = `Data: ${dateLabel}`;
   const dateW = font.widthOfTextAtSize(dateStr, 9);
   ctx.page.drawText(dateStr, { x: (595.28 - dateW) / 2, y: ctx.y, size: 9, font, color: GRAY });
   ctx.y -= 24;
@@ -225,13 +228,24 @@ async function buildContractPdf(
   ctx.y -= 20;
   ctx.page.drawLine({ start: { x: 50, y: ctx.y }, end: { x: 545, y: ctx.y }, thickness: 0.5, color: GRAY });
   ctx.y -= 24;
-  const checkText = "Contrato aceite digitalmente";
-  const checkW = fontBold.widthOfTextAtSize(checkText, 11);
-  ctx.page.drawText(checkText, { x: (595.28 - checkW) / 2, y: ctx.y, size: 11, font: fontBold, color: GREEN });
-  ctx.y -= 18;
-  const sigText = `Assinado por ${guardian.fullName || "\u2014"} em ${signedDate}`;
-  const sigW = font.widthOfTextAtSize(sigText, 10);
-  ctx.page.drawText(sigText, { x: (595.28 - sigW) / 2, y: ctx.y, size: 10, font, color: BLACK });
+
+  if (signed && signedDate) {
+    const checkText = "Contrato aceite digitalmente";
+    const checkW = fontBold.widthOfTextAtSize(checkText, 11);
+    ctx.page.drawText(checkText, { x: (595.28 - checkW) / 2, y: ctx.y, size: 11, font: fontBold, color: GREEN });
+    ctx.y -= 18;
+    const sigText = `Assinado por ${guardian.fullName || "\u2014"} em ${signedDate}`;
+    const sigW = font.widthOfTextAtSize(sigText, 10);
+    ctx.page.drawText(sigText, { x: (595.28 - sigW) / 2, y: ctx.y, size: 10, font, color: BLACK });
+  } else {
+    const pendingText = "Aguarda assinatura digital";
+    const pendingW = fontBold.widthOfTextAtSize(pendingText, 11);
+    ctx.page.drawText(pendingText, { x: (595.28 - pendingW) / 2, y: ctx.y, size: 11, font: fontBold, color: AMBER });
+    ctx.y -= 18;
+    const infoText = "O contratante devera aceitar este contrato na plataforma Chronos Education.";
+    const infoW = font.widthOfTextAtSize(infoText, 9);
+    ctx.page.drawText(infoText, { x: (595.28 - infoW) / 2, y: ctx.y, size: 9, font, color: GRAY });
+  }
 
   return await doc.save();
 }
@@ -242,7 +256,8 @@ serve(async (req) => {
   }
 
   try {
-    const { guardian, student, enrollmentId } = await req.json();
+    const body = await req.json();
+    const { enrollmentId, guardian, student, signed } = body;
 
     if (!enrollmentId) {
       return new Response(
@@ -251,36 +266,72 @@ serve(async (req) => {
       );
     }
 
-    // Fetch financial data from enrollment
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { data: enrollment } = await supabase
+    // Fetch enrollment data
+    const { data: enrollment, error: enrollError } = await supabase
       .from("enrollments")
-      .select("inscription_fee_cents, tuition_installment_cents, tuition_installments, summercamp_installment_cents, summercamp_installments")
+      .select("*")
       .eq("id", enrollmentId)
       .single();
 
+    if (enrollError || !enrollment) {
+      return new Response(
+        JSON.stringify({ error: "Matrícula não encontrada" }),
+        { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Fetch guardian profile
+    let guardianData = guardian;
+    let studentData = student;
+
+    if (!guardianData || !studentData) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name, email, phone")
+        .eq("user_id", enrollment.user_id)
+        .single();
+
+      guardianData = guardianData || {
+        fullName: profile?.full_name || "",
+        email: profile?.email || "",
+        phone: profile?.phone || "",
+      };
+
+      studentData = studentData || {
+        studentName: enrollment.student_name || "",
+        studentBirthDate: enrollment.student_birth_date || "",
+        studentEmail: enrollment.student_email || "",
+        studentAddress: enrollment.student_address || "",
+        studentSchool: enrollment.student_school || "",
+        studentGraduationYear: enrollment.student_graduation_year?.toString() || "",
+      };
+    }
+
     const financial = {
-      inscriptionFeeCents: enrollment?.inscription_fee_cents ?? 0,
-      tuitionInstallmentCents: enrollment?.tuition_installment_cents ?? 0,
-      tuitionInstallments: enrollment?.tuition_installments ?? 0,
-      summercampInstallmentCents: enrollment?.summercamp_installment_cents ?? 0,
-      summercampInstallments: enrollment?.summercamp_installments ?? 0,
+      inscriptionFeeCents: enrollment.inscription_fee_cents ?? 0,
+      tuitionInstallmentCents: enrollment.tuition_installment_cents ?? 0,
+      tuitionInstallments: enrollment.tuition_installments ?? 0,
+      summercampInstallmentCents: enrollment.summercamp_installment_cents ?? 0,
+      summercampInstallments: enrollment.summercamp_installments ?? 0,
     };
 
     const now = new Date();
-    const signedDate = now.toLocaleDateString("pt-BR", {
+    const dateLabel = now.toLocaleDateString("pt-BR", {
       day: "2-digit",
       month: "long",
       year: "numeric",
     });
 
-    const pdfBytes = await buildContractPdf(guardian, student, financial, signedDate);
+    const isSigned = signed === true;
+    const signedDateStr = isSigned ? dateLabel : undefined;
+
+    const pdfBytes = await buildContractPdf(guardianData, studentData, financial, dateLabel, isSigned, signedDateStr);
 
     // Upload to Supabase Storage
-
     const fileName = `contrato-${enrollmentId}.pdf`;
     const filePath = `signed/${fileName}`;
 
@@ -302,20 +353,27 @@ serve(async (req) => {
 
     const contractUrl = publicUrlData.publicUrl;
 
-    // Update enrollment with contract URL and signed date
+    // Update enrollment
+    const updateFields: Record<string, unknown> = {
+      contract_url: contractUrl,
+    };
+
+    if (isSigned) {
+      updateFields.contract_signed_at = now.toISOString();
+    } else {
+      updateFields.contract_sent_at = now.toISOString();
+    }
+
     const { error: updateError } = await supabase
       .from("enrollments")
-      .update({
-        contract_url: contractUrl,
-        contract_signed_at: now.toISOString(),
-      })
+      .update(updateFields)
       .eq("id", enrollmentId);
 
     if (updateError) {
       console.error("Update enrollment error:", updateError);
     }
 
-    // Convert to base64 for email attachment (chunked)
+    // Convert to base64 for response (chunked)
     const chunkSize = 8192;
     let binary = "";
     for (let i = 0; i < pdfBytes.length; i += chunkSize) {
@@ -333,6 +391,9 @@ serve(async (req) => {
         contractBase64: base64Content,
         contentType: "application/pdf",
         fileName,
+        guardianEmail: guardianData.email,
+        guardianName: guardianData.fullName,
+        studentName: studentData.studentName,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
