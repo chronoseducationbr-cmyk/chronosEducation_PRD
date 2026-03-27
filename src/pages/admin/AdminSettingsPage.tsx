@@ -173,7 +173,7 @@ const AdminSettingsPage = () => {
   return (
     <div>
       <h1 className="font-heading text-2xl font-bold text-foreground mb-1">Configurações</h1>
-      <p className="text-muted-foreground mb-6">Gerir testes de inglês e contrato.</p>
+      <p className="text-muted-foreground mb-6">Gerir provas de inglês e contrato.</p>
 
       <Tabs defaultValue="testes" className="w-full">
         <TabsList className="mb-8 bg-transparent border-0 border-b border-border p-0 gap-10 pb-0">
