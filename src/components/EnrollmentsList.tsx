@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { GraduationCap, Clock, Plus, ChevronDown, ChevronUp, FileText, Download, BookOpen, Check, ExternalLink, Info, ShieldCheck } from "lucide-react";
+import { GraduationCap, Plus, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { getClassification } from "@/lib/quizScoring";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 
 interface Enrollment {
   id: string;
@@ -46,57 +41,22 @@ const statusColors: Record<string, { bg: string; text: string }> = {
 
 const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const { user } = useAuth();
-  const { toast } = useToast();
-  const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  const [quizResults, setQuizResults] = useState<Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }>>({});
-  const [activeTestIds, setActiveTestIds] = useState<Set<string>>(new Set());
-  const [testSlugMap, setTestSlugMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [acceptingContract, setAcceptingContract] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
       if (!user) return;
       setLoading(true);
 
-      const [{ data }, { data: qr }, { data: activeTests }] = await Promise.all([
-        supabase
-          .from("enrollments")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false }),
-        supabase
-          .from("quiz_results" as any)
-          .select("enrollment_id, correct_count, total_questions, score_points, max_points")
-          .eq("user_id", user.id),
-        supabase
-          .from("quiz_tests" as any)
-          .select("id, slug, is_active"),
-      ]);
+      const { data } = await supabase
+        .from("enrollments")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
 
       setEnrollments((data as Enrollment[]) || []);
-
-      const resultsMap: Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }> = {};
-      if (qr) {
-        (qr as any[]).forEach((r: any) => {
-          resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions, score_points: r.score_points || 0, max_points: r.max_points || 0 };
-        });
-      }
-      setQuizResults(resultsMap);
-
-      // Build active test IDs set
-      const idsSet = new Set<string>();
-      const slugMap: Record<string, string> = {};
-      if (activeTests) {
-        (activeTests as any[]).forEach((t: any) => {
-          if (t.is_active) idsSet.add(t.id);
-          slugMap[t.id] = t.slug;
-        });
-      }
-      setActiveTestIds(idsSet);
-      setTestSlugMap(slugMap);
 
       setLoading(false);
     };
@@ -198,175 +158,6 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                        <Detail label="Ano de conclusão" value={e.student_graduation_year?.toString() || ""} />
                        <Detail label="Indicado por" value={e.referred_by_email} />
                      </div>
-                     {/* Contract section - always visible */}
-                     <div className="mt-3 pt-3 border-t border-border">
-                       <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
-                         <FileText size={14} className="text-secondary" />
-                         Contrato
-                       </p>
-                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                         <Detail label="Enviado em" value={e.contract_sent_at ? formatDate(e.contract_sent_at) : ""} />
-                         <Detail label="Assinado em" value={e.contract_signed_at ? formatDate(e.contract_signed_at) : ""} />
-                         <div>
-                           <p className="text-muted-foreground text-xs">Documento</p>
-                            {e.contract_url ? (
-                              <button
-                                onClick={async () => {
-                                  try {
-                                    const res = await fetch(e.contract_url!);
-                                    const blob = await res.blob();
-                                    const url = URL.createObjectURL(blob);
-                                    const a = document.createElement("a");
-                                    a.href = url;
-                                    a.download = `contrato-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
-                                    document.body.appendChild(a);
-                                    a.click();
-                                    document.body.removeChild(a);
-                                    URL.revokeObjectURL(url);
-                                  } catch (err) {
-                                    console.error("Download error:", err);
-                                  }
-                                }}
-                                className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm mt-0.5"
-                              >
-                                <Download size={14} className="text-secondary" />
-                                Descarregar contrato
-                              </button>
-                           ) : (
-                             <p className="text-foreground font-medium text-xs mt-0.5 italic text-muted-foreground">Ainda não disponível</p>
-                           )}
-                         </div>
-                       </div>
-                       {/* Accept contract button - show when contract exists but not signed */}
-                       {e.contract_url && !e.contract_signed_at && (
-                         <div className="mt-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                           <p className="text-sm text-amber-800 dark:text-amber-200 mb-2">
-                             O contrato está disponível e aguarda a sua aceitação para prosseguir com a matrícula.
-                           </p>
-                           <Button
-                             size="sm"
-                             onClick={async () => {
-                               setAcceptingContract(e.id);
-                               try {
-                                 // Generate signed version of the PDF
-                                 const { data: pdfResult, error: pdfError } = await supabase.functions.invoke("generate-contract-pdf", {
-                                   body: { enrollmentId: e.id, signed: true },
-                                 });
-
-                                 if (pdfError || !pdfResult?.success) {
-                                   toast({ title: "Erro ao aceitar contrato", variant: "destructive" });
-                                   return;
-                                 }
-
-                                 // Update local state
-                                 setEnrollments(prev => prev.map(en =>
-                                   en.id === e.id
-                                     ? { ...en, contract_signed_at: new Date().toISOString(), contract_url: pdfResult.contractUrl, status: "Contrato assinado" }
-                                     : en
-                                 ));
-
-                                 // Update status in DB
-                                 await supabase.from("enrollments").update({ status: "Contrato assinado" } as any).eq("id", e.id);
-
-                                 toast({ title: "Contrato aceite com sucesso!" });
-                               } catch (err) {
-                                 console.error("Accept contract error:", err);
-                                 toast({ title: "Erro ao aceitar contrato", variant: "destructive" });
-                               } finally {
-                                 setAcceptingContract(null);
-                               }
-                             }}
-                             disabled={acceptingContract === e.id}
-                             className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
-                           >
-                             <ShieldCheck size={16} className="mr-1.5" />
-                             {acceptingContract === e.id ? "A processar..." : "Aceitar contrato"}
-                           </Button>
-                         </div>
-                       )}
-                       {/* Signed confirmation */}
-                       {e.contract_signed_at && (
-                         <div className="mt-3 p-3 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-2">
-                           <Check size={16} className="text-green-600 shrink-0" />
-                           <p className="text-sm text-green-800 dark:text-green-200 font-medium">Contrato aceite digitalmente</p>
-                         </div>
-                       )}
-                     </div>
-                     {(e.inscription_fee_cents > 0 || e.tuition_installment_cents > 0 || e.summercamp_installment_cents > 0) && (
-                      <div className="mt-3 pt-3 border-t border-border">
-                        <p className="text-xs font-semibold text-muted-foreground mb-2">Valores</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                          <Detail label="Matrícula" value={`$${(e.inscription_fee_cents / 100).toFixed(2)}`} />
-                          <Detail label={`Plataforma Online (${e.tuition_installments}x)`} value={e.tuition_installment_cents > 0 ? `$${(e.tuition_installment_cents / 100).toFixed(2)}` : ""} emptyText="falta associar" />
-                          <Detail label={`Summer Camp (${e.summercamp_installments}x)`} value={e.summercamp_installment_cents > 0 ? `$${(e.summercamp_installment_cents / 100).toFixed(2)}` : ""} emptyText="falta associar" />
-                        </div>
-                      </div>
-                     )}
-                     {/* Quiz section: show results if taken, show link only if test is active, hide if disabled & not taken */}
-                     {(() => {
-                       const hasResult = !!quizResults[e.id];
-                       const testActive = e.quiz_test_id && activeTestIds.has(e.quiz_test_id);
-                       if (!hasResult && !testActive) return null;
-                       return (
-                         <div className="mt-3 pt-3 border-t border-border">
-                           <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
-                             <BookOpen size={14} className="text-secondary" />
-                             Teste de Inglês
-                           </p>
-                           {hasResult ? (() => {
-                             const cls = getClassification(quizResults[e.id].score_points, e.quiz_test_id ? testSlugMap[e.quiz_test_id] : undefined);
-                             const levelDescriptions: Record<string, string> = {
-                               "A0": "Os alunos neste nível estão começando a aprender as suas primeiras palavras.",
-                               "A1": "Os alunos que atingem o nível A1 conseguem comunicar usando expressões do dia a dia familiares e frases muito básicas.",
-                               "A2": "Os alunos que atingem o nível A2 conseguem comunicar usando expressões frequentes em situações do dia a dia.",
-                               "B1": "Os alunos que atingem o nível B1 conseguem compreender informação sobre temas familiares. Conseguem comunicar na maioria das situações enquanto viajam para países de língua inglesa.",
-                               "B2": "Os alunos que atingem o nível B2 conseguem compreender as principais ideias de textos complexos. Conseguem interagir com alguma fluência e comunicar facilmente.",
-                               "C1": "Os alunos que atingem o nível C1 conseguem compreender uma vasta gama de textos longos e complexos.",
-                               "C2": "Os alunos que atingem o nível C2 conseguem facilmente compreender quase tudo o que ouvem ou escrevem. Conseguem expressar-se de forma fluente e espontânea com precisão em situações complexas.",
-                             };
-                              const hiddenLevel = ["A0", "A1", "A2"].includes(cls.level);
-                              return (
-                                <div className="flex flex-col gap-1 text-sm">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-secondary font-semibold inline-flex items-center gap-1">Realizado <Check size={14} /></span>
-                                  </div>
-                                  {hiddenLevel ? (
-                                    <span className="text-muted-foreground text-xs">Em breve serás informado sobre a nota do teste realizado.</span>
-                                  ) : (
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-foreground font-semibold">
-                                        {cls.level}{cls.label ? ` (${cls.label})` : ""}
-                                      </span>
-                                      {levelDescriptions[cls.level] && (
-                                        <TooltipProvider delayDuration={200}>
-                                          <Tooltip>
-                                            <TooltipTrigger asChild>
-                                              <button type="button" className="text-muted-foreground hover:text-foreground transition-colors">
-                                                <Info size={14} />
-                                              </button>
-                                            </TooltipTrigger>
-                                            <TooltipContent side="top" className="max-w-xs text-xs leading-relaxed">
-                                              {levelDescriptions[cls.level]}
-                                            </TooltipContent>
-                                          </Tooltip>
-                                        </TooltipProvider>
-                                      )}
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                           })() : (
-                             <button
-                               onClick={() => navigate(`/teste-ingles?enrollment=${e.id}`)}
-                               className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#F9B91D] hover:text-[#F9B91D]/80 transition-colors"
-                             >
-                               Realizar teste de inglês
-                               <ExternalLink size={14} className="text-[#042d44]" />
-                             </button>
-                           )}
-                         </div>
-                       );
-                     })()}
                   </div>
                 )}
               </div>

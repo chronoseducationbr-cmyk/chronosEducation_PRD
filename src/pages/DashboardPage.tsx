@@ -8,6 +8,8 @@ import ReferralSection from "@/components/ReferralSection";
 
 import EnrollmentsList from "@/components/EnrollmentsList";
 import PaymentsList from "@/components/PaymentsList";
+import ContractsList from "@/components/ContractsList";
+import QuizResultsList from "@/components/QuizResultsList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
@@ -378,6 +380,18 @@ const DashboardPage = () => {
             >
               Pagamentos
             </TabsTrigger>
+            <TabsTrigger
+              value="contratos"
+              className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+            >
+              Contratos
+            </TabsTrigger>
+            <TabsTrigger
+              value="prova-ingles"
+              className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+            >
+              Prova de Inglês
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="inscricoes">
@@ -447,6 +461,18 @@ const DashboardPage = () => {
           <TabsContent value="pagamentos">
             <div className="max-w-2xl">
               <PaymentsList refreshKey={refreshKey} />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="contratos">
+            <div className="max-w-xl">
+              <ContractsList refreshKey={refreshKey} />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="prova-ingles">
+            <div className="max-w-xl">
+              <QuizResultsList refreshKey={refreshKey} />
             </div>
           </TabsContent>
         </Tabs>
