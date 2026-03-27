@@ -401,7 +401,7 @@ const DashboardPage = () => {
               value="prova-ingles"
               className="shrink-0 whitespace-nowrap bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-xs sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
-              <span className="sm:hidden">Inglês</span>
+              <span className="sm:hidden">Prova</span>
               <span className="hidden sm:inline">Prova de Inglês</span>
             </TabsTrigger>
             <TabsTrigger
