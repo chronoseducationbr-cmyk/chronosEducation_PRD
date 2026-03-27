@@ -363,9 +363,11 @@ serve(async (req) => {
 
     if (isSigned) {
       updateFields.contract_signed_at = now.toISOString();
+      updateFields.status = "Contrato assinado";
     } else {
       updateFields.contract_sent_at = now.toISOString();
       updateFields.contract_signed_at = null;
+      updateFields.status = "Pendente de assinatura de contrato";
     }
 
     const { error: updateError } = await supabase
