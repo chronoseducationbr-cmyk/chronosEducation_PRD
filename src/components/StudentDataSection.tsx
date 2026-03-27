@@ -35,6 +35,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
   const [photoPreview, setPhotoPreview] = useState<string | null>(initialData?.studentPhotoUrl || null);
   const [uploading, setUploading] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [birthDateError, setBirthDateError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateEmail = (email: string) => {
