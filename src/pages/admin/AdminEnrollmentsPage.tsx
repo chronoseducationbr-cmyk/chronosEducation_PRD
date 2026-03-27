@@ -67,7 +67,8 @@ interface Enrollment {
 }
 
 const statuses = [
-  "Aguarda assinatura de contrato",
+  "Matrícula confirmada",
+  "Pendente de assinatura de contrato",
   "Contrato assinado",
   "Em curso",
   "Concluído",
@@ -75,9 +76,11 @@ const statuses = [
 ];
 
 const statusColors: Record<string, string> = {
+  "Matrícula confirmada": "bg-blue-100 text-blue-800",
+  "Pendente de assinatura de contrato": "bg-amber-100 text-amber-800",
   "Aguarda assinatura de contrato": "bg-amber-100 text-amber-800",
-  "Contrato assinado": "bg-blue-100 text-blue-800",
-  "Em curso": "bg-green-100 text-green-800",
+  "Contrato assinado": "bg-green-100 text-green-800",
+  "Em curso": "bg-emerald-100 text-emerald-800",
   "Concluído": "bg-emerald-100 text-emerald-800",
   "Cancelado": "bg-red-100 text-red-800",
 };
