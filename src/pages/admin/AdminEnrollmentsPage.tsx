@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard, BookOpen, CheckCircle2 } from "lucide-react"; // force rebuild
-import SetFinancialValuesDialog from "@/components/admin/SetFinancialValuesDialog";
+
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -302,32 +302,6 @@ const AdminEnrollmentsPage = () => {
                       )}
                     </div>
                     <p className="text-xs text-muted-foreground">{e.student_email || "—"}</p>
-                    <div className="flex items-center gap-3 mt-1 flex-wrap md:flex-nowrap text-[11px] text-muted-foreground">
-                      <span>Matrícula: <span className="font-medium text-foreground">{e.inscription_fee_cents > 0 ? `$${(e.inscription_fee_cents / 100).toFixed(2)}` : "—"}</span></span>
-                      <span>Plataforma Online: <span className="font-medium text-foreground">{e.tuition_installment_cents > 0 ? `${e.tuition_installments}x $${(e.tuition_installment_cents / 100).toFixed(2)}` : <span className="italic">falta associar</span>}</span></span>
-                      <span>Summer: <span className="font-medium text-foreground">{e.summercamp_installment_cents > 0 ? `${e.summercamp_installments}x $${(e.summercamp_installment_cents / 100).toFixed(2)}` : <span className="italic">falta associar</span>}</span></span>
-                      <SetFinancialValuesDialog
-                        enrollmentId={e.id}
-                        studentName={e.student_name}
-                        contractSignedAt={e.contract_signed_at}
-                        currentValues={{
-                          inscription_fee_cents: e.inscription_fee_cents,
-                          inscription_due_date: e.inscription_due_date,
-                          tuition_installment_cents: e.tuition_installment_cents,
-                          tuition_installments: e.tuition_installments,
-                          summercamp_installment_cents: e.summercamp_installment_cents,
-                          summercamp_installments: e.summercamp_installments,
-                          tuition_start_date: e.tuition_start_date,
-                          summercamp_start_date: e.summercamp_start_date,
-                        }}
-                        onSaved={(updates) => {
-                          setEnrollments((prev) =>
-                            prev.map((en) => (en.id === e.id ? { ...en, ...updates } : en))
-                          );
-                        }}
-                        disabled={!!e.has_installments}
-                      />
-                    </div>
                   </div>
                   <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
                     {e.status}
