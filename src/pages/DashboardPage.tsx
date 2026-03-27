@@ -386,27 +386,27 @@ const DashboardPage = () => {
           <TabsList className="mb-10 bg-transparent border-0 border-b border-border p-0 gap-1 sm:gap-6 md:gap-10 pb-0 w-full flex-nowrap">
             <TabsTrigger
               value="inscricoes"
-              className="shrink-0 whitespace-nowrap bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-xs sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              className="shrink-0 whitespace-nowrap bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
               Matrículas
             </TabsTrigger>
             <TabsTrigger
               value="contratos"
-              className="shrink-0 whitespace-nowrap bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-xs sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              className="shrink-0 whitespace-nowrap bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
               Contratos
               {hasUnsignedContract && <AlertTriangle size={14} className="ml-1 text-amber-500" />}
             </TabsTrigger>
             <TabsTrigger
               value="prova-ingles"
-              className="shrink-0 whitespace-nowrap bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-xs sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              className="shrink-0 whitespace-nowrap bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
               <span className="sm:hidden">Prova</span>
               <span className="hidden sm:inline">Prova de Inglês</span>
             </TabsTrigger>
             <TabsTrigger
               value="pagamentos"
-              className="shrink-0 whitespace-nowrap bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-xs sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              className="shrink-0 whitespace-nowrap bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
               <span className="sm:hidden">Pagamentos</span>
               <span className="hidden sm:inline">Pagamentos</span>
