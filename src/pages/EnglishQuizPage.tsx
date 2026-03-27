@@ -142,7 +142,7 @@ const EnglishQuizPage = () => {
           </button>
 
           <div className="bg-card border border-border rounded-xl p-8 text-center">
-            <h1 className="font-heading text-3xl font-bold text-accent mb-4">Bem-vindo ao teste de nível de inglês!</h1>
+            <h1 className="font-heading text-3xl font-bold text-accent mb-4"><h1 className="font-heading text-3xl font-bold text-accent mb-4">Bem-vindo à prova de nível de inglês!</h1></h1>
             <p className="text-foreground mb-6">Este teste avalia o teu conhecimento da gramática inglesa.</p>
             
             <h2 className="font-heading text-lg font-semibold text-foreground mb-4 text-left">Instruções para o teste:</h2>
