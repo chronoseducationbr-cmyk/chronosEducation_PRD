@@ -102,10 +102,10 @@ const AdminSettingsPage = () => {
         .update({ is_active: false } as any)
         .in("id", tests.map((t) => t.id));
       if (error) {
-        toast({ title: "Erro ao desativar testes", variant: "destructive" });
+        toast({ title: "Erro ao desativar provas", variant: "destructive" });
       } else {
         setTests((prev) => prev.map((t) => ({ ...t, is_active: false })));
-        toast({ title: "Testes de inglês desativados" });
+        toast({ title: "Provas de inglês desativadas" });
       }
     } else {
       const first = tests[0];
