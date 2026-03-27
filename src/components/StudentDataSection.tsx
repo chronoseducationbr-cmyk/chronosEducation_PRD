@@ -34,7 +34,17 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
   const [studentPhotoUrl, setStudentPhotoUrl] = useState(initialData?.studentPhotoUrl || "");
   const [photoPreview, setPhotoPreview] = useState<string | null>(initialData?.studentPhotoUrl || null);
   const [uploading, setUploading] = useState(false);
+  const [emailError, setEmailError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const validateEmail = (email: string) => {
+    if (!email.trim()) {
+      setEmailError("");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmailError(emailRegex.test(email.trim()) ? "" : "Formato de email inválido");
+  };
 
   useEffect(() => {
     if (initialData) {
