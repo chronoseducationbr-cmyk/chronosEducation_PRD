@@ -353,7 +353,7 @@ const AdminEnrollmentsPage = () => {
                             className="w-16 h-16 rounded-full object-cover border-2 border-secondary/30 shrink-0"
                           />
                         )}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm flex-1">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm flex-1 min-w-0">
                         <div>
                           <p className="text-muted-foreground text-xs">Email</p>
                           <p className="text-foreground font-medium">{e.student_email || "—"}</p>
