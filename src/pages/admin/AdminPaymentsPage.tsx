@@ -460,7 +460,7 @@ const AdminPaymentsPage = () => {
                                     )}
                                   </td>
                                   <td className="py-2 pr-2">
-                                    {inst.type !== "summercamp" || inst.status === "paid" ? (
+                                    {inst.status === "paid" ? (
                                       <span className="text-muted-foreground">
                                         {inst.discount_percent > 0 ? `${inst.discount_percent}%` : "—"}
                                       </span>
