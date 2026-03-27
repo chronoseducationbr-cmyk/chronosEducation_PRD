@@ -124,6 +124,27 @@ async function buildContractPdf(
   const page = doc.addPage([595.28, 841.89]);
   const ctx: DrawCtx = { page, y: 780, font, fontBold, doc };
 
+  // Logo
+  try {
+    const logoUrl = "https://qqgfqjpgxoourayjlrwc.supabase.co/storage/v1/object/public/email-assets/chronos-logo-header.png";
+    const logoResponse = await fetch(logoUrl);
+    if (logoResponse.ok) {
+      const logoBytes = new Uint8Array(await logoResponse.arrayBuffer());
+      const logoImage = await doc.embedPng(logoBytes);
+      const logoHeight = 36;
+      const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
+      ctx.page.drawImage(logoImage, {
+        x: (595.28 - logoWidth) / 2,
+        y: ctx.y - logoHeight + 10,
+        width: logoWidth,
+        height: logoHeight,
+      });
+      ctx.y -= logoHeight + 16;
+    }
+  } catch (e) {
+    console.error("Failed to embed logo:", e);
+  }
+
   // Title
   drawTitle(ctx, "CONTRATO DE PRESTACAO DE SERVICOS EDUCACIONAIS", 13);
   drawTitle(ctx, "Programa Dual Diploma - Chronos Education", 11);
