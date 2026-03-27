@@ -383,33 +383,36 @@ const DashboardPage = () => {
         <p className="text-muted-foreground mb-6">Gerencie as matrículas e pagamentos do programa Dual Diploma</p>
 
         <Tabs defaultValue="inscricoes" className="w-full">
-          <TabsList className="mb-10 bg-transparent border-0 border-b border-border p-0 gap-2 sm:gap-6 md:gap-10 pb-0 w-full overflow-x-auto sm:overflow-x-visible flex-nowrap scrollbar-hide">
-            <TabsTrigger
-              value="inscricoes"
-              className="shrink-0 whitespace-nowrap bg-transparent px-3 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
-            >
-              Matrículas
-            </TabsTrigger>
-            <TabsTrigger
-              value="contratos"
-              className="shrink-0 whitespace-nowrap bg-transparent px-3 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
-            >
-              Contratos
-              {hasUnsignedContract && <AlertTriangle size={16} className="ml-1.5 text-amber-500" />}
-            </TabsTrigger>
-            <TabsTrigger
-              value="prova-ingles"
-              className="shrink-0 whitespace-nowrap bg-transparent px-3 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
-            >
-              Prova de Inglês
-            </TabsTrigger>
-            <TabsTrigger
-              value="pagamentos"
-              className="shrink-0 whitespace-nowrap bg-transparent px-3 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
-            >
-              Pagamentos
-            </TabsTrigger>
-          </TabsList>
+          <div className="relative mb-10">
+            <TabsList className="bg-transparent border-0 border-b border-border p-0 gap-2 sm:gap-6 md:gap-10 pb-0 w-full overflow-x-auto sm:overflow-x-visible flex-nowrap scrollbar-hide">
+              <TabsTrigger
+                value="inscricoes"
+                className="shrink-0 whitespace-nowrap bg-transparent px-3 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              >
+                Matrículas
+              </TabsTrigger>
+              <TabsTrigger
+                value="contratos"
+                className="shrink-0 whitespace-nowrap bg-transparent px-3 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              >
+                Contratos
+                {hasUnsignedContract && <AlertTriangle size={16} className="ml-1.5 text-amber-500" />}
+              </TabsTrigger>
+              <TabsTrigger
+                value="prova-ingles"
+                className="shrink-0 whitespace-nowrap bg-transparent px-3 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              >
+                Prova de Inglês
+              </TabsTrigger>
+              <TabsTrigger
+                value="pagamentos"
+                className="shrink-0 whitespace-nowrap bg-transparent px-3 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              >
+                Pagamentos
+              </TabsTrigger>
+            </TabsList>
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none sm:hidden" />
+          </div>
 
           <TabsContent value="inscricoes">
             <div className="max-w-xl">
