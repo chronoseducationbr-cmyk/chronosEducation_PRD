@@ -178,9 +178,12 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     }
 
     if (tuition_installment_cents > 0 && tuition_start_date) {
+      const startDate = new Date(tuition_start_date);
+      const startDay = startDate.getUTCDate();
       for (let i = 0; i < tCount; i++) {
         const date = new Date(tuition_start_date);
-        date.setMonth(date.getMonth() + i);
+        date.setUTCMonth(date.getUTCMonth() + i);
+        date.setUTCDate(startDay);
         rows.push({
           enrollment_id: enrollmentId,
           type: "tuition",
@@ -193,9 +196,12 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     }
 
     if (summercamp_installment_cents > 0 && summercamp_start_date) {
+      const startDate = new Date(summercamp_start_date);
+      const startDay = startDate.getUTCDate();
       for (let i = 0; i < sCount; i++) {
         const date = new Date(summercamp_start_date);
-        date.setMonth(date.getMonth() + i);
+        date.setUTCMonth(date.getUTCMonth() + i);
+        date.setUTCDate(startDay);
         rows.push({
           enrollment_id: enrollmentId,
           type: "summercamp",
