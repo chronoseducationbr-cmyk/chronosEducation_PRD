@@ -114,6 +114,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     const { fee, tuition, tInstallments, summer, sInstallments } = getFormValues();
     return {
       inscription_fee_cents: fee,
+      inscription_due_date: inscriptionDueDate || null,
       tuition_installment_cents: tuition,
       tuition_installments: tInstallments,
       summercamp_installment_cents: summer,
