@@ -463,6 +463,18 @@ const DashboardPage = () => {
               <PaymentsList refreshKey={refreshKey} />
             </div>
           </TabsContent>
+
+          <TabsContent value="contratos">
+            <div className="max-w-xl">
+              <ContractsList refreshKey={refreshKey} />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="prova-ingles">
+            <div className="max-w-xl">
+              <QuizResultsList refreshKey={refreshKey} />
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
     </div>
