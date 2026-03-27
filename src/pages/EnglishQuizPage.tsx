@@ -145,7 +145,7 @@ const EnglishQuizPage = () => {
             <h1 className="font-heading text-3xl font-bold text-accent mb-4"><h1 className="font-heading text-3xl font-bold text-accent mb-4">Bem-vindo à prova de nível de inglês!</h1></h1>
             <p className="text-foreground mb-6">Este teste avalia o teu conhecimento da gramática inglesa.</p>
             
-            <h2 className="font-heading text-lg font-semibold text-foreground mb-4 text-left">Instruções para o teste:</h2>
+            <h2 className="font-heading text-lg font-semibold text-foreground mb-4 text-left"><h2 className="font-heading text-lg font-semibold text-foreground mb-4 text-left">Instruções para a prova:</h2></h2>
             <ol className="text-foreground text-left space-y-3 mb-8 list-none pl-0">
               <li><span className="font-heading text-accent font-bold text-2xl">1.</span> <strong>Responde a todas as perguntas:</strong> Há 60 perguntas de múltipla escolha no total.</li>
               <li><span className="font-heading text-accent font-bold text-2xl">2.</span> <strong>Após avançar para a pergunta seguinte</strong> já não podes voltar a pergunta anterior.</li>
