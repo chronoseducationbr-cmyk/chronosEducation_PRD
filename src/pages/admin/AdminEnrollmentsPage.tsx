@@ -422,7 +422,7 @@ const AdminEnrollmentsPage = () => {
                                 }
                               }}
                             >
-                              <SelectTrigger className="h-8 text-xs w-56">
+                              <SelectTrigger className="h-8 text-xs w-full max-w-[224px]">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
