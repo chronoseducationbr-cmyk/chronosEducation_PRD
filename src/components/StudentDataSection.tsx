@@ -35,6 +35,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
   const [photoPreview, setPhotoPreview] = useState<string | null>(initialData?.studentPhotoUrl || null);
   const [uploading, setUploading] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [birthDateError, setBirthDateError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateEmail = (email: string) => {
@@ -44,6 +45,25 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     setEmailError(emailRegex.test(email.trim()) ? "" : "Formato de email inválido");
+  };
+
+  const validateBirthDate = (dateStr: string) => {
+    if (!dateStr) {
+      setBirthDateError("");
+      return;
+    }
+    const birthDate = new Date(dateStr);
+    const today = new Date();
+    if (birthDate > today) {
+      setBirthDateError("A data de nascimento não pode ser superior à data atual.");
+      return;
+    }
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    setBirthDateError(age < 13 ? "O aluno deve ter pelo menos 13 anos." : "");
   };
 
   useEffect(() => {
@@ -212,10 +232,17 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
                 required
                 max={new Date().toISOString().split("T")[0]}
                 value={studentBirthDate}
-                onChange={(e) => setStudentBirthDate(e.target.value)}
-                className={`${inputClasses("studentBirthDate")} pl-10`}
+                onChange={(e) => {
+                  setStudentBirthDate(e.target.value);
+                  validateBirthDate(e.target.value);
+                }}
+                onBlur={(e) => validateBirthDate(e.target.value)}
+                className={`${inputClasses("studentBirthDate")} pl-10 ${birthDateError ? "border-destructive" : ""}`}
               />
             </div>
+            {birthDateError && (
+              <p className="text-xs text-destructive mt-1">{birthDateError}</p>
+            )}
           </div>
           <div>
             <label className="text-sm font-medium text-foreground block mb-1.5">Gênero <span className="text-[#F9B91D]">*</span></label>
