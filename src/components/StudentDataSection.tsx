@@ -240,10 +240,17 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
                 required
                 maxLength={100}
                 value={studentEmail}
-                onChange={(e) => setStudentEmail(e.target.value)}
-                className={`${inputClasses("studentEmail")} pl-10`}
+                onChange={(e) => {
+                  setStudentEmail(e.target.value);
+                  if (emailError) validateEmail(e.target.value);
+                }}
+                onBlur={(e) => validateEmail(e.target.value)}
+                className={`${inputClasses("studentEmail")} pl-10 ${emailError ? "border-destructive" : ""}`}
                 placeholder="aluno@exemplo.com"
               />
+              {emailError && (
+                <p className="text-xs text-destructive mt-1">{emailError}</p>
+              )}
             </div>
           </div>
           <div>
