@@ -250,7 +250,7 @@ const AdminSettingsPage = () => {
                               onChange={(e) => setEditValue(e.target.value)}
                               className="flex-1 text-sm rounded-lg border border-border bg-background p-2 text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-secondary"
                               rows={2}
-                              placeholder="Descrição do teste..."
+                              placeholder="Descrição da prova..."
                             />
                             <button onClick={() => handleSaveDescription(test)} className="p-1.5 rounded-md hover:bg-muted text-secondary">
                               <Check size={16} />
