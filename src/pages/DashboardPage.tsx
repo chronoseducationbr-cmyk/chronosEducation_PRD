@@ -23,6 +23,22 @@ const DashboardPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [wizardStep, setWizardStep] = useState(1);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [hasUnsignedContract, setHasUnsignedContract] = useState(false);
+
+  useEffect(() => {
+    const checkUnsignedContracts = async () => {
+      if (!user) return;
+      const { data } = await supabase
+        .from("enrollments")
+        .select("id")
+        .eq("user_id", user.id)
+        .not("contract_url", "is", null)
+        .is("contract_signed_at", null)
+        .limit(1);
+      setHasUnsignedContract(!!(data && data.length > 0));
+    };
+    checkUnsignedContracts();
+  }, [user, refreshKey]);
   
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
