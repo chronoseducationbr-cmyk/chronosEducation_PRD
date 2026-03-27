@@ -54,7 +54,7 @@ const AdminSettingsPage = () => {
       .order("created_at", { ascending: true });
     if (error) {
       console.error("Error loading tests:", error);
-      toast({ title: "Erro ao carregar testes", variant: "destructive" });
+      toast({ title: "Erro ao carregar provas", variant: "destructive" });
     } else {
       setTests((data as any[]) || []);
     }
@@ -102,10 +102,10 @@ const AdminSettingsPage = () => {
         .update({ is_active: false } as any)
         .in("id", tests.map((t) => t.id));
       if (error) {
-        toast({ title: "Erro ao desativar testes", variant: "destructive" });
+        toast({ title: "Erro ao desativar provas", variant: "destructive" });
       } else {
         setTests((prev) => prev.map((t) => ({ ...t, is_active: false })));
-        toast({ title: "Testes de inglês desativados" });
+        toast({ title: "Provas de inglês desativadas" });
       }
     } else {
       const first = tests[0];
@@ -115,10 +115,10 @@ const AdminSettingsPage = () => {
           .update({ is_active: true } as any)
           .eq("id", first.id);
         if (error) {
-          toast({ title: "Erro ao ativar teste", variant: "destructive" });
+          toast({ title: "Erro ao ativar prova", variant: "destructive" });
         } else {
           setTests((prev) => prev.map((t) => ({ ...t, is_active: t.id === first.id })));
-          toast({ title: "Testes de inglês ativados", description: `${first.name} selecionado.` });
+          toast({ title: "Provas de inglês ativadas", description: `${first.name} selecionada.` });
         }
       }
     }
@@ -130,10 +130,10 @@ const AdminSettingsPage = () => {
     await supabase.from("quiz_tests").update({ is_active: false } as any).in("id", tests.map((t) => t.id));
     const { error } = await supabase.from("quiz_tests").update({ is_active: true } as any).eq("id", selectedTest.id);
     if (error) {
-      toast({ title: "Erro ao selecionar teste", variant: "destructive" });
+      toast({ title: "Erro ao selecionar prova", variant: "destructive" });
     } else {
       setTests((prev) => prev.map((t) => ({ ...t, is_active: t.id === selectedTest.id })));
-      toast({ title: "Teste selecionado", description: `${selectedTest.name} é agora o teste ativo.` });
+      toast({ title: "Prova selecionada", description: `${selectedTest.name} é agora a prova ativa.` });
     }
     setToggling(null);
   };
@@ -173,13 +173,13 @@ const AdminSettingsPage = () => {
   return (
     <div>
       <h1 className="font-heading text-2xl font-bold text-foreground mb-1">Configurações</h1>
-      <p className="text-muted-foreground mb-6">Gerir testes de inglês e contrato.</p>
+      <p className="text-muted-foreground mb-6">Gerir provas de inglês e contrato.</p>
 
-      <Tabs defaultValue="testes" className="w-full">
+      <Tabs defaultValue="provas" className="w-full">
         <TabsList className="mb-8 bg-transparent border-0 border-b border-border p-0 gap-10 pb-0">
-          <TabsTrigger value="testes" className={tabTriggerClass}>
+          <TabsTrigger value="provas" className={tabTriggerClass}>
             <BookOpen size={18} className="mr-2" />
-            Testes
+            Provas
             <span className={`ml-2 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full ${quizEnabled ? "bg-secondary/20 text-secondary" : "bg-muted text-muted-foreground"}`}>
               {quizEnabled ? "ON" : "OFF"}
             </span>
@@ -193,11 +193,11 @@ const AdminSettingsPage = () => {
           </TabsTrigger>
         </TabsList>
 
-        {/* ─── Testes de Inglês ─── */}
-        <TabsContent value="testes">
+        {/* ─── Provas de Inglês ─── */}
+        <TabsContent value="provas">
           <div className="max-w-2xl">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-heading text-lg font-semibold text-foreground">Testes de Inglês</h2>
+              <h2 className="font-heading text-lg font-semibold text-foreground">Provas de Inglês</h2>
               {!loading && tests.length > 0 && (
                 <Switch checked={quizEnabled} onCheckedChange={handleGeneralToggle} />
               )}
@@ -206,10 +206,10 @@ const AdminSettingsPage = () => {
             {loading ? (
               <div className="animate-pulse h-20 bg-muted rounded-xl" />
             ) : tests.length === 0 ? (
-              <p className="text-muted-foreground text-sm">Nenhum teste configurado.</p>
+              <p className="text-muted-foreground text-sm">Nenhuma prova configurada.</p>
             ) : quizEnabled ? (
               <div className="space-y-3 pl-4 border-l-2 border-secondary/30">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Selecionar teste ativo</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Selecionar prova ativa</p>
                 {tests.map((test) => (
                   <div
                     key={test.id}
@@ -250,7 +250,7 @@ const AdminSettingsPage = () => {
                               onChange={(e) => setEditValue(e.target.value)}
                               className="flex-1 text-sm rounded-lg border border-border bg-background p-2 text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-secondary"
                               rows={2}
-                              placeholder="Descrição do teste..."
+                              placeholder="Descrição da prova..."
                             />
                             <button onClick={() => handleSaveDescription(test)} className="p-1.5 rounded-md hover:bg-muted text-secondary">
                               <Check size={16} />
@@ -322,7 +322,7 @@ const AdminSettingsPage = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground italic">Testes de inglês desativados.</p>
+              <p className="text-sm text-muted-foreground italic">Provas de inglês desativadas.</p>
             )}
           </div>
         </TabsContent>
