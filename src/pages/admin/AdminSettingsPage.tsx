@@ -322,7 +322,7 @@ const AdminSettingsPage = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground italic">Testes de inglês desativados.</p>
+              <p className="text-sm text-muted-foreground italic">Provas de inglês desativadas.</p>
             )}
           </div>
         </TabsContent>

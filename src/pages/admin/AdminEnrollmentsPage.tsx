@@ -540,7 +540,7 @@ const AdminEnrollmentsPage = () => {
                           })()}
                         </div>
                       ) : (
-                        <span className="text-muted-foreground text-sm italic">Teste não realizado</span>
+                        <span className="text-muted-foreground text-sm italic">Prova não realizada</span>
                       )}
                     </div>
                   </div>
