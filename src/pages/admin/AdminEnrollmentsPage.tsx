@@ -302,6 +302,11 @@ const AdminEnrollmentsPage = () => {
                       )}
                     </div>
                     <p className="text-xs text-muted-foreground">{e.student_email || "—"}</p>
+                    <div className="flex items-center gap-3 mt-1 flex-wrap md:flex-nowrap text-[11px] text-muted-foreground">
+                      <span>Matrícula: <span className="font-medium text-foreground">{e.inscription_fee_cents > 0 ? `$${(e.inscription_fee_cents / 100).toFixed(2)}` : "—"}</span></span>
+                      <span>Plataforma Online: <span className="font-medium text-foreground">{e.tuition_installment_cents > 0 ? `${e.tuition_installments}x $${(e.tuition_installment_cents / 100).toFixed(2)}` : <span className="italic">falta associar</span>}</span></span>
+                      <span>Summer: <span className="font-medium text-foreground">{e.summercamp_installment_cents > 0 ? `${e.summercamp_installments}x $${(e.summercamp_installment_cents / 100).toFixed(2)}` : <span className="italic">falta associar</span>}</span></span>
+                    </div>
                   </div>
                   <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
                     {e.status}
