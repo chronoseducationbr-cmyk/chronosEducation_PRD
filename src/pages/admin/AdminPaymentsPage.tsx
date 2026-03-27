@@ -484,8 +484,16 @@ const AdminPaymentsPage = () => {
                                         <button
                                           onClick={() => saveDiscount(inst.id, e.id)}
                                           className="text-secondary hover:text-secondary/80 text-[10px] font-semibold"
+                                          title="Confirmar"
                                         >
                                           ✓
+                                        </button>
+                                        <button
+                                          onClick={() => setEditingDiscount(null)}
+                                          className="text-destructive hover:text-destructive/80 text-[10px] font-semibold"
+                                          title="Cancelar"
+                                        >
+                                          ✕
                                         </button>
                                       </div>
                                     ) : (
