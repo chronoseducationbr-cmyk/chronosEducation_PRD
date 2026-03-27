@@ -206,10 +206,10 @@ const AdminSettingsPage = () => {
             {loading ? (
               <div className="animate-pulse h-20 bg-muted rounded-xl" />
             ) : tests.length === 0 ? (
-              <p className="text-muted-foreground text-sm">Nenhum teste configurado.</p>
+              <p className="text-muted-foreground text-sm">Nenhuma prova configurada.</p>
             ) : quizEnabled ? (
               <div className="space-y-3 pl-4 border-l-2 border-secondary/30">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Selecionar teste ativo</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Selecionar prova ativa</p>
                 {tests.map((test) => (
                   <div
                     key={test.id}
