@@ -57,18 +57,18 @@ const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: 
               <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;border:1px solid #e8ecef;margin-bottom:24px;">
                 <tr>
                   <td style="padding:24px;">
-                    <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
-                      O contrato de prestação de serviços educacionais do programa <strong>Dual Diploma</strong> para o(a) aluno(a) <strong>${studentName}</strong> já se encontra disponível.
-                    </p>
-                    <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
-                      Para prosseguir com a matrícula, é necessário que reveja e aceite o contrato na plataforma Chronos Education.
-                    </p>
-                    <p style="margin:0 0 8px;font-size:13px;color:#5a6a78;">
-                      Pode também descarregar o contrato em PDF para consulta:
-                    </p>
-                    <p style="margin:0 0 20px;">
-                      <a href="${contractUrl}" style="color:#062a45;font-size:14px;text-decoration:underline;" target="_blank">Descarregar contrato PDF</a>
-                    </p>
+                     <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
+                       O contrato de prestação de serviços educacionais do programa <strong>Dual Diploma</strong> da <strong>Chronos Education</strong> para o(a) aluno(a) <strong>${studentName}</strong> já se encontra disponível.
+                     </p>
+                     <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
+                       Para concluir a matrícula, é necessário que aceite o contrato na plataforma Chronos Education.
+                     </p>
+                     <p style="margin:0 0 8px;font-size:13px;color:#5a6a78;">
+                       Pode também baixar o contrato em PDF para consulta:
+                     </p>
+                     <p style="margin:0 0 20px;">
+                       <a href="${contractUrl}" style="color:#062a45;font-size:14px;text-decoration:underline;" target="_blank">Download contrato PDF</a>
+                     </p>
                   </td>
                 </tr>
               </table>
