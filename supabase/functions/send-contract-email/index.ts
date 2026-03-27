@@ -139,7 +139,7 @@ serve(async (req) => {
       );
     }
 
-    const platformUrl = "https://www.chronoseducation.com/dashboard";
+    const platformUrl = "https://www.chronoseducation.com/gestao-matriculas";
 
     const emailPayload: Record<string, unknown> = {
       from: "Chronos Education <contato@info.chronoseducation.com>",
