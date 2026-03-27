@@ -8,6 +8,8 @@ import ReferralSection from "@/components/ReferralSection";
 
 import EnrollmentsList from "@/components/EnrollmentsList";
 import PaymentsList from "@/components/PaymentsList";
+import ContractsList from "@/components/ContractsList";
+import QuizResultsList from "@/components/QuizResultsList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import chronosLogo from "@/assets/chronos-logo-header.png";
 import SEOHead from "@/components/SEOHead";
