@@ -380,6 +380,18 @@ const DashboardPage = () => {
             >
               Pagamentos
             </TabsTrigger>
+            <TabsTrigger
+              value="contratos"
+              className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+            >
+              Contratos
+            </TabsTrigger>
+            <TabsTrigger
+              value="prova-ingles"
+              className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+            >
+              Prova de Inglês
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="inscricoes">
