@@ -372,7 +372,7 @@ const AdminEnrollmentsPage = () => {
                         </div>
                         <div>
                           <p className="text-muted-foreground text-xs">Endereço</p>
-                          <p className="text-foreground font-medium">{e.student_address || "—"}</p>
+                          <p className="text-foreground font-medium break-words">{e.student_address || "—"}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground text-xs">Indicação</p>
