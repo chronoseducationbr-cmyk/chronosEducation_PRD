@@ -341,7 +341,7 @@ const AdminEnrollmentsPage = () => {
 
                 {/* Expanded details */}
                 {isExpanded && (
-                  <div className="px-4 pb-4 border-t border-border space-y-4">
+                  <div className="px-4 pb-4 border-t border-border space-y-4 overflow-hidden">
                     {/* Dados do Aluno */}
                     <div className="mt-3">
                       <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Dados do Aluno</p>
