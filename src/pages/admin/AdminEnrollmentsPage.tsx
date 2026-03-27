@@ -406,7 +406,7 @@ const AdminEnrollmentsPage = () => {
                     {/* Matrícula */}
                     <div>
                       <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Matrícula</p>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
                         <div>
                           <p className="text-muted-foreground text-xs">Data de matrícula</p>
                           <p className="text-foreground font-medium">{formatDate(e.created_at)}</p>
