@@ -47,6 +47,25 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
     setEmailError(emailRegex.test(email.trim()) ? "" : "Formato de email inválido");
   };
 
+  const validateBirthDate = (dateStr: string) => {
+    if (!dateStr) {
+      setBirthDateError("");
+      return;
+    }
+    const birthDate = new Date(dateStr);
+    const today = new Date();
+    if (birthDate > today) {
+      setBirthDateError("A data de nascimento não pode ser superior à data atual.");
+      return;
+    }
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    setBirthDateError(age < 13 ? "O aluno deve ter pelo menos 13 anos." : "");
+  };
+
   useEffect(() => {
     if (initialData) {
       setLoading(false);
