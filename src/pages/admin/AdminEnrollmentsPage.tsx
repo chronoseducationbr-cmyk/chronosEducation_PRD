@@ -376,7 +376,7 @@ const AdminEnrollmentsPage = () => {
                         </div>
                         <div>
                           <p className="text-muted-foreground text-xs">Indicação</p>
-                          <p className="text-foreground font-medium">{e.referred_by_email || "—"}</p>
+                          <p className="text-foreground font-medium break-all">{e.referred_by_email || "—"}</p>
                         </div>
                       </div>
                       </div>
