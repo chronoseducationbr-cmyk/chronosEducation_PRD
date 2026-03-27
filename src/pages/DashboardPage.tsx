@@ -379,7 +379,7 @@ const DashboardPage = () => {
       </header>
 
       <div className="container-narrow px-4 md:px-8 py-8">
-        <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Painel</h1>
+        <h1 className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-2">Painel</h1>
         <p className="text-muted-foreground mb-6">Gerencie as matrículas e pagamentos do programa Dual Diploma</p>
 
         <Tabs defaultValue="inscricoes" className="w-full">
