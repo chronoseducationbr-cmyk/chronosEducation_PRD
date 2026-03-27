@@ -161,7 +161,7 @@ const QuizResultsList = ({ refreshKey }: Props) => {
                   onClick={() => navigate(`/teste-ingles?enrollment=${e.id}`)}
                   className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#F9B91D] hover:text-[#F9B91D]/80 transition-colors"
                 >
-                  Realizar teste de inglês
+                  Realizar prova de inglês
                   <ExternalLink size={14} className="text-[#042d44]" />
                 </button>
               )}
