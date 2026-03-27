@@ -115,10 +115,10 @@ const AdminSettingsPage = () => {
           .update({ is_active: true } as any)
           .eq("id", first.id);
         if (error) {
-          toast({ title: "Erro ao ativar teste", variant: "destructive" });
+          toast({ title: "Erro ao ativar prova", variant: "destructive" });
         } else {
           setTests((prev) => prev.map((t) => ({ ...t, is_active: t.id === first.id })));
-          toast({ title: "Testes de inglês ativados", description: `${first.name} selecionado.` });
+          toast({ title: "Provas de inglês ativadas", description: `${first.name} selecionada.` });
         }
       }
     }
