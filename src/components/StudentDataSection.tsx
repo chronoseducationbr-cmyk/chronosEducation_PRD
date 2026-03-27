@@ -232,10 +232,17 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
                 required
                 max={new Date().toISOString().split("T")[0]}
                 value={studentBirthDate}
-                onChange={(e) => setStudentBirthDate(e.target.value)}
-                className={`${inputClasses("studentBirthDate")} pl-10`}
+                onChange={(e) => {
+                  setStudentBirthDate(e.target.value);
+                  validateBirthDate(e.target.value);
+                }}
+                onBlur={(e) => validateBirthDate(e.target.value)}
+                className={`${inputClasses("studentBirthDate")} pl-10 ${birthDateError ? "border-destructive" : ""}`}
               />
             </div>
+            {birthDateError && (
+              <p className="text-xs text-destructive mt-1">{birthDateError}</p>
+            )}
           </div>
           <div>
             <label className="text-sm font-medium text-foreground block mb-1.5">Gênero <span className="text-[#F9B91D]">*</span></label>
