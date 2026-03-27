@@ -27,6 +27,7 @@ interface Enrollment {
   student_name: string;
   student_email: string | null;
   inscription_fee_cents: number;
+  inscription_due_date: string | null;
   tuition_installment_cents: number;
   tuition_installments: number;
   summercamp_installment_cents: number;
