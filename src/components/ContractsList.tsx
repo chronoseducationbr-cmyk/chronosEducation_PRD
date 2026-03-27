@@ -116,7 +116,7 @@ const ContractsList = ({ refreshKey }: Props) => {
             {e.contract_url && !e.contract_signed_at && (
               <div className="mt-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                 <p className="text-sm text-amber-800 dark:text-amber-200 mb-2">
-                  O contrato está disponível e aguarda a sua aceitação para prosseguir com a matrícula.
+                  O contrato está disponível e aguarda a sua aceitação para concluir a matrícula.
                 </p>
                 <Button
                   size="sm"
