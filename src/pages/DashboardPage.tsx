@@ -379,33 +379,33 @@ const DashboardPage = () => {
       </header>
 
       <div className="container-narrow px-4 md:px-8 py-8">
-        <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Painel</h1>
+        <h1 className="font-heading text-2xl sm:text-3xl font-bold text-foreground mb-2">Painel</h1>
         <p className="text-muted-foreground mb-6">Gerencie as matrículas e pagamentos do programa Dual Diploma</p>
 
         <Tabs defaultValue="inscricoes" className="w-full">
-          <TabsList className="mb-10 bg-transparent border-0 border-b border-border p-0 gap-10 pb-0">
+          <TabsList className="mb-10 bg-transparent border-0 border-b border-border p-0 gap-2 sm:gap-6 md:gap-10 pb-0 flex-wrap sm:flex-nowrap overflow-x-auto">
             <TabsTrigger
               value="inscricoes"
-              className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              className="bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
               Matrículas
             </TabsTrigger>
             <TabsTrigger
               value="contratos"
-              className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              className="bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
               Contratos
               {hasUnsignedContract && <AlertTriangle size={16} className="ml-1.5 text-amber-500" />}
             </TabsTrigger>
             <TabsTrigger
               value="prova-ingles"
-              className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              className="bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
               Prova de Inglês
             </TabsTrigger>
             <TabsTrigger
               value="pagamentos"
-              className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              className="bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
               Pagamentos
             </TabsTrigger>
