@@ -130,10 +130,10 @@ const AdminSettingsPage = () => {
     await supabase.from("quiz_tests").update({ is_active: false } as any).in("id", tests.map((t) => t.id));
     const { error } = await supabase.from("quiz_tests").update({ is_active: true } as any).eq("id", selectedTest.id);
     if (error) {
-      toast({ title: "Erro ao selecionar teste", variant: "destructive" });
+      toast({ title: "Erro ao selecionar prova", variant: "destructive" });
     } else {
       setTests((prev) => prev.map((t) => ({ ...t, is_active: t.id === selectedTest.id })));
-      toast({ title: "Teste selecionado", description: `${selectedTest.name} é agora o teste ativo.` });
+      toast({ title: "Prova selecionada", description: `${selectedTest.name} é agora a prova ativa.` });
     }
     setToggling(null);
   };
