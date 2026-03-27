@@ -386,7 +386,7 @@ const DashboardPage = () => {
           <TabsList className="mb-10 bg-transparent border-0 border-b border-border p-0 gap-2 sm:gap-6 md:gap-10 pb-0 flex-wrap sm:flex-nowrap overflow-x-auto">
             <TabsTrigger
               value="inscricoes"
-              className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
+              className="bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
               Matrículas
             </TabsTrigger>
