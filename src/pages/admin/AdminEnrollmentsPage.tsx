@@ -480,7 +480,7 @@ const AdminEnrollmentsPage = () => {
                                 className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium text-sm"
                               >
                                 <Download size={14} />
-                                Descarregar contrato
+                                Download contrato
                               </button>
                             ) : (
                               <span className="text-muted-foreground inline-flex items-center gap-1 text-sm italic">
