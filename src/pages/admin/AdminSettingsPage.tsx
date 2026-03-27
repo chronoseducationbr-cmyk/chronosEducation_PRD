@@ -54,7 +54,7 @@ const AdminSettingsPage = () => {
       .order("created_at", { ascending: true });
     if (error) {
       console.error("Error loading tests:", error);
-      toast({ title: "Erro ao carregar testes", variant: "destructive" });
+      toast({ title: "Erro ao carregar provas", variant: "destructive" });
     } else {
       setTests((data as any[]) || []);
     }
