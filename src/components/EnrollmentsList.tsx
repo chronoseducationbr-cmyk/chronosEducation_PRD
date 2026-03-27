@@ -50,42 +50,13 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
       if (!user) return;
       setLoading(true);
 
-      const [{ data }, { data: qr }, { data: activeTests }] = await Promise.all([
-        supabase
-          .from("enrollments")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false }),
-        supabase
-          .from("quiz_results" as any)
-          .select("enrollment_id, correct_count, total_questions, score_points, max_points")
-          .eq("user_id", user.id),
-        supabase
-          .from("quiz_tests" as any)
-          .select("id, slug, is_active"),
-      ]);
+      const { data } = await supabase
+        .from("enrollments")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
 
       setEnrollments((data as Enrollment[]) || []);
-
-      const resultsMap: Record<string, { correct_count: number; total_questions: number; score_points: number; max_points: number }> = {};
-      if (qr) {
-        (qr as any[]).forEach((r: any) => {
-          resultsMap[r.enrollment_id] = { correct_count: r.correct_count, total_questions: r.total_questions, score_points: r.score_points || 0, max_points: r.max_points || 0 };
-        });
-      }
-      setQuizResults(resultsMap);
-
-      // Build active test IDs set
-      const idsSet = new Set<string>();
-      const slugMap: Record<string, string> = {};
-      if (activeTests) {
-        (activeTests as any[]).forEach((t: any) => {
-          if (t.is_active) idsSet.add(t.id);
-          slugMap[t.id] = t.slug;
-        });
-      }
-      setActiveTestIds(idsSet);
-      setTestSlugMap(slugMap);
 
       setLoading(false);
     };
