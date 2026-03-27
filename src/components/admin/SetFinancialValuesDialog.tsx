@@ -177,18 +177,23 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
       });
     }
 
+    const getInstallmentDate = (startDateStr: string, startDay: number, monthOffset: number): string => {
+      const date = new Date(startDateStr);
+      date.setUTCMonth(date.getUTCMonth() + monthOffset);
+      // Clamp to last day of the target month if startDay exceeds it
+      const lastDayOfMonth = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)).getUTCDate();
+      date.setUTCDate(Math.min(startDay, lastDayOfMonth));
+      return date.toISOString().split("T")[0];
+    };
+
     if (tuition_installment_cents > 0 && tuition_start_date) {
-      const startDate = new Date(tuition_start_date);
-      const startDay = startDate.getUTCDate();
+      const startDay = new Date(tuition_start_date).getUTCDate();
       for (let i = 0; i < tCount; i++) {
-        const date = new Date(tuition_start_date);
-        date.setUTCMonth(date.getUTCMonth() + i);
-        date.setUTCDate(startDay);
         rows.push({
           enrollment_id: enrollmentId,
           type: "tuition",
           installment_number: i + 1,
-          due_date: date.toISOString().split("T")[0],
+          due_date: getInstallmentDate(tuition_start_date, startDay, i),
           status: "pending",
           amount_cents: tuition_installment_cents,
         });
@@ -196,17 +201,13 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     }
 
     if (summercamp_installment_cents > 0 && summercamp_start_date) {
-      const startDate = new Date(summercamp_start_date);
-      const startDay = startDate.getUTCDate();
+      const startDay = new Date(summercamp_start_date).getUTCDate();
       for (let i = 0; i < sCount; i++) {
-        const date = new Date(summercamp_start_date);
-        date.setUTCMonth(date.getUTCMonth() + i);
-        date.setUTCDate(startDay);
         rows.push({
           enrollment_id: enrollmentId,
           type: "summercamp",
           installment_number: i + 1,
-          due_date: date.toISOString().split("T")[0],
+          due_date: getInstallmentDate(summercamp_start_date, startDay, i),
           status: "pending",
           amount_cents: summercamp_installment_cents,
         });
