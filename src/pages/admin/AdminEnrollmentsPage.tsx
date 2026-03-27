@@ -255,6 +255,25 @@ const AdminEnrollmentsPage = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 flex-wrap">
                       <p className="font-semibold text-foreground">{e.student_name || "Sem nome"}</p>
+                      {(() => {
+                        const qr = quizResults[e.id];
+                        if (!qr) {
+                          return (
+                            <span className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-muted text-muted-foreground flex items-center gap-1">
+                              <BookOpen size={10} />
+                              —
+                            </span>
+                          );
+                        }
+                        const cls = getClassification(qr.score_points, e.quiz_test_id ? testSlugMap[e.quiz_test_id] : undefined);
+                        const isLow = ["A0", "A1", "A2"].includes(cls.level);
+                        return (
+                          <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 ${isLow ? "bg-destructive/10 text-destructive" : "bg-green-100 text-green-700"}`}>
+                            <BookOpen size={10} />
+                            {cls.level}
+                          </span>
+                        );
+                      })()}
                       {e.guardian && (
                         <Popover>
                           <PopoverTrigger asChild>
@@ -310,26 +329,6 @@ const AdminEnrollmentsPage = () => {
                       />
                     </div>
                   </div>
-                  {/* Quiz level badge */}
-                  {(() => {
-                    const qr = quizResults[e.id];
-                    if (!qr) {
-                      return (
-                        <span className="shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full bg-muted text-muted-foreground flex items-center gap-1">
-                          <BookOpen size={12} />
-                          —
-                        </span>
-                      );
-                    }
-                    const cls = getClassification(qr.score_points, e.quiz_test_id ? testSlugMap[e.quiz_test_id] : undefined);
-                    const isLow = ["A0", "A1", "A2"].includes(cls.level);
-                    return (
-                      <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 ${isLow ? "bg-destructive/10 text-destructive" : "bg-green-100 text-green-700"}`}>
-                        <BookOpen size={12} />
-                        {cls.level}
-                      </span>
-                    );
-                  })()}
                   <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
                     {e.status}
                   </span>
