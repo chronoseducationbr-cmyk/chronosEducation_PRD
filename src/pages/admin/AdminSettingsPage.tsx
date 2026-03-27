@@ -193,11 +193,11 @@ const AdminSettingsPage = () => {
           </TabsTrigger>
         </TabsList>
 
-        {/* ─── Testes de Inglês ─── */}
-        <TabsContent value="testes">
+        {/* ─── Provas de Inglês ─── */}
+        <TabsContent value="provas">
           <div className="max-w-2xl">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-heading text-lg font-semibold text-foreground">Testes de Inglês</h2>
+              <h2 className="font-heading text-lg font-semibold text-foreground">Provas de Inglês</h2>
               {!loading && tests.length > 0 && (
                 <Switch checked={quizEnabled} onCheckedChange={handleGeneralToggle} />
               )}
