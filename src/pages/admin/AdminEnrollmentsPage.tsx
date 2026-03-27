@@ -356,7 +356,7 @@ const AdminEnrollmentsPage = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm flex-1 min-w-0">
                         <div>
                           <p className="text-muted-foreground text-xs">Email</p>
-                          <p className="text-foreground font-medium">{e.student_email || "—"}</p>
+                          <p className="text-foreground font-medium break-all">{e.student_email || "—"}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground text-xs">Data de nascimento</p>
