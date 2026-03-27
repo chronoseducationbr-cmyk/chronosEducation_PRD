@@ -341,7 +341,7 @@ const AdminEnrollmentsPage = () => {
 
                 {/* Expanded details */}
                 {isExpanded && (
-                  <div className="px-4 pb-4 border-t border-border space-y-4">
+                  <div className="px-4 pb-4 border-t border-border space-y-4 overflow-hidden">
                     {/* Dados do Aluno */}
                     <div className="mt-3">
                       <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Dados do Aluno</p>
@@ -353,10 +353,10 @@ const AdminEnrollmentsPage = () => {
                             className="w-16 h-16 rounded-full object-cover border-2 border-secondary/30 shrink-0"
                           />
                         )}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm flex-1">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm flex-1 min-w-0">
                         <div>
                           <p className="text-muted-foreground text-xs">Email</p>
-                          <p className="text-foreground font-medium">{e.student_email || "—"}</p>
+                          <p className="text-foreground font-medium break-all">{e.student_email || "—"}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground text-xs">Data de nascimento</p>
@@ -372,11 +372,11 @@ const AdminEnrollmentsPage = () => {
                         </div>
                         <div>
                           <p className="text-muted-foreground text-xs">Endereço</p>
-                          <p className="text-foreground font-medium">{e.student_address || "—"}</p>
+                          <p className="text-foreground font-medium break-words">{e.student_address || "—"}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground text-xs">Indicação</p>
-                          <p className="text-foreground font-medium">{e.referred_by_email || "—"}</p>
+                          <p className="text-foreground font-medium break-all">{e.referred_by_email || "—"}</p>
                         </div>
                       </div>
                       </div>
@@ -386,14 +386,14 @@ const AdminEnrollmentsPage = () => {
                     {e.guardian && (
                       <div>
                         <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Responsável (Pai/Mãe)</p>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
                           <div>
                             <p className="text-muted-foreground text-xs">Nome</p>
                             <p className="text-foreground font-medium">{e.guardian.full_name || "—"}</p>
                           </div>
                           <div>
                             <p className="text-muted-foreground text-xs">Email</p>
-                            <p className="text-foreground font-medium">{e.guardian.email || "—"}</p>
+                            <p className="text-foreground font-medium break-all">{e.guardian.email || "—"}</p>
                           </div>
                           <div>
                             <p className="text-muted-foreground text-xs">Telefone</p>
@@ -406,7 +406,7 @@ const AdminEnrollmentsPage = () => {
                     {/* Matrícula */}
                     <div>
                       <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Matrícula</p>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
                         <div>
                           <p className="text-muted-foreground text-xs">Data de matrícula</p>
                           <p className="text-foreground font-medium">{formatDate(e.created_at)}</p>
@@ -422,7 +422,7 @@ const AdminEnrollmentsPage = () => {
                                 }
                               }}
                             >
-                              <SelectTrigger className="h-8 text-xs w-56">
+                              <SelectTrigger className="h-8 text-xs w-full max-w-[224px]">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -441,7 +441,7 @@ const AdminEnrollmentsPage = () => {
                     {/* Contrato */}
                     <div>
                       <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Contrato</p>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
                         <div>
                           <p className="text-muted-foreground text-xs">Enviado em</p>
                           <p className="text-foreground font-medium">{formatDate(e.contract_sent_at)}</p>
