@@ -383,7 +383,7 @@ const DashboardPage = () => {
         <p className="text-muted-foreground mb-6">Gerencie as matrículas e pagamentos do programa Dual Diploma</p>
 
         <Tabs defaultValue="inscricoes" className="w-full">
-          <TabsList className="mb-10 bg-transparent border-0 border-b border-border p-0 gap-2 sm:gap-6 md:gap-10 pb-0 flex-wrap sm:flex-nowrap w-full">
+          <TabsList className="mb-10 bg-transparent border-0 border-b border-border p-0 gap-2 sm:gap-6 md:gap-10 pb-0 w-full overflow-x-auto sm:overflow-x-visible flex-nowrap scrollbar-hide">
             <TabsTrigger
               value="inscricoes"
               className="bg-transparent px-2 sm:px-4 py-3 rounded-none shadow-none text-sm sm:text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
