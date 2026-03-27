@@ -178,12 +178,12 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     }
 
     const getInstallmentDate = (startDateStr: string, startDay: number, monthOffset: number): string => {
-      const date = new Date(startDateStr);
-      date.setUTCMonth(date.getUTCMonth() + monthOffset);
-      // Clamp to last day of the target month if startDay exceeds it
-      const lastDayOfMonth = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)).getUTCDate();
-      date.setUTCDate(Math.min(startDay, lastDayOfMonth));
-      return date.toISOString().split("T")[0];
+      const base = new Date(startDateStr);
+      const targetYear = base.getUTCFullYear() + Math.floor((base.getUTCMonth() + monthOffset) / 12);
+      const targetMonth = (base.getUTCMonth() + monthOffset) % 12;
+      const lastDayOfMonth = new Date(Date.UTC(targetYear, targetMonth + 1, 0)).getUTCDate();
+      const day = Math.min(startDay, lastDayOfMonth);
+      return new Date(Date.UTC(targetYear, targetMonth, day)).toISOString().split("T")[0];
     };
 
     if (tuition_installment_cents > 0 && tuition_start_date) {
