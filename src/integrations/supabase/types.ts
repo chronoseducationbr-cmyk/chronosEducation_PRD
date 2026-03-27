@@ -145,6 +145,7 @@ export type Database = {
           created_at: string
           guardian_email: string | null
           id: string
+          inscription_due_date: string | null
           inscription_fee_cents: number
           quiz_test_id: string | null
           referred_by_email: string | null
@@ -172,6 +173,7 @@ export type Database = {
           created_at?: string
           guardian_email?: string | null
           id?: string
+          inscription_due_date?: string | null
           inscription_fee_cents?: number
           quiz_test_id?: string | null
           referred_by_email?: string | null
@@ -199,6 +201,7 @@ export type Database = {
           created_at?: string
           guardian_email?: string | null
           id?: string
+          inscription_due_date?: string | null
           inscription_fee_cents?: number
           quiz_test_id?: string | null
           referred_by_email?: string | null

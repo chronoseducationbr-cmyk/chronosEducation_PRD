@@ -1,0 +1,1 @@
+ALTER TABLE public.enrollments ADD COLUMN IF NOT EXISTS inscription_due_date date;

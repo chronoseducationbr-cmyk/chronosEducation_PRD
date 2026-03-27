@@ -28,6 +28,7 @@ interface Props {
   contractSignedAt: string | null;
   currentValues: {
     inscription_fee_cents: number;
+    inscription_due_date: string | null;
     tuition_installment_cents: number;
     tuition_installments: number;
     summercamp_installment_cents: number;
@@ -82,20 +83,6 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     const { data } = await supabase.from("app_settings").select("default_inscription_fee_cents, default_tuition_installment_cents, default_tuition_installments, default_summercamp_installment_cents, default_summercamp_installments").eq("id", 1).single();
     if (data) defaults = data as AppDefaults;
 
-    // Load existing inscription_fee installment due_date
-    let savedInscriptionDueDate = "";
-    const { data: inscInstallment } = await supabase
-      .from("installments")
-      .select("due_date")
-      .eq("enrollment_id", enrollmentId)
-      .eq("type", "inscription_fee")
-      .order("installment_number", { ascending: true })
-      .limit(1)
-      .maybeSingle();
-    if (inscInstallment?.due_date) {
-      savedInscriptionDueDate = inscInstallment.due_date;
-    }
-
     const dInscription = defaults?.default_inscription_fee_cents ?? 80000;
     const dTuition = defaults?.default_tuition_installment_cents ?? 45000;
     const dTuitionInst = defaults?.default_tuition_installments ?? 16;
@@ -110,7 +97,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     setSummercampValue(currentValues.summercamp_installment_cents > 0 ? toComma(currentValues.summercamp_installment_cents / 100) : (dSummer > 0 ? toComma(dSummer / 100) : ""));
     setSummercampInstallments(currentValues.summercamp_installments > 0 ? String(currentValues.summercamp_installments) : String(dSummerInst));
     setSummercampStartDate(currentValues.summercamp_start_date || "");
-    setInscriptionDueDate(savedInscriptionDueDate || (contractSignedAt ? contractSignedAt.split("T")[0] : ""));
+    setInscriptionDueDate(currentValues.inscription_due_date || (contractSignedAt ? contractSignedAt.split("T")[0] : ""));
     setOpen(true);
   };
 
@@ -127,6 +114,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
     const { fee, tuition, tInstallments, summer, sInstallments } = getFormValues();
     return {
       inscription_fee_cents: fee,
+      inscription_due_date: inscriptionDueDate || null,
       tuition_installment_cents: tuition,
       tuition_installments: tInstallments,
       summercamp_installment_cents: summer,

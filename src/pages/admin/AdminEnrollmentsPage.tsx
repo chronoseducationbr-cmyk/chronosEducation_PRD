@@ -51,6 +51,7 @@ interface Enrollment {
   status: string;
   created_at: string;
   inscription_fee_cents: number;
+  inscription_due_date: string | null;
   tuition_installment_cents: number;
   tuition_installments: number;
   summercamp_installment_cents: number;
@@ -289,6 +290,7 @@ const AdminEnrollmentsPage = () => {
                         contractSignedAt={e.contract_signed_at}
                         currentValues={{
                           inscription_fee_cents: e.inscription_fee_cents,
+                          inscription_due_date: e.inscription_due_date,
                           tuition_installment_cents: e.tuition_installment_cents,
                           tuition_installments: e.tuition_installments,
                           summercamp_installment_cents: e.summercamp_installment_cents,
