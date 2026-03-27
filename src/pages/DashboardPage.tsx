@@ -1,7 +1,7 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { LogOut, ArrowLeft } from "lucide-react";
+import { LogOut, ArrowLeft, AlertTriangle } from "lucide-react";
 import GuardianDataSection, { type GuardianData } from "@/components/GuardianDataSection";
 import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
 import ReferralSection from "@/components/ReferralSection";
@@ -23,6 +23,22 @@ const DashboardPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [wizardStep, setWizardStep] = useState(1);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [hasUnsignedContract, setHasUnsignedContract] = useState(false);
+
+  useEffect(() => {
+    const checkUnsignedContracts = async () => {
+      if (!user) return;
+      const { data } = await supabase
+        .from("enrollments")
+        .select("id")
+        .eq("user_id", user.id)
+        .not("contract_url", "is", null)
+        .is("contract_signed_at", null)
+        .limit(1);
+      setHasUnsignedContract(!!(data && data.length > 0));
+    };
+    checkUnsignedContracts();
+  }, [user, refreshKey]);
   
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
@@ -379,6 +395,7 @@ const DashboardPage = () => {
               className="bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold"
             >
               Contratos
+              {hasUnsignedContract && <AlertTriangle size={16} className="ml-1.5 text-amber-500" />}
             </TabsTrigger>
             <TabsTrigger
               value="prova-ingles"
