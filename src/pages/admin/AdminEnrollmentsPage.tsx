@@ -393,7 +393,7 @@ const AdminEnrollmentsPage = () => {
                           </div>
                           <div>
                             <p className="text-muted-foreground text-xs">Email</p>
-                            <p className="text-foreground font-medium">{e.guardian.email || "—"}</p>
+                            <p className="text-foreground font-medium break-all">{e.guardian.email || "—"}</p>
                           </div>
                           <div>
                             <p className="text-muted-foreground text-xs">Telefone</p>
