@@ -240,8 +240,11 @@ async function buildContractPdf(
     return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   };
 
-  // Parse and render contract text sections (skip section 1 - already rendered above)
-  const sections = parseContractSections(contractText);
+  // Replace placeholders in contract text
+  const filledContractText = contractText.replace(/\[Data\]/gi, dateLabel);
+
+  // Parse and render contract text sections
+  const sections = parseContractSections(filledContractText);
 
   for (const section of sections) {
     // The preamble (PARTES) is already rendered dynamically above from enrollment data
