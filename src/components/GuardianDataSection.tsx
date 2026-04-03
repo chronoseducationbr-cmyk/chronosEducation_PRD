@@ -10,6 +10,7 @@ export interface GuardianData {
   cpf: string;
   nationality: string;
   civilStatus: string;
+  profession: string;
   rgNumber: string;
   guardianAddress: string;
 }

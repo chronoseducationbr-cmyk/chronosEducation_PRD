@@ -44,7 +44,7 @@ const DashboardPage = () => {
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [selectedServices, setSelectedServices] = useState<{ plataforma: boolean; summercamp: boolean }>({ plataforma: false, summercamp: false });
 
-  const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "", nationality: "", civilStatus: "", rgNumber: "", guardianAddress: "" });
+  const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "", nationality: "", civilStatus: "", profession: "", rgNumber: "", guardianAddress: "" });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
   const referralRef = useRef("");
 
