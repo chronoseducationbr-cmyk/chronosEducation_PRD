@@ -346,7 +346,7 @@ const AdminSettingsPage = () => {
             ) : !settings.contract_enabled ? (
               <p className="text-sm text-muted-foreground italic">Contrato desativado. Os alunos não precisarão assinar contrato na matrícula.</p>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {/* Section 1 info */}
                 <div className="bg-muted/40 border border-border rounded-xl p-4 flex items-start gap-3">
                   <Info size={16} className="text-secondary shrink-0 mt-0.5" />
@@ -369,58 +369,11 @@ const AdminSettingsPage = () => {
                   </div>
                 </div>
 
-                <div className="bg-card border border-border rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Texto do Contrato</p>
-                    {!editingContract && (
-                      <button
-                        onClick={() => { setEditingContract(true); setContractDraft(settings.contract_text); }}
-                        className="p-1.5 rounded-md hover:bg-muted text-muted-foreground"
-                      >
-                        <Pencil size={14} />
-                      </button>
-                    )}
-                  </div>
-                  {editingContract ? (
-                    <div className="space-y-3">
-                      <textarea
-                        value={contractDraft}
-                        onChange={(e) => setContractDraft(e.target.value)}
-                        className="w-full text-sm rounded-lg border border-border bg-background p-3 text-foreground resize-vertical focus:outline-none focus:ring-1 focus:ring-secondary min-h-[200px]"
-                        rows={10}
-                        placeholder="Insira o texto do contrato aqui. Pode usar parágrafos separados por linhas em branco..."
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Dica: Utilize linhas em branco para separar parágrafos. Os dados do responsável e do aluno são inseridos automaticamente.
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={handleSaveContractText}
-                          disabled={savingSettings}
-                          className="inline-flex items-center gap-1.5 bg-secondary text-secondary-foreground font-semibold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity text-sm disabled:opacity-50"
-                        >
-                          <Check size={14} />
-                          Guardar
-                        </button>
-                        <button
-                          onClick={() => setEditingContract(false)}
-                          className="inline-flex items-center gap-1.5 text-muted-foreground font-medium py-2 px-4 rounded-lg hover:bg-muted transition-colors text-sm"
-                        >
-                          <X size={14} />
-                          Cancelar
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-muted/30 border border-border rounded-lg p-3 max-h-[300px] overflow-y-auto">
-                      {settings.contract_text ? (
-                        <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">{settings.contract_text}</p>
-                      ) : (
-                        <p className="text-sm text-muted-foreground italic">Nenhum texto de contrato personalizado definido.</p>
-                      )}
-                    </div>
-                  )}
-                </div>
+                {/* Plataforma Online Contract */}
+                {renderContractEditor("plataforma", "Contrato — Plataforma Online", settings.contract_text)}
+
+                {/* Summer Camp Contract */}
+                {renderContractEditor("summercamp", "Contrato — Summer Camp", settings.contract_text_summercamp)}
               </div>
             )}
           </div>
