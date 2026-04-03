@@ -234,10 +234,10 @@ async function buildContractPdf(
   drawField(ctx, "Escola atual:", student.studentSchool, 60);
   drawField(ctx, "Ano de conclusao do Ensino Medio:", student.studentGraduationYear || "\u2014", 60);
 
-  // Currency formatter
-  const fmtCurrency = (cents: number) => {
-    if (!cents || cents <= 0) return "A definir";
-    return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  // Currency formatter - plain number (no currency symbol, used inside "USD $ ..." text)
+  const fmtNumber = (cents: number) => {
+    if (!cents || cents <= 0) return "0,00";
+    return (cents / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
   // Replace placeholders in contract text
