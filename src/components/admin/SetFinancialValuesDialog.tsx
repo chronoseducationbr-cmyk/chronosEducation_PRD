@@ -12,7 +12,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Settings } from "lucide-react";
+import { Settings, AlertTriangle } from "lucide-react";
 
 interface AppDefaults {
   default_inscription_fee_cents: number;
