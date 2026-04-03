@@ -450,7 +450,6 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
               </DialogFooter>
             );
           })()}
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
