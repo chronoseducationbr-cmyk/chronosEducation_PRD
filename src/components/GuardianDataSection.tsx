@@ -146,26 +146,26 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Nacionalidade</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Nacionalidade <span className="text-[#F9B91D]">*</span></label>
               <input
                 type="text"
                 maxLength={60}
                 value={nationality}
                 onChange={(e) => setNationality(e.target.value)}
                 onBlur={() => saveProfile({ nationality: nationality.trim() })}
-                className={inputClass()}
+                className={inputClass("guardianNationality")}
                 placeholder="Ex: Brasileira"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Estado Civil</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Estado Civil <span className="text-[#F9B91D]">*</span></label>
               <select
                 value={civilStatus}
                 onChange={(e) => {
                   setCivilStatus(e.target.value);
                   saveProfile({ civil_status: e.target.value });
                 }}
-                className={inputClass()}
+                className={inputClass("guardianCivilStatus")}
               >
                 <option value="">Selecione...</option>
                 <option value="Solteiro(a)">Solteiro(a)</option>
@@ -205,7 +205,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">CPF</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">CPF <span className="text-[#F9B91D]">*</span></label>
               <div className="relative">
                 <FileText size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
@@ -219,7 +219,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Nº RG</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Nº RG <span className="text-[#F9B91D]">*</span></label>
               <div className="relative">
                 <FileText size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
@@ -228,7 +228,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                   value={rgNumber}
                   onChange={(e) => setRgNumber(e.target.value)}
                   onBlur={() => saveProfile({ rg_number: rgNumber.trim() })}
-                  className={`${inputClass()} pl-10`}
+                  className={`${inputClass("guardianRgNumber")} pl-10`}
                   placeholder="Número do RG"
                 />
               </div>
