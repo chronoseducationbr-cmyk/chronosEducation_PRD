@@ -115,7 +115,8 @@ async function buildContractPdf(
   },
   dateLabel: string,
   signed: boolean,
-  signedDate?: string
+  signedDate?: string,
+  contractType: "platform" | "summercamp" = "platform"
 ): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
