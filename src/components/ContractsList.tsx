@@ -141,7 +141,7 @@ const ContractsList = ({ refreshKey }: Props) => {
             </div>
 
             {/* Accept contract button */}
-            {e.contract_url && !e.contract_signed_at && (
+            {(e.contract_url || e.contract_url_summercamp) && !e.contract_signed_at && (
               <div className="mt-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                 <p className="text-sm text-amber-800 dark:text-amber-200 mb-2">
                   O contrato está disponível e aguarda a sua aceitação para concluir a matrícula.
@@ -151,20 +151,32 @@ const ContractsList = ({ refreshKey }: Props) => {
                   onClick={async () => {
                     setAcceptingContract(e.id);
                     try {
-                      const { data: pdfResult, error: pdfError } = await supabase.functions.invoke("generate-contract-pdf", {
-                        body: { enrollmentId: e.id, signed: true },
-                      });
-                      if (pdfError || !pdfResult?.success) {
-                        toast({ title: "Erro ao aceitar contrato", variant: "destructive" });
-                        return;
+                      const contractTypes: Array<"platform" | "summercamp"> = [];
+                      if (e.contract_url) contractTypes.push("platform");
+                      if (e.contract_url_summercamp) contractTypes.push("summercamp");
+
+                      for (const contractType of contractTypes) {
+                        const { data: pdfResult, error: pdfError } = await supabase.functions.invoke("generate-contract-pdf", {
+                          body: { enrollmentId: e.id, signed: true, contractType },
+                        });
+                        if (pdfError || !pdfResult?.success) {
+                          toast({ title: "Erro ao aceitar contrato", variant: "destructive" });
+                          return;
+                        }
+                        if (contractType === "summercamp") {
+                          e.contract_url_summercamp = pdfResult.contractUrl;
+                        } else {
+                          e.contract_url = pdfResult.contractUrl;
+                        }
                       }
+
                       setEnrollments(prev => prev.map(en =>
                         en.id === e.id
-                          ? { ...en, contract_signed_at: new Date().toISOString(), contract_url: pdfResult.contractUrl, status: "Contrato assinado" }
+                          ? { ...en, contract_signed_at: new Date().toISOString(), status: "Contrato assinado" }
                           : en
                       ));
                       await supabase.from("enrollments").update({ status: "Contrato assinado" } as any).eq("id", e.id);
-                      toast({ title: "Contrato aceite com sucesso!" });
+                      toast({ title: "Contrato(s) aceite(s) com sucesso!" });
                     } catch (err) {
                       console.error("Accept contract error:", err);
                       toast({ title: "Erro ao aceitar contrato", variant: "destructive" });
