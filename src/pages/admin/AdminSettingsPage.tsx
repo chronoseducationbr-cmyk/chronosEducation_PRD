@@ -19,11 +19,13 @@ interface QuizTest {
 interface AppSettings {
   contract_enabled: boolean;
   contract_text: string;
+  contract_text_summercamp: string;
 }
 
 const defaultSettings: AppSettings = {
   contract_enabled: true,
   contract_text: "",
+  contract_text_summercamp: "",
 };
 
 const AdminSettingsPage = () => {
