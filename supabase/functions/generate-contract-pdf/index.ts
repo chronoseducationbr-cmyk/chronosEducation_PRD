@@ -379,6 +379,17 @@ serve(async (req) => {
       summercampInstallments: enrollment.summercamp_installments ?? 0,
     };
 
+    // Fetch contract text from app_settings
+    const { data: appSettings } = await supabase
+      .from("app_settings")
+      .select("contract_text, contract_text_summercamp")
+      .eq("id", 1)
+      .single();
+
+    const contractText = resolvedContractType === "summercamp"
+      ? (appSettings?.contract_text_summercamp || "")
+      : (appSettings?.contract_text || "");
+
     const now = new Date();
     const dateLabel = now.toLocaleDateString("pt-BR", {
       day: "2-digit",
@@ -389,7 +400,7 @@ serve(async (req) => {
     const isSigned = signed === true;
     const signedDateStr = isSigned ? dateLabel : undefined;
 
-    const pdfBytes = await buildContractPdf(guardianData, studentData, financial, dateLabel, isSigned, signedDateStr, resolvedContractType);
+    const pdfBytes = await buildContractPdf(guardianData, studentData, financial, dateLabel, isSigned, signedDateStr, resolvedContractType, contractText);
 
     // Upload to Supabase Storage
     const typeSuffix = resolvedContractType === "summercamp" ? "-summercamp" : "";
