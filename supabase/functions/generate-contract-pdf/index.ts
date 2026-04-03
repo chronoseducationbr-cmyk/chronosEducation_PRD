@@ -50,8 +50,13 @@ function drawSectionTitle(ctx: DrawCtx, text: string) {
   ctx.y -= 16;
 }
 
+// Sanitize text to remove characters unsupported by WinAnsi encoding (e.g. tabs)
+function sanitize(text: string): string {
+  return text.replace(/[\t\r]/g, " ").replace(/[^\x20-\x7E\xA0-\xFF\n]/g, " ");
+}
+
 function wrapText(text: string, font: DrawCtx["font"], size: number, maxWidth: number): string[] {
-  const words = text.split(" ");
+  const words = sanitize(text).split(" ").filter(w => w.length > 0);
   const lines: string[] = [];
   let current = "";
   for (const word of words) {
