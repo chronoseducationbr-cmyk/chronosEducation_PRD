@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           contract_enabled: boolean
           contract_text: string
+          contract_text_summercamp: string
           default_inscription_fee_cents: number
           default_summercamp_installment_cents: number
           default_summercamp_installments: number
@@ -29,6 +30,7 @@ export type Database = {
         Insert: {
           contract_enabled?: boolean
           contract_text?: string
+          contract_text_summercamp?: string
           default_inscription_fee_cents?: number
           default_summercamp_installment_cents?: number
           default_summercamp_installments?: number
@@ -40,6 +42,7 @@ export type Database = {
         Update: {
           contract_enabled?: boolean
           contract_text?: string
+          contract_text_summercamp?: string
           default_inscription_fee_cents?: number
           default_summercamp_installment_cents?: number
           default_summercamp_installments?: number
