@@ -158,14 +158,14 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Estado Civil</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Estado Civil <span className="text-[#F9B91D]">*</span></label>
               <select
                 value={civilStatus}
                 onChange={(e) => {
                   setCivilStatus(e.target.value);
                   saveProfile({ civil_status: e.target.value });
                 }}
-                className={inputClass()}
+                className={inputClass("guardianCivilStatus")}
               >
                 <option value="">Selecione...</option>
                 <option value="Solteiro(a)">Solteiro(a)</option>
