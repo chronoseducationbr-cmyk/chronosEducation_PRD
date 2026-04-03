@@ -47,7 +47,8 @@ function drawTitle(ctx: DrawCtx, text: string, size: number) {
 function drawSectionTitle(ctx: DrawCtx, text: string) {
   ensureSpace(ctx, 30);
   ctx.y -= 10;
-  ctx.page.drawText(text, { x: 50, y: ctx.y, size: 11, font: ctx.fontBold, color: BLACK });
+  const safe = sanitize(text);
+  ctx.page.drawText(safe, { x: 50, y: ctx.y, size: 11, font: ctx.fontBold, color: BLACK });
   ctx.y -= 16;
 }
 
