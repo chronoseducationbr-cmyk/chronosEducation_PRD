@@ -85,9 +85,11 @@ function drawParagraph(ctx: DrawCtx, text: string, indent = 60) {
 
 function drawField(ctx: DrawCtx, label: string, value: string, x: number) {
   ensureSpace(ctx, 16);
-  const labelWidth = ctx.font.widthOfTextAtSize(label + " ", 10);
-  ctx.page.drawText(label, { x, y: ctx.y, size: 10, font: ctx.font, color: GRAY });
-  ctx.page.drawText(value || "\u2014", { x: x + labelWidth, y: ctx.y, size: 10, font: ctx.fontBold, color: BLACK });
+  const safeLabel = sanitize(label);
+  const safeValue = sanitize(value || "\u2014");
+  const labelWidth = ctx.font.widthOfTextAtSize(safeLabel + " ", 10);
+  ctx.page.drawText(safeLabel, { x, y: ctx.y, size: 10, font: ctx.font, color: GRAY });
+  ctx.page.drawText(safeValue, { x: x + labelWidth, y: ctx.y, size: 10, font: ctx.fontBold, color: BLACK });
   ctx.y -= 15;
 }
 
