@@ -192,6 +192,40 @@ const AdminEnrollmentsPage = () => {
     setPendingStatusChange(null);
   };
 
+  const confirmDelete = async () => {
+    if (!pendingDelete) return;
+    setDeleting(true);
+    const { id, contractUrl } = pendingDelete;
+    try {
+      // Delete referrals (both directions)
+      await supabase.from("referrals").delete().or(`referrer_enrollment_id.eq.${id},referred_enrollment_id.eq.${id}`);
+      // Delete quiz results
+      await supabase.from("quiz_results").delete().eq("enrollment_id", id);
+      // Delete installments
+      await supabase.from("installments").delete().eq("enrollment_id", id);
+      // Delete contract file from storage if exists
+      if (contractUrl) {
+        try {
+          const url = new URL(contractUrl);
+          const pathMatch = url.pathname.match(/\/contracts\/(.+)$/);
+          if (pathMatch) {
+            await supabase.storage.from("contracts").remove([pathMatch[1]]);
+          }
+        } catch (_) { /* ignore storage errors */ }
+      }
+      // Delete enrollment
+      const { error } = await supabase.from("enrollments").delete().eq("id", id);
+      if (error) throw error;
+      toast({ title: `Aluno "${pendingDelete.studentName}" apagado com sucesso` });
+      setEnrollments((prev) => prev.filter((e) => e.id !== id));
+      if (expandedId === id) setExpandedId(null);
+    } catch (err: any) {
+      toast({ title: "Erro ao apagar aluno", description: err.message, variant: "destructive" });
+    } finally {
+      setDeleting(false);
+      setPendingDelete(null);
+    }
+  };
 
 
 
