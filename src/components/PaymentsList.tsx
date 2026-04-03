@@ -142,15 +142,15 @@ const PaymentsList = ({ refreshKey }: Props) => {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div className="bg-card rounded-lg p-3 border border-border">
                         <p className="text-muted-foreground text-xs mb-0.5">Matrícula</p>
-                        <p className="text-foreground text-lg font-bold">${(e.inscription_fee_cents / 100).toFixed(2)}</p>
+                        <p className="text-foreground text-lg font-bold">${(e.inscription_fee_cents / 100).toFixed(2).replace('.', ',')}</p>
                       </div>
                       <div className="bg-card rounded-lg p-3 border border-border">
                         <p className="text-muted-foreground text-xs mb-0.5">Plataforma Online ({e.tuition_installments}x)</p>
-                        <p className="text-foreground text-lg font-bold">{e.tuition_installment_cents > 0 ? `$${(e.tuition_installment_cents / 100).toFixed(2)}` : <span className="text-muted-foreground italic text-sm font-medium">falta associar</span>}</p>
+                        <p className="text-foreground text-lg font-bold">{e.tuition_installment_cents > 0 ? `$${(e.tuition_installment_cents / 100).toFixed(2).replace('.', ',')}` : <span className="text-muted-foreground italic text-sm font-medium">falta associar</span>}</p>
                       </div>
                       <div className="bg-card rounded-lg p-3 border border-border">
                         <p className="text-muted-foreground text-xs mb-0.5">Summer Camp ({e.summercamp_installments}x)</p>
-                        <p className="text-foreground text-lg font-bold">{e.summercamp_installment_cents > 0 ? `$${(e.summercamp_installment_cents / 100).toFixed(2)}` : <span className="text-muted-foreground italic text-sm font-medium">falta associar</span>}</p>
+                        <p className="text-foreground text-lg font-bold">{e.summercamp_installment_cents > 0 ? `$${(e.summercamp_installment_cents / 100).toFixed(2).replace('.', ',')}` : <span className="text-muted-foreground italic text-sm font-medium">falta associar</span>}</p>
                       </div>
                     </div>
                   </div>
