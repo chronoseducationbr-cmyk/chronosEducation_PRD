@@ -148,7 +148,10 @@ async function buildContractPdf(
 
   // Title
   drawTitle(ctx, "CONTRATO DE PRESTACAO DE SERVICOS EDUCACIONAIS", 13);
-  drawTitle(ctx, "Programa Dual Diploma - Chronos Education", 11);
+  const subtitle = contractType === "summercamp"
+    ? "Programa Summer Camp - Chronos Education"
+    : "Programa Dual Diploma - Chronos Education";
+  drawTitle(ctx, subtitle, 11);
   ctx.y -= 4;
   const dateStr = `Data: ${dateLabel}`;
   const dateW = font.widthOfTextAtSize(dateStr, 9);
