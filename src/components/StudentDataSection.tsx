@@ -21,7 +21,7 @@ interface Props {
   guardianAddress?: string;
 }
 
-const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Props) => {
+const StudentDataSection = ({ onChange, validationErrors = [], initialData, guardianAddress = "" }: Props) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
 
