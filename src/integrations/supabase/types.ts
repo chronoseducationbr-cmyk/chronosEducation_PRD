@@ -390,6 +390,7 @@ export type Database = {
           id: string
           nationality: string | null
           phone: string | null
+          profession: string | null
           referred_by_email: string | null
           rg_number: string | null
           student_address: string | null
@@ -412,6 +413,7 @@ export type Database = {
           id?: string
           nationality?: string | null
           phone?: string | null
+          profession?: string | null
           referred_by_email?: string | null
           rg_number?: string | null
           student_address?: string | null
@@ -434,6 +436,7 @@ export type Database = {
           id?: string
           nationality?: string | null
           phone?: string | null
+          profession?: string | null
           referred_by_email?: string | null
           rg_number?: string | null
           student_address?: string | null
