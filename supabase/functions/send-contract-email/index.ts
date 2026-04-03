@@ -133,7 +133,8 @@ serve(async (req) => {
     const guardianName = (body.guardianName || "Responsável").trim();
     const studentName = (body.studentName || "").trim();
     const contractUrl = body.contractUrl || "";
-
+    const contractType: "platform" | "summercamp" = body.contractType === "summercamp" ? "summercamp" : "platform";
+    const programLabel = contractType === "summercamp" ? "Summer Camp" : "Dual Diploma";
     if (!email || !studentName) {
       return new Response(
         JSON.stringify({ error: "Email e nome do aluno são obrigatórios" }),
