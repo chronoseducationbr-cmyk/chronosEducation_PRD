@@ -37,7 +37,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData, guar
   const [uploading, setUploading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [birthDateError, setBirthDateError] = useState("");
-  const [addressSameAsGuardian, setAddressSameAsGuardian] = useState(false);
+  const [addressSameAsGuardian, setAddressSameAsGuardian] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
