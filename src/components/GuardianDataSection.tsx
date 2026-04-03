@@ -219,7 +219,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Nº RG</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Nº RG <span className="text-[#F9B91D]">*</span></label>
               <div className="relative">
                 <FileText size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
@@ -228,7 +228,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                   value={rgNumber}
                   onChange={(e) => setRgNumber(e.target.value)}
                   onBlur={() => saveProfile({ rg_number: rgNumber.trim() })}
-                  className={`${inputClass()} pl-10`}
+                  className={`${inputClass("guardianRgNumber")} pl-10`}
                   placeholder="Número do RG"
                 />
               </div>
