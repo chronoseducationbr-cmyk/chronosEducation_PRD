@@ -405,33 +405,36 @@ const AdminSettingsPage = () => {
               <p className="text-sm text-muted-foreground italic">Contrato desativado. Os alunos não precisarão assinar contrato na matrícula.</p>
             ) : (
               <div className="space-y-6">
-                {/* Section 1 info */}
+                {/* Dynamic sections info */}
                 <div className="bg-muted/40 border border-border rounded-xl p-4 flex items-start gap-3">
                   <Info size={16} className="text-secondary shrink-0 mt-0.5" />
                   <div className="text-sm text-muted-foreground leading-relaxed">
-                    <p className="font-medium text-foreground mb-1">1. PARTES — Secção dinâmica</p>
-                    <p>
-                      Esta secção é preenchida automaticamente com os dados do responsável (nome, email, celular) e do aluno (nome, data de nascimento, email, endereço, escola, ano de conclusão) inseridos no momento da matrícula.
-                    </p>
+                    <p className="font-medium text-foreground mb-1">Secções dinâmicas</p>
+                    <p>As secções <strong>1. PARTES</strong> e <strong>Valores e Pagamento</strong> são preenchidas automaticamente com os dados da matrícula.</p>
                   </div>
                 </div>
 
-                {/* Financial section info */}
-                <div className="bg-muted/40 border border-border rounded-xl p-4 flex items-start gap-3">
-                  <Info size={16} className="text-secondary shrink-0 mt-0.5" />
-                  <div className="text-sm text-muted-foreground leading-relaxed">
-                    <p className="font-medium text-foreground mb-1">Valores e Pagamento — Secção dinâmica</p>
-                    <p>
-                      Esta secção é preenchida automaticamente com os valores financeiros atribuídos ao aluno: taxa de matrícula, parcelas da Plataforma Online (valor e quantidade) e parcelas do Summer Camp (valor e quantidade). Quando os valores ainda não foram definidos, aparece "Valores a definir pela equipa Chronos Education".
-                    </p>
-                  </div>
-                </div>
+                {/* Sub-tabs for Plataforma / Summer Camp */}
+                <Tabs defaultValue="plataforma" className="w-full">
+                  <TabsList className="bg-muted/50 border border-border p-1 rounded-lg">
+                    <TabsTrigger value="plataforma" className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
+                      <Monitor size={14} />
+                      Plataforma Online
+                    </TabsTrigger>
+                    <TabsTrigger value="summercamp" className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
+                      <Sun size={14} />
+                      Summer Camp
+                    </TabsTrigger>
+                  </TabsList>
 
-                {/* Plataforma Online Contract */}
-                {renderContractEditor("plataforma", "Contrato — Plataforma Online", settings.contract_text)}
+                  <TabsContent value="plataforma" className="mt-4">
+                    {renderContractEditor("plataforma", "Texto do Contrato — Plataforma Online", settings.contract_text)}
+                  </TabsContent>
 
-                {/* Summer Camp Contract */}
-                {renderContractEditor("summercamp", "Contrato — Summer Camp", settings.contract_text_summercamp)}
+                  <TabsContent value="summercamp" className="mt-4">
+                    {renderContractEditor("summercamp", "Texto do Contrato — Summer Camp", settings.contract_text_summercamp)}
+                  </TabsContent>
+                </Tabs>
               </div>
             )}
           </div>
