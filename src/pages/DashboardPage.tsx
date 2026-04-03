@@ -433,6 +433,7 @@ const DashboardPage = () => {
                         studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
                         referralRef.current = "";
                         setValidationErrors([]);
+                        setSelectedServices({ plataforma: false, summercamp: false });
                         setWizardStep(1);
                         setShowForm(true);
                       }}
