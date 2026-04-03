@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, ArrowLeft, AlertTriangle } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import GuardianDataSection, { type GuardianData } from "@/components/GuardianDataSection";
 import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
 import ReferralSection from "@/components/ReferralSection";
@@ -41,6 +42,7 @@ const DashboardPage = () => {
   }, [user, refreshKey]);
   
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [selectedServices, setSelectedServices] = useState<{ plataforma: boolean; summercamp: boolean }>({ plataforma: false, summercamp: false });
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
@@ -178,8 +180,8 @@ const DashboardPage = () => {
         guardian_email: g.email?.trim() || user?.email || "",
         status: "Matrícula confirmada",
         inscription_fee_cents: 0,
-        tuition_installments: 16,
-        summercamp_installments: 6,
+        tuition_installments: selectedServices.plataforma ? 16 : 0,
+        summercamp_installments: selectedServices.summercamp ? 6 : 0,
         tuition_installment_cents: 0,
         summercamp_installment_cents: 0,
       };
@@ -252,9 +254,9 @@ const DashboardPage = () => {
       setWizardStep(1);
       setRefreshKey((k) => k + 1);
       setRefreshKey((k) => k + 1);
-      // Reset student refs
       studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
       referralRef.current = "";
+      setSelectedServices({ plataforma: false, summercamp: false });
     } catch (err: any) {
       console.error(err);
       toast({ title: "Erro ao processar", description: err.message || "Tente novamente.", variant: "destructive" });
@@ -346,6 +348,13 @@ const DashboardPage = () => {
       }
     }
 
+    // Validate services selection
+    if (!selectedServices.plataforma && !selectedServices.summercamp) {
+      setValidationErrors(["services"]);
+      toast({ title: "Serviço obrigatório", description: "Selecione pelo menos um serviço (Plataforma Online ou Summer Camp).", variant: "destructive" });
+      return false;
+    }
+
     setValidationErrors([]);
     return true;
   };
@@ -424,6 +433,7 @@ const DashboardPage = () => {
                         studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
                         referralRef.current = "";
                         setValidationErrors([]);
+                        setSelectedServices({ plataforma: false, summercamp: false });
                         setWizardStep(1);
                         setShowForm(true);
                       }}
@@ -456,6 +466,37 @@ const DashboardPage = () => {
 
                   <div className="mt-8">
                     <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
+                  </div>
+
+                  {/* Serviços contratados */}
+                  <div className="mt-8">
+                    <h3 className="font-heading text-lg font-semibold text-foreground mb-1">Serviços contratados</h3>
+                    <p className="text-sm text-muted-foreground mb-4">Selecione os serviços que pretende contratar. Pode escolher um ou ambos.</p>
+                    <div className="space-y-3">
+                      <label
+                        className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.plataforma ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
+                        onClick={() => setSelectedServices((prev) => ({ ...prev, plataforma: !prev.plataforma }))}
+                      >
+                        <Checkbox checked={selectedServices.plataforma} onCheckedChange={(v) => setSelectedServices((prev) => ({ ...prev, plataforma: !!v }))} />
+                        <div>
+                          <p className="font-semibold text-foreground">Plataforma Online</p>
+                          <p className="text-xs text-muted-foreground">Acesso à plataforma digital do programa Dual Diploma</p>
+                        </div>
+                      </label>
+                      <label
+                        className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.summercamp ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
+                        onClick={() => setSelectedServices((prev) => ({ ...prev, summercamp: !prev.summercamp }))}
+                      >
+                        <Checkbox checked={selectedServices.summercamp} onCheckedChange={(v) => setSelectedServices((prev) => ({ ...prev, summercamp: !!v }))} />
+                        <div>
+                          <p className="font-semibold text-foreground">Summer Camp</p>
+                          <p className="text-xs text-muted-foreground">Programa presencial de imersão durante o verão</p>
+                        </div>
+                      </label>
+                    </div>
+                    {validationErrors.includes("services") && (
+                      <p className="text-destructive text-sm mt-2">Selecione pelo menos um serviço.</p>
+                    )}
                   </div>
 
                   <div className="mt-8">
