@@ -193,7 +193,7 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData, f
 
             {/* Dynamic sections from DB — inject financial values into payment clause */}
             {sections.map((section, idx) => {
-              const isPaymentSection = /^7\.\s/i.test(section.title);
+              const isPaymentSection = /^\d+\.\s*(VALORES|PAGAMENTO|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO))/i.test(section.title);
               return (
                 <div key={idx}>
                   <p className="font-semibold mb-1">{section.title}</p>
