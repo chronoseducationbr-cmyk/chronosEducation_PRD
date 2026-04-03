@@ -234,7 +234,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
               </div>
             </div>
             <div className="sm:col-span-2">
-              <label className="text-sm font-medium text-foreground block mb-1.5">Endereço</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Endereço <span className="text-[#F9B91D]">*</span></label>
               <div className="relative">
                 <MapPin size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
@@ -243,7 +243,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                   value={guardianAddress}
                   onChange={(e) => setGuardianAddress(e.target.value)}
                   onBlur={() => saveProfile({ guardian_address: guardianAddress.trim() })}
-                  className={`${inputClass()} pl-10`}
+                  className={`${inputClass("guardianAddress")} pl-10`}
                   placeholder="Endereço completo"
                 />
               </div>
