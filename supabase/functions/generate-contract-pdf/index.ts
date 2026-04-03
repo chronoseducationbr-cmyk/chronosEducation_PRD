@@ -261,22 +261,12 @@ async function buildContractPdf(
 
       const replacePlaceholders = (text: string): string => {
         let result = text;
-        // Remove "USD $ " or "USD $" prefix before placeholders since values are already formatted in BRL
-        // [Total_1] = inscription + all installments
-        result = result.replace(/USD\s*\$\s*\[Total_1\]/gi, fmtCurrency(totalCents + financial.inscriptionFeeCents));
-        result = result.replace(/\[Total_1\]/gi, fmtCurrency(totalCents + financial.inscriptionFeeCents));
-        // [Valor Matricula] or [Valor_Matricula]
-        result = result.replace(/USD\s*\$\s*\[Valor[\s_]*Matricula\]/gi, fmtCurrency(financial.inscriptionFeeCents));
-        result = result.replace(/\[Valor[\s_]*Matricula\]/gi, fmtCurrency(financial.inscriptionFeeCents));
-        // [TOTAL_2] = installments total only
-        result = result.replace(/USD\s*\$\s*\[TOTAL_2\]/gi, fmtCurrency(totalCents));
-        result = result.replace(/\[TOTAL_2\]/gi, fmtCurrency(totalCents));
-        // [NumeroParcela] or [NumeroParcelas]
+        // Replace placeholders with formatted numbers - "USD $" prefix is kept from the original text
+        result = result.replace(/\[Total_1\]/gi, fmtNumber(totalCents + financial.inscriptionFeeCents));
+        result = result.replace(/\[Valor[\s_]*Matricula\]/gi, fmtNumber(financial.inscriptionFeeCents));
+        result = result.replace(/\[TOTAL_2\]/gi, fmtNumber(totalCents));
         result = result.replace(/\[Numero\s*Parcelas?\]/gi, String(installmentCount));
-        // [ValorParcela] or [Valor Parcela]
-        result = result.replace(/USD\s*\$\s*\[Valor[\s_]*Parcela\]/gi, fmtCurrency(installmentCents));
-        result = result.replace(/\[Valor[\s_]*Parcela\]/gi, fmtCurrency(installmentCents));
-        // Fallback: replace any remaining [xxx] with "A definir"
+        result = result.replace(/\[Valor[\s_]*Parcela\]/gi, fmtNumber(installmentCents));
         result = result.replace(/\[xxx\]/gi, "A definir");
         return result;
       };
