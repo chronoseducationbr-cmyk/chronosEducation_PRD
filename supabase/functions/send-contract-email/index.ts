@@ -147,8 +147,8 @@ serve(async (req) => {
     const emailPayload: Record<string, unknown> = {
       from: "Chronos Education <contato@info.chronoseducation.com>",
       to: [email],
-      subject: `Contrato disponível - ${studentName}`,
-      html: buildEmailHtml(guardianName, studentName, contractUrl || "", platformUrl),
+      subject: `Contrato ${programLabel} disponível - ${studentName}`,
+      html: buildEmailHtml(guardianName, studentName, contractUrl || "", platformUrl, contractType),
       reply_to: "chronoseducationbr@gmail.com",
     };
 
