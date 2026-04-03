@@ -156,9 +156,10 @@ const AdminSettingsPage = () => {
     updateSettings({ contract_enabled: !settings.contract_enabled });
   };
 
-  const handleSaveContractText = () => {
-    updateSettings({ contract_text: contractDraft });
-    setEditingContract(false);
+  const handleSaveContractText = (type: "plataforma" | "summercamp") => {
+    const field = type === "plataforma" ? "contract_text" : "contract_text_summercamp";
+    updateSettings({ [field]: contractDraft } as Partial<AppSettings>);
+    setEditingContract(null);
   };
 
   const levelDescriptions: Record<string, string> = {
