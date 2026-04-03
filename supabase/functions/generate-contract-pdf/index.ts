@@ -393,8 +393,9 @@ serve(async (req) => {
     const contractUrl = publicUrlData.publicUrl;
 
     // Update enrollment
+    const contractUrlField = resolvedContractType === "summercamp" ? "contract_url_summercamp" : "contract_url";
     const updateFields: Record<string, unknown> = {
-      contract_url: contractUrl,
+      [contractUrlField]: contractUrl,
     };
 
     if (isSigned) {
