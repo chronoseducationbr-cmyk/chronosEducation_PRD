@@ -427,6 +427,8 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                 )}
               </>
             )}
+          </div>
+
           {(() => {
             const { fee, tuition, summer } = getFormValues();
             const missing: string[] = [];
