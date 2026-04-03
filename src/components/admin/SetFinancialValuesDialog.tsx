@@ -421,15 +421,35 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
             )}
           </div>
 
-          <DialogFooter className="flex-col sm:flex-row gap-2 pt-4 border-t border-border shrink-0">
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
-            <Button variant="secondary" onClick={handleSave} disabled={saving}>
-              {saving ? "A guardar..." : "Guardar"}
-            </Button>
-            <Button onClick={handleSaveAndGenerate} disabled={saving}>
-              {saving ? "A processar..." : "Guardar e gerar contrato"}
-            </Button>
-          </DialogFooter>
+          {(() => {
+            const { fee, tuition, summer } = getFormValues();
+            const missing: string[] = [];
+            if (fee <= 0) missing.push("Valor da Matrícula");
+            if (!inscriptionDueDate) missing.push("Data de vencimento da Matrícula");
+            if (tuition > 0 && !tuitionStartDate) missing.push("Data de início da Plataforma Online");
+            if (summer > 0 && !summercampStartDate) missing.push("Data de início do Summer Camp");
+            if (tuition <= 0) missing.push("Valor da Plataforma Online");
+            const canGenerate = missing.length === 0;
+
+            return (
+              <DialogFooter className="flex-col sm:flex-row gap-2 pt-4 border-t border-border shrink-0">
+                <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
+                <Button variant="secondary" onClick={handleSave} disabled={saving}>
+                  {saving ? "A guardar..." : "Guardar"}
+                </Button>
+                <div className="flex flex-col items-end gap-1">
+                  <Button onClick={handleSaveAndGenerate} disabled={saving || !canGenerate}>
+                    {saving ? "A processar..." : "Guardar e gerar contrato"}
+                  </Button>
+                  {!canGenerate && (
+                    <p className="text-[10px] text-destructive max-w-xs text-right">
+                      Falta: {missing.join(", ")}
+                    </p>
+                  )}
+                </div>
+              </DialogFooter>
+            );
+          })()}
         </DialogContent>
       </Dialog>
     </>
