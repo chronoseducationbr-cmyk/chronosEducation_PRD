@@ -311,15 +311,15 @@ const AdminEnrollmentsPage = () => {
                   <div className="flex items-start gap-4 text-[11px] pl-[52px] sm:pl-0">
                     <div>
                       <p className="text-muted-foreground">Matrícula</p>
-                      <p className="font-medium text-foreground">{e.inscription_fee_cents > 0 ? `$${(e.inscription_fee_cents / 100).toFixed(2)}` : "—"}</p>
+                      <p className="font-medium text-foreground">{e.inscription_fee_cents > 0 ? `$${(e.inscription_fee_cents / 100).toFixed(2).replace('.', ',')}` : "—"}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Plataforma</p>
-                      <p className="font-medium text-foreground">{e.tuition_installment_cents > 0 ? `${e.tuition_installments}x $${(e.tuition_installment_cents / 100).toFixed(2)}` : <span className="italic text-muted-foreground">—</span>}</p>
+                      <p className="font-medium text-foreground">{e.tuition_installment_cents > 0 ? `${e.tuition_installments}x $${(e.tuition_installment_cents / 100).toFixed(2).replace('.', ',')}` : <span className="italic text-muted-foreground">—</span>}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Summer</p>
-                      <p className="font-medium text-foreground">{e.summercamp_installment_cents > 0 ? `${e.summercamp_installments}x $${(e.summercamp_installment_cents / 100).toFixed(2)}` : <span className="italic text-muted-foreground">—</span>}</p>
+                      <p className="font-medium text-foreground">{e.summercamp_installment_cents > 0 ? `${e.summercamp_installments}x $${(e.summercamp_installment_cents / 100).toFixed(2).replace('.', ',')}` : <span className="italic text-muted-foreground">—</span>}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 pl-[52px] sm:pl-0">
