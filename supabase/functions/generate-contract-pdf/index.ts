@@ -437,6 +437,7 @@ serve(async (req) => {
       JSON.stringify({
         success: true,
         contractUrl,
+        contractType: resolvedContractType,
         contractBase64: base64Content,
         contentType: "application/pdf",
         fileName,
