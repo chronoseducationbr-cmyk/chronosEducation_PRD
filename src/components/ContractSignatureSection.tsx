@@ -158,6 +158,7 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData, f
                 <span className="font-medium">{guardianData.fullName || "[Nome completo]"}</span>,{" "}
                 {guardianData.nationality || "[nacionalidade]"},{" "}
                 {guardianData.civilStatus || "[estado civil]"},{" "}
+                {guardianData.profession || "[profissão]"},{" "}
                 inscrito(a) no CPF sob o nº{" "}
                 <span className="font-medium">{guardianData.cpf || "[CPF]"}</span>{" "}
                 e RG nº{" "}
