@@ -252,42 +252,31 @@ async function buildContractPdf(
 
     drawSectionTitle(ctx, section.title);
 
-    // If this is the payment section, inject financial values
+    // If this is the payment section, replace placeholders with actual financial values
     if (isPaymentSection(section.title)) {
-      // Render any paragraphs from the contract text first
+      // Calculate values based on contract type
+      const installmentCents = contractType === "platform" ? financial.tuitionInstallmentCents : financial.summercampInstallmentCents;
+      const installmentCount = contractType === "platform" ? financial.tuitionInstallments : financial.summercampInstallments;
+      const totalCents = installmentCents * installmentCount;
+
+      const replacePlaceholders = (text: string): string => {
+        // Replace total value
+        let result = text.replace(/USD\s*\$\s*\[(?:xxx|Total)\]/gi, fmtCurrency(totalCents + financial.inscriptionFeeCents));
+        // Replace inscription fee (à vista / matrícula)
+        result = result.replace(/USD\s*\$\s*\[(?:xxx|Valor\s*Matricula)\](\s*(?:a|à)\s*vista)/gi, `${fmtCurrency(financial.inscriptionFeeCents)}$1`);
+        // Replace installment amount and count pattern: "USD $ [xxx] parcelado em xx vezes de USD $ [xxx]"
+        result = result.replace(/USD\s*\$\s*\[(?:xxx|Valor\s*da\s*parcela)\]\s*parcelado\s*em\s*(?:xx|\[(?:xxx|Numero\s*Parcelas)\])\s*vezes\s*de\s*USD\s*\$\s*\[(?:xxx|Numero\s*Parcelas|Valor\s*da\s*parcela)\]/gi,
+          `${fmtCurrency(installmentCents)} parcelado em ${installmentCount} vezes de ${fmtCurrency(installmentCents)}`);
+        // Fallback: replace any remaining [xxx] with "A definir"
+        result = result.replace(/\[xxx\]/gi, "A definir");
+        return result;
+      };
+
       for (const p of section.paragraphs) {
-        drawParagraph(ctx, p);
+        drawParagraph(ctx, replacePlaceholders(p));
       }
       for (const item of section.listItems) {
-        drawBullet(ctx, item);
-      }
-
-      ctx.y -= 4;
-      drawField(ctx, "Taxa de Matricula:", fmtCurrency(financial.inscriptionFeeCents), 60);
-      ctx.y -= 4;
-
-      if (contractType === "platform") {
-        ctx.page.drawText("Plataforma Online", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
-        ctx.y -= 16;
-        if (financial.tuitionInstallmentCents > 0) {
-          drawField(ctx, "Valor da parcela:", fmtCurrency(financial.tuitionInstallmentCents), 60);
-          drawField(ctx, "Numero de parcelas:", String(financial.tuitionInstallments), 60);
-          const totalTuition = financial.tuitionInstallmentCents * financial.tuitionInstallments;
-          drawField(ctx, "Total:", fmtCurrency(totalTuition), 60);
-        } else {
-          drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
-        }
-      } else {
-        ctx.page.drawText("Summer Camp", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
-        ctx.y -= 16;
-        if (financial.summercampInstallmentCents > 0) {
-          drawField(ctx, "Valor da parcela:", fmtCurrency(financial.summercampInstallmentCents), 60);
-          drawField(ctx, "Numero de parcelas:", String(financial.summercampInstallments), 60);
-          const totalCamp = financial.summercampInstallmentCents * financial.summercampInstallments;
-          drawField(ctx, "Total:", fmtCurrency(totalCamp), 60);
-        } else {
-          drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
-        }
+        drawBullet(ctx, replacePlaceholders(item));
       }
     } else {
       // Normal section - render paragraphs and list items from contract text
