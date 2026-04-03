@@ -330,94 +330,102 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
               </div>
             </div>
 
-            <div className="border-t border-border pt-3">
-              <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Plataforma Online</Label>
-              <div className="grid grid-cols-3 gap-3 mt-1">
-                <div>
-                  <Label className="text-xs text-muted-foreground">Nº parcelas <span className="text-destructive">*</span></Label>
-                  <Input
-                    type="number"
-                    min="1"
-                    value={tuitionInstallments}
-                    onChange={(e) => setTuitionInstallments(e.target.value)}
-                    className="h-9"
-                    required
-                  />
+            {currentValues.tuition_installments > 0 && (
+              <>
+                <div className="border-t border-border pt-3">
+                  <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Plataforma Online</Label>
+                  <div className="grid grid-cols-3 gap-3 mt-1">
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Nº parcelas <span className="text-destructive">*</span></Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        value={tuitionInstallments}
+                        onChange={(e) => setTuitionInstallments(e.target.value)}
+                        className="h-9"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Valor ($) <span className="text-destructive">*</span></Label>
+                      <Input
+                        type="text"
+                        inputMode="decimal"
+                        placeholder="0,00"
+                        value={tuitionValue}
+                        onChange={(e) => handleMoneyChange(e, setTuitionValue)}
+                        onBlur={() => handleMoneyBlur(tuitionValue, setTuitionValue)}
+                        className="h-9"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Data início <span className="text-destructive">*</span></Label>
+                      <Input
+                        type="date"
+                        value={tuitionStartDate}
+                        onChange={(e) => setTuitionStartDate(e.target.value)}
+                        className="h-9"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <Label className="text-xs text-muted-foreground">Valor ($) <span className="text-destructive">*</span></Label>
-                  <Input
-                    type="text"
-                    inputMode="decimal"
-                    placeholder="0,00"
-                    value={tuitionValue}
-                    onChange={(e) => handleMoneyChange(e, setTuitionValue)}
-                    onBlur={() => handleMoneyBlur(tuitionValue, setTuitionValue)}
-                    className="h-9"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs text-muted-foreground">Data início <span className="text-destructive">*</span></Label>
-                  <Input
-                    type="date"
-                    value={tuitionStartDate}
-                    onChange={(e) => setTuitionStartDate(e.target.value)}
-                    className="h-9"
-                  />
-                </div>
-              </div>
-            </div>
-            {parseMoneyToNumber(tuitionValue) > 0 && !tuitionStartDate && (
-              <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-xs">
-                <AlertTriangle size={14} className="shrink-0" />
-                <span>A <strong>Plataforma Online</strong> tem valor definido mas não tem data de início. As parcelas não serão geradas sem esta data.</span>
-              </div>
+                {parseMoneyToNumber(tuitionValue) > 0 && !tuitionStartDate && (
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-xs">
+                    <AlertTriangle size={14} className="shrink-0" />
+                    <span>A <strong>Plataforma Online</strong> tem valor definido mas não tem data de início. As parcelas não serão geradas sem esta data.</span>
+                  </div>
+                )}
+              </>
             )}
 
-            <div className="border-t border-border pt-3">
-              <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Summer Camp</Label>
-              <div className="grid grid-cols-3 gap-3 mt-1">
-                <div>
-                  <Label className="text-xs text-muted-foreground">Nº parcelas <span className="text-destructive">*</span></Label>
-                  <Input
-                    type="number"
-                    min="1"
-                    value={summercampInstallments}
-                    onChange={(e) => setSummercampInstallments(e.target.value)}
-                    className="h-9"
-                    required
-                  />
+            {currentValues.summercamp_installments > 0 && (
+              <>
+                <div className="border-t border-border pt-3">
+                  <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Summer Camp</Label>
+                  <div className="grid grid-cols-3 gap-3 mt-1">
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Nº parcelas <span className="text-destructive">*</span></Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        value={summercampInstallments}
+                        onChange={(e) => setSummercampInstallments(e.target.value)}
+                        className="h-9"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Valor ($) <span className="text-destructive">*</span></Label>
+                      <Input
+                        type="text"
+                        inputMode="decimal"
+                        placeholder="0,00"
+                        value={summercampValue}
+                        onChange={(e) => handleMoneyChange(e, setSummercampValue)}
+                        onBlur={() => handleMoneyBlur(summercampValue, setSummercampValue)}
+                        className="h-9"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Data início <span className="text-destructive">*</span></Label>
+                      <Input
+                        type="date"
+                        value={summercampStartDate}
+                        onChange={(e) => setSummercampStartDate(e.target.value)}
+                        className="h-9"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <Label className="text-xs text-muted-foreground">Valor ($) <span className="text-destructive">*</span></Label>
-                  <Input
-                    type="text"
-                    inputMode="decimal"
-                    placeholder="0,00"
-                    value={summercampValue}
-                    onChange={(e) => handleMoneyChange(e, setSummercampValue)}
-                    onBlur={() => handleMoneyBlur(summercampValue, setSummercampValue)}
-                    className="h-9"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs text-muted-foreground">Data início <span className="text-destructive">*</span></Label>
-                  <Input
-                    type="date"
-                    value={summercampStartDate}
-                    onChange={(e) => setSummercampStartDate(e.target.value)}
-                    className="h-9"
-                  />
-                </div>
-              </div>
-            </div>
-            {parseMoneyToNumber(summercampValue) > 0 && !summercampStartDate && (
-              <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-xs">
-                <AlertTriangle size={14} className="shrink-0" />
-                <span>O <strong>Summer Camp</strong> tem valor definido mas não tem data de início. As parcelas não serão geradas sem esta data.</span>
-              </div>
+                {parseMoneyToNumber(summercampValue) > 0 && !summercampStartDate && (
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-xs">
+                    <AlertTriangle size={14} className="shrink-0" />
+                    <span>O <strong>Summer Camp</strong> tem valor definido mas não tem data de início. As parcelas não serão geradas sem esta data.</span>
+                  </div>
+                )}
+              </>
             )}
           </div>
 
@@ -426,9 +434,14 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
             const missing: string[] = [];
             if (fee <= 0) missing.push("Valor da Matrícula");
             if (!inscriptionDueDate) missing.push("Data de vencimento da Matrícula");
-            if (tuition > 0 && !tuitionStartDate) missing.push("Data de início da Plataforma Online");
-            if (summer > 0 && !summercampStartDate) missing.push("Data de início do Summer Camp");
-            if (tuition <= 0) missing.push("Valor da Plataforma Online");
+            if (currentValues.tuition_installments > 0) {
+              if (tuition <= 0) missing.push("Valor da Plataforma Online");
+              if (tuition > 0 && !tuitionStartDate) missing.push("Data de início da Plataforma Online");
+            }
+            if (currentValues.summercamp_installments > 0) {
+              if (summer <= 0) missing.push("Valor do Summer Camp");
+              if (summer > 0 && !summercampStartDate) missing.push("Data de início do Summer Camp");
+            }
             const canGenerate = missing.length === 0;
 
             return (
