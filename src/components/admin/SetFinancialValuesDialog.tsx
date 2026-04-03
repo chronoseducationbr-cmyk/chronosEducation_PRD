@@ -225,52 +225,74 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
       toast({ title: "Valores guardados. Preencha datas de início para gerar parcelas.", variant: "destructive" });
     }
 
-    // Generate contract PDF
-    try {
-      toast({ title: "A gerar contrato PDF..." });
-      const { data: pdfResult, error: pdfError } = await supabase.functions.invoke("generate-contract-pdf", {
-        body: { enrollmentId, signed: false },
-      });
+    // Determine which contracts to generate
+    const contractsToGenerate: Array<"platform" | "summercamp"> = [];
+    if (updates.tuition_installment_cents > 0) contractsToGenerate.push("platform");
+    if (updates.summercamp_installment_cents > 0) contractsToGenerate.push("summercamp");
 
-      if (pdfError) {
-        console.error("PDF generation error:", pdfError);
-        toast({ title: "Erro ao gerar contrato PDF", variant: "destructive" });
-      } else if (pdfResult?.success) {
-        toast({ title: "Contrato PDF gerado com sucesso" });
+    // If no specific service, default to platform
+    if (contractsToGenerate.length === 0) contractsToGenerate.push("platform");
 
-        // Send email to guardian
-        if (pdfResult.guardianEmail) {
-          try {
-            const { error: emailError } = await supabase.functions.invoke("send-contract-email", {
-              body: {
-                email: pdfResult.guardianEmail,
-                guardianName: pdfResult.guardianName,
-                studentName: pdfResult.studentName || studentName,
-                contractUrl: pdfResult.contractUrl,
-              },
-            });
-            if (emailError) {
-              console.error("Email send error:", emailError);
-              toast({ title: "Contrato gerado, mas erro ao enviar email", variant: "destructive" });
-            } else {
-              toast({ title: "Email enviado ao responsável com o contrato" });
-            }
-          } catch (emailErr) {
-            console.error("Email error:", emailErr);
-            toast({ title: "Contrato gerado, mas erro ao enviar email", variant: "destructive" });
-          }
-        } else {
-          toast({ title: "Contrato gerado. Email do responsável não encontrado.", variant: "destructive" });
+    const contractTypeLabels: Record<string, string> = {
+      platform: "Plataforma Online",
+      summercamp: "Summer Camp",
+    };
+
+    for (const contractType of contractsToGenerate) {
+      try {
+        toast({ title: `A gerar contrato PDF (${contractTypeLabels[contractType]})...` });
+        const { data: pdfResult, error: pdfError } = await supabase.functions.invoke("generate-contract-pdf", {
+          body: { enrollmentId, signed: false, contractType },
+        });
+
+        if (pdfError) {
+          console.error(`PDF generation error (${contractType}):`, pdfError);
+          toast({ title: `Erro ao gerar contrato ${contractTypeLabels[contractType]}`, variant: "destructive" });
+          continue;
         }
+        
+        if (pdfResult?.success) {
+          toast({ title: `Contrato ${contractTypeLabels[contractType]} gerado com sucesso` });
 
-        // Update local state with contract info
-        updates.contract_url = pdfResult.contractUrl;
-        updates.contract_sent_at = new Date().toISOString();
-        updates.contract_signed_at = null;
+          // Store the URL in the right field
+          if (contractType === "summercamp") {
+            updates.contract_url_summercamp = pdfResult.contractUrl;
+          } else {
+            updates.contract_url = pdfResult.contractUrl;
+          }
+          updates.contract_sent_at = new Date().toISOString();
+          updates.contract_signed_at = null;
+
+          // Send email to guardian
+          if (pdfResult.guardianEmail) {
+            try {
+              const { error: emailError } = await supabase.functions.invoke("send-contract-email", {
+                body: {
+                  email: pdfResult.guardianEmail,
+                  guardianName: pdfResult.guardianName,
+                  studentName: pdfResult.studentName || studentName,
+                  contractUrl: pdfResult.contractUrl,
+                  contractType,
+                },
+              });
+              if (emailError) {
+                console.error(`Email send error (${contractType}):`, emailError);
+                toast({ title: `Contrato ${contractTypeLabels[contractType]} gerado, mas erro ao enviar email`, variant: "destructive" });
+              } else {
+                toast({ title: `Email enviado (${contractTypeLabels[contractType]})` });
+              }
+            } catch (emailErr) {
+              console.error(`Email error (${contractType}):`, emailErr);
+              toast({ title: `Contrato ${contractTypeLabels[contractType]} gerado, mas erro ao enviar email`, variant: "destructive" });
+            }
+          } else {
+            toast({ title: `Contrato ${contractTypeLabels[contractType]} gerado. Email do responsável não encontrado.`, variant: "destructive" });
+          }
+        }
+      } catch (err) {
+        console.error(`Contract generation error (${contractType}):`, err);
+        toast({ title: `Erro ao gerar contrato ${contractTypeLabels[contractType]}`, variant: "destructive" });
       }
-    } catch (err) {
-      console.error("Contract generation error:", err);
-      toast({ title: "Erro ao gerar contrato", variant: "destructive" });
     }
 
     onSaved(updates);
