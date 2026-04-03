@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard, BookOpen, CheckCircle2 } from "lucide-react"; // force rebuild
+import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard, BookOpen, CheckCircle2, Trash2 } from "lucide-react";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
