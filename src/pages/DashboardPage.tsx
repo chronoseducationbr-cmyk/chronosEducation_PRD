@@ -460,6 +460,37 @@ const DashboardPage = () => {
                     <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
                   </div>
 
+                  {/* Serviços contratados */}
+                  <div className="mt-8">
+                    <h3 className="font-heading text-lg font-semibold text-foreground mb-1">Serviços contratados</h3>
+                    <p className="text-sm text-muted-foreground mb-4">Selecione os serviços que pretende contratar. Pode escolher um ou ambos.</p>
+                    <div className="space-y-3">
+                      <label
+                        className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.plataforma ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
+                        onClick={() => setSelectedServices((prev) => ({ ...prev, plataforma: !prev.plataforma }))}
+                      >
+                        <Checkbox checked={selectedServices.plataforma} onCheckedChange={(v) => setSelectedServices((prev) => ({ ...prev, plataforma: !!v }))} />
+                        <div>
+                          <p className="font-semibold text-foreground">Plataforma Online</p>
+                          <p className="text-xs text-muted-foreground">Acesso à plataforma digital do programa Dual Diploma</p>
+                        </div>
+                      </label>
+                      <label
+                        className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.summercamp ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
+                        onClick={() => setSelectedServices((prev) => ({ ...prev, summercamp: !prev.summercamp }))}
+                      >
+                        <Checkbox checked={selectedServices.summercamp} onCheckedChange={(v) => setSelectedServices((prev) => ({ ...prev, summercamp: !!v }))} />
+                        <div>
+                          <p className="font-semibold text-foreground">Summer Camp</p>
+                          <p className="text-xs text-muted-foreground">Programa presencial de imersão durante o verão</p>
+                        </div>
+                      </label>
+                    </div>
+                    {validationErrors.includes("services") && (
+                      <p className="text-destructive text-sm mt-2">Selecione pelo menos um serviço.</p>
+                    )}
+                  </div>
+
                   <div className="mt-8">
                     <button
                       onClick={async () => {
