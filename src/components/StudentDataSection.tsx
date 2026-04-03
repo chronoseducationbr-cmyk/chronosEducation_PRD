@@ -18,6 +18,7 @@ interface Props {
   onChange?: (data: StudentData) => void;
   validationErrors?: string[];
   initialData?: StudentData;
+  guardianAddress?: string;
 }
 
 const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Props) => {
