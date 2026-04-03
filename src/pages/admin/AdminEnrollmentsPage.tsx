@@ -520,6 +520,7 @@ const AdminEnrollmentsPage = () => {
                             )}
                           </div>
                         </div>
+                      </div>
                     </div>
 
                      {/* Prova de Inglês */}
