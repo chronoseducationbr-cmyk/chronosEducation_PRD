@@ -348,6 +348,13 @@ const DashboardPage = () => {
       }
     }
 
+    // Validate services selection
+    if (!selectedServices.plataforma && !selectedServices.summercamp) {
+      setValidationErrors(["services"]);
+      toast({ title: "Serviço obrigatório", description: "Selecione pelo menos um serviço (Plataforma Online ou Summer Camp).", variant: "destructive" });
+      return false;
+    }
+
     setValidationErrors([]);
     return true;
   };
