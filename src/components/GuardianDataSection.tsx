@@ -205,7 +205,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">CPF</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">CPF <span className="text-[#F9B91D]">*</span></label>
               <div className="relative">
                 <FileText size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
