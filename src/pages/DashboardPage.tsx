@@ -254,9 +254,9 @@ const DashboardPage = () => {
       setWizardStep(1);
       setRefreshKey((k) => k + 1);
       setRefreshKey((k) => k + 1);
-      // Reset student refs
       studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
       referralRef.current = "";
+      setSelectedServices({ plataforma: false, summercamp: false });
     } catch (err: any) {
       console.error(err);
       toast({ title: "Erro ao processar", description: err.message || "Tente novamente.", variant: "destructive" });
