@@ -38,8 +38,9 @@ function ensureSpace(ctx: DrawCtx, needed: number) {
 
 function drawTitle(ctx: DrawCtx, text: string, size: number) {
   ensureSpace(ctx, 30);
-  const width = ctx.fontBold.widthOfTextAtSize(text, size);
-  ctx.page.drawText(text, { x: (595.28 - width) / 2, y: ctx.y, size, font: ctx.fontBold, color: PRIMARY });
+  const safe = sanitize(text);
+  const width = ctx.fontBold.widthOfTextAtSize(safe, size);
+  ctx.page.drawText(safe, { x: (595.28 - width) / 2, y: ctx.y, size, font: ctx.fontBold, color: PRIMARY });
   ctx.y -= size + 6;
 }
 
