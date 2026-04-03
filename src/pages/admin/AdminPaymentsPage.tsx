@@ -391,15 +391,6 @@ const AdminPaymentsPage = () => {
                           disabled={false}
                         />
                       </div>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setShowCreateDialog(e.id)}
-                        className="text-xs"
-                      >
-                        <Plus size={14} className="mr-1" />
-                        Criar Mensalidades
-                      </Button>
                     </div>
 
                     {insts.length === 0 ? (
