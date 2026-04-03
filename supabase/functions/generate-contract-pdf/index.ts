@@ -96,6 +96,40 @@ function drawBullet(ctx: DrawCtx, text: string) {
   }
 }
 
+/**
+ * Parses contract text from app_settings into structured sections.
+ * Same logic as ContractSignatureSection on the frontend.
+ */
+function parseContractSections(text: string) {
+  if (!text?.trim()) return [];
+  const lines = text.split("\n");
+  const sections: { title: string; paragraphs: string[]; listItems: string[] }[] = [];
+  let current: { title: string; paragraphs: string[]; listItems: string[] } | null = null;
+
+  for (const raw of lines) {
+    const line = raw.trimEnd();
+    const headerMatch = line.match(/^(\d+)\.\s+(.+)$/);
+    if (headerMatch) {
+      if (current) sections.push(current);
+      current = { title: `${headerMatch[1]}. ${headerMatch[2]}`, paragraphs: [], listItems: [] };
+      continue;
+    }
+    if (!current) continue;
+    const listMatch = line.match(/^[a-z]\)\s+(.+)$/);
+    if (listMatch) {
+      current.listItems.push(listMatch[1]);
+    } else if (line.trim()) {
+      current.paragraphs.push(line.trim());
+    }
+  }
+  if (current) sections.push(current);
+  return sections;
+}
+
+function isPaymentSection(title: string): boolean {
+  return /^\d+\.\s*(VALORES|PAGAMENTO|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO))/i.test(title);
+}
+
 async function buildContractPdf(
   guardian: { fullName: string; email: string; phone: string },
   student: {
@@ -116,7 +150,8 @@ async function buildContractPdf(
   dateLabel: string,
   signed: boolean,
   signedDate?: string,
-  contractType: "platform" | "summercamp" = "platform"
+  contractType: "platform" | "summercamp" = "platform",
+  contractText: string = ""
 ): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
@@ -158,7 +193,8 @@ async function buildContractPdf(
   ctx.page.drawText(dateStr, { x: (595.28 - dateW) / 2, y: ctx.y, size: 9, font, color: GRAY });
   ctx.y -= 24;
 
-  // Preamble
+  // Section 1 - PARTES (always dynamic from enrollment data)
+  drawSectionTitle(ctx, "1. PARTES");
   drawParagraph(ctx, "Pelo presente instrumento particular, de um lado:");
   ctx.y -= 4;
   drawParagraph(ctx, `CONTRATANTE: ${guardian.fullName || "[Nome completo]"}, residente e domiciliado(a) em ${student.studentAddress || "[endereco completo]"}, e-mail ${guardian.email || "[e-mail]"}, celular ${guardian.phone || "[celular]"};`);
@@ -170,7 +206,7 @@ async function buildContractPdf(
   drawParagraph(ctx, "Tem entre si justo e contratado:");
   ctx.y -= 8;
 
-  // Aluno beneficiario
+  // Student info block
   ctx.page.drawText("Aluno(a) Beneficiario(a)", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
   ctx.y -= 16;
   drawField(ctx, "Nome:", student.studentName, 60);
@@ -180,82 +216,68 @@ async function buildContractPdf(
   drawField(ctx, "Escola atual:", student.studentSchool, 60);
   drawField(ctx, "Ano de conclusao do Ensino Medio:", student.studentGraduationYear || "\u2014", 60);
 
-  // 2. OBJETO
-  drawSectionTitle(ctx, "2. OBJETO");
-  const objectText = contractType === "summercamp"
-    ? "O presente contrato tem por objeto a prestacao de servicos educacionais do Programa Summer Camp da Chronos Education, que permite ao aluno vivenciar uma experiencia internacional de imersao academica e cultural nos Estados Unidos."
-    : "O presente contrato tem por objeto a prestacao de servicos educacionais do Programa Dual Diploma da Chronos Education, que permite ao aluno obter simultaneamente o diploma brasileiro de Ensino Medio e o diploma americano de High School, atraves da Plataforma Online.";
-  drawParagraph(ctx, objectText);
-
-  // 3. DURACAO
-  drawSectionTitle(ctx, "3. DURACAO");
-  drawParagraph(ctx, "O programa tem duracao media de 2 (dois) anos, com inicio na data de confirmacao da matricula.");
-
-  // 4. OBRIGACOES DA CHRONOS
-  drawSectionTitle(ctx, "4. OBRIGACOES DA CHRONOS EDUCATION");
-  drawBullet(ctx, "Disponibilizar acesso a Plataforma Online;");
-  drawBullet(ctx, "Fornecer tutoria individual e suporte tecnico;");
-  drawBullet(ctx, "Enviar relatorios periodicos aos pais/responsaveis;");
-  drawBullet(ctx, "Emitir o diploma americano de High School apos a conclusao dos creditos necessarios.");
-
-  // 5. OBRIGACOES DO CONTRATANTE
-  drawSectionTitle(ctx, "5. OBRIGACOES DO CONTRATANTE");
-  drawBullet(ctx, "Efetuar o pagamento das parcelas nos prazos estabelecidos;");
-  drawBullet(ctx, "Garantir que o aluno dedique entre 1 a 2 horas semanais as atividades do programa;");
-  drawBullet(ctx, "Manter os dados cadastrais atualizados.");
-
-  // 6. VALORES E PAGAMENTO
-  drawSectionTitle(ctx, "6. VALORES E PAGAMENTO");
-
+  // Currency formatter
   const fmtCurrency = (cents: number) => {
     if (!cents || cents <= 0) return "A definir";
     return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   };
 
-  drawParagraph(ctx, "Os valores acordados para o presente contrato sao os seguintes:");
-  ctx.y -= 4;
+  // Parse and render contract text sections (skip section 1 - already rendered above)
+  const sections = parseContractSections(contractText);
 
-  // Inscription fee
-  drawField(ctx, "Taxa de Matricula:", fmtCurrency(financial.inscriptionFeeCents), 60);
-  ctx.y -= 4;
+  for (const section of sections) {
+    // Skip section 1 (PARTES) - already rendered dynamically above
+    if (/^1\.\s/i.test(section.title)) continue;
 
-  if (contractType === "platform") {
-    // Tuition (Plataforma Online)
-    ctx.page.drawText("Plataforma Online", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
-    ctx.y -= 16;
-    if (financial.tuitionInstallmentCents > 0) {
-      drawField(ctx, "Valor da parcela:", fmtCurrency(financial.tuitionInstallmentCents), 60);
-      drawField(ctx, "Numero de parcelas:", String(financial.tuitionInstallments), 60);
-      const totalTuition = financial.tuitionInstallmentCents * financial.tuitionInstallments;
-      drawField(ctx, "Total:", fmtCurrency(totalTuition), 60);
+    drawSectionTitle(ctx, section.title);
+
+    // If this is the payment section, inject financial values
+    if (isPaymentSection(section.title)) {
+      // Render any paragraphs from the contract text first
+      for (const p of section.paragraphs) {
+        drawParagraph(ctx, p);
+      }
+      for (const item of section.listItems) {
+        drawBullet(ctx, item);
+      }
+
+      ctx.y -= 4;
+      drawField(ctx, "Taxa de Matricula:", fmtCurrency(financial.inscriptionFeeCents), 60);
+      ctx.y -= 4;
+
+      if (contractType === "platform") {
+        ctx.page.drawText("Plataforma Online", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
+        ctx.y -= 16;
+        if (financial.tuitionInstallmentCents > 0) {
+          drawField(ctx, "Valor da parcela:", fmtCurrency(financial.tuitionInstallmentCents), 60);
+          drawField(ctx, "Numero de parcelas:", String(financial.tuitionInstallments), 60);
+          const totalTuition = financial.tuitionInstallmentCents * financial.tuitionInstallments;
+          drawField(ctx, "Total:", fmtCurrency(totalTuition), 60);
+        } else {
+          drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
+        }
+      } else {
+        ctx.page.drawText("Summer Camp", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
+        ctx.y -= 16;
+        if (financial.summercampInstallmentCents > 0) {
+          drawField(ctx, "Valor da parcela:", fmtCurrency(financial.summercampInstallmentCents), 60);
+          drawField(ctx, "Numero de parcelas:", String(financial.summercampInstallments), 60);
+          const totalCamp = financial.summercampInstallmentCents * financial.summercampInstallments;
+          drawField(ctx, "Total:", fmtCurrency(totalCamp), 60);
+        } else {
+          drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
+        }
+      }
     } else {
-      drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
-    }
-  } else {
-    // Summer Camp
-    ctx.page.drawText("Summer Camp", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
-    ctx.y -= 16;
-    if (financial.summercampInstallmentCents > 0) {
-      drawField(ctx, "Valor da parcela:", fmtCurrency(financial.summercampInstallmentCents), 60);
-      drawField(ctx, "Numero de parcelas:", String(financial.summercampInstallments), 60);
-      const totalCamp = financial.summercampInstallmentCents * financial.summercampInstallments;
-      drawField(ctx, "Total:", fmtCurrency(totalCamp), 60);
-    } else {
-      drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
+      // Normal section - render paragraphs and list items from contract text
+      for (const p of section.paragraphs) {
+        drawParagraph(ctx, p);
+      }
+      for (const item of section.listItems) {
+        drawBullet(ctx, item);
+      }
     }
   }
-
-  // 7. CANCELAMENTO
-  drawSectionTitle(ctx, "7. CANCELAMENTO");
-  drawParagraph(ctx, "O contratante podera solicitar o cancelamento a qualquer momento, mediante comunicacao por escrito. Aplicam-se as condicoes de reembolso conforme os Termos e Condicoes disponiveis em chronoseducation.com/termos.");
-
-  // 8. LGPD
-  drawSectionTitle(ctx, "8. PROTECAO DE DADOS (LGPD)");
-  drawParagraph(ctx, "Os dados pessoais recolhidos serao tratados em conformidade com a Lei Geral de Protecao de Dados (Lei n. 13.709/2018), sendo utilizados exclusivamente para fins educacionais e administrativos.");
-
-  // 9. FORO
-  drawSectionTitle(ctx, "9. FORO");
-  drawParagraph(ctx, "As partes elegem o foro da Comarca de Sao Paulo/SP para dirimir quaisquer questoes decorrentes deste contrato.");
 
   // Signature block
   ensureSpace(ctx, 60);
@@ -357,6 +379,17 @@ serve(async (req) => {
       summercampInstallments: enrollment.summercamp_installments ?? 0,
     };
 
+    // Fetch contract text from app_settings
+    const { data: appSettings } = await supabase
+      .from("app_settings")
+      .select("contract_text, contract_text_summercamp")
+      .eq("id", 1)
+      .single();
+
+    const contractText = resolvedContractType === "summercamp"
+      ? (appSettings?.contract_text_summercamp || "")
+      : (appSettings?.contract_text || "");
+
     const now = new Date();
     const dateLabel = now.toLocaleDateString("pt-BR", {
       day: "2-digit",
@@ -367,7 +400,7 @@ serve(async (req) => {
     const isSigned = signed === true;
     const signedDateStr = isSigned ? dateLabel : undefined;
 
-    const pdfBytes = await buildContractPdf(guardianData, studentData, financial, dateLabel, isSigned, signedDateStr, resolvedContractType);
+    const pdfBytes = await buildContractPdf(guardianData, studentData, financial, dateLabel, isSigned, signedDateStr, resolvedContractType, contractText);
 
     // Upload to Supabase Storage
     const typeSuffix = resolvedContractType === "summercamp" ? "-summercamp" : "";
