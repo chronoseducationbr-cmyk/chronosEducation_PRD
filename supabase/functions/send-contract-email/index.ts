@@ -60,7 +60,7 @@ const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: 
                 <tr>
                   <td style="padding:24px;">
                      <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
-                       O contrato de prestação de serviços educacionais do programa <strong>Dual Diploma</strong> da <strong>Chronos Education</strong> para o(a) aluno(a) <strong>${studentName}</strong> já se encontra disponível.
+                       O contrato de prestação de serviços educacionais do programa <strong>${programLabel}</strong> da <strong>Chronos Education</strong> para o(a) aluno(a) <strong>${studentName}</strong> já se encontra disponível.
                      </p>
                      <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
                        Para concluir a matrícula, é necessário que aceite o contrato na plataforma Chronos Education.
