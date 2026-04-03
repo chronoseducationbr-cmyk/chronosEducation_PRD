@@ -115,7 +115,8 @@ async function buildContractPdf(
   },
   dateLabel: string,
   signed: boolean,
-  signedDate?: string
+  signedDate?: string,
+  contractType: "platform" | "summercamp" = "platform"
 ): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
@@ -147,7 +148,10 @@ async function buildContractPdf(
 
   // Title
   drawTitle(ctx, "CONTRATO DE PRESTACAO DE SERVICOS EDUCACIONAIS", 13);
-  drawTitle(ctx, "Programa Dual Diploma - Chronos Education", 11);
+  const subtitle = contractType === "summercamp"
+    ? "Programa Summer Camp - Chronos Education"
+    : "Programa Dual Diploma - Chronos Education";
+  drawTitle(ctx, subtitle, 11);
   ctx.y -= 4;
   const dateStr = `Data: ${dateLabel}`;
   const dateW = font.widthOfTextAtSize(dateStr, 9);
@@ -178,7 +182,10 @@ async function buildContractPdf(
 
   // 2. OBJETO
   drawSectionTitle(ctx, "2. OBJETO");
-  drawParagraph(ctx, "O presente contrato tem por objeto a prestacao de servicos educacionais do Programa Dual Diploma da Chronos Education, que permite ao aluno obter simultaneamente o diploma brasileiro de Ensino Medio e o diploma americano de High School, atraves da Plataforma Online.");
+  const objectText = contractType === "summercamp"
+    ? "O presente contrato tem por objeto a prestacao de servicos educacionais do Programa Summer Camp da Chronos Education, que permite ao aluno vivenciar uma experiencia internacional de imersao academica e cultural nos Estados Unidos."
+    : "O presente contrato tem por objeto a prestacao de servicos educacionais do Programa Dual Diploma da Chronos Education, que permite ao aluno obter simultaneamente o diploma brasileiro de Ensino Medio e o diploma americano de High School, atraves da Plataforma Online.";
+  drawParagraph(ctx, objectText);
 
   // 3. DURACAO
   drawSectionTitle(ctx, "3. DURACAO");
@@ -212,29 +219,30 @@ async function buildContractPdf(
   drawField(ctx, "Taxa de Matricula:", fmtCurrency(financial.inscriptionFeeCents), 60);
   ctx.y -= 4;
 
-  // Tuition (Plataforma Online)
-  ctx.page.drawText("Plataforma Online", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
-  ctx.y -= 16;
-  if (financial.tuitionInstallmentCents > 0) {
-    drawField(ctx, "Valor da parcela:", fmtCurrency(financial.tuitionInstallmentCents), 60);
-    drawField(ctx, "Numero de parcelas:", String(financial.tuitionInstallments), 60);
-    const totalTuition = financial.tuitionInstallmentCents * financial.tuitionInstallments;
-    drawField(ctx, "Total:", fmtCurrency(totalTuition), 60);
+  if (contractType === "platform") {
+    // Tuition (Plataforma Online)
+    ctx.page.drawText("Plataforma Online", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
+    ctx.y -= 16;
+    if (financial.tuitionInstallmentCents > 0) {
+      drawField(ctx, "Valor da parcela:", fmtCurrency(financial.tuitionInstallmentCents), 60);
+      drawField(ctx, "Numero de parcelas:", String(financial.tuitionInstallments), 60);
+      const totalTuition = financial.tuitionInstallmentCents * financial.tuitionInstallments;
+      drawField(ctx, "Total:", fmtCurrency(totalTuition), 60);
+    } else {
+      drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
+    }
   } else {
-    drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
-  }
-  ctx.y -= 4;
-
-  // Summer Camp
-  ctx.page.drawText("Summer Camp", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
-  ctx.y -= 16;
-  if (financial.summercampInstallmentCents > 0) {
-    drawField(ctx, "Valor da parcela:", fmtCurrency(financial.summercampInstallmentCents), 60);
-    drawField(ctx, "Numero de parcelas:", String(financial.summercampInstallments), 60);
-    const totalCamp = financial.summercampInstallmentCents * financial.summercampInstallments;
-    drawField(ctx, "Total:", fmtCurrency(totalCamp), 60);
-  } else {
-    drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
+    // Summer Camp
+    ctx.page.drawText("Summer Camp", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
+    ctx.y -= 16;
+    if (financial.summercampInstallmentCents > 0) {
+      drawField(ctx, "Valor da parcela:", fmtCurrency(financial.summercampInstallmentCents), 60);
+      drawField(ctx, "Numero de parcelas:", String(financial.summercampInstallments), 60);
+      const totalCamp = financial.summercampInstallmentCents * financial.summercampInstallments;
+      drawField(ctx, "Total:", fmtCurrency(totalCamp), 60);
+    } else {
+      drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
+    }
   }
 
   // 7. CANCELAMENTO
@@ -283,7 +291,8 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { enrollmentId, guardian, student, signed } = body;
+    const { enrollmentId, guardian, student, signed, contractType } = body;
+    const resolvedContractType: "platform" | "summercamp" = contractType === "summercamp" ? "summercamp" : "platform";
 
     if (!enrollmentId) {
       return new Response(
@@ -358,10 +367,11 @@ serve(async (req) => {
     const isSigned = signed === true;
     const signedDateStr = isSigned ? dateLabel : undefined;
 
-    const pdfBytes = await buildContractPdf(guardianData, studentData, financial, dateLabel, isSigned, signedDateStr);
+    const pdfBytes = await buildContractPdf(guardianData, studentData, financial, dateLabel, isSigned, signedDateStr, resolvedContractType);
 
     // Upload to Supabase Storage
-    const fileName = `contrato-${enrollmentId}.pdf`;
+    const typeSuffix = resolvedContractType === "summercamp" ? "-summercamp" : "";
+    const fileName = `contrato${typeSuffix}-${enrollmentId}.pdf`;
     const filePath = `signed/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
@@ -383,8 +393,9 @@ serve(async (req) => {
     const contractUrl = publicUrlData.publicUrl;
 
     // Update enrollment
+    const contractUrlField = resolvedContractType === "summercamp" ? "contract_url_summercamp" : "contract_url";
     const updateFields: Record<string, unknown> = {
-      contract_url: contractUrl,
+      [contractUrlField]: contractUrl,
     };
 
     if (isSigned) {
@@ -426,6 +437,7 @@ serve(async (req) => {
       JSON.stringify({
         success: true,
         contractUrl,
+        contractType: resolvedContractType,
         contractBase64: base64Content,
         contentType: "application/pdf",
         fileName,

@@ -1,0 +1,1 @@
+ALTER TABLE public.enrollments ADD COLUMN IF NOT EXISTS contract_url_summercamp text DEFAULT NULL;

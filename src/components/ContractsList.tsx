@@ -10,9 +10,12 @@ interface Enrollment {
   student_name: string;
   student_photo_url: string | null;
   contract_url: string | null;
+  contract_url_summercamp: string | null;
   contract_sent_at: string | null;
   contract_signed_at: string | null;
   status: string;
+  tuition_installment_cents: number;
+  summercamp_installment_cents: number;
 }
 
 interface Props {
@@ -32,10 +35,10 @@ const ContractsList = ({ refreshKey }: Props) => {
       setLoading(true);
       const { data } = await supabase
         .from("enrollments")
-        .select("id, student_name, student_photo_url, contract_url, contract_sent_at, contract_signed_at, status")
+        .select("id, student_name, student_photo_url, contract_url, contract_url_summercamp, contract_sent_at, contract_signed_at, status, tuition_installment_cents, summercamp_installment_cents")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      setEnrollments((data as Enrollment[]) || []);
+      setEnrollments((data as unknown as Enrollment[]) || []);
       setLoading(false);
     };
     load();
@@ -82,7 +85,7 @@ const ContractsList = ({ refreshKey }: Props) => {
               <Detail label="Enviado em" value={e.contract_sent_at ? formatDate(e.contract_sent_at) : ""} />
               <Detail label="Assinado em" value={e.contract_signed_at ? formatDate(e.contract_signed_at) : ""} />
               <div>
-                <p className="text-muted-foreground text-xs">Documento</p>
+                <p className="text-muted-foreground text-xs">Documentos</p>
                 {e.contract_url ? (
                   <button
                     onClick={async () => {
@@ -92,7 +95,7 @@ const ContractsList = ({ refreshKey }: Props) => {
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement("a");
                         a.href = url;
-                        a.download = `contrato-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
+                        a.download = `contrato-plataforma-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
@@ -104,16 +107,41 @@ const ContractsList = ({ refreshKey }: Props) => {
                     className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm mt-0.5"
                   >
                     <Download size={14} className="text-secondary" />
-                    Download contrato
+                    Contrato Plataforma
                   </button>
-                ) : (
+                ) : null}
+                {e.contract_url_summercamp ? (
+                  <button
+                    onClick={async () => {
+                      try {
+                        const res = await fetch(e.contract_url_summercamp!);
+                        const blob = await res.blob();
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.href = url;
+                        a.download = `contrato-summercamp-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                      } catch (err) {
+                        console.error("Download error:", err);
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm mt-0.5"
+                  >
+                    <Download size={14} className="text-secondary" />
+                    Contrato Summer Camp
+                  </button>
+                ) : null}
+                {!e.contract_url && !e.contract_url_summercamp && (
                   <p className="text-foreground font-medium text-xs mt-0.5 italic text-muted-foreground">Ainda não disponível</p>
                 )}
               </div>
             </div>
 
             {/* Accept contract button */}
-            {e.contract_url && !e.contract_signed_at && (
+            {(e.contract_url || e.contract_url_summercamp) && !e.contract_signed_at && (
               <div className="mt-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                 <p className="text-sm text-amber-800 dark:text-amber-200 mb-2">
                   O contrato está disponível e aguarda a sua aceitação para concluir a matrícula.
@@ -123,20 +151,32 @@ const ContractsList = ({ refreshKey }: Props) => {
                   onClick={async () => {
                     setAcceptingContract(e.id);
                     try {
-                      const { data: pdfResult, error: pdfError } = await supabase.functions.invoke("generate-contract-pdf", {
-                        body: { enrollmentId: e.id, signed: true },
-                      });
-                      if (pdfError || !pdfResult?.success) {
-                        toast({ title: "Erro ao aceitar contrato", variant: "destructive" });
-                        return;
+                      const contractTypes: Array<"platform" | "summercamp"> = [];
+                      if (e.contract_url) contractTypes.push("platform");
+                      if (e.contract_url_summercamp) contractTypes.push("summercamp");
+
+                      for (const contractType of contractTypes) {
+                        const { data: pdfResult, error: pdfError } = await supabase.functions.invoke("generate-contract-pdf", {
+                          body: { enrollmentId: e.id, signed: true, contractType },
+                        });
+                        if (pdfError || !pdfResult?.success) {
+                          toast({ title: "Erro ao aceitar contrato", variant: "destructive" });
+                          return;
+                        }
+                        if (contractType === "summercamp") {
+                          e.contract_url_summercamp = pdfResult.contractUrl;
+                        } else {
+                          e.contract_url = pdfResult.contractUrl;
+                        }
                       }
+
                       setEnrollments(prev => prev.map(en =>
                         en.id === e.id
-                          ? { ...en, contract_signed_at: new Date().toISOString(), contract_url: pdfResult.contractUrl, status: "Contrato assinado" }
+                          ? { ...en, contract_signed_at: new Date().toISOString(), status: "Contrato assinado" }
                           : en
                       ));
                       await supabase.from("enrollments").update({ status: "Contrato assinado" } as any).eq("id", e.id);
-                      toast({ title: "Contrato aceite com sucesso!" });
+                      toast({ title: "Contrato(s) aceite(s) com sucesso!" });
                     } catch (err) {
                       console.error("Accept contract error:", err);
                       toast({ title: "Erro ao aceitar contrato", variant: "destructive" });

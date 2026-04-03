@@ -6,7 +6,9 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: string, platformUrl: string) => `
+const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: string, platformUrl: string, contractType: "platform" | "summercamp" = "platform") => {
+  const programLabel = contractType === "summercamp" ? "Summer Camp" : "Dual Diploma";
+  return `
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -25,7 +27,7 @@ const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: 
             <td style="background:linear-gradient(135deg,#062a45 0%,#0d3d5e 100%);padding:32px 40px;border-radius:16px 16px 0 0;text-align:center;">
               <img src="https://qqgfqjpgxoourayjlrwc.supabase.co/storage/v1/object/public/email-assets/chronos-logo-header.png" alt="Chronos Education" style="height:40px;margin-bottom:12px;" />
               <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;">
-                Dual Diploma Program
+                ${programLabel} Program
               </p>
             </td>
           </tr>
@@ -47,7 +49,7 @@ const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: 
               </div>
 
               <h2 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#062a45;text-align:center;font-family:Georgia,'Times New Roman',serif;">
-                Contrato disponível para assinatura
+                Contrato disponível - ${programLabel}
               </h2>
               <p style="margin:0 0 24px;font-size:15px;color:#5a6a78;text-align:center;line-height:1.6;">
                 Olá <strong style="color:#062a45;">${guardianName}</strong>,
@@ -58,7 +60,7 @@ const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: 
                 <tr>
                   <td style="padding:24px;">
                      <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
-                       O contrato de prestação de serviços educacionais do programa <strong>Dual Diploma</strong> da <strong>Chronos Education</strong> para o(a) aluno(a) <strong>${studentName}</strong> já se encontra disponível.
+                       O contrato de prestação de serviços educacionais do programa <strong>${programLabel}</strong> da <strong>Chronos Education</strong> para o(a) aluno(a) <strong>${studentName}</strong> já se encontra disponível.
                      </p>
                      <p style="margin:0 0 16px;font-size:15px;color:#333;line-height:1.7;">
                        Para concluir a matrícula, é necessário que aceite o contrato na plataforma Chronos Education.
@@ -110,7 +112,7 @@ const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: 
   </table>
 </body>
 </html>
-`;
+`};
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -131,7 +133,8 @@ serve(async (req) => {
     const guardianName = (body.guardianName || "Responsável").trim();
     const studentName = (body.studentName || "").trim();
     const contractUrl = body.contractUrl || "";
-
+    const contractType: "platform" | "summercamp" = body.contractType === "summercamp" ? "summercamp" : "platform";
+    const programLabel = contractType === "summercamp" ? "Summer Camp" : "Dual Diploma";
     if (!email || !studentName) {
       return new Response(
         JSON.stringify({ error: "Email e nome do aluno são obrigatórios" }),
@@ -144,8 +147,8 @@ serve(async (req) => {
     const emailPayload: Record<string, unknown> = {
       from: "Chronos Education <contato@info.chronoseducation.com>",
       to: [email],
-      subject: `Contrato disponível - ${studentName}`,
-      html: buildEmailHtml(guardianName, studentName, contractUrl || "", platformUrl),
+      subject: `Contrato ${programLabel} disponível - ${studentName}`,
+      html: buildEmailHtml(guardianName, studentName, contractUrl || "", platformUrl, contractType),
       reply_to: "chronoseducationbr@gmail.com",
     };
 
