@@ -367,10 +367,11 @@ serve(async (req) => {
     const isSigned = signed === true;
     const signedDateStr = isSigned ? dateLabel : undefined;
 
-    const pdfBytes = await buildContractPdf(guardianData, studentData, financial, dateLabel, isSigned, signedDateStr);
+    const pdfBytes = await buildContractPdf(guardianData, studentData, financial, dateLabel, isSigned, signedDateStr, resolvedContractType);
 
     // Upload to Supabase Storage
-    const fileName = `contrato-${enrollmentId}.pdf`;
+    const typeSuffix = resolvedContractType === "summercamp" ? "-summercamp" : "";
+    const fileName = `contrato${typeSuffix}-${enrollmentId}.pdf`;
     const filePath = `signed/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
