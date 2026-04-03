@@ -146,14 +146,14 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Nacionalidade</label>
+              <label className="text-sm font-medium text-foreground block mb-1.5">Nacionalidade <span className="text-[#F9B91D]">*</span></label>
               <input
                 type="text"
                 maxLength={60}
                 value={nationality}
                 onChange={(e) => setNationality(e.target.value)}
                 onBlur={() => saveProfile({ nationality: nationality.trim() })}
-                className={inputClass()}
+                className={inputClass("guardianNationality")}
                 placeholder="Ex: Brasileira"
               />
             </div>

@@ -275,6 +275,10 @@ const DashboardPage = () => {
     if (!g.fullName.trim()) { missingFields.push("Nome do responsável"); errors.push("guardianFullName"); }
     if (!g.email.trim()) { missingFields.push("Email do responsável"); errors.push("guardianEmail"); }
     if (!g.phone.trim()) { missingFields.push("Celular do responsável"); errors.push("guardianPhone"); }
+    if (!g.nationality.trim()) { missingFields.push("Nacionalidade"); errors.push("guardianNationality"); }
+    if (!g.civilStatus.trim()) { missingFields.push("Estado Civil"); errors.push("guardianCivilStatus"); }
+    if (!g.cpf.trim()) { missingFields.push("CPF"); errors.push("guardianCpf"); }
+    if (!g.rgNumber.trim()) { missingFields.push("Nº RG"); errors.push("guardianRgNumber"); }
 
     // Student fields
     if (!s.studentName.trim()) { missingFields.push("Nome do aluno"); errors.push("studentName"); }
