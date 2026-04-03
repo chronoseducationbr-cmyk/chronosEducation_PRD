@@ -117,14 +117,16 @@ function parseContractSections(text: string) {
 
   for (const raw of lines) {
     const line = raw.trimEnd();
-    const headerMatch = line.match(/^(\d+)\.\s+(.+)$/);
+    // Match formats: "1. TITLE", "CLÁUSULA 1 – TITLE", "CLAUSULA 1 - TITLE"
+    const headerMatch = line.match(/^(?:CL[AÁ]USULA\s+)?(\d+)[\.\s]*[\-–—]\s*(.+)$/i) || line.match(/^(\d+)\.\s+(.+)$/);
     if (headerMatch) {
       if (current) sections.push(current);
       current = { title: `${headerMatch[1]}. ${headerMatch[2]}`, paragraphs: [], listItems: [] };
       continue;
     }
     if (!current) continue;
-    const listMatch = line.match(/^[a-z]\)\s+(.+)$/);
+    // Match list items: "a) ...", "I. ...", "1º ...", "- ..."
+    const listMatch = line.match(/^(?:[a-z]\)|[IVX]+\.|[0-9]+[ºª]|\-)\s+(.+)$/);
     if (listMatch) {
       current.listItems.push(listMatch[1]);
     } else if (line.trim()) {
@@ -136,7 +138,7 @@ function parseContractSections(text: string) {
 }
 
 function isPaymentSection(title: string): boolean {
-  return /^\d+\.\s*(VALORES|PAGAMENTO|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO))/i.test(title);
+  return /^\d+\.\s*(VALORES|PAGAMENTO|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO)|D[OA]S?\s*(VALORES|PAGAMENTO|CONDI[CÇ][OÕ]ES))/i.test(title);
 }
 
 async function buildContractPdf(
@@ -235,8 +237,8 @@ async function buildContractPdf(
   const sections = parseContractSections(contractText);
 
   for (const section of sections) {
-    // Skip section 1 (PARTES) - already rendered dynamically above
-    if (/^1\.\s/i.test(section.title)) continue;
+    // The preamble (PARTES) is already rendered dynamically above from enrollment data
+    // No sections need to be skipped - all parsed CLÁUSULA sections should be rendered
 
     drawSectionTitle(ctx, section.title);
 
