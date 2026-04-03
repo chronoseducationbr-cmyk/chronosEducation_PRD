@@ -12,7 +12,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Settings } from "lucide-react";
+import { Settings, AlertTriangle } from "lucide-react";
 
 interface AppDefaults {
   default_inscription_fee_cents: number;
@@ -368,6 +368,12 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                 </div>
               </div>
             </div>
+            {parseMoneyToNumber(tuitionValue) > 0 && !tuitionStartDate && (
+              <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-xs">
+                <AlertTriangle size={14} className="shrink-0" />
+                <span>A <strong>Plataforma Online</strong> tem valor definido mas não tem data de início. As parcelas não serão geradas sem esta data.</span>
+              </div>
+            )}
 
             <div className="border-t border-border pt-3">
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Summer Camp</Label>
@@ -407,6 +413,12 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                 </div>
               </div>
             </div>
+            {parseMoneyToNumber(summercampValue) > 0 && !summercampStartDate && (
+              <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-xs">
+                <AlertTriangle size={14} className="shrink-0" />
+                <span>O <strong>Summer Camp</strong> tem valor definido mas não tem data de início. As parcelas não serão geradas sem esta data.</span>
+              </div>
+            )}
           </div>
 
           <DialogFooter className="flex-col sm:flex-row gap-2 pt-4 border-t border-border shrink-0">
