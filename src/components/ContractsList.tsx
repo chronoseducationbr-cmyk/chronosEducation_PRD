@@ -10,9 +10,12 @@ interface Enrollment {
   student_name: string;
   student_photo_url: string | null;
   contract_url: string | null;
+  contract_url_summercamp: string | null;
   contract_sent_at: string | null;
   contract_signed_at: string | null;
   status: string;
+  tuition_installment_cents: number;
+  summercamp_installment_cents: number;
 }
 
 interface Props {
