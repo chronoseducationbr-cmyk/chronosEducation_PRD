@@ -427,52 +427,6 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                 )}
               </>
             )}
-            <div className="border-t border-border pt-3">
-              <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Summer Camp</Label>
-              <div className="grid grid-cols-3 gap-3 mt-1">
-                <div>
-                  <Label className="text-xs text-muted-foreground">Nº parcelas <span className="text-destructive">*</span></Label>
-                  <Input
-                    type="number"
-                    min="1"
-                    value={summercampInstallments}
-                    onChange={(e) => setSummercampInstallments(e.target.value)}
-                    className="h-9"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs text-muted-foreground">Valor ($) <span className="text-destructive">*</span></Label>
-                  <Input
-                    type="text"
-                    inputMode="decimal"
-                    placeholder="0,00"
-                    value={summercampValue}
-                    onChange={(e) => handleMoneyChange(e, setSummercampValue)}
-                    onBlur={() => handleMoneyBlur(summercampValue, setSummercampValue)}
-                    className="h-9"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs text-muted-foreground">Data início <span className="text-destructive">*</span></Label>
-                  <Input
-                    type="date"
-                    value={summercampStartDate}
-                    onChange={(e) => setSummercampStartDate(e.target.value)}
-                    className="h-9"
-                  />
-                </div>
-              </div>
-            </div>
-            {parseMoneyToNumber(summercampValue) > 0 && !summercampStartDate && (
-              <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-xs">
-                <AlertTriangle size={14} className="shrink-0" />
-                <span>O <strong>Summer Camp</strong> tem valor definido mas não tem data de início. As parcelas não serão geradas sem esta data.</span>
-              </div>
-            )}
-          </div>
-
           {(() => {
             const { fee, tuition, summer } = getFormValues();
             const missing: string[] = [];
