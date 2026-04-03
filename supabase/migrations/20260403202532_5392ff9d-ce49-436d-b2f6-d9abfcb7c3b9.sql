@@ -1,0 +1,1 @@
+ALTER TABLE public.app_settings ADD COLUMN contract_text_summercamp text NOT NULL DEFAULT ''::text;

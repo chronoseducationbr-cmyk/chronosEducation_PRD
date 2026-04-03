@@ -19,11 +19,13 @@ interface QuizTest {
 interface AppSettings {
   contract_enabled: boolean;
   contract_text: string;
+  contract_text_summercamp: string;
 }
 
 const defaultSettings: AppSettings = {
   contract_enabled: true,
   contract_text: "",
+  contract_text_summercamp: "",
 };
 
 const AdminSettingsPage = () => {
@@ -38,7 +40,7 @@ const AdminSettingsPage = () => {
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
   const [loadingSettings, setLoadingSettings] = useState(true);
   const [savingSettings, setSavingSettings] = useState(false);
-  const [editingContract, setEditingContract] = useState(false);
+  const [editingContract, setEditingContract] = useState<"plataforma" | "summercamp" | null>(null);
   const [contractDraft, setContractDraft] = useState("");
 
   useEffect(() => {
@@ -73,6 +75,7 @@ const AdminSettingsPage = () => {
       setSettings({
         contract_enabled: s.contract_enabled,
         contract_text: s.contract_text || "",
+        contract_text_summercamp: s.contract_text_summercamp || "",
       });
     }
     setLoadingSettings(false);
@@ -153,9 +156,10 @@ const AdminSettingsPage = () => {
     updateSettings({ contract_enabled: !settings.contract_enabled });
   };
 
-  const handleSaveContractText = () => {
-    updateSettings({ contract_text: contractDraft });
-    setEditingContract(false);
+  const handleSaveContractText = (type: "plataforma" | "summercamp") => {
+    const field = type === "plataforma" ? "contract_text" : "contract_text_summercamp";
+    updateSettings({ [field]: contractDraft } as Partial<AppSettings>);
+    setEditingContract(null);
   };
 
   const levelDescriptions: Record<string, string> = {
@@ -166,6 +170,64 @@ const AdminSettingsPage = () => {
     "B2": "Os alunos que atingem o nível B2 conseguem compreender as principais ideias de textos complexos. Conseguem interagir com alguma fluência e comunicar facilmente.",
     "C1": "Os alunos que atingem o nível C1 conseguem compreender uma vasta gama de textos longos e complexos.",
     "C2": "Os alunos que atingem o nível C2 conseguem facilmente compreender quase tudo o que ouvem ou escrevem. Conseguem expressar-se de forma fluente e espontânea com precisão em situações complexas.",
+  };
+
+  const renderContractEditor = (type: "plataforma" | "summercamp", title: string, text: string) => {
+    const isEditing = editingContract === type;
+    return (
+      <div className="bg-card border border-border rounded-xl p-4">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{title}</p>
+          {!isEditing && (
+            <button
+              onClick={() => { setEditingContract(type); setContractDraft(text); }}
+              className="p-1.5 rounded-md hover:bg-muted text-muted-foreground"
+            >
+              <Pencil size={14} />
+            </button>
+          )}
+        </div>
+        {isEditing ? (
+          <div className="space-y-3">
+            <textarea
+              value={contractDraft}
+              onChange={(e) => setContractDraft(e.target.value)}
+              className="w-full text-sm rounded-lg border border-border bg-background p-3 text-foreground resize-vertical focus:outline-none focus:ring-1 focus:ring-secondary min-h-[200px]"
+              rows={10}
+              placeholder="Insira o texto do contrato aqui..."
+            />
+            <p className="text-xs text-muted-foreground">
+              Dica: Utilize linhas em branco para separar parágrafos.
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handleSaveContractText(type)}
+                disabled={savingSettings}
+                className="inline-flex items-center gap-1.5 bg-secondary text-secondary-foreground font-semibold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity text-sm disabled:opacity-50"
+              >
+                <Check size={14} />
+                Guardar
+              </button>
+              <button
+                onClick={() => setEditingContract(null)}
+                className="inline-flex items-center gap-1.5 text-muted-foreground font-medium py-2 px-4 rounded-lg hover:bg-muted transition-colors text-sm"
+              >
+                <X size={14} />
+                Cancelar
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-muted/30 border border-border rounded-lg p-3 max-h-[300px] overflow-y-auto">
+            {text ? (
+              <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">{text}</p>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">Nenhum texto de contrato definido.</p>
+            )}
+          </div>
+        )}
+      </div>
+    );
   };
 
   const tabTriggerClass = "bg-transparent px-4 py-3 rounded-none shadow-none text-lg text-muted-foreground data-[state=active]:text-[#f9b41f] data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#f9b41f] data-[state=active]:bg-transparent font-semibold";
@@ -342,7 +404,7 @@ const AdminSettingsPage = () => {
             ) : !settings.contract_enabled ? (
               <p className="text-sm text-muted-foreground italic">Contrato desativado. Os alunos não precisarão assinar contrato na matrícula.</p>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {/* Section 1 info */}
                 <div className="bg-muted/40 border border-border rounded-xl p-4 flex items-start gap-3">
                   <Info size={16} className="text-secondary shrink-0 mt-0.5" />
@@ -365,58 +427,11 @@ const AdminSettingsPage = () => {
                   </div>
                 </div>
 
-                <div className="bg-card border border-border rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Texto do Contrato</p>
-                    {!editingContract && (
-                      <button
-                        onClick={() => { setEditingContract(true); setContractDraft(settings.contract_text); }}
-                        className="p-1.5 rounded-md hover:bg-muted text-muted-foreground"
-                      >
-                        <Pencil size={14} />
-                      </button>
-                    )}
-                  </div>
-                  {editingContract ? (
-                    <div className="space-y-3">
-                      <textarea
-                        value={contractDraft}
-                        onChange={(e) => setContractDraft(e.target.value)}
-                        className="w-full text-sm rounded-lg border border-border bg-background p-3 text-foreground resize-vertical focus:outline-none focus:ring-1 focus:ring-secondary min-h-[200px]"
-                        rows={10}
-                        placeholder="Insira o texto do contrato aqui. Pode usar parágrafos separados por linhas em branco..."
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Dica: Utilize linhas em branco para separar parágrafos. Os dados do responsável e do aluno são inseridos automaticamente.
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={handleSaveContractText}
-                          disabled={savingSettings}
-                          className="inline-flex items-center gap-1.5 bg-secondary text-secondary-foreground font-semibold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity text-sm disabled:opacity-50"
-                        >
-                          <Check size={14} />
-                          Guardar
-                        </button>
-                        <button
-                          onClick={() => setEditingContract(false)}
-                          className="inline-flex items-center gap-1.5 text-muted-foreground font-medium py-2 px-4 rounded-lg hover:bg-muted transition-colors text-sm"
-                        >
-                          <X size={14} />
-                          Cancelar
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-muted/30 border border-border rounded-lg p-3 max-h-[300px] overflow-y-auto">
-                      {settings.contract_text ? (
-                        <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">{settings.contract_text}</p>
-                      ) : (
-                        <p className="text-sm text-muted-foreground italic">Nenhum texto de contrato personalizado definido.</p>
-                      )}
-                    </div>
-                  )}
-                </div>
+                {/* Plataforma Online Contract */}
+                {renderContractEditor("plataforma", "Contrato — Plataforma Online", settings.contract_text)}
+
+                {/* Summer Camp Contract */}
+                {renderContractEditor("summercamp", "Contrato — Summer Camp", settings.contract_text_summercamp)}
               </div>
             )}
           </div>
