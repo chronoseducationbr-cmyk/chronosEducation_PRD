@@ -117,20 +117,27 @@ function parseContractSections(text: string) {
 
   for (const raw of lines) {
     const line = raw.trimEnd();
-    // Match formats: "1. TITLE", "CLÁUSULA 1 – TITLE", "CLAUSULA 1 - TITLE"
-    const headerMatch = line.match(/^(?:CL[AÁ]USULA\s+)?(\d+)[\.\s]*[\-–—]\s*(.+)$/i) || line.match(/^(\d+)\.\s+(.+)$/);
+    // Only match "CLÁUSULA X – TITLE" or "CLÁUSULA X TITLE" as section headers
+    // Do NOT match bare "1. text" as that catches numbered list items
+    const headerMatch = line.match(/^CL[AÁ]USULA\s+(\d+)\s*[\-–—]?\s*(.+)$/i);
     if (headerMatch) {
       if (current) sections.push(current);
       current = { title: `${headerMatch[1]}. ${headerMatch[2]}`, paragraphs: [], listItems: [] };
       continue;
     }
     if (!current) continue;
-    // Match list items: "a) ...", "I. ...", "1º ...", "- ..."
-    const listMatch = line.match(/^(?:[a-z]\)|[IVX]+\.|[0-9]+[ºª]|\-)\s+(.+)$/);
-    if (listMatch) {
-      current.listItems.push(listMatch[1]);
-    } else if (line.trim()) {
-      current.paragraphs.push(line.trim());
+    // Match list items: "• ...", "a) ...", "I. ...", "1º ...", "- ...", "1. ..." (numbered within a clause)
+    const bulletLine = line.replace(/^[\u2022\u2023\u25E6\u2043]\s*/, "");
+    if (bulletLine !== line) {
+      // Was a bullet item
+      if (bulletLine.trim()) current.listItems.push(bulletLine.trim());
+    } else {
+      const listMatch = line.match(/^(?:[a-z]\)|[IVX]+[\.\)]\s|[0-9]+[ºª\.]\s|\-\s)\s*(.+)$/);
+      if (listMatch) {
+        current.listItems.push(listMatch[1]);
+      } else if (line.trim()) {
+        current.paragraphs.push(line.trim());
+      }
     }
   }
   if (current) sections.push(current);
