@@ -6,7 +6,9 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: string, platformUrl: string) => `
+const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: string, platformUrl: string, contractType: "platform" | "summercamp" = "platform") => {
+  const programLabel = contractType === "summercamp" ? "Summer Camp" : "Dual Diploma";
+  return `
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
