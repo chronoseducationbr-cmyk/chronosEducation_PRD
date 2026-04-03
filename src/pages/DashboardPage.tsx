@@ -1,7 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { LogOut, ArrowLeft, AlertTriangle, Monitor, Sun } from "lucide-react";
+import { LogOut, ArrowLeft, AlertTriangle } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import GuardianDataSection, { type GuardianData } from "@/components/GuardianDataSection";
 import StudentDataSection, { type StudentData } from "@/components/StudentDataSection";
 import ReferralSection from "@/components/ReferralSection";
