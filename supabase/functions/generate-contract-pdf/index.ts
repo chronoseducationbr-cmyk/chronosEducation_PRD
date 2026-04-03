@@ -261,11 +261,14 @@ async function buildContractPdf(
 
       const replacePlaceholders = (text: string): string => {
         let result = text;
-        // Replace placeholders with formatted numbers - "USD $" prefix is kept from the original text
+        // Platform placeholders
         result = result.replace(/\[Total_1\]/gi, fmtNumber(totalCents + financial.inscriptionFeeCents));
         result = result.replace(/\[Valor[\s_]*Matricula\]/gi, fmtNumber(financial.inscriptionFeeCents));
         result = result.replace(/\[TOTAL_2\]/gi, fmtNumber(totalCents));
-        result = result.replace(/\[Numero\s*Parcelas?\]/gi, String(installmentCount));
+        // Summer Camp placeholders
+        result = result.replace(/\[TOTAL_3\]/gi, fmtNumber(totalCents));
+        // Shared placeholders
+        result = result.replace(/\[Numero[\s_]*Parcelas?\]/gi, String(installmentCount));
         result = result.replace(/\[Valor[\s_]*Parcela\]/gi, fmtNumber(installmentCents));
         result = result.replace(/\[xxx\]/gi, "A definir");
         return result;
