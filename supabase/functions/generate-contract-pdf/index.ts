@@ -237,8 +237,8 @@ async function buildContractPdf(
   const sections = parseContractSections(contractText);
 
   for (const section of sections) {
-    // Skip section 1 (PARTES) - already rendered dynamically above
-    if (/^1\.\s/i.test(section.title)) continue;
+    // The preamble (PARTES) is already rendered dynamically above from enrollment data
+    // No sections need to be skipped - all parsed CLÁUSULA sections should be rendered
 
     drawSectionTitle(ctx, section.title);
 
