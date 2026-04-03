@@ -98,6 +98,8 @@ const AdminEnrollmentsPage = () => {
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [pendingStatusChange, setPendingStatusChange] = useState<{ id: string; studentName: string; from: string; to: string } | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<{ id: string; studentName: string; contractUrl: string | null } | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = async () => {
     setLoading(true);
