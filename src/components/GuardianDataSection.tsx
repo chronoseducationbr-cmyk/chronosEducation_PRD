@@ -10,6 +10,7 @@ export interface GuardianData {
   cpf: string;
   nationality: string;
   civilStatus: string;
+  profession: string;
   rgNumber: string;
   guardianAddress: string;
 }
@@ -32,6 +33,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
   const [cpf, setCpf] = useState(initialData?.cpf || "");
   const [nationality, setNationality] = useState(initialData?.nationality || "");
   const [civilStatus, setCivilStatus] = useState(initialData?.civilStatus || "");
+  const [profession, setProfession] = useState(initialData?.profession || "");
   const [rgNumber, setRgNumber] = useState(initialData?.rgNumber || "");
   const [guardianAddress, setGuardianAddress] = useState(initialData?.guardianAddress || "");
 
@@ -42,7 +44,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
     }
     const fetchData = async () => {
       const [profileRes, enrollRes] = await Promise.all([
-        supabase.from("profiles").select("full_name, email, phone, nationality, civil_status, rg_number, guardian_address").eq("user_id", user!.id).maybeSingle(),
+        supabase.from("profiles").select("full_name, email, phone, nationality, civil_status, profession, rg_number, guardian_address").eq("user_id", user!.id).maybeSingle(),
         supabase.from("enrollments").select("id").eq("user_id", user!.id).limit(1),
       ]);
 
@@ -53,6 +55,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
         setPhone(p.phone || "");
         setNationality(p.nationality || "");
         setCivilStatus(p.civil_status || "");
+        setProfession(p.profession || "");
         setRgNumber(p.rg_number || "");
         setGuardianAddress(p.guardian_address || "");
       } else {
@@ -72,8 +75,8 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
   };
 
   useEffect(() => {
-    onChange?.({ fullName, email, phone, cpf, nationality, civilStatus, rgNumber, guardianAddress });
-  }, [fullName, email, phone, cpf, nationality, civilStatus, rgNumber, guardianAddress]);
+    onChange?.({ fullName, email, phone, cpf, nationality, civilStatus, profession, rgNumber, guardianAddress });
+  }, [fullName, email, phone, cpf, nationality, civilStatus, profession, rgNumber, guardianAddress]);
 
   const formatCpf = (value: string) => {
     const digits = value.replace(/\D/g, "").slice(0, 11);
@@ -173,6 +176,18 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                 <option value="Viúvo(a)">Viúvo(a)</option>
                 <option value="Divorciado(a)">Divorciado(a)</option>
               </select>
+            </div>
+            <div className="sm:col-span-2">
+              <label className="text-sm font-medium text-foreground block mb-1.5">Profissão <span className="text-[#F9B91D]">*</span></label>
+              <input
+                type="text"
+                maxLength={60}
+                value={profession}
+                onChange={(e) => setProfession(e.target.value)}
+                onBlur={() => saveProfile({ profession: profession.trim() })}
+                className={inputClass("guardianProfession")}
+                placeholder="Ex: Engenheiro(a)"
+              />
             </div>
             <div className="sm:col-span-2">
               <label className="text-sm font-medium text-foreground block mb-1.5">Email <span className="text-[#F9B91D]">*</span></label>

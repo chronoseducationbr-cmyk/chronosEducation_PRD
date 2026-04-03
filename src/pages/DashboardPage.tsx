@@ -44,7 +44,7 @@ const DashboardPage = () => {
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [selectedServices, setSelectedServices] = useState<{ plataforma: boolean; summercamp: boolean }>({ plataforma: false, summercamp: false });
 
-  const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "", nationality: "", civilStatus: "", rgNumber: "", guardianAddress: "" });
+  const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "", nationality: "", civilStatus: "", profession: "", rgNumber: "", guardianAddress: "" });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
   const referralRef = useRef("");
 
@@ -277,6 +277,7 @@ const DashboardPage = () => {
     if (!g.phone.trim()) { missingFields.push("Celular do responsável"); errors.push("guardianPhone"); }
     if (!g.nationality.trim()) { missingFields.push("Nacionalidade"); errors.push("guardianNationality"); }
     if (!g.civilStatus.trim()) { missingFields.push("Estado Civil"); errors.push("guardianCivilStatus"); }
+    if (!g.profession.trim()) { missingFields.push("Profissão"); errors.push("guardianProfession"); }
     if (!g.cpf.trim()) { missingFields.push("CPF"); errors.push("guardianCpf"); }
     if (!g.rgNumber.trim()) { missingFields.push("Nº RG"); errors.push("guardianRgNumber"); }
     if (!g.guardianAddress.trim()) { missingFields.push("Endereço do responsável"); errors.push("guardianAddress"); }
