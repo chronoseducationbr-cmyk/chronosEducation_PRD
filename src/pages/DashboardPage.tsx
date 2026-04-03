@@ -180,8 +180,8 @@ const DashboardPage = () => {
         guardian_email: g.email?.trim() || user?.email || "",
         status: "Matrícula confirmada",
         inscription_fee_cents: 0,
-        tuition_installments: 16,
-        summercamp_installments: 6,
+        tuition_installments: selectedServices.plataforma ? 16 : 0,
+        summercamp_installments: selectedServices.summercamp ? 6 : 0,
         tuition_installment_cents: 0,
         summercamp_installment_cents: 0,
       };
