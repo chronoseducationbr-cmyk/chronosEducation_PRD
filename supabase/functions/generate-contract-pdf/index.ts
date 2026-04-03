@@ -38,20 +38,27 @@ function ensureSpace(ctx: DrawCtx, needed: number) {
 
 function drawTitle(ctx: DrawCtx, text: string, size: number) {
   ensureSpace(ctx, 30);
-  const width = ctx.fontBold.widthOfTextAtSize(text, size);
-  ctx.page.drawText(text, { x: (595.28 - width) / 2, y: ctx.y, size, font: ctx.fontBold, color: PRIMARY });
+  const safe = sanitize(text);
+  const width = ctx.fontBold.widthOfTextAtSize(safe, size);
+  ctx.page.drawText(safe, { x: (595.28 - width) / 2, y: ctx.y, size, font: ctx.fontBold, color: PRIMARY });
   ctx.y -= size + 6;
 }
 
 function drawSectionTitle(ctx: DrawCtx, text: string) {
   ensureSpace(ctx, 30);
   ctx.y -= 10;
-  ctx.page.drawText(text, { x: 50, y: ctx.y, size: 11, font: ctx.fontBold, color: BLACK });
+  const safe = sanitize(text);
+  ctx.page.drawText(safe, { x: 50, y: ctx.y, size: 11, font: ctx.fontBold, color: BLACK });
   ctx.y -= 16;
 }
 
+// Sanitize text to remove characters unsupported by WinAnsi encoding (e.g. tabs)
+function sanitize(text: string): string {
+  return text.replace(/[\t\r]/g, " ").replace(/[^\x20-\x7E\xA0-\xFF\n]/g, " ");
+}
+
 function wrapText(text: string, font: DrawCtx["font"], size: number, maxWidth: number): string[] {
-  const words = text.split(" ");
+  const words = sanitize(text).split(" ").filter(w => w.length > 0);
   const lines: string[] = [];
   let current = "";
   for (const word of words) {
@@ -78,9 +85,11 @@ function drawParagraph(ctx: DrawCtx, text: string, indent = 60) {
 
 function drawField(ctx: DrawCtx, label: string, value: string, x: number) {
   ensureSpace(ctx, 16);
-  const labelWidth = ctx.font.widthOfTextAtSize(label + " ", 10);
-  ctx.page.drawText(label, { x, y: ctx.y, size: 10, font: ctx.font, color: GRAY });
-  ctx.page.drawText(value || "\u2014", { x: x + labelWidth, y: ctx.y, size: 10, font: ctx.fontBold, color: BLACK });
+  const safeLabel = sanitize(label);
+  const safeValue = sanitize(value || "\u2014");
+  const labelWidth = ctx.font.widthOfTextAtSize(safeLabel + " ", 10);
+  ctx.page.drawText(safeLabel, { x, y: ctx.y, size: 10, font: ctx.font, color: GRAY });
+  ctx.page.drawText(safeValue, { x: x + labelWidth, y: ctx.y, size: 10, font: ctx.fontBold, color: BLACK });
   ctx.y -= 15;
 }
 
