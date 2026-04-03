@@ -282,6 +282,13 @@ const AdminPaymentsPage = () => {
     return `${String(dt.getDate()).padStart(2, "0")}/${String(dt.getMonth() + 1).padStart(2, "0")}/${dt.getFullYear()}`;
   };
 
+  const formatMoney = (amountCents: number) => {
+    return `$${(amountCents / 100).toLocaleString("pt-PT", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  };
+
   const filtered = enrollments.filter(
     (e) =>
       e.student_name.toLowerCase().includes(search.toLowerCase()) ||
@@ -455,7 +462,7 @@ const AdminPaymentsPage = () => {
                                         className="text-foreground font-medium hover:text-secondary transition-colors cursor-pointer"
                                         title="Clique para editar"
                                       >
-                                        {inst.amount_cents > 0 ? `$${(inst.amount_cents / 100).toFixed(2).replace('.', ',')}` : "—"}
+                                        {inst.amount_cents > 0 ? formatMoney(inst.amount_cents) : "—"}
                                       </button>
                                     )}
                                   </td>
@@ -515,8 +522,8 @@ const AdminPaymentsPage = () => {
                                       const disc = inst.discount_percent || 0;
                                       const final_cents = inst.status === "paid" ? inst.amount_cents : Math.round(inst.amount_cents * (1 - disc / 100));
                                       return disc > 0 && inst.status !== "paid"
-                                        ? <span className="text-green-700">${(final_cents / 100).toFixed(2).replace('.', ',')}</span>
-                                        : `$${(final_cents / 100).toFixed(2).replace('.', ',')}`;
+                                        ? <span className="text-green-700">{formatMoney(final_cents)}</span>
+                                        : formatMoney(final_cents);
                                     })()}
                                   </td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.due_date)}</td>
