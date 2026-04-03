@@ -381,7 +381,7 @@ const AdminPaymentsPage = () => {
                             setEnrollments((prev) => prev.map((en) => en.id === e.id ? { ...en, ...updates } : en));
                             loadInstallments(e.id);
                           }}
-                          disabled={!!e.has_installments}
+                          disabled={false}
                         />
                       </div>
                       <Button
