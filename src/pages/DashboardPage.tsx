@@ -466,7 +466,7 @@ const DashboardPage = () => {
 
                   <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} initialData={guardianRef.current} />
                   <div className="mt-6">
-                    <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
+                    <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} guardianAddress={guardianRef.current.guardianAddress} />
                   </div>
 
                   {/* Serviços contratados */}

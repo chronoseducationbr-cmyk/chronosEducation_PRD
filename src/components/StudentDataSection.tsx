@@ -18,9 +18,10 @@ interface Props {
   onChange?: (data: StudentData) => void;
   validationErrors?: string[];
   initialData?: StudentData;
+  guardianAddress?: string;
 }
 
-const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Props) => {
+const StudentDataSection = ({ onChange, validationErrors = [], initialData, guardianAddress = "" }: Props) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +37,14 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
   const [uploading, setUploading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [birthDateError, setBirthDateError] = useState("");
+  const [addressSameAsGuardian, setAddressSameAsGuardian] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (addressSameAsGuardian && guardianAddress) {
+      setStudentAddress(guardianAddress);
+    }
+  }, [addressSameAsGuardian, guardianAddress]);
 
   const validateEmail = (email: string) => {
     if (!email.trim()) {
@@ -295,18 +303,49 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
           </div>
           <div className="sm:col-span-2">
             <label className="text-sm font-medium text-foreground block mb-1.5">Endereço <span className="text-[#F9B91D]">*</span></label>
-            <div className="relative">
-              <MapPin size={18} className="absolute left-3 top-3 text-muted-foreground" />
-              <input
-                type="text"
-                required
-                maxLength={300}
-                value={studentAddress}
-                onChange={(e) => setStudentAddress(e.target.value)}
-                className={`${inputClasses("studentAddress")} pl-10`}
-                placeholder="Endereço completo do aluno"
-              />
+            <div className="flex items-center gap-3 mb-2">
+              <label className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
+                <input
+                  type="radio"
+                  name="addressOption"
+                  checked={addressSameAsGuardian}
+                  onChange={() => setAddressSameAsGuardian(true)}
+                  className="accent-secondary"
+                />
+                Igual ao endereço do pai/mãe/responsável
+              </label>
+              <label className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
+                <input
+                  type="radio"
+                  name="addressOption"
+                  checked={!addressSameAsGuardian}
+                  onChange={() => {
+                    setAddressSameAsGuardian(false);
+                    setStudentAddress("");
+                  }}
+                  className="accent-secondary"
+                />
+                Outro endereço
+              </label>
             </div>
+            {addressSameAsGuardian ? (
+              <div className="px-4 py-3 rounded-lg border border-border bg-muted/30 text-sm text-foreground">
+                {guardianAddress || <span className="text-muted-foreground italic">Endereço do responsável não preenchido</span>}
+              </div>
+            ) : (
+              <div className="relative">
+                <MapPin size={18} className="absolute left-3 top-3 text-muted-foreground" />
+                <input
+                  type="text"
+                  required
+                  maxLength={300}
+                  value={studentAddress}
+                  onChange={(e) => setStudentAddress(e.target.value)}
+                  className={`${inputClasses("studentAddress")} pl-10`}
+                  placeholder="Endereço completo do aluno"
+                />
+              </div>
+            )}
           </div>
           <div className="sm:col-span-2">
             <label className="text-sm font-medium text-foreground block mb-1.5">Escola atual <span className="text-[#F9B91D]">*</span></label>
