@@ -109,34 +109,33 @@ function drawBullet(ctx: DrawCtx, text: string) {
  * Parses contract text from app_settings into structured sections.
  * Same logic as ContractSignatureSection on the frontend.
  */
-function parseContractSections(text: string) {
+interface SectionItem { type: "paragraph" | "bullet"; text: string }
+interface ContractSection { title: string; items: SectionItem[] }
+
+function parseContractSections(text: string): ContractSection[] {
   if (!text?.trim()) return [];
   const lines = text.split("\n");
-  const sections: { title: string; paragraphs: string[]; listItems: string[] }[] = [];
-  let current: { title: string; paragraphs: string[]; listItems: string[] } | null = null;
+  const sections: ContractSection[] = [];
+  let current: ContractSection | null = null;
 
   for (const raw of lines) {
     const line = raw.trimEnd();
-    // Only match "CLÁUSULA X – TITLE" or "CLÁUSULA X TITLE" as section headers
-    // Do NOT match bare "1. text" as that catches numbered list items
     const headerMatch = line.match(/^CL[AÁ]USULA\s+(\d+)\s*[\-–—]?\s*(.+)$/i);
     if (headerMatch) {
       if (current) sections.push(current);
-      current = { title: `CLAUSULA ${headerMatch[1]} - ${headerMatch[2]}`, paragraphs: [], listItems: [] };
+      current = { title: `CLAUSULA ${headerMatch[1]} - ${headerMatch[2]}`, items: [] };
       continue;
     }
     if (!current) continue;
-    // Match list items: "• ...", "a) ...", "I. ...", "1º ...", "- ...", "1. ..." (numbered within a clause)
     const bulletLine = line.replace(/^[\u2022\u2023\u25E6\u2043]\s*/, "");
     if (bulletLine !== line) {
-      // Was a bullet item
-      if (bulletLine.trim()) current.listItems.push(bulletLine.trim());
+      if (bulletLine.trim()) current.items.push({ type: "bullet", text: bulletLine.trim() });
     } else {
       const listMatch = line.match(/^(?:[a-z]\)|[IVX]+[\.\)]\s|[0-9]+[ºª\.]\s|\-\s)\s*(.+)$/);
       if (listMatch) {
-        current.listItems.push(listMatch[1]);
+        current.items.push({ type: "bullet", text: listMatch[1] });
       } else if (line.trim()) {
-        current.paragraphs.push(line.trim());
+        current.items.push({ type: "paragraph", text: line.trim() });
       }
     }
   }
