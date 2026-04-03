@@ -117,7 +117,8 @@ function parseContractSections(text: string) {
 
   for (const raw of lines) {
     const line = raw.trimEnd();
-    const headerMatch = line.match(/^(\d+)\.\s+(.+)$/);
+    // Match formats: "1. TITLE", "CLÁUSULA 1 – TITLE", "CLAUSULA 1 - TITLE"
+    const headerMatch = line.match(/^(?:CL[AÁ]USULA\s+)?(\d+)[\.\s]*[\-–—]\s*(.+)$/i) || line.match(/^(\d+)\.\s+(.+)$/);
     if (headerMatch) {
       if (current) sections.push(current);
       current = { title: `${headerMatch[1]}. ${headerMatch[2]}`, paragraphs: [], listItems: [] };
