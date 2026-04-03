@@ -55,6 +55,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
         setPhone(p.phone || "");
         setNationality(p.nationality || "");
         setCivilStatus(p.civil_status || "");
+        setProfession(p.profession || "");
         setRgNumber(p.rg_number || "");
         setGuardianAddress(p.guardian_address || "");
       } else {
