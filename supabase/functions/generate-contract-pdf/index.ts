@@ -270,19 +270,15 @@ async function buildContractPdf(
         return result;
       };
 
-      for (const p of section.paragraphs) {
-        drawParagraph(ctx, replacePlaceholders(p));
-      }
-      for (const item of section.listItems) {
-        drawBullet(ctx, replacePlaceholders(item));
+      for (const item of section.items) {
+        if (item.type === "bullet") drawBullet(ctx, replacePlaceholders(item.text));
+        else drawParagraph(ctx, replacePlaceholders(item.text));
       }
     } else {
-      // Normal section - render paragraphs and list items from contract text
-      for (const p of section.paragraphs) {
-        drawParagraph(ctx, p);
-      }
-      for (const item of section.listItems) {
-        drawBullet(ctx, item);
+      // Normal section - render items in original order
+      for (const item of section.items) {
+        if (item.type === "bullet") drawBullet(ctx, item.text);
+        else drawParagraph(ctx, item.text);
       }
     }
   }
