@@ -145,7 +145,7 @@ function parseContractSections(text: string) {
 }
 
 function isPaymentSection(title: string): boolean {
-  return /^\d+\.\s*(VALORES|PAGAMENTO|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO)|D[OA]S?\s*(VALORES|PAGAMENTO|CONDI[CÇ][OÕ]ES))/i.test(title);
+  return /^\d+\.\s*(D[OA]S?\s*)?(VALORES?|PAGAMENTO|VALOR\s+E\s+FORMA|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO))/i.test(title);
 }
 
 async function buildContractPdf(
