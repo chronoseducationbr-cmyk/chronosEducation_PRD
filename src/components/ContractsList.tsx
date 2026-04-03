@@ -35,10 +35,10 @@ const ContractsList = ({ refreshKey }: Props) => {
       setLoading(true);
       const { data } = await supabase
         .from("enrollments")
-        .select("id, student_name, student_photo_url, contract_url, contract_sent_at, contract_signed_at, status")
+        .select("id, student_name, student_photo_url, contract_url, contract_url_summercamp, contract_sent_at, contract_signed_at, status, tuition_installment_cents, summercamp_installment_cents")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      setEnrollments((data as Enrollment[]) || []);
+      setEnrollments((data as unknown as Enrollment[]) || []);
       setLoading(false);
     };
     load();
