@@ -219,29 +219,30 @@ async function buildContractPdf(
   drawField(ctx, "Taxa de Matricula:", fmtCurrency(financial.inscriptionFeeCents), 60);
   ctx.y -= 4;
 
-  // Tuition (Plataforma Online)
-  ctx.page.drawText("Plataforma Online", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
-  ctx.y -= 16;
-  if (financial.tuitionInstallmentCents > 0) {
-    drawField(ctx, "Valor da parcela:", fmtCurrency(financial.tuitionInstallmentCents), 60);
-    drawField(ctx, "Numero de parcelas:", String(financial.tuitionInstallments), 60);
-    const totalTuition = financial.tuitionInstallmentCents * financial.tuitionInstallments;
-    drawField(ctx, "Total:", fmtCurrency(totalTuition), 60);
+  if (contractType === "platform") {
+    // Tuition (Plataforma Online)
+    ctx.page.drawText("Plataforma Online", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
+    ctx.y -= 16;
+    if (financial.tuitionInstallmentCents > 0) {
+      drawField(ctx, "Valor da parcela:", fmtCurrency(financial.tuitionInstallmentCents), 60);
+      drawField(ctx, "Numero de parcelas:", String(financial.tuitionInstallments), 60);
+      const totalTuition = financial.tuitionInstallmentCents * financial.tuitionInstallments;
+      drawField(ctx, "Total:", fmtCurrency(totalTuition), 60);
+    } else {
+      drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
+    }
   } else {
-    drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
-  }
-  ctx.y -= 4;
-
-  // Summer Camp
-  ctx.page.drawText("Summer Camp", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
-  ctx.y -= 16;
-  if (financial.summercampInstallmentCents > 0) {
-    drawField(ctx, "Valor da parcela:", fmtCurrency(financial.summercampInstallmentCents), 60);
-    drawField(ctx, "Numero de parcelas:", String(financial.summercampInstallments), 60);
-    const totalCamp = financial.summercampInstallmentCents * financial.summercampInstallments;
-    drawField(ctx, "Total:", fmtCurrency(totalCamp), 60);
-  } else {
-    drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
+    // Summer Camp
+    ctx.page.drawText("Summer Camp", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
+    ctx.y -= 16;
+    if (financial.summercampInstallmentCents > 0) {
+      drawField(ctx, "Valor da parcela:", fmtCurrency(financial.summercampInstallmentCents), 60);
+      drawField(ctx, "Numero de parcelas:", String(financial.summercampInstallments), 60);
+      const totalCamp = financial.summercampInstallmentCents * financial.summercampInstallments;
+      drawField(ctx, "Total:", fmtCurrency(totalCamp), 60);
+    } else {
+      drawParagraph(ctx, "Valores a definir pela equipa Chronos Education.");
+    }
   }
 
   // 7. CANCELAMENTO
