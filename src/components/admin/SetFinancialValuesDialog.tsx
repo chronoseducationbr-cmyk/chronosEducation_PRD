@@ -413,6 +413,12 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                 </div>
               </div>
             </div>
+            {parseMoneyToNumber(summercampValue) > 0 && !summercampStartDate && (
+              <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-xs">
+                <AlertTriangle size={14} className="shrink-0" />
+                <span>O <strong>Summer Camp</strong> tem valor definido mas não tem data de início. As parcelas não serão geradas sem esta data.</span>
+              </div>
+            )}
           </div>
 
           <DialogFooter className="flex-col sm:flex-row gap-2 pt-4 border-t border-border shrink-0">
