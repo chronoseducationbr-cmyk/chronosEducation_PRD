@@ -282,6 +282,13 @@ const AdminPaymentsPage = () => {
     return `${String(dt.getDate()).padStart(2, "0")}/${String(dt.getMonth() + 1).padStart(2, "0")}/${dt.getFullYear()}`;
   };
 
+  const formatMoney = (amountCents: number) => {
+    return `$${(amountCents / 100).toLocaleString("pt-PT", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  };
+
   const filtered = enrollments.filter(
     (e) =>
       e.student_name.toLowerCase().includes(search.toLowerCase()) ||
