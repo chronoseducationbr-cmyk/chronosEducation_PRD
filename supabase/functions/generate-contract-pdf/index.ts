@@ -127,8 +127,9 @@ function parseContractSections(text: string): ContractSection[] {
       continue;
     }
     if (!current) continue;
-    const bulletLine = line.replace(/^[\u2022\u2023\u25E6\u2043]\s*/, "");
-    if (bulletLine !== line) {
+    const trimmedLine = line.trim();
+    const bulletLine = trimmedLine.replace(/^[\u2022\u2023\u25E6\u2043\u25CF\u2219]\s*/, "");
+    if (bulletLine !== trimmedLine) {
       if (bulletLine.trim()) current.items.push({ type: "bullet", text: bulletLine.trim() });
     } else {
       const listMatch = line.match(/^(?:[a-z]\)|[IVX]+[\.\)]\s|[0-9]+[ºª\.]\s|\-\s)\s*(.+)$/);
