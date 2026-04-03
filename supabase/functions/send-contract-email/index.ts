@@ -49,7 +49,7 @@ const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: 
               </div>
 
               <h2 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#062a45;text-align:center;font-family:Georgia,'Times New Roman',serif;">
-                Contrato disponível para assinatura
+                Contrato disponível - ${programLabel}
               </h2>
               <p style="margin:0 0 24px;font-size:15px;color:#5a6a78;text-align:center;line-height:1.6;">
                 Olá <strong style="color:#062a45;">${guardianName}</strong>,
