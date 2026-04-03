@@ -464,10 +464,6 @@ const DashboardPage = () => {
                     <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
                   </div>
 
-                  <div className="mt-8">
-                    <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
-                  </div>
-
                   {/* Serviços contratados */}
                   <div className="mt-8">
                     <h3 className="font-heading text-lg font-semibold text-foreground mb-1">Serviços contratados</h3>
@@ -497,6 +493,10 @@ const DashboardPage = () => {
                     {validationErrors.includes("services") && (
                       <p className="text-destructive text-sm mt-2">Selecione pelo menos um serviço.</p>
                     )}
+                  </div>
+
+                  <div className="mt-8">
+                    <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
                   </div>
 
                   <div className="mt-8">
