@@ -178,6 +178,18 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
               </select>
             </div>
             <div className="sm:col-span-2">
+              <label className="text-sm font-medium text-foreground block mb-1.5">Profissão <span className="text-[#F9B91D]">*</span></label>
+              <input
+                type="text"
+                maxLength={60}
+                value={profession}
+                onChange={(e) => setProfession(e.target.value)}
+                onBlur={() => saveProfile({ profession: profession.trim() })}
+                className={inputClass("guardianProfession")}
+                placeholder="Ex: Engenheiro(a)"
+              />
+            </div>
+            <div className="sm:col-span-2">
               <label className="text-sm font-medium text-foreground block mb-1.5">Email <span className="text-[#F9B91D]">*</span></label>
               <div className="relative">
                 <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
