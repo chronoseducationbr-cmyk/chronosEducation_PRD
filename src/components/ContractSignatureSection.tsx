@@ -66,16 +66,24 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData, f
     const load = async () => {
       const { data } = await supabase
         .from("app_settings" as any)
-        .select("contract_text")
+        .select("contract_text, contract_text_summercamp")
         .eq("id", 1)
         .single();
       if (data) {
-        setContractText((data as any).contract_text || "");
+        const s = data as any;
+        // Use summercamp contract if summercamp is contracted, otherwise plataforma contract
+        const isSummercamp = financialData && financialData.summercampInstallments > 0;
+        const isPlataforma = financialData && financialData.tuitionInstallments > 0;
+        if (isSummercamp && !isPlataforma) {
+          setContractText(s.contract_text_summercamp || "");
+        } else {
+          setContractText(s.contract_text || "");
+        }
       }
       setLoading(false);
     };
     load();
-  }, []);
+  }, [financialData]);
 
   const handleScroll = useCallback(() => {
     const el = contractRef.current;
