@@ -75,6 +75,7 @@ const AdminSettingsPage = () => {
       setSettings({
         contract_enabled: s.contract_enabled,
         contract_text: s.contract_text || "",
+        contract_text_summercamp: s.contract_text_summercamp || "",
       });
     }
     setLoadingSettings(false);
