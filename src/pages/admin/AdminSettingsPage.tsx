@@ -405,14 +405,6 @@ const AdminSettingsPage = () => {
               <p className="text-sm text-muted-foreground italic">Contrato desativado. Os alunos não precisarão assinar contrato na matrícula.</p>
             ) : (
               <div className="space-y-6">
-                {/* Dynamic sections info */}
-                <div className="bg-muted/40 border border-border rounded-xl p-4 flex items-start gap-3">
-                  <Info size={16} className="text-secondary shrink-0 mt-0.5" />
-                  <div className="text-sm text-muted-foreground leading-relaxed">
-                    <p className="font-medium text-foreground mb-1">Secções dinâmicas</p>
-                    <p>As secções <strong>1. PARTES</strong> e <strong>Valores e Pagamento</strong> são preenchidas automaticamente com os dados da matrícula.</p>
-                  </div>
-                </div>
 
                 {/* Sub-tabs for Plataforma / Summer Camp */}
                 <Tabs defaultValue="plataforma" className="w-full">
