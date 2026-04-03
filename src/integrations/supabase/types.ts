@@ -145,6 +145,7 @@ export type Database = {
           contract_sent_at: string | null
           contract_signed_at: string | null
           contract_url: string | null
+          contract_url_summercamp: string | null
           created_at: string
           guardian_email: string | null
           id: string
@@ -173,6 +174,7 @@ export type Database = {
           contract_sent_at?: string | null
           contract_signed_at?: string | null
           contract_url?: string | null
+          contract_url_summercamp?: string | null
           created_at?: string
           guardian_email?: string | null
           id?: string
@@ -201,6 +203,7 @@ export type Database = {
           contract_sent_at?: string | null
           contract_signed_at?: string | null
           contract_url?: string | null
+          contract_url_summercamp?: string | null
           created_at?: string
           guardian_email?: string | null
           id?: string
