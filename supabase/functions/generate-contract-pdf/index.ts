@@ -260,13 +260,17 @@ async function buildContractPdf(
       const totalCents = installmentCents * installmentCount;
 
       const replacePlaceholders = (text: string): string => {
-        // Replace total value
-        let result = text.replace(/USD\s*\$\s*\[(?:xxx|Total)\]/gi, fmtCurrency(totalCents + financial.inscriptionFeeCents));
-        // Replace inscription fee (à vista / matrícula)
-        result = result.replace(/USD\s*\$\s*\[(?:xxx|Valor\s*Matricula)\](\s*(?:a|à)\s*vista)/gi, `${fmtCurrency(financial.inscriptionFeeCents)}$1`);
-        // Replace installment amount and count pattern: "USD $ [xxx] parcelado em xx vezes de USD $ [xxx]"
-        result = result.replace(/USD\s*\$\s*\[(?:xxx|Valor\s*da\s*parcela)\]\s*parcelado\s*em\s*(?:xx|\[(?:xxx|Numero\s*Parcelas)\])\s*vezes\s*de\s*USD\s*\$\s*\[(?:xxx|Numero\s*Parcelas|Valor\s*da\s*parcela)\]/gi,
-          `${fmtCurrency(installmentCents)} parcelado em ${installmentCount} vezes de ${fmtCurrency(installmentCents)}`);
+        let result = text;
+        // [Total_1] = inscription + all installments
+        result = result.replace(/\[Total_1\]/gi, fmtCurrency(totalCents + financial.inscriptionFeeCents));
+        // [Valor Matricula] or [Valor_Matricula]
+        result = result.replace(/\[Valor[\s_]*Matricula\]/gi, fmtCurrency(financial.inscriptionFeeCents));
+        // [TOTAL_2] = installments total only
+        result = result.replace(/\[TOTAL_2\]/gi, fmtCurrency(totalCents));
+        // [NumeroParcela] or [NumeroParcelas]
+        result = result.replace(/\[Numero\s*Parcelas?\]/gi, String(installmentCount));
+        // [ValorParcela] or [Valor Parcela]
+        result = result.replace(/\[Valor[\s_]*Parcela\]/gi, fmtCurrency(installmentCents));
         // Fallback: replace any remaining [xxx] with "A definir"
         result = result.replace(/\[xxx\]/gi, "A definir");
         return result;
