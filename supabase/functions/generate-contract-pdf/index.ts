@@ -122,7 +122,7 @@ function parseContractSections(text: string) {
     const headerMatch = line.match(/^CL[AÁ]USULA\s+(\d+)\s*[\-–—]?\s*(.+)$/i);
     if (headerMatch) {
       if (current) sections.push(current);
-      current = { title: `${headerMatch[1]}. ${headerMatch[2]}`, paragraphs: [], listItems: [] };
+      current = { title: `CLAUSULA ${headerMatch[1]} - ${headerMatch[2]}`, paragraphs: [], listItems: [] };
       continue;
     }
     if (!current) continue;
@@ -145,7 +145,7 @@ function parseContractSections(text: string) {
 }
 
 function isPaymentSection(title: string): boolean {
-  return /^\d+\.\s*(D[OA]S?\s*)?(VALORES?|PAGAMENTO|VALOR\s+E\s+FORMA|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO))/i.test(title);
+  return /(D[OA]S?\s*)?(VALORES?|PAGAMENTO|VALOR\s+E\s+FORMA|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO))/i.test(title);
 }
 
 async function buildContractPdf(
