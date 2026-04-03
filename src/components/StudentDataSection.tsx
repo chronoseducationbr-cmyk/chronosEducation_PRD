@@ -37,7 +37,14 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData, guar
   const [uploading, setUploading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [birthDateError, setBirthDateError] = useState("");
+  const [addressSameAsGuardian, setAddressSameAsGuardian] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (addressSameAsGuardian && guardianAddress) {
+      setStudentAddress(guardianAddress);
+    }
+  }, [addressSameAsGuardian, guardianAddress]);
 
   const validateEmail = (email: string) => {
     if (!email.trim()) {
