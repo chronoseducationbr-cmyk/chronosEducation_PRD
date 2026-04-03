@@ -40,7 +40,7 @@ const AdminSettingsPage = () => {
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
   const [loadingSettings, setLoadingSettings] = useState(true);
   const [savingSettings, setSavingSettings] = useState(false);
-  const [editingContract, setEditingContract] = useState(false);
+  const [editingContract, setEditingContract] = useState<"plataforma" | "summercamp" | null>(null);
   const [contractDraft, setContractDraft] = useState("");
 
   useEffect(() => {
