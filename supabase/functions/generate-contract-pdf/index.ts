@@ -125,7 +125,8 @@ function parseContractSections(text: string) {
       continue;
     }
     if (!current) continue;
-    const listMatch = line.match(/^[a-z]\)\s+(.+)$/);
+    // Match list items: "a) ...", "I. ...", "1º ...", "- ..."
+    const listMatch = line.match(/^(?:[a-z]\)|[IVX]+\.|[0-9]+[ºª]|\-)\s+(.+)$/);
     if (listMatch) {
       current.listItems.push(listMatch[1]);
     } else if (line.trim()) {
@@ -137,7 +138,7 @@ function parseContractSections(text: string) {
 }
 
 function isPaymentSection(title: string): boolean {
-  return /^\d+\.\s*(VALORES|PAGAMENTO|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO))/i.test(title);
+  return /^\d+\.\s*(VALORES|PAGAMENTO|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO)|D[OA]S?\s*(VALORES|PAGAMENTO|CONDI[CÇ][OÕ]ES))/i.test(title);
 }
 
 async function buildContractPdf(
