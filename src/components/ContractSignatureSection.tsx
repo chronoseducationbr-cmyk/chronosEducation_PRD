@@ -155,13 +155,15 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData, f
               <p>Pelo presente instrumento particular, de um lado:</p>
               <p>
                 <span className="font-semibold">CONTRATANTE:</span>{" "}
-                <span className="font-medium">{guardianData.fullName || "[Nome completo]"}</span>,
+                <span className="font-medium">{guardianData.fullName || "[Nome completo]"}</span>,{" "}
+                {guardianData.nationality || "[nacionalidade]"},{" "}
+                {guardianData.civilStatus || "[estado civil]"},{" "}
+                inscrito(a) no CPF sob o nº{" "}
+                <span className="font-medium">{guardianData.cpf || "[CPF]"}</span>{" "}
+                e RG nº{" "}
+                <span className="font-medium">{guardianData.rgNumber || "[RG]"}</span>,{" "}
                 residente e domiciliado(a) em{" "}
-                <span className="font-medium">{studentData.studentAddress || "[endereço completo]"}</span>,
-                e-mail{" "}
-                <span className="font-medium">{guardianData.email || "[e-mail]"}</span>,
-                celular{" "}
-                <span className="font-medium">{guardianData.phone || "[celular]"}</span>;
+                <span className="font-medium">{guardianData.guardianAddress || "[endereço completo]"}</span>;
               </p>
               <p>E, de outro lado:</p>
               <p>

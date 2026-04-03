@@ -382,12 +382,16 @@ export type Database = {
       }
       profiles: {
         Row: {
+          civil_status: string | null
           created_at: string
           email: string | null
           full_name: string
+          guardian_address: string | null
           id: string
+          nationality: string | null
           phone: string | null
           referred_by_email: string | null
+          rg_number: string | null
           student_address: string | null
           student_age: number | null
           student_birth_date: string | null
@@ -400,12 +404,16 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          civil_status?: string | null
           created_at?: string
           email?: string | null
           full_name?: string
+          guardian_address?: string | null
           id?: string
+          nationality?: string | null
           phone?: string | null
           referred_by_email?: string | null
+          rg_number?: string | null
           student_address?: string | null
           student_age?: number | null
           student_birth_date?: string | null
@@ -418,12 +426,16 @@ export type Database = {
           user_id: string
         }
         Update: {
+          civil_status?: string | null
           created_at?: string
           email?: string | null
           full_name?: string
+          guardian_address?: string | null
           id?: string
+          nationality?: string | null
           phone?: string | null
           referred_by_email?: string | null
+          rg_number?: string | null
           student_address?: string | null
           student_age?: number | null
           student_birth_date?: string | null
