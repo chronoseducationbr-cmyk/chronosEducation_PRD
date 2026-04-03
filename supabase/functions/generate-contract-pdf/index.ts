@@ -182,7 +182,10 @@ async function buildContractPdf(
 
   // 2. OBJETO
   drawSectionTitle(ctx, "2. OBJETO");
-  drawParagraph(ctx, "O presente contrato tem por objeto a prestacao de servicos educacionais do Programa Dual Diploma da Chronos Education, que permite ao aluno obter simultaneamente o diploma brasileiro de Ensino Medio e o diploma americano de High School, atraves da Plataforma Online.");
+  const objectText = contractType === "summercamp"
+    ? "O presente contrato tem por objeto a prestacao de servicos educacionais do Programa Summer Camp da Chronos Education, que permite ao aluno vivenciar uma experiencia internacional de imersao academica e cultural nos Estados Unidos."
+    : "O presente contrato tem por objeto a prestacao de servicos educacionais do Programa Dual Diploma da Chronos Education, que permite ao aluno obter simultaneamente o diploma brasileiro de Ensino Medio e o diploma americano de High School, atraves da Plataforma Online.";
+  drawParagraph(ctx, objectText);
 
   // 3. DURACAO
   drawSectionTitle(ctx, "3. DURACAO");
