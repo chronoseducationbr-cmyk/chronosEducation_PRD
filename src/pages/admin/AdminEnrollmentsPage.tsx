@@ -520,8 +520,7 @@ const AdminEnrollmentsPage = () => {
                             )}
                           </div>
                         </div>
-                      </div>
-
+                    </div>
 
                      {/* Prova de Inglês */}
                      <div>
@@ -569,6 +568,19 @@ const AdminEnrollmentsPage = () => {
                       ) : (
                         <span className="text-muted-foreground text-sm italic">Prova não realizada</span>
                       )}
+                    </div>
+
+                    {/* Apagar aluno */}
+                    <div className="pt-2 border-t border-border flex justify-end">
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="gap-1.5"
+                        onClick={(ev) => { ev.stopPropagation(); setPendingDelete({ id: e.id, studentName: e.student_name, contractUrl: e.contract_url }); }}
+                      >
+                        <Trash2 size={14} />
+                        Apagar aluno
+                      </Button>
                     </div>
                   </div>
                 )}
