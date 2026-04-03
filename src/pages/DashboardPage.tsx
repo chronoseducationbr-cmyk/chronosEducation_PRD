@@ -42,6 +42,7 @@ const DashboardPage = () => {
   }, [user, refreshKey]);
   
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [selectedServices, setSelectedServices] = useState<{ plataforma: boolean; summercamp: boolean }>({ plataforma: false, summercamp: false });
 
   const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "" });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
