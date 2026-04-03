@@ -96,12 +96,12 @@ const TypeSection = ({
                           const finalCents = Math.round(inst.amount_cents * (1 - disc / 100));
                           return (
                             <span className="flex flex-col leading-tight">
-                              <span className="line-through text-muted-foreground text-[10px]">${(inst.amount_cents / 100).toFixed(2).replace('.', ',')}</span>
-                              <span className="text-green-700">${(finalCents / 100).toFixed(2).replace('.', ',')} <span className="text-[10px] text-muted-foreground font-normal">(-{disc}%)</span></span>
+                              <span className="line-through text-muted-foreground text-[10px]">${(inst.amount_cents / 100).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                              <span className="text-green-700">${(finalCents / 100).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span className="text-[10px] text-muted-foreground font-normal">(-{disc}%)</span></span>
                             </span>
                           );
                         }
-                        return `$${(inst.amount_cents / 100).toFixed(2).replace('.', ',')}`;
+                        return `$${(inst.amount_cents / 100).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                       })()}
                     </td>
                     <td className="py-2 pr-2 text-foreground">
