@@ -279,6 +279,7 @@ const DashboardPage = () => {
     if (!g.civilStatus.trim()) { missingFields.push("Estado Civil"); errors.push("guardianCivilStatus"); }
     if (!g.cpf.trim()) { missingFields.push("CPF"); errors.push("guardianCpf"); }
     if (!g.rgNumber.trim()) { missingFields.push("Nº RG"); errors.push("guardianRgNumber"); }
+    if (!g.guardianAddress.trim()) { missingFields.push("Endereço do responsável"); errors.push("guardianAddress"); }
 
     // Student fields
     if (!s.studentName.trim()) { missingFields.push("Nome do aluno"); errors.push("studentName"); }
