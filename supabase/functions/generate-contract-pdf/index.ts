@@ -291,7 +291,8 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { enrollmentId, guardian, student, signed } = body;
+    const { enrollmentId, guardian, student, signed, contractType } = body;
+    const resolvedContractType: "platform" | "summercamp" = contractType === "summercamp" ? "summercamp" : "platform";
 
     if (!enrollmentId) {
       return new Response(
