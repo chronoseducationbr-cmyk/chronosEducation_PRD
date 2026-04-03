@@ -195,7 +195,7 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData, f
                 <div key={idx}>
                   <p className="font-semibold mb-1">{section.title}</p>
                   {section.paragraphs.map((p, pi) => (
-                    <p key={pi} className="pl-3">{p}</p>
+                    <p key={pi} className="pl-3">{p.replace(/\[Data\]/gi, formattedDate)}</p>
                   ))}
                   {section.listItems.length > 0 && (
                     <ul className="pl-6 list-[lower-alpha] space-y-0.5">
