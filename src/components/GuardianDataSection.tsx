@@ -75,8 +75,8 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
   };
 
   useEffect(() => {
-    onChange?.({ fullName, email, phone, cpf, nationality, civilStatus, rgNumber, guardianAddress });
-  }, [fullName, email, phone, cpf, nationality, civilStatus, rgNumber, guardianAddress]);
+    onChange?.({ fullName, email, phone, cpf, nationality, civilStatus, profession, rgNumber, guardianAddress });
+  }, [fullName, email, phone, cpf, nationality, civilStatus, profession, rgNumber, guardianAddress]);
 
   const formatCpf = (value: string) => {
     const digits = value.replace(/\D/g, "").slice(0, 11);
