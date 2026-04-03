@@ -150,32 +150,40 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData, f
               <p className="text-muted-foreground text-xs">Data: {formattedDate}</p>
             </div>
 
-            {/* Section 1: PARTES (always dynamic) */}
-            <div>
-              <p className="font-semibold mb-2">1. PARTES</p>
-              <div className="space-y-3 pl-3">
-                <div>
-                  <p className="font-medium text-muted-foreground text-xs uppercase tracking-wide mb-1">
-                    Contratante (Pai/Mãe ou Responsável)
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
-                    <p>Nome: <span className="font-medium">{guardianData.fullName || "—"}</span></p>
-                    <p>Email: <span className="font-medium">{guardianData.email || "—"}</span></p>
-                    <p>Celular: <span className="font-medium">{guardianData.phone || "—"}</span></p>
-                  </div>
-                </div>
-                <div>
-                  <p className="font-medium text-muted-foreground text-xs uppercase tracking-wide mb-1">
-                    Aluno(a) Beneficiário(a)
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
-                    <p>Nome: <span className="font-medium">{studentData.studentName || "—"}</span></p>
-                    <p>Data de nascimento: <span className="font-medium">{formatBirthDate(studentData.studentBirthDate)}</span></p>
-                    <p>Email: <span className="font-medium">{studentData.studentEmail || "—"}</span></p>
-                    <p>Endereço: <span className="font-medium">{studentData.studentAddress || "—"}</span></p>
-                    <p>Escola atual: <span className="font-medium">{studentData.studentSchool || "—"}</span></p>
-                    <p>Ano de conclusão do Ensino Médio: <span className="font-medium">{studentData.studentGraduationYear || "—"}</span></p>
-                  </div>
+            {/* Preamble / PARTES */}
+            <div className="space-y-3">
+              <p>Pelo presente instrumento particular, de um lado:</p>
+              <p>
+                <span className="font-semibold">CONTRATANTE:</span>{" "}
+                <span className="font-medium">{guardianData.fullName || "[Nome completo]"}</span>,
+                residente e domiciliado(a) em{" "}
+                <span className="font-medium">{studentData.studentAddress || "[endereço completo]"}</span>,
+                e-mail{" "}
+                <span className="font-medium">{guardianData.email || "[e-mail]"}</span>,
+                celular{" "}
+                <span className="font-medium">{guardianData.phone || "[celular]"}</span>;
+              </p>
+              <p>E, de outro lado:</p>
+              <p>
+                <span className="font-semibold">CONTRATADA:</span>{" "}
+                Chronos8 Consultoria de Negócios Ltda., inscrita no CNPJ sob o nº 12.004.589/0001-85,
+                com endereço em Rua Alberto Willo, nº 419 – Casa 3 – CEP 04067-041, São Paulo/SP,
+                neste ato representada por Mário Miguel Guallar Galvez Reis e Sá;
+              </p>
+              <p>Têm entre si justo e contratado:</p>
+
+              {/* Aluno beneficiário */}
+              <div className="mt-2">
+                <p className="font-medium text-muted-foreground text-xs uppercase tracking-wide mb-1">
+                  Aluno(a) Beneficiário(a)
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
+                  <p>Nome: <span className="font-medium">{studentData.studentName || "—"}</span></p>
+                  <p>Data de nascimento: <span className="font-medium">{formatBirthDate(studentData.studentBirthDate)}</span></p>
+                  <p>Email: <span className="font-medium">{studentData.studentEmail || "—"}</span></p>
+                  <p>Endereço: <span className="font-medium">{studentData.studentAddress || "—"}</span></p>
+                  <p>Escola atual: <span className="font-medium">{studentData.studentSchool || "—"}</span></p>
+                  <p>Ano de conclusão do Ensino Médio: <span className="font-medium">{studentData.studentGraduationYear || "—"}</span></p>
                 </div>
               </div>
             </div>

@@ -154,14 +154,19 @@ async function buildContractPdf(
   ctx.page.drawText(dateStr, { x: (595.28 - dateW) / 2, y: ctx.y, size: 9, font, color: GRAY });
   ctx.y -= 24;
 
-  // 1. PARTES
-  drawSectionTitle(ctx, "1. PARTES");
-  ctx.page.drawText("Contratante (Pai/Mae ou Responsavel)", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
-  ctx.y -= 16;
-  drawField(ctx, "Nome:", guardian.fullName, 60);
-  drawField(ctx, "Email:", guardian.email, 60);
-  drawField(ctx, "Celular:", guardian.phone, 60);
-  ctx.y -= 6;
+  // Preamble
+  drawParagraph(ctx, "Pelo presente instrumento particular, de um lado:");
+  ctx.y -= 4;
+  drawParagraph(ctx, `CONTRATANTE: ${guardian.fullName || "[Nome completo]"}, residente e domiciliado(a) em ${student.studentAddress || "[endereco completo]"}, e-mail ${guardian.email || "[e-mail]"}, celular ${guardian.phone || "[celular]"};`);
+  ctx.y -= 4;
+  drawParagraph(ctx, "E, de outro lado:");
+  ctx.y -= 4;
+  drawParagraph(ctx, "CONTRATADA: Chronos8 Consultoria de Negocios Ltda., inscrita no CNPJ sob o n. 12.004.589/0001-85, com endereco em Rua Alberto Willo, n. 419 - Casa 3 - CEP 04067-041, Sao Paulo/SP, neste ato representada por Mario Miguel Guallar Galvez Reis e Sa;");
+  ctx.y -= 4;
+  drawParagraph(ctx, "Tem entre si justo e contratado:");
+  ctx.y -= 8;
+
+  // Aluno beneficiario
   ctx.page.drawText("Aluno(a) Beneficiario(a)", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
   ctx.y -= 16;
   drawField(ctx, "Nome:", student.studentName, 60);
