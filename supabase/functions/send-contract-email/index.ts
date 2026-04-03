@@ -112,7 +112,7 @@ const buildEmailHtml = (guardianName: string, studentName: string, contractUrl: 
   </table>
 </body>
 </html>
-`;
+`};
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
