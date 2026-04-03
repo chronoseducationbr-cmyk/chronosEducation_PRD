@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard, BookOpen, CheckCircle2 } from "lucide-react"; // force rebuild
+import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard, BookOpen, CheckCircle2, Trash2 } from "lucide-react";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -98,6 +98,8 @@ const AdminEnrollmentsPage = () => {
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [pendingStatusChange, setPendingStatusChange] = useState<{ id: string; studentName: string; from: string; to: string } | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<{ id: string; studentName: string; contractUrl: string | null } | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -190,6 +192,40 @@ const AdminEnrollmentsPage = () => {
     setPendingStatusChange(null);
   };
 
+  const confirmDelete = async () => {
+    if (!pendingDelete) return;
+    setDeleting(true);
+    const { id, contractUrl } = pendingDelete;
+    try {
+      // Delete referrals (both directions)
+      await supabase.from("referrals").delete().or(`referrer_enrollment_id.eq.${id},referred_enrollment_id.eq.${id}`);
+      // Delete quiz results
+      await supabase.from("quiz_results").delete().eq("enrollment_id", id);
+      // Delete installments
+      await supabase.from("installments").delete().eq("enrollment_id", id);
+      // Delete contract file from storage if exists
+      if (contractUrl) {
+        try {
+          const url = new URL(contractUrl);
+          const pathMatch = url.pathname.match(/\/contracts\/(.+)$/);
+          if (pathMatch) {
+            await supabase.storage.from("contracts").remove([pathMatch[1]]);
+          }
+        } catch (_) { /* ignore storage errors */ }
+      }
+      // Delete enrollment
+      const { error } = await supabase.from("enrollments").delete().eq("id", id);
+      if (error) throw error;
+      toast({ title: `Aluno "${pendingDelete.studentName}" apagado com sucesso` });
+      setEnrollments((prev) => prev.filter((e) => e.id !== id));
+      if (expandedId === id) setExpandedId(null);
+    } catch (err: any) {
+      toast({ title: "Erro ao apagar aluno", description: err.message, variant: "destructive" });
+    } finally {
+      setDeleting(false);
+      setPendingDelete(null);
+    }
+  };
 
 
 
@@ -534,6 +570,19 @@ const AdminEnrollmentsPage = () => {
                         <span className="text-muted-foreground text-sm italic">Prova não realizada</span>
                       )}
                     </div>
+
+                    {/* Apagar aluno */}
+                    <div className="pt-2 border-t border-border flex justify-end">
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="gap-1.5"
+                        onClick={(ev) => { ev.stopPropagation(); setPendingDelete({ id: e.id, studentName: e.student_name, contractUrl: e.contract_url }); }}
+                      >
+                        <Trash2 size={14} />
+                        Apagar aluno
+                      </Button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -558,6 +607,24 @@ const AdminEnrollmentsPage = () => {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction onClick={confirmStatusChange}>Confirmar</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={!!pendingDelete} onOpenChange={(open) => { if (!open && !deleting) setPendingDelete(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Apagar aluno</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem a certeza que deseja apagar <span className="font-semibold">{pendingDelete?.studentName}</span>?
+              Esta ação irá remover permanentemente a matrícula, parcelas, resultados da prova de inglês, contrato e referências associadas.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} disabled={deleting} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              {deleting ? "A apagar..." : "Apagar permanentemente"}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
