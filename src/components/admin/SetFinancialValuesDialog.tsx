@@ -376,7 +376,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
             </div>
             )}
 
-            {currentValues.tuition_installments > 0 && (
+            {currentValues.tuition_installments > 0 && showPlatformSection && (
               <>
                 <div className="border-t border-border pt-3">
                   <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Plataforma Online</Label>
