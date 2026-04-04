@@ -98,7 +98,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
             className="inline-flex items-center gap-2 bg-secondary text-secondary-foreground font-semibold py-2.5 px-5 rounded-lg hover:opacity-90 transition-opacity text-sm"
           >
             <Plus size={16} />
-            Inscrever Aluno
+            Nova Matrícula
           </button>
         </div>
       ) : (
