@@ -70,18 +70,15 @@ const ContractsList = ({ refreshKey }: Props) => {
         Contratos <span className="text-[#f9b41f]">({enrollments.length})</span>
       </h2>
       <div className="space-y-3">
-        {enrollments.map((e) => (
-          <div key={e.id} className="bg-card rounded-xl border border-border shadow-card p-4">
-            <div className="flex items-center gap-3 mb-3">
-              {e.student_photo_url ? (
-                <img src={e.student_photo_url} alt={e.student_name} className="w-10 h-10 rounded-full object-cover border-2 border-secondary/30 shrink-0" />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
-                  <GraduationCap size={20} />
-                </div>
-              )}
-              <p className="font-medium text-foreground">{e.student_name || "Sem nome"}</p>
-            </div>
+        {enrollments.map((e) => {
+          const hasUnsigned =
+            (e.contract_url && !e.contract_signed_at_platform) ||
+            (e.contract_url_summercamp && !e.contract_signed_at_summercamp);
+
+          return (
+            <EnrollmentContractCard key={e.id} enrollment={e} defaultExpanded={!!hasUnsigned} acceptingContract={acceptingContract} setAcceptingContract={setAcceptingContract} setEnrollments={setEnrollments} toast={toast} formatDate={formatDate} />
+          );
+        })}
 
             {/* Contrato Plataforma Online */}
             {(e.tuition_installment_cents > 0 || e.contract_url) && (
