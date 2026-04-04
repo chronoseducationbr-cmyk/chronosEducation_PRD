@@ -361,7 +361,7 @@ const DashboardPage = () => {
 
       if (!referralEnrollment[0].contract_signed_at) {
         setValidationErrors(["referralEmail"]);
-        toast({ title: "Contrato não assinado", description: "O aluno indicado ainda não tem contrato assinado.", variant: "destructive" });
+        toast({ title: "Aluno indicado não encontrado", description: "O email indicado não corresponde a nenhum aluno matriculado.", variant: "destructive" });
         return false;
       }
     }
