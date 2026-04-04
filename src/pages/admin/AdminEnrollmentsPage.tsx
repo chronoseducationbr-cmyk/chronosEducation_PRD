@@ -440,21 +440,23 @@ const AdminEnrollmentsPage = () => {
                       </div>
                     </div>
 
-                    {/* Contrato */}
-                    <div>
-                      <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Contrato</p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
-                        <div>
-                          <p className="text-muted-foreground text-xs">Enviado em</p>
-                          <p className="text-foreground font-medium">{formatDate(e.contract_sent_at)}</p>
-                        </div>
-                        <div>
-                          <p className="text-muted-foreground text-xs">Assinado em</p>
-                          <p className="text-foreground font-medium">{formatDate(e.contract_signed_at)}</p>
-                        </div>
-                        <div>
-                          <p className="text-muted-foreground text-xs">Documento</p>
-                          <div className="flex flex-col gap-1.5 mt-0.5">
+                    {/* Contratos */}
+                    {(e.tuition_installments > 0 || e.contract_url) && (
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide flex items-center gap-1.5">
+                          <Monitor size={12} /> Contrato Plataforma Online
+                        </p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
+                          <div>
+                            <p className="text-muted-foreground text-xs">Enviado em</p>
+                            <p className="text-foreground font-medium">{e.contract_url ? formatDate(e.contract_sent_at) : "—"}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground text-xs">Assinado em</p>
+                            <p className="text-foreground font-medium">{e.contract_url ? formatDate(e.contract_signed_at) : "—"}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground text-xs">Documento</p>
                             {e.contract_url ? (
                               <button
                                 onClick={async () => {
@@ -474,12 +476,38 @@ const AdminEnrollmentsPage = () => {
                                     console.error("Download error:", err);
                                   }
                                 }}
-                                className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium text-sm"
+                                className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium text-sm mt-0.5"
                               >
                                 <Download size={14} />
-                                Plataforma Online
+                                Download PDF
                               </button>
-                            ) : null}
+                            ) : (
+                              <span className="text-muted-foreground inline-flex items-center gap-1 text-sm italic mt-0.5">
+                                <FileText size={14} />
+                                Sem contrato
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {(e.summercamp_installments > 0 || e.contract_url_summercamp) && (
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide flex items-center gap-1.5">
+                          <Sun size={12} /> Contrato Summer Camp
+                        </p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
+                          <div>
+                            <p className="text-muted-foreground text-xs">Enviado em</p>
+                            <p className="text-foreground font-medium">{e.contract_url_summercamp ? formatDate(e.contract_sent_at) : "—"}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground text-xs">Assinado em</p>
+                            <p className="text-foreground font-medium">{e.contract_url_summercamp ? formatDate(e.contract_signed_at) : "—"}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground text-xs">Documento</p>
                             {e.contract_url_summercamp ? (
                               <button
                                 onClick={async () => {
@@ -499,14 +527,13 @@ const AdminEnrollmentsPage = () => {
                                     console.error("Download error:", err);
                                   }
                                 }}
-                                className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium text-sm"
+                                className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium text-sm mt-0.5"
                               >
                                 <Download size={14} />
-                                Summer Camp
+                                Download PDF
                               </button>
-                            ) : null}
-                            {!e.contract_url && !e.contract_url_summercamp && (
-                              <span className="text-muted-foreground inline-flex items-center gap-1 text-sm italic">
+                            ) : (
+                              <span className="text-muted-foreground inline-flex items-center gap-1 text-sm italic mt-0.5">
                                 <FileText size={14} />
                                 Sem contrato
                               </span>
@@ -514,7 +541,7 @@ const AdminEnrollmentsPage = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
 
                      {/* Prova de Inglês */}
                      <div>
