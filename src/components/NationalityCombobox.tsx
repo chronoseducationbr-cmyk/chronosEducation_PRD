@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { nationalities, type Nationality } from "@/data/nationalities";
-import { hasFlag, default as Flags } from "country-flag-icons/react/3x2";
+import { hasFlag } from "country-flag-icons";
+import * as Flags from "country-flag-icons/react/3x2";
 
 const FlagIcon = ({ code, size = 20 }: { code: string; size?: number }) => {
   const upper = code.toUpperCase();
   if (!upper || !hasFlag(upper)) return <span className="inline-block" style={{ width: size, height: size * 2 / 3 }}>🏳️</span>;
-  const FlagComponent = Flags[upper as keyof typeof Flags];
+  const FlagComponent = (Flags as any)[upper];
+  if (!FlagComponent) return <span className="inline-block" style={{ width: size, height: size * 2 / 3 }}>🏳️</span>;
   return <FlagComponent style={{ width: size, height: size * 2 / 3, borderRadius: 2, objectFit: "cover" }} />;
 };
 
