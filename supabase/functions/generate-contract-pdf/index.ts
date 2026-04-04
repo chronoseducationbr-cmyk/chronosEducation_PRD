@@ -365,7 +365,7 @@ async function buildContractPdf(
 
   drawParagraph(ctx, "E, de outro lado:");
   ctx.y -= 4;
-  drawParagraph(ctx, "CONTRATADA: Chronos8 Consultoria de Negocios Ltda., inscrita no CNPJ sob o n. 12.004.589/0001-85, com endereco em Rua Alberto Willo, n. 419 - Casa 3 - CEP 04067-041, Sao Paulo/SP, neste ato representada por Mario Miguel Guallar Galvez Reis e Sa;");
+  drawParagraph(ctx, "CONTRATADA: Chronos8 Consultoria de Negocios Ltda., inscrita no CNPJ sob o n\u00BA 12.004.589/0001-85, com endereco em Rua Alberto Willo, n\u00BA 419 - Casa 3 - CEP 04067-041, Sao Paulo/SP, neste ato representada por Mario Miguel Guallar Galvez Reis e Sa;");
   ctx.y -= 4;
   drawParagraph(ctx, "Tem entre si justo e contratado:");
   ctx.y -= 8;
