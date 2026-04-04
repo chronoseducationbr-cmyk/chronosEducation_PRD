@@ -456,7 +456,7 @@ const AdminEnrollmentsPage = () => {
                           </div>
                           <div>
                             <p className="text-muted-foreground text-xs">Assinado em</p>
-                            <p className="text-foreground font-medium">{e.contract_url ? formatDate(e.contract_signed_at) : "—"}</p>
+                            <p className="text-foreground font-medium">{e.contract_url ? formatDate(e.contract_signed_at_platform) : "—"}</p>
                           </div>
                           <div>
                             <p className="text-muted-foreground text-xs">Documento</p>
