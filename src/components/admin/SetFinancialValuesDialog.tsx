@@ -38,6 +38,8 @@ interface Props {
   };
   onSaved: (updates: Record<string, any>) => void;
   disabled?: boolean;
+  /** Which service still needs values: "platform", "summercamp", or null (show all) */
+  missingService?: "platform" | "summercamp" | null;
 }
 
 const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt, currentValues, onSaved, disabled = false }: Props) => {
