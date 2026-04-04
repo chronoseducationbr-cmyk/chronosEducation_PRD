@@ -472,7 +472,6 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
               if (fee <= 0) missing.push("Valor da Matrícula");
               if (!inscriptionDueDate) missing.push("Data de vencimento da Matrícula");
               if (tuition <= 0) missing.push("Valor da Plataforma Online");
-              if (tuition <= 0) missing.push("Valor da Plataforma Online");
               if (tuition > 0 && !tuitionStartDate) missing.push("Data de início da Plataforma Online");
             }
             if (currentValues.summercamp_installments > 0) {
