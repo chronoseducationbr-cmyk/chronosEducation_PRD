@@ -1,5 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { nationalities, getFlagEmoji, type Nationality } from "@/data/nationalities";
+import { nationalities, type Nationality } from "@/data/nationalities";
+import { hasFlag, default as Flags } from "country-flag-icons/react/3x2";
+
+const FlagIcon = ({ code, size = 20 }: { code: string; size?: number }) => {
+  const upper = code.toUpperCase();
+  if (!upper || !hasFlag(upper)) return <span className="inline-block" style={{ width: size, height: size * 2 / 3 }}>🏳️</span>;
+  const FlagComponent = Flags[upper as keyof typeof Flags];
+  return <FlagComponent style={{ width: size, height: size * 2 / 3, borderRadius: 2, objectFit: "cover" }} />;
+};
 
 interface Props {
   value: string;
@@ -16,7 +24,6 @@ const NationalityCombobox = ({ value, onChange, onBlur, className = "", placehol
   const wrapperRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
-  // Sync display text when value changes externally
   useEffect(() => {
     if (value && !open) setQuery(value);
   }, [value, open]);
@@ -39,7 +46,6 @@ const NationalityCombobox = ({ value, onChange, onBlur, className = "", placehol
     [onChange, onBlur]
   );
 
-  // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
@@ -51,7 +57,6 @@ const NationalityCombobox = ({ value, onChange, onBlur, className = "", placehol
     return () => document.removeEventListener("mousedown", handler);
   }, [value]);
 
-  // Scroll highlighted item into view
   useEffect(() => {
     if (highlightIndex >= 0 && listRef.current) {
       const el = listRef.current.children[highlightIndex] as HTMLElement | undefined;
@@ -81,12 +86,14 @@ const NationalityCombobox = ({ value, onChange, onBlur, className = "", placehol
     }
   };
 
+  const selectedNationality = nationalities.find((n) => n.nationality === value);
+
   return (
     <div ref={wrapperRef} className="relative">
       <div className="relative">
-        {value && (
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base pointer-events-none">
-            {getFlagEmoji(nationalities.find((n) => n.nationality === value)?.code || "")}
+        {value && selectedNationality && (
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+            <FlagIcon code={selectedNationality.code} size={20} />
           </span>
         )}
         <input
@@ -103,7 +110,7 @@ const NationalityCombobox = ({ value, onChange, onBlur, className = "", placehol
             setQuery("");
           }}
           onKeyDown={handleKeyDown}
-          className={`${className} ${value ? "pl-10" : ""}`}
+          className={`${className} ${value && selectedNationality ? "pl-10" : ""}`}
           placeholder={placeholder}
           autoComplete="off"
         />
@@ -127,7 +134,9 @@ const NationalityCombobox = ({ value, onChange, onBlur, className = "", placehol
                   highlightIndex === idx ? "bg-accent text-accent-foreground" : "hover:bg-muted/50"
                 } ${n.nationality === value ? "font-semibold" : ""}`}
               >
-                <span className="text-base shrink-0">{getFlagEmoji(n.code)}</span>
+                <span className="shrink-0 flex items-center">
+                  <FlagIcon code={n.code} size={20} />
+                </span>
                 <span className="truncate">
                   <span className="text-foreground">{n.nationality}</span>
                   <span className="text-muted-foreground ml-1.5 text-xs">({n.country})</span>
