@@ -317,13 +317,8 @@ const AdminEnrollmentsPage = () => {
                     )}
                     {isExpanded ? <ChevronUp size={16} className="text-muted-foreground shrink-0 ml-auto" /> : <ChevronDown size={16} className="text-muted-foreground shrink-0 ml-auto" />}
                   </div>
-                  {/* Line 2: badges, financial summary, actions */}
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                    <div className="flex items-center gap-2 flex-wrap flex-1 min-w-0">
-                      <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
-                        {e.status}
-                      </span>
-                    </div>
+                  {/* Line 2: financial left, status right */}
+                  <div className="flex items-center gap-3 justify-between">
                     <div className="flex items-center gap-4 text-[11px]">
                       <div>
                         <p className="text-muted-foreground">Matrícula</p>
@@ -345,6 +340,9 @@ const AdminEnrollmentsPage = () => {
                         <CreditCard size={16} className="text-muted-foreground" />
                       </button>
                     </div>
+                    <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
+                      {e.status}
+                    </span>
                   </div>
                 </div>
 
