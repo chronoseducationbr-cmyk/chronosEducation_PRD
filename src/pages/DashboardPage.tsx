@@ -495,7 +495,7 @@ const DashboardPage = () => {
                         className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.summercamp ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
                         onClick={() => setSelectedServices((prev) => ({ ...prev, summercamp: !prev.summercamp }))}
                       >
-                        <Checkbox checked={selectedServices.summercamp} onCheckedChange={() => {}} />
+                        <Checkbox checked={selectedServices.summercamp} onCheckedChange={() => {}} className="h-5 w-5 rounded-[3px]" />
                         <div>
                           <p className="font-semibold text-foreground">Summer Camp</p>
                           <p className="text-xs text-muted-foreground">Programa presencial de imersão durante o verão</p>
