@@ -3,6 +3,16 @@ import { GraduationCap, Plus, ChevronDown, ChevronUp, PlusCircle, Monitor, Sun }
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Enrollment {
   id: string;
@@ -25,6 +35,7 @@ interface Enrollment {
   contract_sent_at: string | null;
   contract_signed_at: string | null;
   quiz_test_id: string | null;
+  guardian_email: string | null;
 }
 
 interface Props {
@@ -51,6 +62,15 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [requesting, setRequesting] = useState(false);
 
+  // Confirmation dialog state
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    enrollmentId: string;
+    studentName: string;
+    guardianEmail: string | null;
+    serviceType: "plataforma" | "summercamp";
+  }>({ open: false, enrollmentId: "", studentName: "", guardianEmail: null, serviceType: "plataforma" });
+
   useEffect(() => {
     const load = async () => {
       if (!user) return;
@@ -72,6 +92,64 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
     return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+  };
+
+  const handleAddService = async () => {
+    const { enrollmentId, serviceType, studentName, guardianEmail } = confirmDialog;
+    setConfirmDialog((prev) => ({ ...prev, open: false }));
+    setRequesting(true);
+
+    const serviceName = serviceType === "plataforma" ? "Plataforma Online" : "Summer Camp";
+    const settingsField = serviceType === "plataforma"
+      ? "default_tuition_installments, default_tuition_installment_cents"
+      : "default_summercamp_installments, default_summercamp_installment_cents";
+
+    const { data: settings } = await supabase.from("app_settings").select(settingsField).single();
+
+    const updateData = serviceType === "plataforma"
+      ? { tuition_installments: settings?.default_tuition_installments ?? 16, tuition_installment_cents: 0 }
+      : { summercamp_installments: settings?.default_summercamp_installments ?? 6, summercamp_installment_cents: 0 };
+
+    const { error } = await supabase
+      .from("enrollments")
+      .update(updateData as any)
+      .eq("id", enrollmentId);
+
+    if (error) {
+      toast({ title: "Erro ao adicionar serviço", variant: "destructive" });
+      setRequesting(false);
+      return;
+    }
+
+    toast({ title: `${serviceName} adicionado com sucesso` });
+    setEnrollments((prev) =>
+      prev.map((en) => en.id === enrollmentId ? { ...en, ...updateData } : en)
+    );
+
+    // Send notification emails
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("full_name, email")
+      .eq("user_id", user!.id)
+      .single();
+
+    const recipientEmail = guardianEmail || profile?.email || user!.email;
+    const guardianName = profile?.full_name || "Responsável";
+
+    try {
+      await supabase.functions.invoke("send-service-subscription-email", {
+        body: {
+          guardianName,
+          guardianEmail: recipientEmail,
+          studentName,
+          serviceName,
+        },
+      });
+    } catch (emailError) {
+      console.error("Error sending service subscription email:", emailError);
+    }
+
+    setRequesting(false);
   };
 
   if (loading) {
@@ -187,24 +265,13 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                           {e.tuition_installments === 0 && (
                             <button
                               disabled={requesting}
-                              onClick={async () => {
-                                setRequesting(true);
-                                const { data: settings } = await supabase.from("app_settings").select("default_tuition_installments, default_tuition_installment_cents").single();
-                                const { error } = await supabase
-                                  .from("enrollments")
-                                  .update({
-                                    tuition_installments: settings?.default_tuition_installments ?? 16,
-                                    tuition_installment_cents: 0,
-                                  } as any)
-                                  .eq("id", e.id);
-                                if (error) {
-                                  toast({ title: "Erro ao adicionar serviço", variant: "destructive" });
-                                } else {
-                                  toast({ title: "Plataforma Online adicionada com sucesso" });
-                                  setEnrollments((prev) => prev.map((en) => en.id === e.id ? { ...en, tuition_installments: settings?.default_tuition_installments ?? 16, tuition_installment_cents: 0 } : en));
-                                }
-                                setRequesting(false);
-                              }}
+                              onClick={() => setConfirmDialog({
+                                open: true,
+                                enrollmentId: e.id,
+                                studentName: e.student_name,
+                                guardianEmail: e.guardian_email,
+                                serviceType: "plataforma",
+                              })}
                               className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors disabled:opacity-50"
                             >
                               <PlusCircle size={14} />
@@ -214,24 +281,13 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                           {e.summercamp_installments === 0 && (
                             <button
                               disabled={requesting}
-                              onClick={async () => {
-                                setRequesting(true);
-                                const { data: settings } = await supabase.from("app_settings").select("default_summercamp_installments, default_summercamp_installment_cents").single();
-                                const { error } = await supabase
-                                  .from("enrollments")
-                                  .update({
-                                    summercamp_installments: settings?.default_summercamp_installments ?? 6,
-                                    summercamp_installment_cents: 0,
-                                  } as any)
-                                  .eq("id", e.id);
-                                if (error) {
-                                  toast({ title: "Erro ao adicionar serviço", variant: "destructive" });
-                                } else {
-                                  toast({ title: "Summer Camp adicionado com sucesso" });
-                                  setEnrollments((prev) => prev.map((en) => en.id === e.id ? { ...en, summercamp_installments: settings?.default_summercamp_installments ?? 6, summercamp_installment_cents: 0 } : en));
-                                }
-                                setRequesting(false);
-                              }}
+                              onClick={() => setConfirmDialog({
+                                open: true,
+                                enrollmentId: e.id,
+                                studentName: e.student_name,
+                                guardianEmail: e.guardian_email,
+                                serviceType: "summercamp",
+                              })}
                               className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-secondary/10 text-secondary hover:bg-secondary/20 transition-colors disabled:opacity-50"
                             >
                               <PlusCircle size={14} />
@@ -248,6 +304,28 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
           })}
         </div>
       )}
+
+      {/* Confirmation Dialog */}
+      <AlertDialog open={confirmDialog.open} onOpenChange={(open) => setConfirmDialog((prev) => ({ ...prev, open }))}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar subscrição de serviço</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem a certeza que pretende adicionar o serviço{" "}
+              <strong>{confirmDialog.serviceType === "plataforma" ? "Plataforma Online" : "Summer Camp"}</strong>{" "}
+              à matrícula de <strong>{confirmDialog.studentName}</strong>?
+              <br /><br />
+              Será enviada uma notificação por email a confirmar a subscrição.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleAddService} disabled={requesting}>
+              {requesting ? "A processar..." : "Confirmar"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
