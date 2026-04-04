@@ -402,7 +402,11 @@ const AdminPaymentsPage = () => {
                             setEnrollments((prev) => prev.map((en) => en.id === e.id ? { ...en, ...updates } : en));
                             loadInstallments(e.id);
                           }}
-                          disabled={!!e.contract_sent_at_platform || !!e.contract_signed_at_platform}
+                          disabled={(() => {
+                            const platformDone = e.tuition_installments > 0 ? (!!e.contract_sent_at_platform || !!e.contract_signed_at_platform) : true;
+                            const summercampDone = e.summercamp_installments > 0 ? (!!e.contract_sent_at_summercamp || !!e.contract_signed_at_summercamp) : true;
+                            return platformDone && summercampDone;
+                          })()}
                         />
                       </div>
                     </div>
