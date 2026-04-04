@@ -388,7 +388,7 @@ const AdminPaymentsPage = () => {
                             setEnrollments((prev) => prev.map((en) => en.id === e.id ? { ...en, ...updates } : en));
                             loadInstallments(e.id);
                           }}
-                          disabled={false}
+                          disabled={!!e.contract_signed_at}
                         />
                       </div>
                     </div>
