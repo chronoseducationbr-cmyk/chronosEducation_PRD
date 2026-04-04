@@ -32,6 +32,7 @@ interface Props {
 }
 
 const statusColors: Record<string, { bg: string; text: string }> = {
+  "Matrícula submetida": { bg: "bg-purple-100", text: "text-purple-800" },
   "Matrícula confirmada": { bg: "bg-blue-100", text: "text-blue-800" },
   "Pendente de assinatura de contrato": { bg: "bg-amber-100", text: "text-amber-800" },
   "Aguarda assinatura de contrato": { bg: "bg-amber-100", text: "text-amber-800" },
