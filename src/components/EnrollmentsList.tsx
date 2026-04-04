@@ -45,9 +45,11 @@ const statusColors: Record<string, { bg: string; text: string }> = {
 
 const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [requesting, setRequesting] = useState(false);
 
   useEffect(() => {
     const load = async () => {
