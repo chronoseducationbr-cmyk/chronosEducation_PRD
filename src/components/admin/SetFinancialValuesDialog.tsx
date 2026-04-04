@@ -333,6 +333,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
           </DialogHeader>
 
           <div className="space-y-4 overflow-y-auto flex-1 px-1 pb-1">
+            {currentValues.tuition_installments > 0 && (
             <div>
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula</Label>
               <div className="grid grid-cols-2 gap-3 mt-1">
@@ -361,6 +362,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                 </div>
               </div>
             </div>
+            )}
 
             {currentValues.tuition_installments > 0 && (
               <>
@@ -466,9 +468,9 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
           {(() => {
             const { fee, tuition, summer } = getFormValues();
             const missing: string[] = [];
-            if (fee <= 0) missing.push("Valor da Matrícula");
-            if (!inscriptionDueDate) missing.push("Data de vencimento da Matrícula");
             if (currentValues.tuition_installments > 0) {
+              if (fee <= 0) missing.push("Valor da Matrícula");
+              if (!inscriptionDueDate) missing.push("Data de vencimento da Matrícula");
               if (tuition <= 0) missing.push("Valor da Plataforma Online");
               if (tuition > 0 && !tuitionStartDate) missing.push("Data de início da Plataforma Online");
             }
