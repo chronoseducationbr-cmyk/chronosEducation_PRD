@@ -338,12 +338,6 @@ async function buildContractPdf(
   drawParagraph(ctx, "Pelo presente instrumento particular, de um lado:");
   ctx.y -= 4;
   drawParagraph(ctx, `CONTRATANTE: ${guardian.fullName || "[Nome completo]"}, residente e domiciliado(a) em ${student.studentAddress || "[endereco completo]"}, e-mail ${guardian.email || "[e-mail]"}, celular ${guardian.phone || "[celular]"};`);
-  ctx.y -= 4;
-  drawParagraph(ctx, "E, de outro lado:");
-  ctx.y -= 4;
-  drawParagraph(ctx, "CONTRATADA: Chronos8 Consultoria de Negocios Ltda., inscrita no CNPJ sob o n. 12.004.589/0001-85, com endereco em Rua Alberto Willo, n. 419 - Casa 3 - CEP 04067-041, Sao Paulo/SP, neste ato representada por Mario Miguel Guallar Galvez Reis e Sa;");
-  ctx.y -= 4;
-  drawParagraph(ctx, "Tem entre si justo e contratado:");
   ctx.y -= 8;
 
   // Student info block
@@ -355,6 +349,14 @@ async function buildContractPdf(
   drawField(ctx, "Endereco:", student.studentAddress, 60);
   drawField(ctx, "Escola atual:", student.studentSchool, 60);
   drawField(ctx, "Ano de conclusao do Ensino Medio:", student.studentGraduationYear || "\u2014", 60);
+  ctx.y -= 8;
+
+  drawParagraph(ctx, "E, de outro lado:");
+  ctx.y -= 4;
+  drawParagraph(ctx, "CONTRATADA: Chronos8 Consultoria de Negocios Ltda., inscrita no CNPJ sob o n. 12.004.589/0001-85, com endereco em Rua Alberto Willo, n. 419 - Casa 3 - CEP 04067-041, Sao Paulo/SP, neste ato representada por Mario Miguel Guallar Galvez Reis e Sa;");
+  ctx.y -= 4;
+  drawParagraph(ctx, "Tem entre si justo e contratado:");
+  ctx.y -= 8;
 
   // Currency formatter - plain number (no currency symbol, used inside "USD $ ..." text)
   const fmtNumber = (cents: number) => {
