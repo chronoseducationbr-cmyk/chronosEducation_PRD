@@ -103,6 +103,7 @@ const NationalityCombobox = ({ value, onChange, onBlur, className = "", placehol
           </span>
         )}
         <input
+          title="Escolher uma opção da lista de valores"
           type="text"
           value={query}
           onChange={(e) => {

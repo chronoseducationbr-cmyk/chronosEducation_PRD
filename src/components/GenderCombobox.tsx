@@ -65,6 +65,7 @@ const GenderCombobox = ({ value, onChange, className = "" }: Props) => {
     <div ref={wrapperRef} className="relative">
       <button
         type="button"
+        title="Escolher uma opção da lista de valores"
         onClick={() => setOpen(!open)}
         onKeyDown={handleKeyDown}
         className={`${className} text-left flex items-center justify-between`}
