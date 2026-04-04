@@ -288,6 +288,20 @@ const AdminEnrollmentsPage = () => {
                   {/* Line 1: only student full name */}
                   <div className="flex items-center gap-2">
                     <p className="font-semibold text-foreground">{e.student_name || "Sem nome"}</p>
+                    <div className="flex items-center gap-1.5">
+                      {e.tuition_installments > 0 && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground">
+                          <Monitor size={11} />
+                          Plataforma Online
+                        </span>
+                      )}
+                      {e.summercamp_installments > 0 && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground">
+                          <Sun size={11} />
+                          Summer Camp
+                        </span>
+                      )}
+                    </div>
                     {e.guardian && (
                       <Popover>
                         <PopoverTrigger asChild>
