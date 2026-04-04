@@ -35,6 +35,7 @@ interface Enrollment {
   tuition_start_date: string | null;
   summercamp_start_date: string | null;
   contract_signed_at: string | null;
+  contract_sent_at: string | null;
   user_id: string;
   guardian_name?: string;
   has_installments?: boolean;
@@ -388,7 +389,7 @@ const AdminPaymentsPage = () => {
                             setEnrollments((prev) => prev.map((en) => en.id === e.id ? { ...en, ...updates } : en));
                             loadInstallments(e.id);
                           }}
-                          disabled={!!e.contract_signed_at}
+                          disabled={!!e.contract_sent_at || !!e.contract_signed_at}
                         />
                       </div>
                     </div>
