@@ -32,7 +32,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
   const [email, setEmail] = useState(initialData?.email || "");
   const [phone, setPhone] = useState(initialData?.phone || "");
   const [cpf, setCpf] = useState(initialData?.cpf || "");
-  const [nationality, setNationality] = useState(initialData?.nationality || "");
+  const [nationality, setNationality] = useState(initialData?.nationality || "Brasileira");
   const [civilStatus, setCivilStatus] = useState(initialData?.civilStatus || "Casado(a)");
   const [profession, setProfession] = useState(initialData?.profession || "");
   const [rgNumber, setRgNumber] = useState(initialData?.rgNumber || "");
