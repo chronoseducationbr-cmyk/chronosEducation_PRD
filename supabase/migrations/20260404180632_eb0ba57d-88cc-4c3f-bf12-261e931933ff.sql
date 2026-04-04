@@ -1,0 +1,1 @@
+DELETE FROM installments WHERE id = '8ae44cd5-0da5-4c95-8cbf-b9a635498df9';
