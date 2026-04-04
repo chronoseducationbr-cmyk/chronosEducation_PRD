@@ -234,10 +234,19 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
       toast({ title: "Valores guardados. Preencha datas de início para gerar parcelas.", variant: "destructive" });
     }
 
-    // Determine which contracts to generate
+    // Determine which contracts to generate — only for the service being configured
     const contractsToGenerate: Array<"platform" | "summercamp"> = [];
-    if (updates.tuition_installment_cents > 0) contractsToGenerate.push("platform");
-    if (updates.summercamp_installment_cents > 0) contractsToGenerate.push("summercamp");
+    if (missingService === "platform") {
+      // Only generate platform contract
+      if (updates.tuition_installment_cents > 0) contractsToGenerate.push("platform");
+    } else if (missingService === "summercamp") {
+      // Only generate summercamp contract
+      if (updates.summercamp_installment_cents > 0) contractsToGenerate.push("summercamp");
+    } else {
+      // No specific missing service — generate for all with values
+      if (updates.tuition_installment_cents > 0) contractsToGenerate.push("platform");
+      if (updates.summercamp_installment_cents > 0) contractsToGenerate.push("summercamp");
+    }
 
     // If no specific service, default to platform
     if (contractsToGenerate.length === 0) contractsToGenerate.push("platform");
