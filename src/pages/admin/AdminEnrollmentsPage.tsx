@@ -58,8 +58,10 @@ interface Enrollment {
   summercamp_installments: number;
   contract_url: string | null;
   contract_url_summercamp: string | null;
-  contract_sent_at: string | null;
-  contract_signed_at: string | null;
+  contract_sent_at_platform: string | null;
+  contract_signed_at_platform: string | null;
+  contract_sent_at_summercamp: string | null;
+  contract_signed_at_summercamp: string | null;
   tuition_start_date: string | null;
   summercamp_start_date: string | null;
   quiz_test_id: string | null;
@@ -175,7 +177,8 @@ const AdminEnrollmentsPage = () => {
     const { id, to: status } = pendingStatusChange;
     const updates: any = { status };
     if (status === "Contrato assinado") {
-      updates.contract_signed_at = new Date().toISOString();
+      updates.contract_signed_at_platform = new Date().toISOString();
+      updates.contract_signed_at_summercamp = new Date().toISOString();
     }
     const { error } = await supabase
       .from("enrollments")
@@ -449,11 +452,11 @@ const AdminEnrollmentsPage = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
                           <div>
                             <p className="text-muted-foreground text-xs">Enviado em</p>
-                            <p className="text-foreground font-medium">{e.contract_url ? formatDate(e.contract_sent_at) : "—"}</p>
+                            <p className="text-foreground font-medium">{e.contract_url ? formatDate(e.contract_sent_at_platform) : "—"}</p>
                           </div>
                           <div>
                             <p className="text-muted-foreground text-xs">Assinado em</p>
-                            <p className="text-foreground font-medium">{e.contract_url ? formatDate(e.contract_signed_at) : "—"}</p>
+                            <p className="text-foreground font-medium">{e.contract_url ? formatDate(e.contract_signed_at_platform) : "—"}</p>
                           </div>
                           <div>
                             <p className="text-muted-foreground text-xs">Documento</p>
@@ -500,11 +503,11 @@ const AdminEnrollmentsPage = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
                           <div>
                             <p className="text-muted-foreground text-xs">Enviado em</p>
-                            <p className="text-foreground font-medium">{e.contract_url_summercamp ? formatDate(e.contract_sent_at) : "—"}</p>
+                            <p className="text-foreground font-medium">{e.contract_url_summercamp ? formatDate(e.contract_sent_at_summercamp) : "—"}</p>
                           </div>
                           <div>
                             <p className="text-muted-foreground text-xs">Assinado em</p>
-                            <p className="text-foreground font-medium">{e.contract_url_summercamp ? formatDate(e.contract_signed_at) : "—"}</p>
+                            <p className="text-foreground font-medium">{e.contract_url_summercamp ? formatDate(e.contract_signed_at_summercamp) : "—"}</p>
                           </div>
                           <div>
                             <p className="text-muted-foreground text-xs">Documento</p>

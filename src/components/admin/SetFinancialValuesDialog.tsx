@@ -267,8 +267,10 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
           } else {
             updates.contract_url = pdfResult.contractUrl;
           }
-          updates.contract_sent_at = new Date().toISOString();
-          updates.contract_signed_at = null;
+          const sentField = contractType === "summercamp" ? "contract_sent_at_summercamp" : "contract_sent_at_platform";
+          const signedField = contractType === "summercamp" ? "contract_signed_at_summercamp" : "contract_signed_at_platform";
+          updates[sentField] = new Date().toISOString();
+          updates[signedField] = null;
 
           // Send email to guardian
           if (pdfResult.guardianEmail) {

@@ -31,12 +31,13 @@ const DashboardPage = () => {
       if (!user) return;
       const { data } = await supabase
         .from("enrollments")
-        .select("id")
-        .eq("user_id", user.id)
-        .not("contract_url", "is", null)
-        .is("contract_signed_at", null)
-        .limit(1);
-      setHasUnsignedContract(!!(data && data.length > 0));
+        .select("id, contract_url, contract_url_summercamp, contract_signed_at_platform, contract_signed_at_summercamp")
+        .eq("user_id", user.id);
+      const hasUnsigned = (data || []).some(e =>
+        (e.contract_url && !e.contract_signed_at_platform) ||
+        (e.contract_url_summercamp && !e.contract_signed_at_summercamp)
+      );
+      setHasUnsignedContract(hasUnsigned);
     };
     checkUnsignedContracts();
   }, [user, refreshKey]);
@@ -349,7 +350,7 @@ const DashboardPage = () => {
     if (referralEmail) {
       const { data: referralEnrollment } = await supabase
         .from("enrollments")
-        .select("id, contract_signed_at")
+        .select("id, contract_signed_at_platform")
         .ilike("student_email", referralEmail)
         .limit(1);
 
@@ -359,7 +360,7 @@ const DashboardPage = () => {
         return false;
       }
 
-      if (!referralEnrollment[0].contract_signed_at) {
+      if (!referralEnrollment[0].contract_signed_at_platform) {
         setValidationErrors(["referralEmail"]);
         toast({ title: "Aluno indicado não encontrado", description: "O email indicado não corresponde a nenhum aluno matriculado.", variant: "destructive" });
         return false;
