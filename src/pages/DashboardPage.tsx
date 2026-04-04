@@ -485,7 +485,7 @@ const DashboardPage = () => {
                         className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.plataforma ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
                         onClick={() => setSelectedServices((prev) => ({ ...prev, plataforma: !prev.plataforma }))}
                       >
-                        <Checkbox checked={selectedServices.plataforma} onCheckedChange={() => {}} />
+                        <Checkbox checked={selectedServices.plataforma} onCheckedChange={() => {}} className="h-5 w-5 rounded-[3px]" />
                         <div>
                           <p className="font-semibold text-foreground">Plataforma Online</p>
                           <p className="text-xs text-muted-foreground">Acesso à plataforma digital do programa Dual Diploma</p>
