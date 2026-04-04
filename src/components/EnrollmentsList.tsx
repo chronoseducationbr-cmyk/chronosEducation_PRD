@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { GraduationCap, Plus, ChevronDown, ChevronUp, PlusCircle } from "lucide-react";
+import { GraduationCap, Plus, ChevronDown, ChevronUp, PlusCircle, Monitor, Sun } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
