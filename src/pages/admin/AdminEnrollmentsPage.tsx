@@ -418,28 +418,10 @@ const AdminEnrollmentsPage = () => {
                           <p className="text-foreground font-medium">{formatDate(e.created_at)}</p>
                         </div>
                         <div>
-                          <p className="text-muted-foreground text-xs">Alterar estado</p>
-                          <div className="mt-1">
-                            <Select
-                              value={e.status}
-                              onValueChange={(v) => {
-                                if (v !== e.status) {
-                                  setPendingStatusChange({ id: e.id, studentName: e.student_name, from: e.status, to: v });
-                                }
-                              }}
-                            >
-                              <SelectTrigger className="h-8 text-xs w-full max-w-[224px]">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {statuses.map((s) => (
-                                  <SelectItem key={s} value={s} className="text-xs">
-                                    {s}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
+                          <p className="text-muted-foreground text-xs">Estado</p>
+                          <span className={`inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
+                            {e.status}
+                          </span>
                         </div>
                       </div>
                     </div>
