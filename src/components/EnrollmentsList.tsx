@@ -327,7 +327,6 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
             >
               {requesting ? "A processar..." : "Confirmar"}
             </AlertDialogAction>
-            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
