@@ -333,6 +333,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
           </DialogHeader>
 
           <div className="space-y-4 overflow-y-auto flex-1 px-1 pb-1">
+            {currentValues.tuition_installments > 0 && (
             <div>
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula</Label>
               <div className="grid grid-cols-2 gap-3 mt-1">
@@ -361,6 +362,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                 </div>
               </div>
             </div>
+            )}
 
             {currentValues.tuition_installments > 0 && (
               <>
