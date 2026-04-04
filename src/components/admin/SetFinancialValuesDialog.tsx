@@ -85,9 +85,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
 
     const dInscription = defaults?.default_inscription_fee_cents ?? 80000;
     const dTuition = defaults?.default_tuition_installment_cents ?? 45000;
-    const dTuitionInst = defaults?.default_tuition_installments ?? 16;
     const dSummer = defaults?.default_summercamp_installment_cents ?? 0;
-    const dSummerInst = defaults?.default_summercamp_installments ?? 6;
 
     const toComma = (v: number) => v.toFixed(2).replace(".", ",");
     setInscriptionFee(currentValues.inscription_fee_cents > 0 ? toComma(currentValues.inscription_fee_cents / 100) : toComma(dInscription / 100));
