@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard, BookOpen, CheckCircle2, Trash2 } from "lucide-react";
+import { GraduationCap, Search, Download, FileText, Info, ChevronDown, ChevronUp, CreditCard, BookOpen, CheckCircle2, Trash2, Monitor, Sun } from "lucide-react";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -288,6 +288,20 @@ const AdminEnrollmentsPage = () => {
                   {/* Line 1: only student full name */}
                   <div className="flex items-center gap-2">
                     <p className="font-semibold text-foreground">{e.student_name || "Sem nome"}</p>
+                    <div className="flex items-center gap-1.5">
+                      {e.tuition_installments > 0 && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground">
+                          <Monitor size={11} />
+                          Plataforma Online
+                        </span>
+                      )}
+                      {e.summercamp_installments > 0 && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground">
+                          <Sun size={11} />
+                          Summer Camp
+                        </span>
+                      )}
+                    </div>
                     {e.guardian && (
                       <Popover>
                         <PopoverTrigger asChild>
