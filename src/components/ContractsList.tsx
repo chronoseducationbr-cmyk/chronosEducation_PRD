@@ -83,13 +83,15 @@ const ContractsList = ({ refreshKey }: Props) => {
               <p className="font-medium text-foreground">{e.student_name || "Sem nome"}</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-              <Detail label="Enviado em" value={e.contract_sent_at ? formatDate(e.contract_sent_at) : ""} />
-              <Detail label="Assinado em" value={e.contract_signed_at ? formatDate(e.contract_signed_at) : ""} />
-              <div>
-                <p className="text-muted-foreground text-xs">Documentos</p>
-                <div className="flex flex-col items-start gap-0.5 mt-0.5">
-                  {e.contract_url && (
+            {/* Contrato Plataforma Online */}
+            {e.contract_url && (
+              <div className="text-sm">
+                <p className="text-xs font-semibold text-muted-foreground mb-1">Contrato Plataforma Online</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <Detail label="Enviado em" value={e.contract_sent_at_platform ? formatDate(e.contract_sent_at_platform) : ""} />
+                  <Detail label="Assinado em" value={e.contract_signed_at_platform ? formatDate(e.contract_signed_at_platform) : ""} />
+                  <div>
+                    <p className="text-muted-foreground text-xs">Documento</p>
                     <button
                       onClick={async () => {
                         try {
@@ -107,13 +109,25 @@ const ContractsList = ({ refreshKey }: Props) => {
                           console.error("Download error:", err);
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm text-left"
+                      className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm text-left mt-0.5"
                     >
                       <Download size={14} className="text-secondary" />
-                      Contrato Plataforma Online
+                      Download PDF
                     </button>
-                  )}
-                  {e.contract_url_summercamp && (
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Contrato Summer Camp */}
+            {e.contract_url_summercamp && (
+              <div className="text-sm">
+                <p className="text-xs font-semibold text-muted-foreground mb-1">Contrato Summer Camp</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <Detail label="Enviado em" value={e.contract_sent_at_summercamp ? formatDate(e.contract_sent_at_summercamp) : ""} />
+                  <Detail label="Assinado em" value={e.contract_signed_at_summercamp ? formatDate(e.contract_signed_at_summercamp) : ""} />
+                  <div>
+                    <p className="text-muted-foreground text-xs">Documento</p>
                     <button
                       onClick={async () => {
                         try {
@@ -131,21 +145,22 @@ const ContractsList = ({ refreshKey }: Props) => {
                           console.error("Download error:", err);
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm text-left"
+                      className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm text-left mt-0.5"
                     >
                       <Download size={14} className="text-secondary" />
-                      Contrato Summer Camp
+                      Download PDF
                     </button>
-                  )}
-                  {!e.contract_url && !e.contract_url_summercamp && (
-                    <p className="text-foreground font-medium text-xs italic text-muted-foreground">Ainda não disponível</p>
-                  )}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+
+            {!e.contract_url && !e.contract_url_summercamp && (
+              <p className="text-foreground font-medium text-xs italic text-muted-foreground">Ainda não disponível</p>
+            )}
 
             {/* Accept contract button */}
-            {(e.contract_url || e.contract_url_summercamp) && !e.contract_signed_at && (
+            {(e.contract_url || e.contract_url_summercamp) && !(e.contract_signed_at_platform && e.contract_signed_at_summercamp) && !(e.contract_url && e.contract_signed_at_platform && !e.contract_url_summercamp) && !(e.contract_url_summercamp && e.contract_signed_at_summercamp && !e.contract_url) && (
               <div className="mt-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                 <p className="text-sm text-amber-800 dark:text-amber-200 mb-2">
                   O contrato está disponível e aguarda a sua aceitação para concluir a matrícula.
@@ -156,8 +171,8 @@ const ContractsList = ({ refreshKey }: Props) => {
                     setAcceptingContract(e.id);
                     try {
                       const contractTypes: Array<"platform" | "summercamp"> = [];
-                      if (e.contract_url) contractTypes.push("platform");
-                      if (e.contract_url_summercamp) contractTypes.push("summercamp");
+                      if (e.contract_url && !e.contract_signed_at_platform) contractTypes.push("platform");
+                      if (e.contract_url_summercamp && !e.contract_signed_at_summercamp) contractTypes.push("summercamp");
 
                       for (const contractType of contractTypes) {
                         const { data: pdfResult, error: pdfError } = await supabase.functions.invoke("generate-contract-pdf", {
@@ -174,9 +189,15 @@ const ContractsList = ({ refreshKey }: Props) => {
                         }
                       }
 
+                      const now = new Date().toISOString();
                       setEnrollments(prev => prev.map(en =>
                         en.id === e.id
-                          ? { ...en, contract_signed_at: new Date().toISOString(), status: "Contrato assinado" }
+                          ? {
+                              ...en,
+                              contract_signed_at_platform: e.contract_url ? now : en.contract_signed_at_platform,
+                              contract_signed_at_summercamp: e.contract_url_summercamp ? now : en.contract_signed_at_summercamp,
+                              status: "Contrato assinado",
+                            }
                           : en
                       ));
                       await supabase.from("enrollments").update({ status: "Contrato assinado" } as any).eq("id", e.id);
@@ -198,7 +219,7 @@ const ContractsList = ({ refreshKey }: Props) => {
             )}
 
             {/* Signed confirmation */}
-            {e.contract_signed_at && (
+            {((e.contract_url && e.contract_signed_at_platform) || (e.contract_url_summercamp && e.contract_signed_at_summercamp)) && (
               <div className="mt-3 p-3 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-2">
                 <Check size={16} className="text-green-600 shrink-0" />
                 <p className="text-sm text-green-800 dark:text-green-200 font-medium">Contrato aceite digitalmente</p>

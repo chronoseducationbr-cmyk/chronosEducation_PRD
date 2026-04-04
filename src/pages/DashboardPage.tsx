@@ -359,7 +359,7 @@ const DashboardPage = () => {
         return false;
       }
 
-      if (!referralEnrollment[0].contract_signed_at) {
+      if (!referralEnrollment[0].contract_signed_at_platform) {
         setValidationErrors(["referralEmail"]);
         toast({ title: "Aluno indicado não encontrado", description: "O email indicado não corresponde a nenhum aluno matriculado.", variant: "destructive" });
         return false;
