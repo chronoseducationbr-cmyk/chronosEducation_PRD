@@ -435,7 +435,7 @@ const DashboardPage = () => {
           </TabsList>
 
           <TabsContent value="inscricoes">
-            <div className="max-w-xl">
+            <div className="max-w-2xl">
               {!showForm ? (
                 <>
                   <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} />
