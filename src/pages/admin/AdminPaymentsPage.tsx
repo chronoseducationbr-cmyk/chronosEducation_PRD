@@ -387,7 +387,11 @@ const AdminPaymentsPage = () => {
                         <SetFinancialValuesDialog
                           enrollmentId={e.id}
                           studentName={e.student_name}
-                          contractSignedAt={e.contract_signed_at_platform}
+                          contractSignedAt={
+                            (e.tuition_installments > 0 && !e.contract_signed_at_platform) || (e.summercamp_installments > 0 && !e.contract_signed_at_summercamp)
+                              ? null
+                              : e.contract_signed_at_platform || e.contract_signed_at_summercamp
+                          }
                           currentValues={{
                             inscription_fee_cents: e.inscription_fee_cents,
                             inscription_due_date: e.inscription_due_date,
