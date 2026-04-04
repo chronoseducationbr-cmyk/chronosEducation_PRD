@@ -4,7 +4,7 @@ const civilStatusOptions = [
   "Casado(a)",
   "Divorciado(a)",
   "Solteiro(a)",
-  "União Estável",
+  
   "Viúvo(a)",
 ];
 
