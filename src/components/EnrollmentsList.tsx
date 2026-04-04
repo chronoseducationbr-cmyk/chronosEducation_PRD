@@ -136,6 +136,14 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                       <p className="text-xs text-muted-foreground">
                         Inscrito em {formatDate(e.created_at)}
                       </p>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        {e.tuition_installments > 0 && (
+                          <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-primary/10 text-primary">Plataforma Online</span>
+                        )}
+                        {e.summercamp_installments > 0 && (
+                          <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-secondary/10 text-secondary">Summer Camp</span>
+                        )}
+                      </div>
                     </div>
                     <div className="sm:hidden shrink-0">
                       {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
