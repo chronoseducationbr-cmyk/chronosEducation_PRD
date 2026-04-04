@@ -1,0 +1,1 @@
+UPDATE enrollments SET summercamp_installments = 0, summercamp_installment_cents = 0 WHERE student_name ILIKE '%Constança so Plataforma%' AND summercamp_installments = 6;
