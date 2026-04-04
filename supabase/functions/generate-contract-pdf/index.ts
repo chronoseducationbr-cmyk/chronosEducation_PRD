@@ -341,7 +341,7 @@ async function buildContractPdf(
     guardian.fullName || "[Nome completo]",
     guardian.nationality || "[nacionalidade]",
     guardian.civilStatus || "[estado civil]",
-    guardian.profession || "[profissao]",
+    (guardian.profession || "[profissao]").replace(/\b\w/g, (c: string) => c.toUpperCase()),
     `inscrito(a) no CPF sob o n. ${guardian.cpf || "[CPF]"} e RG n. ${guardian.rg || "[RG]"}`,
     `residente e domiciliado(a) em ${student.studentAddress || "[endereco completo]"}`,
   ];
