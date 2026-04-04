@@ -84,6 +84,30 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
     fetchData();
   }, [user]);
 
+  // Save all unsaved fields on unmount (e.g. when switching tabs without blurring)
+  const latestRef = useRef({ fullName, email, phone, cpf, nationality, civilStatus, profession, rgNumber, guardianAddress });
+  useEffect(() => {
+    latestRef.current = { fullName, email, phone, cpf, nationality, civilStatus, profession, rgNumber, guardianAddress };
+  }, [fullName, email, phone, cpf, nationality, civilStatus, profession, rgNumber, guardianAddress]);
+
+  useEffect(() => {
+    return () => {
+      if (!user) return;
+      const d = latestRef.current;
+      supabase.from("profiles").update({
+        full_name: d.fullName.trim(),
+        email: d.email.trim(),
+        phone: d.phone.trim(),
+        cpf: d.cpf.trim(),
+        nationality: d.nationality.trim(),
+        civil_status: d.civilStatus.trim(),
+        profession: d.profession.trim(),
+        rg_number: d.rgNumber.trim(),
+        guardian_address: d.guardianAddress.trim(),
+      } as any).eq("user_id", user.id).then(() => {});
+    };
+  }, [user]);
+
   const saveProfile = async (fields: Record<string, string>) => {
     if (!user) return;
     await supabase.from("profiles").update(fields as any).eq("user_id", user.id);
