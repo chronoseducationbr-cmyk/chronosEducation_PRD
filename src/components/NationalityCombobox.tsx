@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { nationalities, type Nationality } from "@/data/nationalities";
-import { hasFlag } from "country-flag-icons";
+
 import * as Flags from "country-flag-icons/react/3x2";
 
 const FlagIcon = ({ code, size = 20 }: { code: string; size?: number }) => {
