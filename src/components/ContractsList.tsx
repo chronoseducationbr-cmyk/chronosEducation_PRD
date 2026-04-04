@@ -108,7 +108,7 @@ const ContractsList = ({ refreshKey }: Props) => {
                       className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm"
                     >
                       <Download size={14} className="text-secondary" />
-                      Contrato Plataforma
+                      Contrato Plataforma Online
                     </button>
                   )}
                   {e.contract_url_summercamp && (
