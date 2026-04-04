@@ -315,7 +315,7 @@ const AdminEnrollmentsPage = () => {
                         </PopoverContent>
                       </Popover>
                     )}
-                    {isExpanded ? <ChevronUp size={16} className="text-muted-foreground shrink-0" /> : <ChevronDown size={16} className="text-muted-foreground shrink-0" />}
+                    {isExpanded ? <ChevronUp size={16} className="text-muted-foreground shrink-0 ml-auto" /> : <ChevronDown size={16} className="text-muted-foreground shrink-0 ml-auto" />}
                   </div>
                   {/* Line 2: badges, financial summary, actions */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
