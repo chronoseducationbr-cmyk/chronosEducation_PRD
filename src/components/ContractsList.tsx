@@ -275,10 +275,49 @@ const ContractsList = ({ refreshKey }: Props) => {
             {!e.contract_url && !e.contract_url_summercamp && e.tuition_installment_cents === 0 && e.summercamp_installment_cents === 0 && (
               <p className="text-muted-foreground font-medium text-xs italic">Ainda não disponível</p>
             )}
-          </div>
-        ))}
       </div>
     </div>
+  );
+};
+
+const EnrollmentContractCard = ({ enrollment: e, defaultExpanded, acceptingContract, setAcceptingContract, setEnrollments, toast, formatDate }: {
+  enrollment: Enrollment;
+  defaultExpanded: boolean;
+  acceptingContract: string | null;
+  setAcceptingContract: (v: string | null) => void;
+  setEnrollments: React.Dispatch<React.SetStateAction<Enrollment[]>>;
+  toast: any;
+  formatDate: (d: string) => string;
+}) => {
+  const [expanded, setExpanded] = useState(defaultExpanded);
+
+  const allSigned =
+    (!e.contract_url || !!e.contract_signed_at_platform) &&
+    (!e.contract_url_summercamp || !!e.contract_signed_at_summercamp);
+
+  return (
+    <div className="bg-card rounded-xl border border-border shadow-card overflow-hidden">
+      <button
+        onClick={() => setExpanded(v => !v)}
+        className="w-full flex items-center gap-3 p-4 text-left hover:bg-muted/30 transition-colors"
+      >
+        {e.student_photo_url ? (
+          <img src={e.student_photo_url} alt={e.student_name} className="w-10 h-10 rounded-full object-cover border-2 border-secondary/30 shrink-0" />
+        ) : (
+          <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+            <GraduationCap size={20} />
+          </div>
+        )}
+        <p className="font-medium text-foreground flex-1">{e.student_name || "Sem nome"}</p>
+        {allSigned && (e.contract_url || e.contract_url_summercamp) && (
+          <Check size={16} className="text-green-600 shrink-0" />
+        )}
+        {expanded ? <ChevronUp size={16} className="text-muted-foreground shrink-0" /> : <ChevronDown size={16} className="text-muted-foreground shrink-0" />}
+      </button>
+
+      {expanded && (
+        <div className="px-4 pb-4 border-t border-border">
+          <div className="mt-3 space-y-3">
   );
 };
 
