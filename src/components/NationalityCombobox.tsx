@@ -112,7 +112,7 @@ const NationalityCombobox = ({ value, onChange, onBlur, className = "", placehol
             setQuery("");
           }}
           onKeyDown={handleKeyDown}
-          className={`${className} ${value && selectedNationality ? "pl-10" : ""}`}
+          className={`${className} ${value && selectedNationality ? "pl-10" : ""} cursor-pointer`}
           placeholder={placeholder}
           autoComplete="off"
         />
