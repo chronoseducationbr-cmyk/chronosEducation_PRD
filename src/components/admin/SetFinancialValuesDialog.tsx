@@ -42,7 +42,7 @@ interface Props {
   missingService?: "platform" | "summercamp" | null;
 }
 
-const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt, currentValues, onSaved, disabled = false }: Props) => {
+const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt, currentValues, onSaved, disabled = false, missingService = null }: Props) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
