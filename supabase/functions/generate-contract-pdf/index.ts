@@ -271,7 +271,7 @@ function isPaymentSection(title: string): boolean {
 }
 
 async function buildContractPdf(
-  guardian: { fullName: string; email: string; phone: string },
+  guardian: { fullName: string; email: string; phone: string; nationality?: string; civilStatus?: string; profession?: string; cpf?: string; rg?: string },
   student: {
     studentName: string;
     studentBirthDate: string;
@@ -337,7 +337,15 @@ async function buildContractPdf(
   drawSectionTitle(ctx, "1. PARTES");
   drawParagraph(ctx, "Pelo presente instrumento particular, de um lado:");
   ctx.y -= 4;
-  drawParagraph(ctx, `CONTRATANTE: ${guardian.fullName || "[Nome completo]"}, residente e domiciliado(a) em ${student.studentAddress || "[endereco completo]"}, e-mail ${guardian.email || "[e-mail]"}, celular ${guardian.phone || "[celular]"};`);
+  const contratanteParts = [
+    guardian.fullName || "[Nome completo]",
+    guardian.nationality || "[nacionalidade]",
+    guardian.civilStatus || "[estado civil]",
+    guardian.profession || "[profissao]",
+    `inscrito(a) no CPF sob o n. ${guardian.cpf || "[CPF]"} e RG n. ${guardian.rg || "[RG]"}`,
+    `residente e domiciliado(a) em ${student.studentAddress || "[endereco completo]"}`,
+  ];
+  drawParagraph(ctx, `CONTRATANTE: ${contratanteParts.join(", ")};`);
   ctx.y -= 8;
 
   // Student info block
@@ -482,18 +490,22 @@ serve(async (req) => {
 
     if (!guardianData || !studentData) {
       const [{ data: profile }, { data: authUser }] = await Promise.all([
-        supabase.from("profiles").select("full_name, email, phone").eq("user_id", enrollment.user_id).single(),
+        supabase.from("profiles").select("full_name, email, phone, nationality, civil_status, profession, cpf, rg_number").eq("user_id", enrollment.user_id).single(),
         supabase.auth.admin.getUserById(enrollment.user_id),
       ]);
 
       const guardianEmail = enrollment.guardian_email || profile?.email || authUser?.user?.email || "";
-
       const guardianName = profile?.full_name || authUser?.user?.user_metadata?.full_name || "";
 
       guardianData = guardianData || {
         fullName: guardianName,
         email: guardianEmail,
         phone: profile?.phone || "",
+        nationality: profile?.nationality || "",
+        civilStatus: profile?.civil_status || "",
+        profession: profile?.profession || "",
+        cpf: profile?.cpf || "",
+        rg: profile?.rg_number || "",
       };
 
       studentData = studentData || {
