@@ -426,7 +426,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
               </>
             )}
 
-            {currentValues.summercamp_installments > 0 && (
+            {currentValues.summercamp_installments > 0 && showSummercampSection && (
               <>
                 <div className="border-t border-border pt-3">
                   <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Summer Camp</Label>
