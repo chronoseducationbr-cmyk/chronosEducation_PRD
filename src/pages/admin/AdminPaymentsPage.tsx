@@ -376,7 +376,7 @@ const AdminPaymentsPage = () => {
                         <SetFinancialValuesDialog
                           enrollmentId={e.id}
                           studentName={e.student_name}
-                          contractSignedAt={e.contract_signed_at}
+                          contractSignedAt={e.contract_signed_at_platform}
                           currentValues={{
                             inscription_fee_cents: e.inscription_fee_cents,
                             inscription_due_date: e.inscription_due_date,
