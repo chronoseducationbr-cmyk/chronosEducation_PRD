@@ -177,7 +177,8 @@ const AdminEnrollmentsPage = () => {
     const { id, to: status } = pendingStatusChange;
     const updates: any = { status };
     if (status === "Contrato assinado") {
-      updates.contract_signed_at = new Date().toISOString();
+      updates.contract_signed_at_platform = new Date().toISOString();
+      updates.contract_signed_at_summercamp = new Date().toISOString();
     }
     const { error } = await supabase
       .from("enrollments")
