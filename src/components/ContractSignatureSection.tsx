@@ -109,6 +109,20 @@ function parseListItem(line: string, previousItem: ContractItem | null): Extract
   return null;
 }
 
+function parseSectionHeader(line: string): string | null {
+  const trimmed = line.trim();
+
+  if (/^CL[AÁ]USULA\s+\d+\s*[\-–—]?.+$/i.test(trimmed)) {
+    return trimmed;
+  }
+
+  const numericHeaderMatch = trimmed.match(/^(\d+)\.\s+(.+)$/);
+  if (!numericHeaderMatch) return null;
+
+  const title = numericHeaderMatch[2].trim();
+  return title === title.toUpperCase() ? `${numericHeaderMatch[1]}. ${title}` : null;
+}
+
 function parseContractSections(text: string): ContractSection[] {
   if (!text?.trim()) return [];
 
@@ -119,11 +133,11 @@ function parseContractSections(text: string): ContractSection[] {
 
   for (const raw of lines) {
     const line = raw.trimEnd();
-    const headerMatch = line.match(/^CL[AÁ]USULA\s+\d+\s*[\-–—]?.+$/i) || line.match(/^(\d+)\.\s+(.+)$/);
+    const sectionHeader = parseSectionHeader(line);
 
-    if (headerMatch) {
+    if (sectionHeader) {
       if (current) sections.push(current);
-      current = { title: line.trim(), items: [] };
+      current = { title: sectionHeader, items: [] };
       previousItem = null;
       continue;
     }
