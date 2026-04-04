@@ -173,7 +173,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
 
     const rows: any[] = [];
 
-    if (inscription_fee_cents > 0 && inscriptionDueDate) {
+    if (inscription_fee_cents > 0 && inscriptionDueDate && updates.tuition_installments > 0) {
       rows.push({
         enrollment_id: enrollmentId,
         type: "inscription_fee",
