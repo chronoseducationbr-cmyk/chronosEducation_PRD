@@ -58,8 +58,10 @@ interface Enrollment {
   summercamp_installments: number;
   contract_url: string | null;
   contract_url_summercamp: string | null;
-  contract_sent_at: string | null;
-  contract_signed_at: string | null;
+  contract_sent_at_platform: string | null;
+  contract_signed_at_platform: string | null;
+  contract_sent_at_summercamp: string | null;
+  contract_signed_at_summercamp: string | null;
   tuition_start_date: string | null;
   summercamp_start_date: string | null;
   quiz_test_id: string | null;
