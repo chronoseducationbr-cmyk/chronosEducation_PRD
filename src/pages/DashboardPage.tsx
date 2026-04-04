@@ -31,12 +31,13 @@ const DashboardPage = () => {
       if (!user) return;
       const { data } = await supabase
         .from("enrollments")
-        .select("id")
-        .eq("user_id", user.id)
-        .not("contract_url", "is", null)
-        .is("contract_signed_at_platform", null)
-        .limit(1);
-      setHasUnsignedContract(!!(data && data.length > 0));
+        .select("id, contract_url, contract_url_summercamp, contract_signed_at_platform, contract_signed_at_summercamp")
+        .eq("user_id", user.id);
+      const hasUnsigned = (data || []).some(e =>
+        (e.contract_url && !e.contract_signed_at_platform) ||
+        (e.contract_url_summercamp && !e.contract_signed_at_summercamp)
+      );
+      setHasUnsignedContract(hasUnsigned);
     };
     checkUnsignedContracts();
   }, [user, refreshKey]);
