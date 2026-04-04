@@ -435,7 +435,7 @@ const DashboardPage = () => {
           </TabsList>
 
           <TabsContent value="inscricoes">
-            <div className="max-w-xl">
+            <div className="max-w-2xl">
               {!showForm ? (
                 <>
                   <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} />
@@ -537,13 +537,13 @@ const DashboardPage = () => {
           </TabsContent>
 
           <TabsContent value="contratos">
-            <div className="max-w-xl">
+            <div className="max-w-2xl">
               <ContractsList refreshKey={refreshKey} />
             </div>
           </TabsContent>
 
           <TabsContent value="prova-ingles">
-            <div className="max-w-xl">
+            <div className="max-w-2xl">
               <QuizResultsList refreshKey={refreshKey} />
             </div>
           </TabsContent>
