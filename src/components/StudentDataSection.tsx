@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { GraduationCap, Mail, MapPin, Calendar, Camera, X } from "lucide-react";
+import GenderCombobox from "./GenderCombobox";
 
 export interface StudentData {
   studentName: string;
