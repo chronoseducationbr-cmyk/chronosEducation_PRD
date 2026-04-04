@@ -34,7 +34,7 @@ const DashboardPage = () => {
         .select("id")
         .eq("user_id", user.id)
         .not("contract_url", "is", null)
-        .is("contract_signed_at", null)
+        .is("contract_signed_at_platform", null)
         .limit(1);
       setHasUnsignedContract(!!(data && data.length > 0));
     };
