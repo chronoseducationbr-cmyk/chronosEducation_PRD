@@ -337,12 +337,16 @@ async function buildContractPdf(
   drawSectionTitle(ctx, "1. PARTES");
   drawParagraph(ctx, "Pelo presente instrumento particular, de um lado:");
   ctx.y -= 4;
+  const capitalizeProfession = (text: string): string => {
+    if (!text) return "[profissao]";
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
   const contratanteParts = [
     guardian.fullName || "[Nome completo]",
-    guardian.nationality || "[nacionalidade]",
+    `de nacionalidade ${guardian.nationality || "[nacionalidade]"}`,
     guardian.civilStatus || "[estado civil]",
-    (guardian.profession || "[profissao]").replace(/\b\w/g, (c: string) => c.toUpperCase()),
-    `inscrito(a) no CPF sob o n. ${guardian.cpf || "[CPF]"} e RG n. ${guardian.rg || "[RG]"}`,
+    capitalizeProfession(guardian.profession || ""),
+    `inscrito(a) no CPF sob o n\u00BA ${guardian.cpf || "[CPF]"} e RG n\u00BA ${guardian.rg || "[RG]"}`,
     `residente e domiciliado(a) em ${student.studentAddress || "[endereco completo]"}`,
   ];
   drawParagraph(ctx, `CONTRATANTE: ${contratanteParts.join(", ")};`);
