@@ -582,16 +582,18 @@ serve(async (req) => {
 
     // Update enrollment
     const contractUrlField = resolvedContractType === "summercamp" ? "contract_url_summercamp" : "contract_url";
+    const sentAtField = resolvedContractType === "summercamp" ? "contract_sent_at_summercamp" : "contract_sent_at_platform";
+    const signedAtField = resolvedContractType === "summercamp" ? "contract_signed_at_summercamp" : "contract_signed_at_platform";
     const updateFields: Record<string, unknown> = {
       [contractUrlField]: contractUrl,
     };
 
     if (isSigned) {
-      updateFields.contract_signed_at = now.toISOString();
+      updateFields[signedAtField] = now.toISOString();
       updateFields.status = "Contrato assinado";
     } else {
-      updateFields.contract_sent_at = now.toISOString();
-      updateFields.contract_signed_at = null;
+      updateFields[sentAtField] = now.toISOString();
+      updateFields[signedAtField] = null;
       updateFields.status = "Pendente de assinatura de contrato";
     }
 
