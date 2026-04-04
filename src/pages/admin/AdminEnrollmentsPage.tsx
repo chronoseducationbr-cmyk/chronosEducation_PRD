@@ -320,32 +320,6 @@ const AdminEnrollmentsPage = () => {
                   {/* Line 2: badges, financial summary, actions */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                     <div className="flex items-center gap-2 flex-wrap flex-1 min-w-0">
-                      {e.guardian && (
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <button onClick={(ev) => ev.stopPropagation()} className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-muted hover:bg-muted-foreground/20 transition-colors" title="Dados do responsável">
-                              <Info size={12} className="text-muted-foreground" />
-                            </button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-64 p-3" side="right">
-                            <p className="text-xs font-semibold text-muted-foreground mb-2">Responsável</p>
-                            <div className="space-y-1.5 text-sm">
-                              <div>
-                                <span className="text-muted-foreground text-xs">Nome:</span>{" "}
-                                <span className="text-foreground font-medium">{e.guardian.full_name || "—"}</span>
-                              </div>
-                              <div>
-                                <span className="text-muted-foreground text-xs">Email:</span>{" "}
-                                <span className="text-foreground font-medium">{e.guardian.email || "—"}</span>
-                              </div>
-                              <div>
-                                <span className="text-muted-foreground text-xs">Telefone:</span>{" "}
-                                <span className="text-foreground font-medium">{e.guardian.phone || "—"}</span>
-                              </div>
-                            </div>
-                          </PopoverContent>
-                        </Popover>
-                      )}
                       <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
                         {e.status}
                       </span>
