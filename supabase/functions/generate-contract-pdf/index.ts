@@ -93,14 +93,31 @@ function drawField(ctx: DrawCtx, label: string, value: string, x: number) {
   ctx.y -= 15;
 }
 
-function drawBullet(ctx: DrawCtx, text: string) {
-  const lines = wrapText(text, ctx.font, 10, 595.28 - 80 - 50);
+interface ParagraphItem { type: "paragraph"; text: string }
+interface ListItem {
+  type: "list";
+  text: string;
+  listStyle: "ordered" | "unordered";
+  marker: string;
+  level: number;
+}
+type SectionItem = ParagraphItem | ListItem;
+
+function drawListItem(ctx: DrawCtx, item: ListItem) {
+  const marker = sanitize(item.listStyle === "ordered" ? item.marker : "\u2022");
+  const safeText = sanitize(item.text);
+  const markerX = 65 + item.level * 18;
+  const markerFont = item.listStyle === "ordered" ? ctx.fontBold : ctx.font;
+  const markerWidth = Math.max(10, markerFont.widthOfTextAtSize(marker + " ", 10));
+  const textX = markerX + markerWidth + 4;
+  const lines = wrapText(safeText, ctx.font, 10, 595.28 - textX - 50);
+
   for (let i = 0; i < lines.length; i++) {
     ensureSpace(ctx, 16);
     if (i === 0) {
-      ctx.page.drawText("\u2022", { x: 65, y: ctx.y, size: 10, font: ctx.font, color: BLACK });
+      ctx.page.drawText(marker, { x: markerX, y: ctx.y, size: 10, font: markerFont, color: BLACK });
     }
-    ctx.page.drawText(lines[i], { x: 80, y: ctx.y, size: 10, font: ctx.font, color: BLACK });
+    ctx.page.drawText(lines[i], { x: textX, y: ctx.y, size: 10, font: ctx.font, color: BLACK });
     ctx.y -= 14;
   }
 }
@@ -109,40 +126,111 @@ function drawBullet(ctx: DrawCtx, text: string) {
  * Parses contract text from app_settings into structured sections.
  * Same logic as ContractSignatureSection on the frontend.
  */
-interface SectionItem { type: "paragraph" | "bullet"; text: string }
 interface ContractSection { title: string; items: SectionItem[] }
+
+function getNestedListLevel(previousItem: SectionItem | null): number {
+  if (previousItem?.type === "list" && previousItem.listStyle === "ordered" && /:\s*$/.test(previousItem.text)) {
+    return previousItem.level + 1;
+  }
+
+  if (previousItem?.type === "list" && previousItem.listStyle === "unordered" && previousItem.level > 0) {
+    return previousItem.level;
+  }
+
+  return 0;
+}
+
+function parseListItem(line: string, previousItem: SectionItem | null): ListItem | null {
+  const singleLetterTabMatch = line.match(/^([a-z])\t+(.+)$/i);
+  if (singleLetterTabMatch) {
+    const markerLetter = singleLetterTabMatch[1].toLowerCase();
+
+    if (markerLetter === "o") {
+      return {
+        type: "list",
+        text: singleLetterTabMatch[2].trim(),
+        listStyle: "unordered",
+        marker: "\u2022",
+        level: Math.max(1, getNestedListLevel(previousItem)),
+      };
+    }
+
+    return {
+      type: "list",
+      text: singleLetterTabMatch[2].trim(),
+      listStyle: "ordered",
+      marker: `${singleLetterTabMatch[1]})`,
+      level: 1,
+    };
+  }
+
+  const bulletMatch = line.match(/^[\u2022\u2023\u25E6\u2043\u25CF\u2219]\s*(.+)$/);
+  if (bulletMatch) {
+    return {
+      type: "list",
+      text: bulletMatch[1].trim(),
+      listStyle: "unordered",
+      marker: "\u2022",
+      level: getNestedListLevel(previousItem),
+    };
+  }
+
+  const dashMatch = line.match(/^\-\s+(.+)$/);
+  if (dashMatch) {
+    return {
+      type: "list",
+      text: dashMatch[1].trim(),
+      listStyle: "unordered",
+      marker: "\u2022",
+      level: getNestedListLevel(previousItem),
+    };
+  }
+
+  const orderedMatch = line.match(/^((?:\d+[ºª]?[\.)]|[IVX]+[\.)]|[a-z][\.)]))\s*(.+)$/i);
+  if (orderedMatch) {
+    return {
+      type: "list",
+      text: orderedMatch[2].trim(),
+      listStyle: "ordered",
+      marker: orderedMatch[1],
+      level: 0,
+    };
+  }
+
+  return null;
+}
 
 function parseContractSections(text: string): ContractSection[] {
   if (!text?.trim()) return [];
   const lines = text.split("\n");
   const sections: ContractSection[] = [];
   let current: ContractSection | null = null;
+  let previousItem: SectionItem | null = null;
 
   for (const raw of lines) {
     const line = raw.trimEnd();
     const headerMatch = line.match(/^CL[AÁ]USULA\s+(\d+)\s*[\-–—]?\s*(.+)$/i);
     if (headerMatch) {
       if (current) sections.push(current);
-      current = { title: `CLAUSULA ${headerMatch[1]} - ${headerMatch[2]}`, items: [] };
+      current = { title: line.trim(), items: [] };
+      previousItem = null;
       continue;
     }
     if (!current) continue;
     const trimmedLine = line.trim();
-    const bulletLine = trimmedLine.replace(/^[\u2022\u2023\u25E6\u2043\u25CF\u2219]\s*/, "");
-    if (bulletLine !== trimmedLine) {
-      if (bulletLine.trim()) current.items.push({ type: "bullet", text: bulletLine.trim() });
+    if (!trimmedLine) {
+      previousItem = null;
+      continue;
+    }
+
+    const parsedItem = parseListItem(trimmedLine, previousItem);
+    if (parsedItem) {
+      current.items.push(parsedItem);
+      previousItem = parsedItem;
     } else {
-      const listMatch = trimmedLine.match(/^([a-z][\)\.\t]\s*|[IVX]+[\.\)]\s|[0-9]+[ºª\.]\s|\-\s)\s*(.+)$/);
-      if (listMatch) {
-        const prefix = listMatch[1].trim();
-        const body = listMatch[2].trim();
-        // Single letter + tab (e.g. "o\tAtos...") is a sub-bullet marker — strip the prefix
-        const isSingleLetterTab = /^[a-z][\t]/.test(listMatch[1]);
-        const text = isSingleLetterTab ? body : (prefix + " " + body).trim();
-        current.items.push({ type: "bullet", text });
-      } else if (line.trim()) {
-        current.items.push({ type: "paragraph", text: line.trim() });
-      }
+      const paragraphItem: SectionItem = { type: "paragraph", text: trimmedLine };
+      current.items.push(paragraphItem);
+      previousItem = paragraphItem;
     }
   }
   if (current) sections.push(current);
@@ -280,13 +368,14 @@ async function buildContractPdf(
       };
 
       for (const item of section.items) {
-        if (item.type === "bullet") drawBullet(ctx, replacePlaceholders(item.text));
-        else drawParagraph(ctx, replacePlaceholders(item.text));
+        const text = replacePlaceholders(item.text);
+        if (item.type === "list") drawListItem(ctx, { ...item, text });
+        else drawParagraph(ctx, text);
       }
     } else {
       // Normal section - render items in original order
       for (const item of section.items) {
-        if (item.type === "bullet") drawBullet(ctx, item.text);
+        if (item.type === "list") drawListItem(ctx, item);
         else drawParagraph(ctx, item.text);
       }
     }
