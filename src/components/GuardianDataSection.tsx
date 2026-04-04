@@ -154,8 +154,10 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
               <label className="text-sm font-medium text-foreground block mb-1.5">Nacionalidade <span className="text-[#F9B91D]">*</span></label>
               <NationalityCombobox
                 value={nationality}
-                onChange={(val) => setNationality(val)}
-                onBlur={() => saveProfile({ nationality: nationality.trim() })}
+                onChange={(val) => {
+                  setNationality(val);
+                  if (val) saveProfile({ nationality: val.trim() });
+                }}
                 className={inputClass("guardianNationality")}
                 placeholder="Ex: Brasileira"
               />
