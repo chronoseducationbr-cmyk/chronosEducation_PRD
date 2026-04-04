@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { GraduationCap, FileText, Download, ShieldCheck, Check, Monitor, Sun } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { GraduationCap, FileText, Download, ShieldCheck, Check, Monitor, Sun, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
