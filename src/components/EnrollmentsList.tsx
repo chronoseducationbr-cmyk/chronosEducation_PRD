@@ -320,8 +320,13 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleAddService} disabled={requesting}>
+            <AlertDialogAction
+              onClick={handleAddService}
+              disabled={requesting}
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+            >
               {requesting ? "A processar..." : "Confirmar"}
+            </AlertDialogAction>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
