@@ -313,16 +313,26 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
 
   const hasValues = currentValues.inscription_fee_cents > 0 || currentValues.tuition_installment_cents > 0 || currentValues.summercamp_installment_cents > 0;
 
+  const buttonLabel = missingService === "platform"
+    ? "Editar valores Plataforma Online"
+    : missingService === "summercamp"
+    ? "Editar valores Summer Camp"
+    : hasValues ? "Editar valores" : "Definir valores";
+
+  // Which sections to show in dialog
+  const showPlatformSection = missingService === null || missingService === "platform";
+  const showSummercampSection = missingService === null || missingService === "summercamp";
+
   return (
     <>
       <button
         onClick={(ev) => { ev.stopPropagation(); if (!disabled) handleOpen(); }}
         disabled={disabled}
         className={`inline-flex items-center gap-1 text-[11px] font-medium transition-colors ${disabled ? "text-muted-foreground/50 cursor-not-allowed" : hasValues ? "text-[#F9B91D] hover:text-[#F9B91D]/80" : "text-accent hover:text-accent/80"}`}
-        title={disabled ? "Valores já definidos (existem parcelas geradas)" : hasValues ? "Editar valores financeiros" : "Definir valores financeiros"}
+        title={disabled ? "Valores já definidos (existem parcelas geradas)" : buttonLabel}
       >
         <Settings size={12} />
-        {hasValues ? "Editar valores" : "Definir valores"}
+        {buttonLabel}
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
