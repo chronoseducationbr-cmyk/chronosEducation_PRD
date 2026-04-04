@@ -288,7 +288,7 @@ const AdminEnrollmentsPage = () => {
                 >
                   {/* Line 1: only student full name */}
                   <div className="flex items-center gap-2">
-                    <p className="font-semibold text-foreground flex-1">{e.student_name || "Sem nome"}</p>
+                    <p className="font-semibold text-foreground">{e.student_name || "Sem nome"}</p>
                     {e.guardian && (
                       <Popover>
                         <PopoverTrigger asChild>
