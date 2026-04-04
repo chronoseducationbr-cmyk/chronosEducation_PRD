@@ -176,20 +176,14 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
             </div>
             <div>
               <label className="text-sm font-medium text-foreground block mb-1.5">Estado Civil <span className="text-[#F9B91D]">*</span></label>
-              <select
+              <CivilStatusCombobox
                 value={civilStatus}
-                onChange={(e) => {
-                  setCivilStatus(e.target.value);
-                  saveProfile({ civil_status: e.target.value });
+                onChange={(val) => {
+                  setCivilStatus(val);
+                  if (val) saveProfile({ civil_status: val });
                 }}
                 className={inputClass("guardianCivilStatus")}
-              >
-                <option value="">Selecione...</option>
-                <option value="Casado(a)">Casado(a)</option>
-                <option value="Divorciado(a)">Divorciado(a)</option>
-                <option value="Solteiro(a)">Solteiro(a)</option>
-                <option value="Viúvo(a)">Viúvo(a)</option>
-              </select>
+              />
             </div>
             <div className="sm:col-span-2">
               <label className="text-sm font-medium text-foreground block mb-1.5">Profissão <span className="text-[#F9B91D]">*</span></label>
