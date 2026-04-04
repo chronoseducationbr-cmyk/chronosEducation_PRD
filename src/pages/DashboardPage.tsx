@@ -163,6 +163,12 @@ const DashboardPage = () => {
           full_name: g.fullName.trim(),
           email: g.email.trim(),
           phone: g.phone.trim(),
+          cpf: g.cpf.trim(),
+          nationality: g.nationality.trim(),
+          civil_status: g.civilStatus.trim(),
+          profession: g.profession.trim(),
+          rg_number: g.rgNumber.trim(),
+          guardian_address: g.guardianAddress.trim(),
         } as any)
         .eq("user_id", user.id);
 

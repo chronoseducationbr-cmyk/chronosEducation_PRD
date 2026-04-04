@@ -53,6 +53,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
         setFullName(p.full_name || user?.user_metadata?.full_name || "");
         setEmail(p.email || user?.email || "");
         setPhone(p.phone || "");
+        setCpf(p.cpf || "");
         setNationality(p.nationality || "");
         setCivilStatus(p.civil_status || "");
         setProfession(p.profession || "");
