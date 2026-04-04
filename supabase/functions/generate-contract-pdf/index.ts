@@ -271,7 +271,7 @@ function isPaymentSection(title: string): boolean {
 }
 
 async function buildContractPdf(
-  guardian: { fullName: string; email: string; phone: string },
+  guardian: { fullName: string; email: string; phone: string; nationality?: string; civilStatus?: string; profession?: string; cpf?: string; rg?: string },
   student: {
     studentName: string;
     studentBirthDate: string;
