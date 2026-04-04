@@ -129,7 +129,7 @@ const ContractsList = ({ refreshKey }: Props) => {
                           console.error("Download error:", err);
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm"
+                      className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm text-left"
                     >
                       <Download size={14} className="text-secondary" />
                       Contrato Summer Camp
