@@ -104,11 +104,11 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
       ? "default_tuition_installments, default_tuition_installment_cents"
       : "default_summercamp_installments, default_summercamp_installment_cents";
 
-    const { data: settings } = await supabase.from("app_settings").select(settingsField).single();
+    const { data: settings } = await supabase.from("app_settings").select("*").single();
 
     const updateData = serviceType === "plataforma"
-      ? { tuition_installments: settings?.default_tuition_installments ?? 16, tuition_installment_cents: 0 }
-      : { summercamp_installments: settings?.default_summercamp_installments ?? 6, summercamp_installment_cents: 0 };
+      ? { tuition_installments: (settings as any)?.default_tuition_installments ?? 16, tuition_installment_cents: 0 }
+      : { summercamp_installments: (settings as any)?.default_summercamp_installments ?? 6, summercamp_installment_cents: 0 };
 
     const { error } = await supabase
       .from("enrollments")
