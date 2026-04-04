@@ -338,18 +338,29 @@ const AdminPaymentsPage = () => {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      {!e.has_installments && (
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <AlertTriangle size={16} className="text-amber-500 shrink-0" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Mensalidades ainda não definidas</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      )}
+                      {(() => {
+                        const needsPlatformValues = e.tuition_installments > 0 && e.tuition_installment_cents === 0;
+                        const needsSummercampValues = e.summercamp_installments > 0 && e.summercamp_installment_cents === 0;
+                        const showWarning = !e.has_installments || needsPlatformValues || needsSummercampValues;
+                        if (!showWarning) return null;
+                        const tooltipMsg = needsPlatformValues
+                          ? "Valores financeiros de Matrícula e Plataforma Online ainda não definidos"
+                          : needsSummercampValues
+                          ? "Valores financeiros do Summer Camp ainda não definidos"
+                          : "Mensalidades ainda não definidas";
+                        return (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <AlertTriangle size={16} className="text-amber-500 shrink-0" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{tooltipMsg}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        );
+                      })()}
                       <p className="font-semibold text-foreground">{e.student_name}</p>
                       <button
                         onClick={(ev) => { ev.stopPropagation(); navigate(`/admin/inscricoes?student=${e.id}`); }}
@@ -376,7 +387,11 @@ const AdminPaymentsPage = () => {
                         <SetFinancialValuesDialog
                           enrollmentId={e.id}
                           studentName={e.student_name}
-                          contractSignedAt={e.contract_signed_at_platform}
+                          contractSignedAt={
+                            (e.tuition_installments > 0 && !e.contract_signed_at_platform) || (e.summercamp_installments > 0 && !e.contract_signed_at_summercamp)
+                              ? null
+                              : e.contract_signed_at_platform || e.contract_signed_at_summercamp
+                          }
                           currentValues={{
                             inscription_fee_cents: e.inscription_fee_cents,
                             inscription_due_date: e.inscription_due_date,
@@ -391,7 +406,11 @@ const AdminPaymentsPage = () => {
                             setEnrollments((prev) => prev.map((en) => en.id === e.id ? { ...en, ...updates } : en));
                             loadInstallments(e.id);
                           }}
-                          disabled={!!e.contract_sent_at_platform || !!e.contract_signed_at_platform}
+                          disabled={(() => {
+                            const platformDone = e.tuition_installments > 0 ? (!!e.contract_sent_at_platform || !!e.contract_signed_at_platform) : true;
+                            const summercampDone = e.summercamp_installments > 0 ? (!!e.contract_sent_at_summercamp || !!e.contract_signed_at_summercamp) : true;
+                            return platformDone && summercampDone;
+                          })()}
                         />
                       </div>
                     </div>
