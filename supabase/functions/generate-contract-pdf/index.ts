@@ -366,12 +366,9 @@ async function buildContractPdf(
   const filledContractText = contractText.replace(/\[Data\]/gi, dateLabel);
 
   // Parse and render contract text sections
-  const sections = parseContractSections(filledContractText);
+  const { sections, closingItems } = parseContractSections(filledContractText);
 
   for (const section of sections) {
-    // The preamble (PARTES) is already rendered dynamically above from enrollment data
-    // No sections need to be skipped - all parsed CLÁUSULA sections should be rendered
-
     drawSectionTitle(ctx, section.title);
 
     // If this is the payment section, replace placeholders with actual financial values
@@ -383,13 +380,10 @@ async function buildContractPdf(
 
       const replacePlaceholders = (text: string): string => {
         let result = text;
-        // Platform placeholders
         result = result.replace(/\[Total_1\]/gi, fmtNumber(totalCents + financial.inscriptionFeeCents));
         result = result.replace(/\[Valor[\s_]*Matricula\]/gi, fmtNumber(financial.inscriptionFeeCents));
         result = result.replace(/\[TOTAL_2\]/gi, fmtNumber(totalCents));
-        // Summer Camp placeholders
         result = result.replace(/\[TOTAL_3\]/gi, fmtNumber(totalCents));
-        // Shared placeholders
         result = result.replace(/\[Numero[\s_]*Parcelas?\]/gi, String(installmentCount));
         result = result.replace(/\[Valor[\s_]*Parcela\]/gi, fmtNumber(installmentCents));
         result = result.replace(/\[xxx\]/gi, "A definir");
@@ -402,11 +396,19 @@ async function buildContractPdf(
         else drawParagraph(ctx, text);
       }
     } else {
-      // Normal section - render items in original order
       for (const item of section.items) {
         if (item.type === "list") drawListItem(ctx, item);
         else drawParagraph(ctx, item.text);
       }
+    }
+  }
+
+  // Render closing text (signature block) separately, outside any clause
+  if (closingItems.length > 0) {
+    ctx.y -= 12;
+    for (const item of closingItems) {
+      if (item.type === "paragraph") drawParagraph(ctx, item.text, 50);
+      else if (item.type === "list") drawListItem(ctx, item);
     }
   }
 
