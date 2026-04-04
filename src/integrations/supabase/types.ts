@@ -386,6 +386,7 @@ export type Database = {
       profiles: {
         Row: {
           civil_status: string | null
+          cpf: string | null
           created_at: string
           email: string | null
           full_name: string
@@ -409,6 +410,7 @@ export type Database = {
         }
         Insert: {
           civil_status?: string | null
+          cpf?: string | null
           created_at?: string
           email?: string | null
           full_name?: string
@@ -432,6 +434,7 @@ export type Database = {
         }
         Update: {
           civil_status?: string | null
+          cpf?: string | null
           created_at?: string
           email?: string | null
           full_name?: string
