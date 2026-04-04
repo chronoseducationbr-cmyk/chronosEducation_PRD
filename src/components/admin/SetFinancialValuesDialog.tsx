@@ -438,6 +438,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                         type="date"
                         value={summercampStartDate}
                         onChange={(e) => setSummercampStartDate(e.target.value)}
+                        min={new Date().toISOString().split("T")[0]}
                         className="h-9"
                       />
                     </div>
