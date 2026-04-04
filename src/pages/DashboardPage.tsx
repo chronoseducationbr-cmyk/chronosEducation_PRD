@@ -349,13 +349,19 @@ const DashboardPage = () => {
     if (referralEmail) {
       const { data: referralEnrollment } = await supabase
         .from("enrollments")
-        .select("id")
+        .select("id, contract_signed_at")
         .ilike("student_email", referralEmail)
         .limit(1);
 
       if (!referralEnrollment || referralEnrollment.length === 0) {
         setValidationErrors(["referralEmail"]);
         toast({ title: "Aluno indicado não encontrado", description: "O email indicado não corresponde a nenhum aluno matriculado.", variant: "destructive" });
+        return false;
+      }
+
+      if (!referralEnrollment[0].contract_signed_at) {
+        setValidationErrors(["referralEmail"]);
+        toast({ title: "Contrato não assinado", description: "O aluno indicado ainda não tem contrato assinado.", variant: "destructive" });
         return false;
       }
     }
