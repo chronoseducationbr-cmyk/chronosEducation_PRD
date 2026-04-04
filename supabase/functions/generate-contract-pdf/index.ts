@@ -518,9 +518,17 @@ serve(async (req) => {
 
     const pdfBytes = await buildContractPdf(guardianData, studentData, financial, dateLabel, isSigned, signedDateStr, resolvedContractType, contractText);
 
+    // Build a sanitized student name for the file name
+    const sanitizedName = (studentData.studentName || "aluno")
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+
     // Upload to Supabase Storage
-    const typeSuffix = resolvedContractType === "summercamp" ? "-summercamp" : "";
-    const fileName = `contrato${typeSuffix}-${enrollmentId}.pdf`;
+    const fileName = resolvedContractType === "summercamp"
+      ? `contrato-summercamp-${sanitizedName}.pdf`
+      : `contrato-plataforma-Online_${sanitizedName}.pdf`;
     const filePath = `signed/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
