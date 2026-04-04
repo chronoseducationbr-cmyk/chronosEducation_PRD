@@ -490,18 +490,22 @@ serve(async (req) => {
 
     if (!guardianData || !studentData) {
       const [{ data: profile }, { data: authUser }] = await Promise.all([
-        supabase.from("profiles").select("full_name, email, phone").eq("user_id", enrollment.user_id).single(),
+        supabase.from("profiles").select("full_name, email, phone, nationality, civil_status, profession, cpf, rg_number").eq("user_id", enrollment.user_id).single(),
         supabase.auth.admin.getUserById(enrollment.user_id),
       ]);
 
       const guardianEmail = enrollment.guardian_email || profile?.email || authUser?.user?.email || "";
-
       const guardianName = profile?.full_name || authUser?.user?.user_metadata?.full_name || "";
 
       guardianData = guardianData || {
         fullName: guardianName,
         email: guardianEmail,
         phone: profile?.phone || "",
+        nationality: profile?.nationality || "",
+        civilStatus: profile?.civil_status || "",
+        profession: profile?.profession || "",
+        cpf: profile?.cpf || "",
+        rg: profile?.rg_number || "",
       };
 
       studentData = studentData || {
