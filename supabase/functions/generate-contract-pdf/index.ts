@@ -134,7 +134,12 @@ function parseContractSections(text: string): ContractSection[] {
     } else {
       const listMatch = trimmedLine.match(/^([a-z][\)\.\t]\s*|[IVX]+[\.\)]\s|[0-9]+[ºª\.]\s|\-\s)\s*(.+)$/);
       if (listMatch) {
-        current.items.push({ type: "bullet", text: (listMatch[1].trim() + " " + listMatch[2]).trim() });
+        const prefix = listMatch[1].trim();
+        const body = listMatch[2].trim();
+        // Single letter + tab (e.g. "o\tAtos...") is a sub-bullet marker — strip the prefix
+        const isSingleLetterTab = /^[a-z][\t]/.test(listMatch[1]);
+        const text = isSingleLetterTab ? body : (prefix + " " + body).trim();
+        current.items.push({ type: "bullet", text });
       } else if (line.trim()) {
         current.items.push({ type: "paragraph", text: line.trim() });
       }
