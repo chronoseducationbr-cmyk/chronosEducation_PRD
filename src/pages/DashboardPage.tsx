@@ -349,7 +349,7 @@ const DashboardPage = () => {
     if (referralEmail) {
       const { data: referralEnrollment } = await supabase
         .from("enrollments")
-        .select("id, contract_signed_at")
+        .select("id, contract_signed_at_platform")
         .ilike("student_email", referralEmail)
         .limit(1);
 
