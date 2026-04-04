@@ -38,9 +38,11 @@ interface Props {
   };
   onSaved: (updates: Record<string, any>) => void;
   disabled?: boolean;
+  /** Which service still needs values: "platform", "summercamp", or null (show all) */
+  missingService?: "platform" | "summercamp" | null;
 }
 
-const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt, currentValues, onSaved, disabled = false }: Props) => {
+const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt, currentValues, onSaved, disabled = false, missingService = null }: Props) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -311,16 +313,26 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
 
   const hasValues = currentValues.inscription_fee_cents > 0 || currentValues.tuition_installment_cents > 0 || currentValues.summercamp_installment_cents > 0;
 
+  const buttonLabel = missingService === "platform"
+    ? "Editar valores Plataforma Online"
+    : missingService === "summercamp"
+    ? "Editar valores Summer Camp"
+    : hasValues ? "Editar valores" : "Definir valores";
+
+  // Which sections to show in dialog
+  const showPlatformSection = missingService === null || missingService === "platform";
+  const showSummercampSection = missingService === null || missingService === "summercamp";
+
   return (
     <>
       <button
         onClick={(ev) => { ev.stopPropagation(); if (!disabled) handleOpen(); }}
         disabled={disabled}
         className={`inline-flex items-center gap-1 text-[11px] font-medium transition-colors ${disabled ? "text-muted-foreground/50 cursor-not-allowed" : hasValues ? "text-[#F9B91D] hover:text-[#F9B91D]/80" : "text-accent hover:text-accent/80"}`}
-        title={disabled ? "Valores já definidos (existem parcelas geradas)" : hasValues ? "Editar valores financeiros" : "Definir valores financeiros"}
+        title={disabled ? "Valores já definidos (existem parcelas geradas)" : buttonLabel}
       >
         <Settings size={12} />
-        {hasValues ? "Editar valores" : "Definir valores"}
+        {buttonLabel}
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -333,7 +345,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
           </DialogHeader>
 
           <div className="space-y-4 overflow-y-auto flex-1 px-1 pb-1">
-            {currentValues.tuition_installments > 0 && (
+            {currentValues.tuition_installments > 0 && showPlatformSection && (
             <div>
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Matrícula</Label>
               <div className="grid grid-cols-2 gap-3 mt-1">
@@ -364,7 +376,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
             </div>
             )}
 
-            {currentValues.tuition_installments > 0 && (
+            {currentValues.tuition_installments > 0 && showPlatformSection && (
               <>
                 <div className="border-t border-border pt-3">
                   <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Plataforma Online</Label>
@@ -414,7 +426,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
               </>
             )}
 
-            {currentValues.summercamp_installments > 0 && (
+            {currentValues.summercamp_installments > 0 && showSummercampSection && (
               <>
                 <div className="border-t border-border pt-3">
                   <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Summer Camp</Label>

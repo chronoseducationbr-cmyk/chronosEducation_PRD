@@ -411,6 +411,13 @@ const AdminPaymentsPage = () => {
                             const summercampDone = e.summercamp_installments > 0 ? (!!e.contract_sent_at_summercamp || !!e.contract_signed_at_summercamp) : true;
                             return platformDone && summercampDone;
                           })()}
+                          missingService={(() => {
+                            const platformHasValues = e.tuition_installments === 0 || e.tuition_installment_cents > 0;
+                            const summercampHasValues = e.summercamp_installments === 0 || e.summercamp_installment_cents > 0;
+                            if (!platformHasValues && summercampHasValues) return "platform";
+                            if (platformHasValues && !summercampHasValues) return "summercamp";
+                            return null;
+                          })()}
                         />
                       </div>
                     </div>
