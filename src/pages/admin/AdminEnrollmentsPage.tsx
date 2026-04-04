@@ -69,11 +69,8 @@ interface Enrollment {
 
 const statuses = [
   "Matrícula submetida",
-  "Matrícula confirmada",
   "Pendente de assinatura de contrato",
   "Contrato assinado",
-  "Em curso",
-  "Concluído",
   "Cancelado",
 ];
 
