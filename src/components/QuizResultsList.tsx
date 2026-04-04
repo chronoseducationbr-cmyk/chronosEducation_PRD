@@ -162,7 +162,6 @@ const QuizResultsList = ({ refreshKey }: Props) => {
                   className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#F9B91D] hover:text-[#F9B91D]/80 transition-colors"
                 >
                   Realizar prova de inglês
-                  <ExternalLink size={14} className="text-[#042d44]" />
                 </button>
               )}
             </div>
