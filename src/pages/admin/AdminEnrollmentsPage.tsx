@@ -287,8 +287,34 @@ const AdminEnrollmentsPage = () => {
                   onClick={() => setExpandedId(isExpanded ? null : e.id)}
                 >
                   {/* Line 1: only student full name */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <p className="font-semibold text-foreground flex-1">{e.student_name || "Sem nome"}</p>
+                    {e.guardian && (
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button onClick={(ev) => ev.stopPropagation()} className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-muted hover:bg-muted-foreground/20 transition-colors shrink-0" title="Dados do responsável">
+                            <Info size={12} className="text-muted-foreground" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-64 p-3" side="right">
+                          <p className="text-xs font-semibold text-muted-foreground mb-2">Responsável</p>
+                          <div className="space-y-1.5 text-sm">
+                            <div>
+                              <span className="text-muted-foreground text-xs">Nome:</span>{" "}
+                              <span className="text-foreground font-medium">{e.guardian.full_name || "—"}</span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground text-xs">Email:</span>{" "}
+                              <span className="text-foreground font-medium">{e.guardian.email || "—"}</span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground text-xs">Telefone:</span>{" "}
+                              <span className="text-foreground font-medium">{e.guardian.phone || "—"}</span>
+                            </div>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    )}
                     {isExpanded ? <ChevronUp size={16} className="text-muted-foreground shrink-0" /> : <ChevronDown size={16} className="text-muted-foreground shrink-0" />}
                   </div>
                   {/* Line 2: badges, financial summary, actions */}
