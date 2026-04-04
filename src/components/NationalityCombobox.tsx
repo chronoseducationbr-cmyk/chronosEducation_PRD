@@ -4,11 +4,17 @@ import { hasFlag } from "country-flag-icons";
 import * as Flags from "country-flag-icons/react/3x2";
 
 const FlagIcon = ({ code, size = 20 }: { code: string; size?: number }) => {
+  const fallback = <span className="inline-block" style={{ width: size, height: size * 2 / 3 }}>🏳️</span>;
   const upper = code.toUpperCase();
-  if (!upper || !hasFlag(upper)) return <span className="inline-block" style={{ width: size, height: size * 2 / 3 }}>🏳️</span>;
-  const FlagComponent = (Flags as any)[upper];
-  if (!FlagComponent) return <span className="inline-block" style={{ width: size, height: size * 2 / 3 }}>🏳️</span>;
-  return <FlagComponent style={{ width: size, height: size * 2 / 3, borderRadius: 2, objectFit: "cover" }} />;
+  // Try exact code first, then without hyphens (e.g. GB-SCT → GBSCT), then base country (e.g. GB)
+  const candidates = [upper, upper.replace(/-/g, ""), upper.split("-")[0]];
+  for (const candidate of candidates) {
+    if (hasFlag(candidate)) {
+      const FlagComponent = (Flags as any)[candidate];
+      if (FlagComponent) return <FlagComponent style={{ width: size, height: size * 2 / 3, borderRadius: 2, objectFit: "cover" }} />;
+    }
+  }
+  return fallback;
 };
 
 interface Props {
