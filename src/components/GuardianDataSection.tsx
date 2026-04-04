@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Users, Mail, Phone, FileText, ChevronDown, ChevronUp, MapPin } from "lucide-react";
+import NationalityCombobox from "@/components/NationalityCombobox";
 
 export interface GuardianData {
   fullName: string;
@@ -151,11 +152,9 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
             </div>
             <div>
               <label className="text-sm font-medium text-foreground block mb-1.5">Nacionalidade <span className="text-[#F9B91D]">*</span></label>
-              <input
-                type="text"
-                maxLength={60}
+              <NationalityCombobox
                 value={nationality}
-                onChange={(e) => setNationality(e.target.value)}
+                onChange={(val) => setNationality(val)}
                 onBlur={() => saveProfile({ nationality: nationality.trim() })}
                 className={inputClass("guardianNationality")}
                 placeholder="Ex: Brasileira"
