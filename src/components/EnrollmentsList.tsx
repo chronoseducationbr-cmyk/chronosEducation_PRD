@@ -172,6 +172,69 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                        <Detail label="Ano de conclusão" value={e.student_graduation_year?.toString() || ""} />
                        <Detail label="Indicado por" value={e.referred_by_email} />
                      </div>
+
+                    {/* Request missing service */}
+                    {(e.tuition_installments === 0 || e.summercamp_installments === 0) && (
+                      <div className="mt-4 pt-3 border-t border-border">
+                        <p className="text-xs text-muted-foreground mb-2">Adicionar serviço</p>
+                        <div className="flex gap-2">
+                          {e.tuition_installments === 0 && (
+                            <button
+                              disabled={requesting}
+                              onClick={async () => {
+                                setRequesting(true);
+                                const { data: settings } = await supabase.from("app_settings").select("default_tuition_installments, default_tuition_installment_cents").single();
+                                const { error } = await supabase
+                                  .from("enrollments")
+                                  .update({
+                                    tuition_installments: settings?.default_tuition_installments ?? 16,
+                                    tuition_installment_cents: 0,
+                                  } as any)
+                                  .eq("id", e.id);
+                                if (error) {
+                                  toast({ title: "Erro ao adicionar serviço", variant: "destructive" });
+                                } else {
+                                  toast({ title: "Plataforma Online adicionada com sucesso" });
+                                  setEnrollments((prev) => prev.map((en) => en.id === e.id ? { ...en, tuition_installments: settings?.default_tuition_installments ?? 16, tuition_installment_cents: 0 } : en));
+                                }
+                                setRequesting(false);
+                              }}
+                              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors disabled:opacity-50"
+                            >
+                              <PlusCircle size={14} />
+                              Plataforma Online
+                            </button>
+                          )}
+                          {e.summercamp_installments === 0 && (
+                            <button
+                              disabled={requesting}
+                              onClick={async () => {
+                                setRequesting(true);
+                                const { data: settings } = await supabase.from("app_settings").select("default_summercamp_installments, default_summercamp_installment_cents").single();
+                                const { error } = await supabase
+                                  .from("enrollments")
+                                  .update({
+                                    summercamp_installments: settings?.default_summercamp_installments ?? 6,
+                                    summercamp_installment_cents: 0,
+                                  } as any)
+                                  .eq("id", e.id);
+                                if (error) {
+                                  toast({ title: "Erro ao adicionar serviço", variant: "destructive" });
+                                } else {
+                                  toast({ title: "Summer Camp adicionado com sucesso" });
+                                  setEnrollments((prev) => prev.map((en) => en.id === e.id ? { ...en, summercamp_installments: settings?.default_summercamp_installments ?? 6, summercamp_installment_cents: 0 } : en));
+                                }
+                                setRequesting(false);
+                              }}
+                              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-secondary/10 text-secondary hover:bg-secondary/20 transition-colors disabled:opacity-50"
+                            >
+                              <PlusCircle size={14} />
+                              Summer Camp
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
