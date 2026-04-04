@@ -130,6 +130,15 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
       toast({ title: "Valores não podem ser negativos", variant: "destructive" });
       return null;
     }
+    const today = new Date().toISOString().split("T")[0];
+    const pastDates: string[] = [];
+    if (inscriptionDueDate && inscriptionDueDate < today) pastDates.push("Data de vencimento");
+    if (tuitionStartDate && tuitionStartDate < today) pastDates.push("Data início Plataforma Online");
+    if (summercampStartDate && summercampStartDate < today) pastDates.push("Data início Summer Camp");
+    if (pastDates.length > 0) {
+      toast({ title: "Datas não podem ser anteriores a hoje", description: pastDates.join(", "), variant: "destructive" });
+      return null;
+    }
     const updates = buildUpdates();
     const { error } = await supabase
       .from("enrollments")
