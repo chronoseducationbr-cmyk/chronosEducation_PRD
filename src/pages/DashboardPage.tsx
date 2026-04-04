@@ -537,7 +537,7 @@ const DashboardPage = () => {
           </TabsContent>
 
           <TabsContent value="contratos">
-            <div className="max-w-xl">
+            <div className="max-w-2xl">
               <ContractsList refreshKey={refreshKey} />
             </div>
           </TabsContent>
