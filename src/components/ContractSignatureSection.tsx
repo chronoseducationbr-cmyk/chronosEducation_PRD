@@ -19,38 +19,149 @@ interface Props {
   financialData?: FinancialData;
 }
 
-/**
- * Parses the contract_text from app_settings into structured sections.
- * Expected format: lines starting with "N. TITLE" begin a new section,
- * sub-items starting with "a) " / "b) " etc. become list items.
- */
-function parseContractSections(text: string) {
+type ContractItem =
+  | { type: "paragraph"; text: string }
+  | {
+      type: "list";
+      text: string;
+      listStyle: "ordered" | "unordered";
+      marker: string;
+      level: number;
+    };
+
+interface ContractSection {
+  title: string;
+  items: ContractItem[];
+}
+
+function getNestedListLevel(previousItem: ContractItem | null) {
+  if (previousItem?.type === "list" && previousItem.listStyle === "ordered" && /:\s*$/.test(previousItem.text)) {
+    return previousItem.level + 1;
+  }
+
+  if (previousItem?.type === "list" && previousItem.listStyle === "unordered" && previousItem.level > 0) {
+    return previousItem.level;
+  }
+
+  return 0;
+}
+
+function parseListItem(line: string, previousItem: ContractItem | null): Extract<ContractItem, { type: "list" }> | null {
+  const trimmedLine = line.trim();
+  if (!trimmedLine) return null;
+
+  const singleLetterTabMatch = trimmedLine.match(/^([a-z])\t+(.+)$/i);
+  if (singleLetterTabMatch) {
+    const markerLetter = singleLetterTabMatch[1].toLowerCase();
+
+    if (markerLetter === "o") {
+      return {
+        type: "list",
+        text: singleLetterTabMatch[2].trim(),
+        listStyle: "unordered",
+        marker: "•",
+        level: Math.max(1, getNestedListLevel(previousItem)),
+      };
+    }
+
+    return {
+      type: "list",
+      text: singleLetterTabMatch[2].trim(),
+      listStyle: "ordered",
+      marker: `${singleLetterTabMatch[1]})`,
+      level: 1,
+    };
+  }
+
+  const bulletMatch = trimmedLine.match(/^[\u2022\u2023\u25E6\u2043\u25CF\u2219]\s*(.+)$/);
+  if (bulletMatch) {
+    return {
+      type: "list",
+      text: bulletMatch[1].trim(),
+      listStyle: "unordered",
+      marker: "•",
+      level: getNestedListLevel(previousItem),
+    };
+  }
+
+  const dashMatch = trimmedLine.match(/^\-\s+(.+)$/);
+  if (dashMatch) {
+    return {
+      type: "list",
+      text: dashMatch[1].trim(),
+      listStyle: "unordered",
+      marker: "•",
+      level: getNestedListLevel(previousItem),
+    };
+  }
+
+  const orderedMatch = trimmedLine.match(/^((?:\d+[ºª]?[\.)]|[IVX]+[\.)]|[a-z][\.)]))\s*(.+)$/i);
+  if (orderedMatch) {
+    return {
+      type: "list",
+      text: orderedMatch[2].trim(),
+      listStyle: "ordered",
+      marker: orderedMatch[1],
+      level: 0,
+    };
+  }
+
+  return null;
+}
+
+function parseSectionHeader(line: string): string | null {
+  const trimmed = line.trim();
+
+  if (/^CL[AÁ]USULA\s+\d+\s*[\-–—]?.+$/i.test(trimmed)) {
+    return trimmed;
+  }
+
+  const numericHeaderMatch = trimmed.match(/^(\d+)\.\s+(.+)$/);
+  if (!numericHeaderMatch) return null;
+
+  const title = numericHeaderMatch[2].trim();
+  return title === title.toUpperCase() ? `${numericHeaderMatch[1]}. ${title}` : null;
+}
+
+function parseContractSections(text: string): ContractSection[] {
   if (!text?.trim()) return [];
 
   const lines = text.split("\n");
-  const sections: { title: string; paragraphs: string[]; listItems: string[] }[] = [];
-  let current: { title: string; paragraphs: string[]; listItems: string[] } | null = null;
+  const sections: ContractSection[] = [];
+  let current: ContractSection | null = null;
+  let previousItem: ContractItem | null = null;
 
   for (const raw of lines) {
     const line = raw.trimEnd();
-    // Section header: starts with "N. " or "NN. "
-    const headerMatch = line.match(/^(\d+)\.\s+(.+)$/);
-    if (headerMatch) {
+    const sectionHeader = parseSectionHeader(line);
+
+    if (sectionHeader) {
       if (current) sections.push(current);
-      current = { title: `${headerMatch[1]}. ${headerMatch[2]}`, paragraphs: [], listItems: [] };
+      current = { title: sectionHeader, items: [] };
+      previousItem = null;
       continue;
     }
 
     if (!current) continue;
 
-    // List item: starts with "a) ", "b) ", etc.
-    const listMatch = line.match(/^[a-z]\)\s+(.+)$/);
-    if (listMatch) {
-      current.listItems.push(listMatch[1]);
-    } else if (line.trim()) {
-      current.paragraphs.push(line.trim());
+    const trimmedLine = line.trim();
+    if (!trimmedLine) {
+      previousItem = null;
+      continue;
     }
+
+    const parsedItem = parseListItem(trimmedLine, previousItem);
+    if (parsedItem) {
+      current.items.push(parsedItem);
+      previousItem = parsedItem;
+      continue;
+    }
+
+    const paragraphItem: ContractItem = { type: "paragraph", text: trimmedLine };
+    current.items.push(paragraphItem);
+    previousItem = paragraphItem;
   }
+
   if (current) sections.push(current);
   return sections;
 }
@@ -193,20 +304,32 @@ const ContractSignatureSection = ({ onAcceptChange, guardianData, studentData, f
 
             {/* Dynamic sections from DB — inject financial values into payment clause */}
             {sections.map((section, idx) => {
-              const isPaymentSection = /^\d+\.\s*(VALORES|PAGAMENTO|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO))/i.test(section.title);
+              const isPaymentSection = /(D[OA]S?\s*)?(VALORES?|PAGAMENTO|VALOR\s+E\s+FORMA|CONDI[CÇ][OÕ]ES\s*(FINANC|DE\s*PAGAMENTO))/i.test(section.title);
               return (
                 <div key={idx}>
                   <p className="font-semibold mb-1">{section.title}</p>
-                  {section.paragraphs.map((p, pi) => (
-                    <p key={pi} className="pl-3">{p.replace(/\[Data\]/gi, formattedDate)}</p>
-                  ))}
-                  {section.listItems.length > 0 && (
-                    <ul className="pl-6 list-[lower-alpha] space-y-0.5">
-                      {section.listItems.map((item, li) => (
-                        <li key={li}>{item}</li>
-                      ))}
-                    </ul>
-                  )}
+                  <div className="space-y-1">
+                    {section.items.map((item, itemIndex) => {
+                      const content = item.text.replace(/\[Data\]/gi, formattedDate);
+
+                      if (item.type === "paragraph") {
+                        return <p key={itemIndex} className="pl-3">{content}</p>;
+                      }
+
+                      return (
+                        <div
+                          key={itemIndex}
+                          className="flex items-start gap-2"
+                          style={{ paddingLeft: `${12 + item.level * 20}px` }}
+                        >
+                          <span className="w-5 shrink-0 font-medium text-muted-foreground">
+                            {item.listStyle === "ordered" ? item.marker : "•"}
+                          </span>
+                          <p className="min-w-0 flex-1">{content}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
 
                   {/* Inject contracted financial values into clause 7 */}
                   {isPaymentSection && financialData && (
