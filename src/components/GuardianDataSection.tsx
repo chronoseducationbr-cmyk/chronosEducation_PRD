@@ -33,7 +33,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
   const [phone, setPhone] = useState(initialData?.phone || "");
   const [cpf, setCpf] = useState(initialData?.cpf || "");
   const [nationality, setNationality] = useState(initialData?.nationality || "");
-  const [civilStatus, setCivilStatus] = useState(initialData?.civilStatus || "");
+  const [civilStatus, setCivilStatus] = useState(initialData?.civilStatus || "Casado(a)");
   const [profession, setProfession] = useState(initialData?.profession || "");
   const [rgNumber, setRgNumber] = useState(initialData?.rgNumber || "");
   const [guardianAddress, setGuardianAddress] = useState(initialData?.guardianAddress || "");
@@ -56,7 +56,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
         setPhone(p.phone || "");
         setCpf(p.cpf || "");
         setNationality(p.nationality || "");
-        setCivilStatus(p.civil_status || "");
+        setCivilStatus(p.civil_status || "Casado(a)");
         setProfession(p.profession || "");
         setRgNumber(p.rg_number || "");
         setGuardianAddress(p.guardian_address || "");
