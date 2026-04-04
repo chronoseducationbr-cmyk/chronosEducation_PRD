@@ -205,7 +205,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData, guar
               onClick={() => fileInputRef.current?.click()}
               className="text-xs text-secondary hover:underline"
             >
-              {photoPreview ? "Alterar foto" : "Carregar foto"}
+              {photoPreview ? "Alterar foto" : "Upload de Foto"}
             </button>
             <p className="text-[10px] text-muted-foreground mt-0.5">JPG ou PNG, máx. 5MB</p>
           </div>
