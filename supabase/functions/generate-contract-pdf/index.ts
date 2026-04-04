@@ -337,7 +337,15 @@ async function buildContractPdf(
   drawSectionTitle(ctx, "1. PARTES");
   drawParagraph(ctx, "Pelo presente instrumento particular, de um lado:");
   ctx.y -= 4;
-  drawParagraph(ctx, `CONTRATANTE: ${guardian.fullName || "[Nome completo]"}, residente e domiciliado(a) em ${student.studentAddress || "[endereco completo]"}, e-mail ${guardian.email || "[e-mail]"}, celular ${guardian.phone || "[celular]"};`);
+  const contratanteParts = [
+    guardian.fullName || "[Nome completo]",
+    guardian.nationality || "[nacionalidade]",
+    guardian.civilStatus || "[estado civil]",
+    guardian.profession || "[profissao]",
+    `inscrito(a) no CPF sob o n. ${guardian.cpf || "[CPF]"} e RG n. ${guardian.rg || "[RG]"}`,
+    `residente e domiciliado(a) em ${student.studentAddress || "[endereco completo]"}`,
+  ];
+  drawParagraph(ctx, `CONTRATANTE: ${contratanteParts.join(", ")};`);
   ctx.y -= 8;
 
   // Student info block
