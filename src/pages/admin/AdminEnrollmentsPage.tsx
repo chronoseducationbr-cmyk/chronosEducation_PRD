@@ -57,6 +57,7 @@ interface Enrollment {
   summercamp_installment_cents: number;
   summercamp_installments: number;
   contract_url: string | null;
+  contract_url_summercamp: string | null;
   contract_sent_at: string | null;
   contract_signed_at: string | null;
   tuition_start_date: string | null;
@@ -488,17 +489,18 @@ const AdminEnrollmentsPage = () => {
                         </div>
                         <div>
                           <p className="text-muted-foreground text-xs">Documento</p>
-                          <div className="flex items-center gap-2 mt-0.5">
+                          <div className="flex flex-col gap-1.5 mt-0.5">
                             {e.contract_url ? (
                               <button
                                 onClick={async () => {
                                   try {
+                                    const sanitized = e.student_name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
                                     const res = await fetch(e.contract_url!);
                                     const blob = await res.blob();
                                     const url = URL.createObjectURL(blob);
                                     const a = document.createElement("a");
                                     a.href = url;
-                                    a.download = `contrato-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
+                                    a.download = `contrato-plataforma-Online_${sanitized}.pdf`;
                                     document.body.appendChild(a);
                                     a.click();
                                     document.body.removeChild(a);
@@ -510,9 +512,35 @@ const AdminEnrollmentsPage = () => {
                                 className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium text-sm"
                               >
                                 <Download size={14} />
-                                Download contrato
+                                Plataforma Online
                               </button>
-                            ) : (
+                            ) : null}
+                            {e.contract_url_summercamp ? (
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    const sanitized = e.student_name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
+                                    const res = await fetch(e.contract_url_summercamp!);
+                                    const blob = await res.blob();
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = `contrato-summercamp-${sanitized}.pdf`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                    URL.revokeObjectURL(url);
+                                  } catch (err) {
+                                    console.error("Download error:", err);
+                                  }
+                                }}
+                                className="inline-flex items-center gap-1 text-secondary hover:text-secondary/80 font-medium text-sm"
+                              >
+                                <Download size={14} />
+                                Summer Camp
+                              </button>
+                            ) : null}
+                            {!e.contract_url && !e.contract_url_summercamp && (
                               <span className="text-muted-foreground inline-flex items-center gap-1 text-sm italic">
                                 <FileText size={14} />
                                 Sem contrato
