@@ -132,7 +132,7 @@ function parseContractSections(text: string): ContractSection[] {
     if (bulletLine !== trimmedLine) {
       if (bulletLine.trim()) current.items.push({ type: "bullet", text: bulletLine.trim() });
     } else {
-      const listMatch = line.match(/^([a-z]\)|[IVX]+[\.\)]\s|[0-9]+[ºª\.]\s|\-\s)\s*(.+)$/);
+      const listMatch = trimmedLine.match(/^([a-z][\)\.\t]\s*|[IVX]+[\.\)]\s|[0-9]+[ºª\.]\s|\-\s)\s*(.+)$/);
       if (listMatch) {
         current.items.push({ type: "bullet", text: (listMatch[1].trim() + " " + listMatch[2]).trim() });
       } else if (line.trim()) {
