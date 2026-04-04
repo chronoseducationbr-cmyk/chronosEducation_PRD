@@ -84,79 +84,91 @@ const ContractsList = ({ refreshKey }: Props) => {
             </div>
 
             {/* Contrato Plataforma Online */}
-            {e.contract_url && (
-              <div className="text-sm">
-                <p className="text-xs font-semibold text-muted-foreground mb-1">Contrato Plataforma Online</p>
+            {(e.tuition_installment_cents > 0 || e.contract_url) && (
+              <div className="text-sm mb-3">
+                <p className="text-xs font-semibold text-muted-foreground mb-1 flex items-center gap-1.5">
+                  <Monitor size={12} /> Contrato Plataforma Online
+                </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <Detail label="Enviado em" value={e.contract_sent_at_platform ? formatDate(e.contract_sent_at_platform) : ""} />
                   <Detail label="Assinado em" value={e.contract_signed_at_platform ? formatDate(e.contract_signed_at_platform) : ""} />
                   <div>
                     <p className="text-muted-foreground text-xs">Documento</p>
-                    <button
-                      onClick={async () => {
-                        try {
-                          const res = await fetch(e.contract_url!);
-                          const blob = await res.blob();
-                          const url = URL.createObjectURL(blob);
-                          const a = document.createElement("a");
-                          a.href = url;
-                          a.download = `contrato-plataforma-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
-                          document.body.appendChild(a);
-                          a.click();
-                          document.body.removeChild(a);
-                          URL.revokeObjectURL(url);
-                        } catch (err) {
-                          console.error("Download error:", err);
-                        }
-                      }}
-                      className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm text-left mt-0.5"
-                    >
-                      <Download size={14} className="text-secondary" />
-                      Download PDF
-                    </button>
+                    {e.contract_url ? (
+                      <button
+                        onClick={async () => {
+                          try {
+                            const res = await fetch(e.contract_url!);
+                            const blob = await res.blob();
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement("a");
+                            a.href = url;
+                            a.download = `contrato-plataforma-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                          } catch (err) {
+                            console.error("Download error:", err);
+                          }
+                        }}
+                        className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm text-left mt-0.5"
+                      >
+                        <Download size={14} className="text-secondary" />
+                        Download PDF
+                      </button>
+                    ) : (
+                      <p className="text-muted-foreground font-medium italic mt-0.5">Ainda não disponível</p>
+                    )}
                   </div>
                 </div>
               </div>
             )}
 
             {/* Contrato Summer Camp */}
-            {e.contract_url_summercamp && (
-              <div className="text-sm">
-                <p className="text-xs font-semibold text-muted-foreground mb-1">Contrato Summer Camp</p>
+            {(e.summercamp_installment_cents > 0 || e.contract_url_summercamp) && (
+              <div className="text-sm mb-3">
+                <p className="text-xs font-semibold text-muted-foreground mb-1 flex items-center gap-1.5">
+                  <Sun size={12} /> Contrato Summer Camp
+                </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <Detail label="Enviado em" value={e.contract_sent_at_summercamp ? formatDate(e.contract_sent_at_summercamp) : ""} />
                   <Detail label="Assinado em" value={e.contract_signed_at_summercamp ? formatDate(e.contract_signed_at_summercamp) : ""} />
                   <div>
                     <p className="text-muted-foreground text-xs">Documento</p>
-                    <button
-                      onClick={async () => {
-                        try {
-                          const res = await fetch(e.contract_url_summercamp!);
-                          const blob = await res.blob();
-                          const url = URL.createObjectURL(blob);
-                          const a = document.createElement("a");
-                          a.href = url;
-                          a.download = `contrato-summercamp-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
-                          document.body.appendChild(a);
-                          a.click();
-                          document.body.removeChild(a);
-                          URL.revokeObjectURL(url);
-                        } catch (err) {
-                          console.error("Download error:", err);
-                        }
-                      }}
-                      className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm text-left mt-0.5"
-                    >
-                      <Download size={14} className="text-secondary" />
-                      Download PDF
-                    </button>
+                    {e.contract_url_summercamp ? (
+                      <button
+                        onClick={async () => {
+                          try {
+                            const res = await fetch(e.contract_url_summercamp!);
+                            const blob = await res.blob();
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement("a");
+                            a.href = url;
+                            a.download = `contrato-summercamp-${e.student_name.replace(/\s+/g, "-").toLowerCase()}.pdf`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                          } catch (err) {
+                            console.error("Download error:", err);
+                          }
+                        }}
+                        className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-medium text-sm text-left mt-0.5"
+                      >
+                        <Download size={14} className="text-secondary" />
+                        Download PDF
+                      </button>
+                    ) : (
+                      <p className="text-muted-foreground font-medium italic mt-0.5">Ainda não disponível</p>
+                    )}
                   </div>
                 </div>
               </div>
             )}
 
-            {!e.contract_url && !e.contract_url_summercamp && (
-              <p className="text-foreground font-medium text-xs italic text-muted-foreground">Ainda não disponível</p>
+            {!e.contract_url && !e.contract_url_summercamp && e.tuition_installment_cents === 0 && e.summercamp_installment_cents === 0 && (
+              <p className="text-muted-foreground font-medium text-xs italic">Ainda não disponível</p>
             )}
 
             {/* Accept contract button */}
