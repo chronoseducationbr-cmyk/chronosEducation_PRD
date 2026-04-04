@@ -55,14 +55,26 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
         setEmail(p.email || user?.email || "");
         setPhone(p.phone || "");
         setCpf(p.cpf || "");
-        setNationality(p.nationality || "Brasileira");
-        setCivilStatus(p.civil_status || "Casado(a)");
+        const nat = p.nationality || "Brasileira";
+        setNationality(nat);
+        const cs = p.civil_status || "Casado(a)";
+        setCivilStatus(cs);
         setProfession(p.profession || "");
         setRgNumber(p.rg_number || "");
         setGuardianAddress(p.guardian_address || "");
+
+        // Persist defaults if not yet saved
+        const updates: Record<string, string> = {};
+        if (!p.nationality) updates.nationality = nat;
+        if (!p.civil_status) updates.civil_status = cs;
+        if (Object.keys(updates).length > 0) {
+          supabase.from("profiles").update(updates as any).eq("user_id", user!.id).then(() => {});
+        }
       } else {
         setFullName(user?.user_metadata?.full_name || "");
         setEmail(user?.email || "");
+        // Save defaults for new profile
+        supabase.from("profiles").update({ nationality: "Brasileira", civil_status: "Casado(a)" } as any).eq("user_id", user!.id).then(() => {});
       }
 
       setHasEnrollments((enrollRes.data?.length ?? 0) > 0);
