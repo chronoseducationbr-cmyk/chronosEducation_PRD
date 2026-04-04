@@ -214,8 +214,10 @@ function parseSectionHeader(line: string): string | null {
   return title === title.toUpperCase() ? `${numericHeaderMatch[1]}. ${title}` : null;
 }
 
-function parseContractSections(text: string): ContractSection[] {
-  if (!text?.trim()) return [];
+interface ParseResult { sections: ContractSection[]; closingItems: SectionItem[] }
+
+function parseContractSections(text: string): ParseResult {
+  if (!text?.trim()) return { sections: [], closingItems: [] };
   const lines = text.split("\n");
   const sections: ContractSection[] = [];
   let current: ContractSection | null = null;
@@ -248,7 +250,20 @@ function parseContractSections(text: string): ContractSection[] {
     }
   }
   if (current) sections.push(current);
-  return sections;
+
+  // Extract closing text (signature block) from the last section
+  const closingItems: SectionItem[] = [];
+  if (sections.length > 0) {
+    const lastSection = sections[sections.length - 1];
+    const closingIndex = lastSection.items.findIndex(
+      (item) => item.type === "paragraph" && /e\s+por\s+estarem\s+justas/i.test(item.text)
+    );
+    if (closingIndex !== -1) {
+      closingItems.push(...lastSection.items.splice(closingIndex));
+    }
+  }
+
+  return { sections, closingItems };
 }
 
 function isPaymentSection(title: string): boolean {
