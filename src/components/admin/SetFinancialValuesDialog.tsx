@@ -346,6 +346,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                     type="date"
                     value={inscriptionDueDate}
                     onChange={(e) => setInscriptionDueDate(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]}
                     className="h-9"
                   />
                 </div>
@@ -387,6 +388,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                         type="date"
                         value={tuitionStartDate}
                         onChange={(e) => setTuitionStartDate(e.target.value)}
+                        min={new Date().toISOString().split("T")[0]}
                         className="h-9"
                       />
                     </div>
@@ -436,6 +438,7 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
                         type="date"
                         value={summercampStartDate}
                         onChange={(e) => setSummercampStartDate(e.target.value)}
+                        min={new Date().toISOString().split("T")[0]}
                         className="h-9"
                       />
                     </div>
