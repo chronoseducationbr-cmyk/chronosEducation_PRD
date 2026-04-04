@@ -288,9 +288,6 @@ const AdminEnrollmentsPage = () => {
                 >
                   {/* Line 1: only student full name */}
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
-                      <GraduationCap size={20} />
-                    </div>
                     <p className="font-semibold text-foreground flex-1">{e.student_name || "Sem nome"}</p>
                     {isExpanded ? <ChevronUp size={16} className="text-muted-foreground shrink-0" /> : <ChevronDown size={16} className="text-muted-foreground shrink-0" />}
                   </div>
