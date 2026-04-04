@@ -184,7 +184,7 @@ const DashboardPage = () => {
         student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
         referred_by_email: referralRef.current.trim(),
         guardian_email: g.email?.trim() || user?.email || "",
-        status: "Matrícula confirmada",
+        status: "Matrícula submetida",
         inscription_fee_cents: 0,
         tuition_installments: selectedServices.plataforma ? 16 : 0,
         summercamp_installments: selectedServices.summercamp ? 6 : 0,

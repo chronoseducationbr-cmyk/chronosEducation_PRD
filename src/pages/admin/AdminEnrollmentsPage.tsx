@@ -78,6 +78,7 @@ const statuses = [
 ];
 
 const statusColors: Record<string, string> = {
+  "Matrícula submetida": "bg-purple-100 text-purple-800",
   "Matrícula confirmada": "bg-blue-100 text-blue-800",
   "Pendente de assinatura de contrato": "bg-amber-100 text-amber-800",
   "Aguarda assinatura de contrato": "bg-amber-100 text-amber-800",
