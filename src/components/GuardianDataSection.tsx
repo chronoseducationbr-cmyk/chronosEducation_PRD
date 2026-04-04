@@ -171,10 +171,10 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                 className={inputClass("guardianCivilStatus")}
               >
                 <option value="">Selecione...</option>
-                <option value="Solteiro(a)">Solteiro(a)</option>
                 <option value="Casado(a)">Casado(a)</option>
-                <option value="Viúvo(a)">Viúvo(a)</option>
                 <option value="Divorciado(a)">Divorciado(a)</option>
+                <option value="Solteiro(a)">Solteiro(a)</option>
+                <option value="Viúvo(a)">Viúvo(a)</option>
               </select>
             </div>
             <div className="sm:col-span-2">
