@@ -1,8 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Users, Mail, Phone, FileText, ChevronDown, ChevronUp, MapPin } from "lucide-react";
 import NationalityCombobox from "@/components/NationalityCombobox";
+import CivilStatusCombobox from "@/components/CivilStatusCombobox";
 
 export interface GuardianData {
   fullName: string;
