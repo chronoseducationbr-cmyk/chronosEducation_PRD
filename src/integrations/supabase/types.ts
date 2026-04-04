@@ -142,8 +142,10 @@ export type Database = {
       }
       enrollments: {
         Row: {
-          contract_sent_at: string | null
-          contract_signed_at: string | null
+          contract_sent_at_platform: string | null
+          contract_sent_at_summercamp: string | null
+          contract_signed_at_platform: string | null
+          contract_signed_at_summercamp: string | null
           contract_url: string | null
           contract_url_summercamp: string | null
           created_at: string
@@ -171,8 +173,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          contract_sent_at?: string | null
-          contract_signed_at?: string | null
+          contract_sent_at_platform?: string | null
+          contract_sent_at_summercamp?: string | null
+          contract_signed_at_platform?: string | null
+          contract_signed_at_summercamp?: string | null
           contract_url?: string | null
           contract_url_summercamp?: string | null
           created_at?: string
@@ -200,8 +204,10 @@ export type Database = {
           user_id: string
         }
         Update: {
-          contract_sent_at?: string | null
-          contract_signed_at?: string | null
+          contract_sent_at_platform?: string | null
+          contract_sent_at_summercamp?: string | null
+          contract_signed_at_platform?: string | null
+          contract_signed_at_summercamp?: string | null
           contract_url?: string | null
           contract_url_summercamp?: string | null
           created_at?: string
