@@ -281,97 +281,91 @@ const AdminEnrollmentsPage = () => {
                 key={e.id}
                 className={`bg-card rounded-xl border-2 overflow-hidden transition-colors ${isExpanded ? "border-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.2)]" : "border-border"}`}
               >
-                {/* Collapsed row: name + status badge + select + expand */}
+                {/* Collapsed row */}
                 <div
-                  className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-4 cursor-pointer"
+                  className="p-4 cursor-pointer space-y-2"
                   onClick={() => setExpandedId(isExpanded ? null : e.id)}
                 >
-                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                  {/* Line 1: only student full name */}
+                  <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
                       <GraduationCap size={20} />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className="font-semibold text-foreground truncate">{e.student_name || "Sem nome"}</p>
-                        {(() => {
-                          const qr = quizResults[e.id];
-                          if (!qr) {
-                            return (
-                              <span className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-muted text-muted-foreground flex items-center gap-1">
-                                <BookOpen size={10} />
-                                —
-                              </span>
-                            );
-                          }
-                          const cls = getClassification(qr.score_points, e.quiz_test_id ? testSlugMap[e.quiz_test_id] : undefined);
-                          const isLow = ["A0", "A1", "A2"].includes(cls.level);
+                    <p className="font-semibold text-foreground flex-1">{e.student_name || "Sem nome"}</p>
+                    {isExpanded ? <ChevronUp size={16} className="text-muted-foreground shrink-0" /> : <ChevronDown size={16} className="text-muted-foreground shrink-0" />}
+                  </div>
+                  {/* Line 2: badges, financial summary, actions */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 pl-[52px]">
+                    <div className="flex items-center gap-2 flex-wrap flex-1 min-w-0">
+                      {(() => {
+                        const qr = quizResults[e.id];
+                        if (!qr) {
                           return (
-                            <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 ${isLow ? "bg-destructive/10 text-destructive" : "bg-green-100 text-green-700"}`}>
+                            <span className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-muted text-muted-foreground flex items-center gap-1">
                               <BookOpen size={10} />
-                              {cls.level}
+                              —
                             </span>
                           );
-                        })()}
-                        {e.guardian && (
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-muted hover:bg-muted-foreground/20 transition-colors" title="Dados do responsável">
-                                <Info size={12} className="text-muted-foreground" />
-                              </button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-64 p-3" side="right">
-                              <p className="text-xs font-semibold text-muted-foreground mb-2">Responsável</p>
-                              <div className="space-y-1.5 text-sm">
-                                <div>
-                                  <span className="text-muted-foreground text-xs">Nome:</span>{" "}
-                                  <span className="text-foreground font-medium">{e.guardian.full_name || "—"}</span>
-                                </div>
-                                <div>
-                                  <span className="text-muted-foreground text-xs">Email:</span>{" "}
-                                  <span className="text-foreground font-medium">{e.guardian.email || "—"}</span>
-                                </div>
-                                <div>
-                                  <span className="text-muted-foreground text-xs">Telefone:</span>{" "}
-                                  <span className="text-foreground font-medium">{e.guardian.phone || "—"}</span>
-                                </div>
+                        }
+                        const cls = getClassification(qr.score_points, e.quiz_test_id ? testSlugMap[e.quiz_test_id] : undefined);
+                        const isLow = ["A0", "A1", "A2"].includes(cls.level);
+                        return (
+                          <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 ${isLow ? "bg-destructive/10 text-destructive" : "bg-green-100 text-green-700"}`}>
+                            <BookOpen size={10} />
+                            {cls.level}
+                          </span>
+                        );
+                      })()}
+                      {e.guardian && (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button onClick={(ev) => ev.stopPropagation()} className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-muted hover:bg-muted-foreground/20 transition-colors" title="Dados do responsável">
+                              <Info size={12} className="text-muted-foreground" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-64 p-3" side="right">
+                            <p className="text-xs font-semibold text-muted-foreground mb-2">Responsável</p>
+                            <div className="space-y-1.5 text-sm">
+                              <div>
+                                <span className="text-muted-foreground text-xs">Nome:</span>{" "}
+                                <span className="text-foreground font-medium">{e.guardian.full_name || "—"}</span>
                               </div>
-                            </PopoverContent>
-                          </Popover>
-                        )}
+                              <div>
+                                <span className="text-muted-foreground text-xs">Email:</span>{" "}
+                                <span className="text-foreground font-medium">{e.guardian.email || "—"}</span>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground text-xs">Telefone:</span>{" "}
+                                <span className="text-foreground font-medium">{e.guardian.phone || "—"}</span>
+                              </div>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      )}
+                      <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
+                        {e.status}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-4 text-[11px]">
+                      <div>
+                        <p className="text-muted-foreground">Matrícula</p>
+                        <p className="font-medium text-foreground">{e.inscription_fee_cents > 0 ? `$${(e.inscription_fee_cents / 100).toFixed(2).replace('.', ',')}` : "—"}</p>
                       </div>
-                      <p className="text-xs text-muted-foreground truncate">{e.student_email || "—"}</p>
-                    </div>
-                    <div className="sm:hidden shrink-0">
-                      {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4 text-[11px] pl-[52px] sm:pl-0">
-                    <div>
-                      <p className="text-muted-foreground">Matrícula</p>
-                      <p className="font-medium text-foreground">{e.inscription_fee_cents > 0 ? `$${(e.inscription_fee_cents / 100).toFixed(2).replace('.', ',')}` : "—"}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground">Plataforma</p>
-                      <p className="font-medium text-foreground">{e.tuition_installment_cents > 0 ? `${e.tuition_installments}x $${(e.tuition_installment_cents / 100).toFixed(2).replace('.', ',')}` : <span className="italic text-muted-foreground">—</span>}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground">Summer</p>
-                      <p className="font-medium text-foreground">{e.summercamp_installment_cents > 0 ? `${e.summercamp_installments}x $${(e.summercamp_installment_cents / 100).toFixed(2).replace('.', ',')}` : <span className="italic text-muted-foreground">—</span>}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 pl-[52px] sm:pl-0">
-                    <span className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-full ${statusColors[e.status] || "bg-muted text-muted-foreground"}`}>
-                      {e.status}
-                    </span>
-                    <button
-                      onClick={(ev) => { ev.stopPropagation(); navigate(`/admin/pagamentos?student=${e.id}`); }}
-                      className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
-                      title="Ver pagamentos"
-                    >
-                      <CreditCard size={16} className="text-muted-foreground" />
-                    </button>
-                    <div className="hidden sm:block">
-                      {isExpanded ? <ChevronUp size={16} className="text-muted-foreground shrink-0" /> : <ChevronDown size={16} className="text-muted-foreground shrink-0" />}
+                      <div>
+                        <p className="text-muted-foreground">Plataforma</p>
+                        <p className="font-medium text-foreground">{e.tuition_installment_cents > 0 ? `${e.tuition_installments}x $${(e.tuition_installment_cents / 100).toFixed(2).replace('.', ',')}` : <span className="italic text-muted-foreground">—</span>}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Summer</p>
+                        <p className="font-medium text-foreground">{e.summercamp_installment_cents > 0 ? `${e.summercamp_installments}x $${(e.summercamp_installment_cents / 100).toFixed(2).replace('.', ',')}` : <span className="italic text-muted-foreground">—</span>}</p>
+                      </div>
+                      <button
+                        onClick={(ev) => { ev.stopPropagation(); navigate(`/admin/pagamentos?student=${e.id}`); }}
+                        className="shrink-0 p-1 rounded hover:bg-muted transition-colors"
+                        title="Ver pagamentos"
+                      >
+                        <CreditCard size={16} className="text-muted-foreground" />
+                      </button>
                     </div>
                   </div>
                 </div>
