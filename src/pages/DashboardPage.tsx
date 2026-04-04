@@ -543,7 +543,7 @@ const DashboardPage = () => {
           </TabsContent>
 
           <TabsContent value="prova-ingles">
-            <div className="max-w-xl">
+            <div className="max-w-2xl">
               <QuizResultsList refreshKey={refreshKey} />
             </div>
           </TabsContent>
