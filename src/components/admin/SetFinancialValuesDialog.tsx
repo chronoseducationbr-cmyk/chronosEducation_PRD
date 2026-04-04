@@ -85,17 +85,15 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
 
     const dInscription = defaults?.default_inscription_fee_cents ?? 80000;
     const dTuition = defaults?.default_tuition_installment_cents ?? 45000;
-    const dTuitionInst = defaults?.default_tuition_installments ?? 16;
     const dSummer = defaults?.default_summercamp_installment_cents ?? 0;
-    const dSummerInst = defaults?.default_summercamp_installments ?? 6;
 
     const toComma = (v: number) => v.toFixed(2).replace(".", ",");
     setInscriptionFee(currentValues.inscription_fee_cents > 0 ? toComma(currentValues.inscription_fee_cents / 100) : toComma(dInscription / 100));
-    setTuitionValue(currentValues.tuition_installment_cents > 0 ? toComma(currentValues.tuition_installment_cents / 100) : toComma(dTuition / 100));
-    setTuitionInstallments(currentValues.tuition_installments > 0 ? String(currentValues.tuition_installments) : String(dTuitionInst));
+    setTuitionValue(currentValues.tuition_installments > 0 ? (currentValues.tuition_installment_cents > 0 ? toComma(currentValues.tuition_installment_cents / 100) : toComma(dTuition / 100)) : "");
+    setTuitionInstallments(currentValues.tuition_installments > 0 ? String(currentValues.tuition_installments) : "0");
     setTuitionStartDate(currentValues.tuition_start_date || "");
-    setSummercampValue(currentValues.summercamp_installment_cents > 0 ? toComma(currentValues.summercamp_installment_cents / 100) : (dSummer > 0 ? toComma(dSummer / 100) : ""));
-    setSummercampInstallments(currentValues.summercamp_installments > 0 ? String(currentValues.summercamp_installments) : String(dSummerInst));
+    setSummercampValue(currentValues.summercamp_installments > 0 ? (currentValues.summercamp_installment_cents > 0 ? toComma(currentValues.summercamp_installment_cents / 100) : (dSummer > 0 ? toComma(dSummer / 100) : "")) : "");
+    setSummercampInstallments(currentValues.summercamp_installments > 0 ? String(currentValues.summercamp_installments) : "0");
     setSummercampStartDate(currentValues.summercamp_start_date || "");
     setInscriptionDueDate(currentValues.inscription_due_date || (contractSignedAt ? contractSignedAt.split("T")[0] : ""));
     setOpen(true);
