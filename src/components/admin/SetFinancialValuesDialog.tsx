@@ -468,9 +468,10 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
           {(() => {
             const { fee, tuition, summer } = getFormValues();
             const missing: string[] = [];
-            if (fee <= 0) missing.push("Valor da Matrícula");
-            if (!inscriptionDueDate) missing.push("Data de vencimento da Matrícula");
             if (currentValues.tuition_installments > 0) {
+              if (fee <= 0) missing.push("Valor da Matrícula");
+              if (!inscriptionDueDate) missing.push("Data de vencimento da Matrícula");
+              if (tuition <= 0) missing.push("Valor da Plataforma Online");
               if (tuition <= 0) missing.push("Valor da Plataforma Online");
               if (tuition > 0 && !tuitionStartDate) missing.push("Data de início da Plataforma Online");
             }
