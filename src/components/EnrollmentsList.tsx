@@ -288,9 +288,9 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                                 guardianEmail: e.guardian_email,
                                 serviceType: "summercamp",
                               })}
-                              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-secondary/10 text-secondary hover:bg-secondary/20 transition-colors disabled:opacity-50"
+                              className="flex items-center gap-1.5 text-sm font-semibold text-secondary hover:text-secondary/80 transition-colors disabled:opacity-50"
                             >
-                              <PlusCircle size={14} />
+                              <Plus size={16} />
                               Summer Camp
                             </button>
                           )}
