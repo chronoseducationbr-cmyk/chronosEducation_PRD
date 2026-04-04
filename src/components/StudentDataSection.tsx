@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { GraduationCap, Mail, MapPin, Calendar, Camera, X } from "lucide-react";
+import GenderCombobox from "./GenderCombobox";
 
 export interface StudentData {
   studentName: string;
@@ -257,17 +258,11 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData, guar
           </div>
           <div>
             <label className="text-sm font-medium text-foreground block mb-1.5">Gênero <span className="text-[#F9B91D]">*</span></label>
-            <select
-              required
+            <GenderCombobox
               value={studentGender}
-              onChange={(e) => setStudentGender(e.target.value)}
+              onChange={setStudentGender}
               className={inputClasses("studentGender")}
-            >
-              <option value="">Selecionar...</option>
-              <option value="Feminino">Feminino</option>
-              <option value="Masculino">Masculino</option>
-              <option value="Prefiro não dizer">Prefiro não dizer</option>
-            </select>
+            />
           </div>
           <div className="sm:col-span-2">
             <label className="text-sm font-medium text-foreground block mb-1.5">Email do aluno <span className="text-[#F9B91D]">*</span></label>
