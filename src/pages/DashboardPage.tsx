@@ -25,6 +25,7 @@ const DashboardPage = () => {
   const [wizardStep, setWizardStep] = useState(1);
   const [refreshKey, setRefreshKey] = useState(0);
   const [hasUnsignedContract, setHasUnsignedContract] = useState(false);
+  const [hasOverdueInstallment, setHasOverdueInstallment] = useState(false);
 
   useEffect(() => {
     const checkUnsignedContracts = async () => {
