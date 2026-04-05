@@ -54,6 +54,7 @@ interface Installment {
   boleto_url: string | null;
   amount_cents: number;
   discount_percent: number;
+  final_amount_brl_cents: number | null;
 }
 
 const typeLabels: Record<string, string> = {
@@ -88,6 +89,8 @@ const AdminPaymentsPage = () => {
   const [editDiscountValue, setEditDiscountValue] = useState("");
   const [editingPaidAt, setEditingPaidAt] = useState<string | null>(null);
   const [editPaidAtValue, setEditPaidAtValue] = useState("");
+  const [editingFinalBrl, setEditingFinalBrl] = useState<string | null>(null);
+  const [editFinalBrlValue, setEditFinalBrlValue] = useState("");
 
   const load = async () => {
     setLoading(true);
@@ -219,6 +222,26 @@ const AdminPaymentsPage = () => {
       loadInstallments(enrollmentId);
     }
     setEditingDiscount(null);
+  };
+
+  const saveFinalBrl = async (instId: string, enrollmentId: string) => {
+    const parsed = editFinalBrlValue.replace(",", ".");
+    const cents = parsed === "" ? null : Math.round(parseFloat(parsed) * 100);
+    if (cents !== null && (isNaN(cents) || cents < 0)) {
+      toast({ title: "Valor inválido", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("installments")
+      .update({ final_amount_brl_cents: cents } as any)
+      .eq("id", instId);
+    if (error) {
+      toast({ title: "Erro ao atualizar valor", variant: "destructive" });
+    } else {
+      toast({ title: "Valor Final (R$) atualizado" });
+      loadInstallments(enrollmentId);
+    }
+    setEditingFinalBrl(null);
   };
 
   const handleUploadBoleto = async (file: File) => {
@@ -443,9 +466,10 @@ const AdminPaymentsPage = () => {
                             <tr className="border-b border-border">
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Tipo</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">#</th>
-                              <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Valor</th>
+                              <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Valor ($)</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Desconto</th>
-                              <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Valor Final</th>
+                              <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Valor Final ($)</th>
+                              <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Valor Final (R$)</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Vencimento</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Pago em</th>
                               <th className="text-left py-2 pr-2 text-muted-foreground font-medium">Estado</th>
@@ -557,6 +581,59 @@ const AdminPaymentsPage = () => {
                                         ? <span className="text-green-700">{formatMoney(final_cents)}</span>
                                         : formatMoney(final_cents);
                                     })()}
+                                  </td>
+                                  <td className="py-2 pr-2">
+                                    {editingFinalBrl === inst.id ? (
+                                      <div className="flex items-center gap-1">
+                                        <span className="text-foreground text-[10px]">R$</span>
+                                        <input
+                                          type="text"
+                                          inputMode="decimal"
+                                          className="w-20 h-6 text-[10px] border border-border rounded px-1 bg-background text-foreground"
+                                          value={editFinalBrlValue}
+                                          onChange={(ev) => {
+                                            const v = ev.target.value.replace(/[^0-9,]/g, "");
+                                            setEditFinalBrlValue(v);
+                                          }}
+                                          onKeyDown={(ev) => {
+                                            if (ev.key === "Enter") saveFinalBrl(inst.id, e.id);
+                                            if (ev.key === "Escape") setEditingFinalBrl(null);
+                                          }}
+                                          autoFocus
+                                        />
+                                        <button
+                                          onClick={() => saveFinalBrl(inst.id, e.id)}
+                                          className="text-secondary hover:text-secondary/80 text-[10px] font-semibold"
+                                          title="Confirmar"
+                                        >
+                                          ✓
+                                        </button>
+                                        <button
+                                          onClick={() => setEditingFinalBrl(null)}
+                                          className="text-destructive hover:text-destructive/80 text-[10px] font-semibold"
+                                          title="Cancelar"
+                                        >
+                                          ✕
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <button
+                                        onClick={() => {
+                                          setEditingFinalBrl(inst.id);
+                                          setEditFinalBrlValue(
+                                            inst.final_amount_brl_cents != null
+                                              ? (inst.final_amount_brl_cents / 100).toFixed(2).replace(".", ",")
+                                              : ""
+                                          );
+                                        }}
+                                        className="text-foreground font-medium hover:text-secondary transition-colors cursor-pointer"
+                                        title="Clique para editar valor final em R$"
+                                      >
+                                        {inst.final_amount_brl_cents != null
+                                          ? `R$${(inst.final_amount_brl_cents / 100).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                                          : "—"}
+                                      </button>
+                                    )}
                                   </td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.due_date)}</td>
                                   <td className="py-2 pr-2">

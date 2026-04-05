@@ -1,0 +1,1 @@
+ALTER TABLE public.installments ADD COLUMN final_amount_brl_cents integer DEFAULT NULL;
