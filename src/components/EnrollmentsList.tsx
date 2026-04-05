@@ -228,7 +228,7 @@ const EnrollmentsList = ({ onNewEnrollment, refreshKey }: Props) => {
                         )}
                         {e.summercamp_installments > 0 && (
                           <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground">
-                            <Sun size={11} />
+                            <PlaneTakeoff size={11} />
                             Summer Camp
                           </span>
                         )}

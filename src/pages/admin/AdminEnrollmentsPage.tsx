@@ -300,7 +300,7 @@ const AdminEnrollmentsPage = () => {
                       )}
                       {e.summercamp_installments > 0 && (
                         <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground">
-                          <Sun size={11} />
+                          <PlaneTakeoff size={11} />
                           Summer Camp
                         </span>
                       )}
@@ -504,7 +504,7 @@ const AdminEnrollmentsPage = () => {
                     {(e.summercamp_installments > 0 || e.contract_url_summercamp) && (
                       <div>
                         <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide flex items-center gap-1.5">
-                          <Sun size={12} /> Contrato Summer Camp
+                          <PlaneTakeoff size={12} /> Contrato Summer Camp
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
                           <div>

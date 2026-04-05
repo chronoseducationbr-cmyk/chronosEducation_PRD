@@ -414,7 +414,7 @@ const AdminSettingsPage = () => {
                       Plataforma Online
                     </TabsTrigger>
                     <TabsTrigger value="summercamp" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
-                      <Sun size={14} />
+                      <PlaneTakeoff size={14} />
                       Summer Camp
                     </TabsTrigger>
                   </TabsList>
