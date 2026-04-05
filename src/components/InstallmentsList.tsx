@@ -119,11 +119,17 @@ const TypeSection = ({
                       {formatDate(inst.paid_at)}
                     </td>
                     <td className="py-2 pr-2">
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${cfg.bg} ${cfg.text}`}>
-                        {inst.status === "overdue" && <AlertTriangle size={10} style={{ color: "#F9B91D" }} />}
-                        <StatusIcon size={10} />
-                        {cfg.label}
-                      </span>
+                      {inst.status === "overdue" ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100" style={{ color: "#F9B91D" }}>
+                          <AlertTriangle size={10} />
+                          {cfg.label}
+                        </span>
+                      ) : (
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${cfg.bg} ${cfg.text}`}>
+                          <StatusIcon size={10} />
+                          {cfg.label}
+                        </span>
+                      )}
                     </td>
                     <td className="py-2">
                       {inst.boleto_url ? (
