@@ -500,12 +500,7 @@ const AdminPaymentsPage = () => {
 
                               return (
                                 <tr key={inst.id} className="border-b border-border/50 last:border-0">
-                                  <td className="py-2 pr-2 text-foreground font-medium">
-                                    <span className="flex items-center gap-1">
-                                      {inst.status === "overdue" && <AlertTriangle className="h-3.5 w-3.5 shrink-0" style={{ color: "#F9B91D" }} />}
-                                      {typeLabels[inst.type] || inst.type}
-                                    </span>
-                                  </td>
+                                  <td className="py-2 pr-2 text-foreground font-medium">{typeLabels[inst.type] || inst.type}</td>
                                   <td className="py-2 pr-2 text-foreground">{inst.installment_number}</td>
                                   <td className="py-2 pr-2">
                                     {editingAmount === inst.id ? (
