@@ -37,6 +37,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [referrals, setReferrals] = useState<Record<string, Referral[]>>({});
+  const [overdueEnrollments, setOverdueEnrollments] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const load = async () => {
