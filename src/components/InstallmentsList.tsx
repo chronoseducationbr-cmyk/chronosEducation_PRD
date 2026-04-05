@@ -12,6 +12,7 @@ interface Installment {
   boleto_url: string | null;
   amount_cents: number;
   discount_percent: number;
+  final_amount_brl_cents: number | null;
 }
 
 interface Props {
@@ -72,6 +73,7 @@ const TypeSection = ({
               <tr className="border-b border-border">
                 <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">#</th>
                 <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Valor</th>
+                <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Valor Final (R$)</th>
                 <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Vencimento</th>
                 <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Pago em</th>
                 <th className="text-left py-1.5 pr-2 text-muted-foreground font-medium">Estado</th>
@@ -103,6 +105,11 @@ const TypeSection = ({
                         }
                         return `$${(inst.amount_cents / 100).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                       })()}
+                    </td>
+                    <td className="py-2 pr-2 text-foreground font-medium">
+                      {inst.final_amount_brl_cents != null
+                        ? `R$${(inst.final_amount_brl_cents / 100).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                        : "—"}
                     </td>
                     <td className="py-2 pr-2 text-foreground">
                       {formatDate(inst.due_date)}
