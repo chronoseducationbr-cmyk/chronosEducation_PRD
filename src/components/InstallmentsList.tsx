@@ -120,6 +120,7 @@ const TypeSection = ({
                     </td>
                     <td className="py-2 pr-2">
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${cfg.bg} ${cfg.text}`}>
+                        {inst.status === "overdue" && <AlertTriangle size={10} style={{ color: "#F9B91D" }} />}
                         <StatusIcon size={10} />
                         {cfg.label}
                       </span>
