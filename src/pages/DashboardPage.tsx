@@ -42,6 +42,26 @@ const DashboardPage = () => {
     };
     checkUnsignedContracts();
   }, [user, refreshKey]);
+
+  useEffect(() => {
+    const checkOverdueInstallments = async () => {
+      if (!user) return;
+      const { data: enrs } = await supabase
+        .from("enrollments")
+        .select("id")
+        .eq("user_id", user.id);
+      if (!enrs || enrs.length === 0) { setHasOverdueInstallment(false); return; }
+      const ids = enrs.map(e => e.id);
+      const { data: overdueInsts } = await supabase
+        .from("installments")
+        .select("id")
+        .in("enrollment_id", ids)
+        .eq("status", "overdue")
+        .limit(1);
+      setHasOverdueInstallment((overdueInsts || []).length > 0);
+    };
+    checkOverdueInstallments();
+  }, [user, refreshKey]);
   
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [selectedServices, setSelectedServices] = useState<{ plataforma: boolean; summercamp: boolean }>({ plataforma: false, summercamp: false });
