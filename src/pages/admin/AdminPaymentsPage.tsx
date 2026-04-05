@@ -582,6 +582,59 @@ const AdminPaymentsPage = () => {
                                         : formatMoney(final_cents);
                                     })()}
                                   </td>
+                                  <td className="py-2 pr-2">
+                                    {editingFinalBrl === inst.id ? (
+                                      <div className="flex items-center gap-1">
+                                        <span className="text-foreground text-[10px]">R$</span>
+                                        <input
+                                          type="text"
+                                          inputMode="decimal"
+                                          className="w-20 h-6 text-[10px] border border-border rounded px-1 bg-background text-foreground"
+                                          value={editFinalBrlValue}
+                                          onChange={(ev) => {
+                                            const v = ev.target.value.replace(/[^0-9,]/g, "");
+                                            setEditFinalBrlValue(v);
+                                          }}
+                                          onKeyDown={(ev) => {
+                                            if (ev.key === "Enter") saveFinalBrl(inst.id, e.id);
+                                            if (ev.key === "Escape") setEditingFinalBrl(null);
+                                          }}
+                                          autoFocus
+                                        />
+                                        <button
+                                          onClick={() => saveFinalBrl(inst.id, e.id)}
+                                          className="text-secondary hover:text-secondary/80 text-[10px] font-semibold"
+                                          title="Confirmar"
+                                        >
+                                          ✓
+                                        </button>
+                                        <button
+                                          onClick={() => setEditingFinalBrl(null)}
+                                          className="text-destructive hover:text-destructive/80 text-[10px] font-semibold"
+                                          title="Cancelar"
+                                        >
+                                          ✕
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <button
+                                        onClick={() => {
+                                          setEditingFinalBrl(inst.id);
+                                          setEditFinalBrlValue(
+                                            inst.final_amount_brl_cents != null
+                                              ? (inst.final_amount_brl_cents / 100).toFixed(2).replace(".", ",")
+                                              : ""
+                                          );
+                                        }}
+                                        className="text-foreground font-medium hover:text-secondary transition-colors cursor-pointer"
+                                        title="Clique para editar valor final em R$"
+                                      >
+                                        {inst.final_amount_brl_cents != null
+                                          ? `R$${(inst.final_amount_brl_cents / 100).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                                          : "—"}
+                                      </button>
+                                    )}
+                                  </td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.due_date)}</td>
                                   <td className="py-2 pr-2">
                                     {editingPaidAt === inst.id ? (
