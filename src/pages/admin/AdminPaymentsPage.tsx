@@ -150,6 +150,23 @@ const AdminPaymentsPage = () => {
       const bi = typeOrder.indexOf(b.type) === -1 ? 99 : typeOrder.indexOf(b.type);
       return ai - bi || a.installment_number - b.installment_number;
     });
+
+    // Auto-mark pending installments as overdue when due_date < today
+    const today = new Date().toISOString().slice(0, 10);
+    const overdueIds = sorted
+      .filter((inst) => inst.status === "pending" && inst.due_date && inst.due_date < today)
+      .map((inst) => inst.id);
+
+    if (overdueIds.length > 0) {
+      await supabase
+        .from("installments")
+        .update({ status: "overdue" })
+        .in("id", overdueIds);
+      sorted.forEach((inst) => {
+        if (overdueIds.includes(inst.id)) inst.status = "overdue";
+      });
+    }
+
     setInstallments((prev) => ({ ...prev, [enrollmentId]: sorted }));
   };
 
