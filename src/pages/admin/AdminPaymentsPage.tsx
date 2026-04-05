@@ -86,6 +86,8 @@ const AdminPaymentsPage = () => {
   const [editAmountValue, setEditAmountValue] = useState("");
   const [editingDiscount, setEditingDiscount] = useState<string | null>(null);
   const [editDiscountValue, setEditDiscountValue] = useState("");
+  const [editingPaidAt, setEditingPaidAt] = useState<string | null>(null);
+  const [editPaidAtValue, setEditPaidAtValue] = useState("");
 
   const load = async () => {
     setLoading(true);
@@ -159,8 +161,6 @@ const AdminPaymentsPage = () => {
 
   const updateInstallmentStatus = async (instId: string, enrollmentId: string, status: string) => {
     const updates: any = { status };
-    if (status === "paid") updates.paid_at = new Date().toISOString();
-    else updates.paid_at = null;
 
     const { error } = await supabase.from("installments").update(updates).eq("id", instId);
     if (error) {
@@ -169,6 +169,18 @@ const AdminPaymentsPage = () => {
       toast({ title: "Estado atualizado" });
       loadInstallments(enrollmentId);
     }
+  };
+
+  const savePaidAt = async (instId: string, enrollmentId: string) => {
+    const paid_at = editPaidAtValue ? new Date(editPaidAtValue).toISOString() : null;
+    const { error } = await supabase.from("installments").update({ paid_at } as any).eq("id", instId);
+    if (error) {
+      toast({ title: "Erro ao atualizar data", variant: "destructive" });
+    } else {
+      toast({ title: "Data de pagamento atualizada" });
+      loadInstallments(enrollmentId);
+    }
+    setEditingPaidAt(null);
   };
 
   const saveAmount = async (instId: string, enrollmentId: string) => {
@@ -547,7 +559,48 @@ const AdminPaymentsPage = () => {
                                     })()}
                                   </td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.due_date)}</td>
-                                  <td className="py-2 pr-2 text-foreground">{formatDate(inst.paid_at)}</td>
+                                  <td className="py-2 pr-2">
+                                    {editingPaidAt === inst.id ? (
+                                      <div className="flex items-center gap-1">
+                                        <input
+                                          type="date"
+                                          className="w-28 h-6 text-[10px] border border-border rounded px-1 bg-background text-foreground"
+                                          value={editPaidAtValue}
+                                          onChange={(ev) => setEditPaidAtValue(ev.target.value)}
+                                          onKeyDown={(ev) => {
+                                            if (ev.key === "Enter") savePaidAt(inst.id, e.id);
+                                            if (ev.key === "Escape") setEditingPaidAt(null);
+                                          }}
+                                          autoFocus
+                                        />
+                                        <button
+                                          onClick={() => savePaidAt(inst.id, e.id)}
+                                          className="text-secondary hover:text-secondary/80 text-[10px] font-semibold"
+                                          title="Confirmar"
+                                        >
+                                          ✓
+                                        </button>
+                                        <button
+                                          onClick={() => setEditingPaidAt(null)}
+                                          className="text-destructive hover:text-destructive/80 text-[10px] font-semibold"
+                                          title="Cancelar"
+                                        >
+                                          ✕
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <button
+                                        onClick={() => {
+                                          setEditingPaidAt(inst.id);
+                                          setEditPaidAtValue(inst.paid_at ? inst.paid_at.substring(0, 10) : "");
+                                        }}
+                                        className="text-foreground font-medium hover:text-secondary transition-colors cursor-pointer"
+                                        title="Clique para editar data de pagamento"
+                                      >
+                                        {formatDate(inst.paid_at)}
+                                      </button>
+                                    )}
+                                  </td>
                                   <td className="py-2 pr-2">
                                     <Select
                                       value={inst.status}
