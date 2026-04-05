@@ -99,6 +99,8 @@ const PaymentsList = ({ refreshKey }: Props) => {
     <div className="space-y-3">
       {enrollments.map((e) => {
         const isExpanded = expandedId === e.id;
+        const hasPlatform = e.tuition_installments > 0;
+        const hasSummercamp = e.summercamp_installments > 0;
         const hasValues = e.inscription_fee_cents > 0 || e.tuition_installment_cents > 0 || e.summercamp_installment_cents > 0;
 
         return (
