@@ -459,6 +459,7 @@ const DashboardPage = () => {
             >
               <span className="sm:hidden">Pagamentos</span>
               <span className="hidden sm:inline">Pagamentos</span>
+              {hasOverdueInstallment && <AlertTriangle size={14} className="ml-1" style={{ color: "#F9B91D" }} />}
             </TabsTrigger>
           </TabsList>
 
