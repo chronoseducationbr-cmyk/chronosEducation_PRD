@@ -502,7 +502,7 @@ const AdminPaymentsPage = () => {
                                 <tr key={inst.id} className="border-b border-border/50 last:border-0">
                                   <td className="py-2 pr-2 text-foreground font-medium">
                                     <span className="flex items-center gap-1">
-                                      {inst.status === "overdue" && <AlertTriangle className="h-3.5 w-3.5 text-destructive shrink-0" />}
+                                      {inst.status === "overdue" && <AlertTriangle className="h-3.5 w-3.5 shrink-0" style={{ color: "#F9B91D" }} />}
                                       {typeLabels[inst.type] || inst.type}
                                     </span>
                                   </td>
