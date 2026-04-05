@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Download, FileText, CheckCircle2, Clock, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { Download, FileText, CheckCircle2, Clock, AlertCircle, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react";
 
 interface Installment {
   id: string;
