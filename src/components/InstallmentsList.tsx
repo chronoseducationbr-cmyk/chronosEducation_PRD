@@ -112,7 +112,7 @@ const TypeSection = ({
                         ? `R$${(inst.final_amount_brl_cents / 100).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
                         : "—"}
                     </td>
-                    <td className="py-2 pr-2 text-foreground">
+                    <td className={`py-2 pr-2 ${inst.status === "overdue" ? "text-red-600 font-bold" : "text-foreground"}`}>
                       {formatDate(inst.due_date)}
                     </td>
                     <td className="py-2 pr-2 text-foreground">
@@ -120,7 +120,7 @@ const TypeSection = ({
                     </td>
                     <td className="py-2 pr-2">
                       {inst.status === "overdue" ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100" style={{ color: "#F9B91D" }}>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-red-600">
                           <AlertTriangle size={10} />
                           {cfg.label}
                         </span>
