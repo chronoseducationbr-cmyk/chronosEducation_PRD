@@ -136,7 +136,8 @@ const PaymentsList = ({ refreshKey }: Props) => {
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-foreground truncate">
+                <p className="font-medium text-foreground truncate flex items-center gap-1">
+                  {overdueEnrollments.has(e.id) && <AlertTriangle size={14} className="shrink-0" style={{ color: "#F9B91D" }} />}
                   {e.student_name || "Sem nome"}
                 </p>
                 <p className="text-xs text-muted-foreground">
