@@ -23,6 +23,8 @@ interface Enrollment {
   tuition_installments: number;
   summercamp_installment_cents: number;
   summercamp_installments: number;
+  contract_sent_at_platform: string | null;
+  contract_sent_at_summercamp: string | null;
 }
 
 interface Props {
@@ -99,9 +101,9 @@ const PaymentsList = ({ refreshKey }: Props) => {
     <div className="space-y-3">
       {enrollments.map((e) => {
         const isExpanded = expandedId === e.id;
-        const hasPlatform = e.tuition_installments > 0;
-        const hasSummercamp = e.summercamp_installments > 0;
-        const hasValues = e.inscription_fee_cents > 0 || e.tuition_installment_cents > 0 || e.summercamp_installment_cents > 0;
+        const hasPlatform = e.tuition_installments > 0 && !!e.contract_sent_at_platform;
+        const hasSummercamp = e.summercamp_installments > 0 && !!e.contract_sent_at_summercamp;
+        const hasValues = hasPlatform || hasSummercamp;
 
         return (
           <div
