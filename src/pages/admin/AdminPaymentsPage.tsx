@@ -701,7 +701,7 @@ const AdminPaymentsPage = () => {
                                       onValueChange={(v) => updateInstallmentStatus(inst.id, e.id, v)}
                                     >
                                       <SelectTrigger
-                                        className="h-6 w-28 text-[10px]"
+                                        className={`h-6 w-28 text-[10px] ${inst.status === "overdue" ? "font-bold" : ""}`}
                                         style={inst.status === "overdue" ? { color: "#F9B91D" } : undefined}
                                       >
                                         <div className="flex items-center gap-1">
