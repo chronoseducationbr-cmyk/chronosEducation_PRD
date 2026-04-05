@@ -54,6 +54,7 @@ interface Installment {
   boleto_url: string | null;
   amount_cents: number;
   discount_percent: number;
+  final_amount_brl_cents: number | null;
 }
 
 const typeLabels: Record<string, string> = {
