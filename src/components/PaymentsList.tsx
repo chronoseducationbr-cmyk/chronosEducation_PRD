@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { GraduationCap, ChevronDown, ChevronUp, Users } from "lucide-react";
+import { GraduationCap, ChevronDown, ChevronUp, Users, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import InstallmentsList from "@/components/InstallmentsList";
@@ -37,6 +37,7 @@ const PaymentsList = ({ refreshKey }: Props) => {
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [referrals, setReferrals] = useState<Record<string, Referral[]>>({});
+  const [overdueEnrollments, setOverdueEnrollments] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const load = async () => {
@@ -48,6 +49,19 @@ const PaymentsList = ({ refreshKey }: Props) => {
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
       setEnrollments((data as Enrollment[]) || []);
+
+      // Check which enrollments have overdue installments
+      const enrIds = (data || []).map((e: any) => e.id);
+      if (enrIds.length > 0) {
+        const { data: overdueInsts } = await supabase
+          .from("installments")
+          .select("enrollment_id")
+          .in("enrollment_id", enrIds)
+          .eq("status", "overdue");
+        const overdueSet = new Set((overdueInsts || []).map((i: any) => i.enrollment_id));
+        setOverdueEnrollments(overdueSet);
+      }
+
       setLoading(false);
     };
     load();
@@ -122,7 +136,8 @@ const PaymentsList = ({ refreshKey }: Props) => {
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-foreground truncate">
+                <p className="font-medium text-foreground truncate flex items-center gap-1">
+                  {overdueEnrollments.has(e.id) && <AlertTriangle size={14} className="shrink-0" style={{ color: "#F9B91D" }} />}
                   {e.student_name || "Sem nome"}
                 </p>
                 <p className="text-xs text-muted-foreground">

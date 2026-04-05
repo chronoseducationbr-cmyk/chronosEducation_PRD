@@ -25,6 +25,7 @@ const DashboardPage = () => {
   const [wizardStep, setWizardStep] = useState(1);
   const [refreshKey, setRefreshKey] = useState(0);
   const [hasUnsignedContract, setHasUnsignedContract] = useState(false);
+  const [hasOverdueInstallment, setHasOverdueInstallment] = useState(false);
 
   useEffect(() => {
     const checkUnsignedContracts = async () => {
@@ -40,6 +41,26 @@ const DashboardPage = () => {
       setHasUnsignedContract(hasUnsigned);
     };
     checkUnsignedContracts();
+  }, [user, refreshKey]);
+
+  useEffect(() => {
+    const checkOverdueInstallments = async () => {
+      if (!user) return;
+      const { data: enrs } = await supabase
+        .from("enrollments")
+        .select("id")
+        .eq("user_id", user.id);
+      if (!enrs || enrs.length === 0) { setHasOverdueInstallment(false); return; }
+      const ids = enrs.map(e => e.id);
+      const { data: overdueInsts } = await supabase
+        .from("installments")
+        .select("id")
+        .in("enrollment_id", ids)
+        .eq("status", "overdue")
+        .limit(1);
+      setHasOverdueInstallment((overdueInsts || []).length > 0);
+    };
+    checkOverdueInstallments();
   }, [user, refreshKey]);
   
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -438,6 +459,7 @@ const DashboardPage = () => {
             >
               <span className="sm:hidden">Pagamentos</span>
               <span className="hidden sm:inline">Pagamentos</span>
+              {hasOverdueInstallment && <AlertTriangle size={14} className="ml-1" style={{ color: "#F9B91D" }} />}
             </TabsTrigger>
           </TabsList>
 

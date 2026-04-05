@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Download, FileText, CheckCircle2, Clock, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { Download, FileText, CheckCircle2, Clock, AlertCircle, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react";
 
 interface Installment {
   id: string;
@@ -52,7 +52,8 @@ const TypeSection = ({
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/30 transition-colors"
       >
-        <span className="text-sm font-bold text-foreground uppercase tracking-wide">
+        <span className="text-sm font-bold text-foreground uppercase tracking-wide flex items-center gap-1">
+          {items.some(i => i.status === "overdue") && <AlertTriangle size={14} className="shrink-0" style={{ color: "#F9B91D" }} />}
           {typeLabels[type] || type}
         </span>
         <span className="flex items-center gap-2">
