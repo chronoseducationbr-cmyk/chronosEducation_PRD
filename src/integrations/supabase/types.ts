@@ -252,6 +252,7 @@ export type Database = {
           discount_percent: number
           due_date: string | null
           enrollment_id: string
+          final_amount_brl_cents: number | null
           id: string
           installment_number: number
           paid_at: string | null
@@ -266,6 +267,7 @@ export type Database = {
           discount_percent?: number
           due_date?: string | null
           enrollment_id: string
+          final_amount_brl_cents?: number | null
           id?: string
           installment_number?: number
           paid_at?: string | null
@@ -280,6 +282,7 @@ export type Database = {
           discount_percent?: number
           due_date?: string | null
           enrollment_id?: string
+          final_amount_brl_cents?: number | null
           id?: string
           installment_number?: number
           paid_at?: string | null
