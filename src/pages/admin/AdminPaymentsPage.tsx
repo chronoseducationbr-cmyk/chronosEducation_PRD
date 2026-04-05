@@ -161,8 +161,6 @@ const AdminPaymentsPage = () => {
 
   const updateInstallmentStatus = async (instId: string, enrollmentId: string, status: string) => {
     const updates: any = { status };
-    if (status === "paid") updates.paid_at = new Date().toISOString();
-    else updates.paid_at = null;
 
     const { error } = await supabase.from("installments").update(updates).eq("id", instId);
     if (error) {
@@ -171,6 +169,18 @@ const AdminPaymentsPage = () => {
       toast({ title: "Estado atualizado" });
       loadInstallments(enrollmentId);
     }
+  };
+
+  const savePaidAt = async (instId: string, enrollmentId: string) => {
+    const paid_at = editPaidAtValue ? new Date(editPaidAtValue).toISOString() : null;
+    const { error } = await supabase.from("installments").update({ paid_at } as any).eq("id", instId);
+    if (error) {
+      toast({ title: "Erro ao atualizar data", variant: "destructive" });
+    } else {
+      toast({ title: "Data de pagamento atualizada" });
+      loadInstallments(enrollmentId);
+    }
+    setEditingPaidAt(null);
   };
 
   const saveAmount = async (instId: string, enrollmentId: string) => {
