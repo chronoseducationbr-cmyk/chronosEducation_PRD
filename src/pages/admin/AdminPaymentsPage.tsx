@@ -559,7 +559,48 @@ const AdminPaymentsPage = () => {
                                     })()}
                                   </td>
                                   <td className="py-2 pr-2 text-foreground">{formatDate(inst.due_date)}</td>
-                                  <td className="py-2 pr-2 text-foreground">{formatDate(inst.paid_at)}</td>
+                                  <td className="py-2 pr-2">
+                                    {editingPaidAt === inst.id ? (
+                                      <div className="flex items-center gap-1">
+                                        <input
+                                          type="date"
+                                          className="w-28 h-6 text-[10px] border border-border rounded px-1 bg-background text-foreground"
+                                          value={editPaidAtValue}
+                                          onChange={(ev) => setEditPaidAtValue(ev.target.value)}
+                                          onKeyDown={(ev) => {
+                                            if (ev.key === "Enter") savePaidAt(inst.id, e.id);
+                                            if (ev.key === "Escape") setEditingPaidAt(null);
+                                          }}
+                                          autoFocus
+                                        />
+                                        <button
+                                          onClick={() => savePaidAt(inst.id, e.id)}
+                                          className="text-secondary hover:text-secondary/80 text-[10px] font-semibold"
+                                          title="Confirmar"
+                                        >
+                                          ✓
+                                        </button>
+                                        <button
+                                          onClick={() => setEditingPaidAt(null)}
+                                          className="text-destructive hover:text-destructive/80 text-[10px] font-semibold"
+                                          title="Cancelar"
+                                        >
+                                          ✕
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <button
+                                        onClick={() => {
+                                          setEditingPaidAt(inst.id);
+                                          setEditPaidAtValue(inst.paid_at ? inst.paid_at.substring(0, 10) : "");
+                                        }}
+                                        className="text-foreground font-medium hover:text-secondary transition-colors cursor-pointer"
+                                        title="Clique para editar data de pagamento"
+                                      >
+                                        {formatDate(inst.paid_at)}
+                                      </button>
+                                    )}
+                                  </td>
                                   <td className="py-2 pr-2">
                                     <Select
                                       value={inst.status}
