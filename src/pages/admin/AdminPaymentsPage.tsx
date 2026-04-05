@@ -86,6 +86,8 @@ const AdminPaymentsPage = () => {
   const [editAmountValue, setEditAmountValue] = useState("");
   const [editingDiscount, setEditingDiscount] = useState<string | null>(null);
   const [editDiscountValue, setEditDiscountValue] = useState("");
+  const [editingPaidAt, setEditingPaidAt] = useState<string | null>(null);
+  const [editPaidAtValue, setEditPaidAtValue] = useState("");
 
   const load = async () => {
     setLoading(true);
