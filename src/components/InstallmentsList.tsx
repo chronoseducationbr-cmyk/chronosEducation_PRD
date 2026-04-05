@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Download, FileText, CheckCircle2, Clock, AlertCircle, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react";
+import { Download, FileText, CheckCircle2, Clock, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react";
 
 interface Installment {
   id: string;
@@ -28,7 +28,7 @@ const typeLabels: Record<string, string> = {
 const statusConfig: Record<string, { label: string; icon: typeof Clock; bg: string; text: string }> = {
   pending: { label: "Pendente", icon: Clock, bg: "bg-gray-100", text: "text-gray-600" },
   paid: { label: "Pago", icon: CheckCircle2, bg: "bg-green-100", text: "text-green-800" },
-  overdue: { label: "Em atraso", icon: AlertCircle, bg: "bg-red-100", text: "text-red-800" },
+  overdue: { label: "Em atraso", icon: AlertTriangle, bg: "bg-gray-100", text: "" },
 };
 
 const TypeSection = ({
@@ -119,11 +119,17 @@ const TypeSection = ({
                       {formatDate(inst.paid_at)}
                     </td>
                     <td className="py-2 pr-2">
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${cfg.bg} ${cfg.text}`}>
-                        {inst.status === "overdue" && <AlertTriangle size={10} style={{ color: "#F9B91D" }} />}
-                        <StatusIcon size={10} />
-                        {cfg.label}
-                      </span>
+                      {inst.status === "overdue" ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100" style={{ color: "#F9B91D" }}>
+                          <AlertTriangle size={10} />
+                          {cfg.label}
+                        </span>
+                      ) : (
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${cfg.bg} ${cfg.text}`}>
+                          <StatusIcon size={10} />
+                          {cfg.label}
+                        </span>
+                      )}
                     </td>
                     <td className="py-2">
                       {inst.boleto_url ? (
