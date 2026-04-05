@@ -106,6 +106,11 @@ const TypeSection = ({
                         return `$${(inst.amount_cents / 100).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                       })()}
                     </td>
+                    <td className="py-2 pr-2 text-foreground font-medium">
+                      {inst.final_amount_brl_cents != null
+                        ? `R$${(inst.final_amount_brl_cents / 100).toLocaleString("pt-PT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                        : "—"}
+                    </td>
                     <td className="py-2 pr-2 text-foreground">
                       {formatDate(inst.due_date)}
                     </td>
