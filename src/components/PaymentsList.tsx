@@ -49,6 +49,19 @@ const PaymentsList = ({ refreshKey }: Props) => {
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
       setEnrollments((data as Enrollment[]) || []);
+
+      // Check which enrollments have overdue installments
+      const enrIds = (data || []).map((e: any) => e.id);
+      if (enrIds.length > 0) {
+        const { data: overdueInsts } = await supabase
+          .from("installments")
+          .select("enrollment_id")
+          .in("enrollment_id", enrIds)
+          .eq("status", "overdue");
+        const overdueSet = new Set((overdueInsts || []).map((i: any) => i.enrollment_id));
+        setOverdueEnrollments(overdueSet);
+      }
+
       setLoading(false);
     };
     load();
