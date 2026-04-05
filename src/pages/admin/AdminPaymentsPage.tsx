@@ -224,6 +224,26 @@ const AdminPaymentsPage = () => {
     setEditingDiscount(null);
   };
 
+  const saveFinalBrl = async (instId: string, enrollmentId: string) => {
+    const parsed = editFinalBrlValue.replace(",", ".");
+    const cents = parsed === "" ? null : Math.round(parseFloat(parsed) * 100);
+    if (cents !== null && (isNaN(cents) || cents < 0)) {
+      toast({ title: "Valor inválido", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase
+      .from("installments")
+      .update({ final_amount_brl_cents: cents } as any)
+      .eq("id", instId);
+    if (error) {
+      toast({ title: "Erro ao atualizar valor", variant: "destructive" });
+    } else {
+      toast({ title: "Valor Final (R$) atualizado" });
+      loadInstallments(enrollmentId);
+    }
+    setEditingFinalBrl(null);
+  };
+
   const handleUploadBoleto = async (file: File) => {
     if (!uploadTarget) return;
     const instId = uploadTarget;
