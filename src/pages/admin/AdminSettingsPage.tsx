@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info, FileText, Monitor, Sun } from "lucide-react";
+import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info, FileText, Monitor, PlaneTakeoff } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { scoringConfigs } from "@/lib/quizScoring";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -414,7 +414,7 @@ const AdminSettingsPage = () => {
                       Plataforma Online
                     </TabsTrigger>
                     <TabsTrigger value="summercamp" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
-                      <Sun size={14} />
+                      <PlaneTakeoff size={14} />
                       Summer Camp
                     </TabsTrigger>
                   </TabsList>

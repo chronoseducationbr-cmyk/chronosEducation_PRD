@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { GraduationCap, FileText, Download, ShieldCheck, Check, Monitor, Sun, ChevronDown, ChevronUp } from "lucide-react";
+import { GraduationCap, FileText, Download, ShieldCheck, Check, Monitor, PlaneTakeoff, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -253,7 +253,7 @@ const EnrollmentContractCard = ({
             {(e.summercamp_installment_cents > 0 || e.contract_url_summercamp) && (
               <div className="text-sm">
                 <p className="text-xs font-semibold text-muted-foreground mb-1 flex items-center gap-1.5">
-                  <Sun size={12} /> Contrato Summer Camp
+                  <PlaneTakeoff size={12} /> Contrato Summer Camp
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <Detail label="Enviado em" value={e.contract_sent_at_summercamp ? formatDate(e.contract_sent_at_summercamp) : ""} />
