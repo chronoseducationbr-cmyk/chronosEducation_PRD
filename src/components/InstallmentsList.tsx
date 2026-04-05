@@ -26,7 +26,7 @@ const typeLabels: Record<string, string> = {
 };
 
 const statusConfig: Record<string, { label: string; icon: typeof Clock; bg: string; text: string }> = {
-  pending: { label: "Pendente", icon: Clock, bg: "bg-amber-100", text: "text-amber-800" },
+  pending: { label: "Pendente", icon: Clock, bg: "bg-gray-100", text: "text-gray-600" },
   paid: { label: "Pago", icon: CheckCircle2, bg: "bg-green-100", text: "text-green-800" },
   overdue: { label: "Em atraso", icon: AlertCircle, bg: "bg-red-100", text: "text-red-800" },
 };
