@@ -696,22 +696,25 @@ const AdminPaymentsPage = () => {
                                     )}
                                   </td>
                                   <td className="py-2 pr-2">
-                                    <div className="flex items-center gap-1">
-                                      {inst.status === "overdue" && <AlertTriangle className="h-3.5 w-3.5 shrink-0" style={{ color: "#F9B91D" }} />}
-                                      <Select
-                                        value={inst.status}
-                                        onValueChange={(v) => updateInstallmentStatus(inst.id, e.id, v)}
+                                    <Select
+                                      value={inst.status}
+                                      onValueChange={(v) => updateInstallmentStatus(inst.id, e.id, v)}
+                                    >
+                                      <SelectTrigger
+                                        className="h-6 w-28 text-[10px]"
+                                        style={inst.status === "overdue" ? { color: "#F9B91D" } : undefined}
                                       >
-                                        <SelectTrigger className="h-6 w-28 text-[10px]">
+                                        <div className="flex items-center gap-1">
+                                          {inst.status === "overdue" && <AlertTriangle className="h-3 w-3 shrink-0" style={{ color: "#F9B91D" }} />}
                                           <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          <SelectItem value="pending" className="text-xs">Pendente</SelectItem>
-                                          <SelectItem value="paid" className="text-xs">Pago</SelectItem>
-                                          <SelectItem value="overdue" className="text-xs">Em atraso</SelectItem>
-                                        </SelectContent>
-                                      </Select>
-                                    </div>
+                                        </div>
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="pending" className="text-xs">Pendente</SelectItem>
+                                        <SelectItem value="paid" className="text-xs">Pago</SelectItem>
+                                        <SelectItem value="overdue" className="text-xs">Em atraso</SelectItem>
+                                      </SelectContent>
+                                    </Select>
                                   </td>
                                   <td className="py-2">
                                     <div className="flex items-center gap-2">
