@@ -23,6 +23,8 @@ interface Enrollment {
   tuition_installments: number;
   summercamp_installment_cents: number;
   summercamp_installments: number;
+  contract_sent_at_platform: string | null;
+  contract_sent_at_summercamp: string | null;
 }
 
 interface Props {
