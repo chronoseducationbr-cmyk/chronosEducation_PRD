@@ -529,6 +529,9 @@ const DashboardPage = () => {
                                 const initial = { ...guardianRef.current };
                                 contractGuardianRef.current = initial;
                                 setContractGuardianInitial(initial);
+                              } else {
+                                // Re-sync initialData with latest edits so remount preserves them
+                                setContractGuardianInitial({ ...contractGuardianRef.current });
                               }
                               setWizardStep(2);
                               window.scrollTo({ top: 0, behavior: "smooth" });
