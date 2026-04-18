@@ -274,14 +274,48 @@ const GuardianDataSection = ({
         </button>
       ) : (
         <div className="bg-card rounded-xl border border-border shadow-card p-5">
-          {!alwaysExpanded && hasEnrollments && (
-            <div className="flex justify-end mb-4">
-              <button
-                onClick={() => setExpanded(false)}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <ChevronUp size={18} />
-              </button>
+          {(requireExplicitSave || (!alwaysExpanded && hasEnrollments)) && (
+            <div className="flex justify-end items-center gap-2 mb-4">
+              {requireExplicitSave && !editing && (
+                <button
+                  type="button"
+                  onClick={() => setEditing(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-foreground border border-border hover:bg-muted/40 transition-colors"
+                >
+                  <Pencil size={14} />
+                  Editar
+                </button>
+              )}
+              {requireExplicitSave && editing && (
+                <>
+                  <button
+                    type="button"
+                    onClick={handleCancelEdit}
+                    disabled={saving}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-foreground border border-border hover:bg-muted/40 transition-colors disabled:opacity-50"
+                  >
+                    <X size={14} />
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSaveAll}
+                    disabled={saving}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
+                  >
+                    <Check size={14} />
+                    {saving ? "A guardar..." : "Guardar"}
+                  </button>
+                </>
+              )}
+              {!alwaysExpanded && hasEnrollments && !editing && (
+                <button
+                  onClick={() => setExpanded(false)}
+                  className="text-muted-foreground hover:text-foreground transition-colors ml-1"
+                >
+                  <ChevronUp size={18} />
+                </button>
+              )}
             </div>
           )}
           <div className="grid sm:grid-cols-2 gap-5">
