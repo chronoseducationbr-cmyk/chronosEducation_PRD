@@ -99,6 +99,12 @@ const GuardianDataSection = ({
     guardianAddress: initialData?.guardianAddress || "",
   });
 
+  // One-shot tracking: when clearOnFullNameChange is enabled, the first time
+  // the user edits fullName away from the initial pre-filled value, clear all
+  // other fields. Tracked via refs so it survives re-renders without retriggering.
+  const initialFullNameRef = useRef(initialData?.fullName || "");
+  const hasClearedRef = useRef(false);
+
   useEffect(() => {
     if (mode === "memory") {
       setLoading(false);
