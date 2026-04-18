@@ -194,6 +194,18 @@ serve(async (req) => {
       );
     }
 
+    // Sanitize reply_to: trim, lowercase, strip invisible chars; fallback if invalid
+    const sanitizeEmail = (raw: string) =>
+      raw.normalize("NFKC").replace(/[\u200B-\u200D\uFEFF\s]/g, "").toLowerCase();
+    const isAscii = (s: string) => /^[\x00-\x7F]+$/.test(s);
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    const fallback = "contato@chronoseducation.com";
+    const candidate = body.guardian.email ? sanitizeEmail(body.guardian.email) : "";
+    const replyTo = candidate && isAscii(candidate) && emailRegex.test(candidate)
+      ? candidate
+      : fallback;
+
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -205,7 +217,7 @@ serve(async (req) => {
         to: ["contato@chronoseducation.com"],
         subject: `Nova Inscrição — ${body.student.student_name || body.guardian.full_name} | Dual Diploma`,
         html: buildNotificationHtml(body),
-        reply_to: body.guardian.email || "contato@chronoseducation.com",
+        reply_to: replyTo,
       }),
     });
 
