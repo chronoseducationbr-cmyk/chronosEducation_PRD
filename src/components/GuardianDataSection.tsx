@@ -47,6 +47,12 @@ interface Props {
    * via the contract guardian step.
    */
   simplified?: boolean;
+  /**
+   * When true (only in "memory" mode): the first time the user changes the
+   * full name field (away from the pre-filled default), all other fields are
+   * cleared so the user is forced to fill the contract guardian's actual data.
+   */
+  clearOnFullNameChange?: boolean;
 }
 
 const GuardianDataSection = ({
