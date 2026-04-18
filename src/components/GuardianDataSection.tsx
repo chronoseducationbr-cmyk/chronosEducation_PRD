@@ -369,6 +369,7 @@ const GuardianDataSection = ({
                 onBlur={() => saveProfile({ profession: profession.trim() })}
                 className={inputClass(errKey("Profession"))}
                 placeholder="Ex: Engenheiro(a)"
+                disabled={isReadOnly}
               />
             </div>
             <div className="sm:col-span-2">
