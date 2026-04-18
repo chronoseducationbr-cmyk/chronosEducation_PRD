@@ -66,6 +66,7 @@ const GuardianDataSection = ({
   errorPrefix = "guardian",
   requireExplicitSave = false,
   simplified = false,
+  clearOnFullNameChange = false,
 }: Props) => {
   const { user } = useAuth();
   const { toast } = useToast();
