@@ -121,9 +121,23 @@ serve(async (req) => {
       );
     }
 
+    // Sanitize: trim, lowercase, strip invisible chars, ensure ASCII-only
+    const sanitizeEmail = (raw: string) =>
+      raw.normalize("NFKC").replace(/[\u200B-\u200D\uFEFF\s]/g, "").toLowerCase();
+    const isAscii = (s: string) => /^[\x00-\x7F]+$/.test(s);
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    const cleanEmail = sanitizeEmail(email);
+    if (!isAscii(cleanEmail) || !emailRegex.test(cleanEmail)) {
+      return new Response(
+        JSON.stringify({ error: `Endereço de email inválido: ${email}` }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const emailPayload: Record<string, unknown> = {
       from: "Chronos Education <contato@info.chronoseducation.com>",
-      to: [email],
+      to: [cleanEmail],
       subject: "Matrícula confirmada",
       html: buildEmailHtml(name, studentName || ""),
       reply_to: "chronoseducationbr@gmail.com",
