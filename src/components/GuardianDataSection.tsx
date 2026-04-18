@@ -156,6 +156,7 @@ const GuardianDataSection = ({
   useEffect(() => {
     return () => {
       if (mode !== "profile") return;
+      if (requireExplicitSave) return; // explicit-save mode never auto-persists
       if (!user) return;
       const d = latestRef.current;
       supabase.from("profiles").update({
@@ -170,12 +171,52 @@ const GuardianDataSection = ({
         guardian_address: d.guardianAddress.trim(),
       } as any).eq("user_id", user.id).then(() => {});
     };
-  }, [user, mode]);
+  }, [user, mode, requireExplicitSave]);
 
   const saveProfile = async (fields: Record<string, string>) => {
     if (mode !== "profile") return;
+    if (requireExplicitSave) return; // do nothing on blur in explicit-save mode
     if (!user) return;
     await supabase.from("profiles").update(fields as any).eq("user_id", user.id);
+  };
+
+  const handleSaveAll = async () => {
+    if (!user) return;
+    setSaving(true);
+    const data: GuardianData = { fullName, email, phone, cpf, nationality, civilStatus, profession, rgNumber, guardianAddress };
+    const { error } = await supabase.from("profiles").update({
+      full_name: data.fullName.trim(),
+      email: data.email.trim(),
+      phone: data.phone.trim(),
+      cpf: data.cpf.trim(),
+      nationality: data.nationality.trim(),
+      civil_status: data.civilStatus.trim(),
+      profession: data.profession.trim(),
+      rg_number: data.rgNumber.trim(),
+      guardian_address: data.guardianAddress.trim(),
+    } as any).eq("user_id", user.id);
+    setSaving(false);
+    if (error) {
+      toast({ title: "Erro ao guardar", description: error.message, variant: "destructive" });
+      return;
+    }
+    savedRef.current = data;
+    setEditing(false);
+    toast({ title: "Dados guardados", description: "Os dados do responsável foram atualizados." });
+  };
+
+  const handleCancelEdit = () => {
+    const s = savedRef.current;
+    setFullName(s.fullName);
+    setEmail(s.email);
+    setPhone(s.phone);
+    setCpf(s.cpf);
+    setNationality(s.nationality);
+    setCivilStatus(s.civilStatus);
+    setProfession(s.profession);
+    setRgNumber(s.rgNumber);
+    setGuardianAddress(s.guardianAddress);
+    setEditing(false);
   };
 
   useEffect(() => {
