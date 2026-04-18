@@ -345,7 +345,25 @@ const GuardianDataSection = ({
                 type="text"
                 maxLength={100}
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                onChange={(e) => {
+                  const newVal = e.target.value;
+                  setFullName(newVal);
+                  if (
+                    clearOnFullNameChange &&
+                    !hasClearedRef.current &&
+                    newVal.trim() !== initialFullNameRef.current.trim()
+                  ) {
+                    hasClearedRef.current = true;
+                    setEmail("");
+                    setPhone("");
+                    setCpf("");
+                    setNationality("");
+                    setCivilStatus("");
+                    setProfession("");
+                    setRgNumber("");
+                    setGuardianAddress("");
+                  }
+                }}
                 onBlur={() => saveProfile({ full_name: fullName.trim() })}
                 className={inputClass(errKey("FullName"))}
                 placeholder="Nome completo do responsável"
