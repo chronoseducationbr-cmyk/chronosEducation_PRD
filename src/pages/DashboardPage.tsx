@@ -86,9 +86,9 @@ const DashboardPage = () => {
     const s = studentRef.current;
     if (!user) return;
 
-    const targetEmail = cg.email?.trim() || g.email?.trim() || user?.email;
+    const targetEmail = g.email?.trim() || user?.email;
     if (!targetEmail) {
-      toast({ title: "Preencha o email do responsável do contrato", variant: "destructive" });
+      toast({ title: "Preencha o email do pai/mãe", variant: "destructive" });
       return;
     }
 
