@@ -102,28 +102,41 @@ const GuardianDataSection = ({
 
       if (profileRes.data) {
         const p = profileRes.data as any;
-        setFullName(p.full_name || user?.user_metadata?.full_name || "");
-        setEmail(p.email || user?.email || "");
-        setPhone(p.phone || "");
-        setCpf(p.cpf || "");
-        const nat = p.nationality || "Brasileira";
-        setNationality(nat);
-        const cs = p.civil_status || "Casado(a)";
-        setCivilStatus(cs);
-        setProfession(p.profession || "");
-        setRgNumber(p.rg_number || "");
-        setGuardianAddress(p.guardian_address || "");
+        const loaded: GuardianData = {
+          fullName: p.full_name || user?.user_metadata?.full_name || "",
+          email: p.email || user?.email || "",
+          phone: p.phone || "",
+          cpf: p.cpf || "",
+          nationality: p.nationality || "Brasileira",
+          civilStatus: p.civil_status || "Casado(a)",
+          profession: p.profession || "",
+          rgNumber: p.rg_number || "",
+          guardianAddress: p.guardian_address || "",
+        };
+        setFullName(loaded.fullName);
+        setEmail(loaded.email);
+        setPhone(loaded.phone);
+        setCpf(loaded.cpf);
+        setNationality(loaded.nationality);
+        setCivilStatus(loaded.civilStatus);
+        setProfession(loaded.profession);
+        setRgNumber(loaded.rgNumber);
+        setGuardianAddress(loaded.guardianAddress);
+        savedRef.current = loaded;
 
         // Persist defaults if not yet saved
         const updates: Record<string, string> = {};
-        if (!p.nationality) updates.nationality = nat;
-        if (!p.civil_status) updates.civil_status = cs;
+        if (!p.nationality) updates.nationality = loaded.nationality;
+        if (!p.civil_status) updates.civil_status = loaded.civilStatus;
         if (Object.keys(updates).length > 0) {
           supabase.from("profiles").update(updates as any).eq("user_id", user!.id).then(() => {});
         }
       } else {
-        setFullName(user?.user_metadata?.full_name || "");
-        setEmail(user?.email || "");
+        const fn = user?.user_metadata?.full_name || "";
+        const em = user?.email || "";
+        setFullName(fn);
+        setEmail(em);
+        savedRef.current = { ...savedRef.current, fullName: fn, email: em };
         // Save defaults for new profile
         supabase.from("profiles").update({ nationality: "Brasileira", civil_status: "Casado(a)" } as any).eq("user_id", user!.id).then(() => {});
       }
