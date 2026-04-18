@@ -444,74 +444,129 @@ const DashboardPage = () => {
                 <>
                   <button
                     onClick={() => {
-                      setShowForm(false);
-                      setWizardStep(1);
+                      if (wizardStep === 2) {
+                        setWizardStep(1);
+                        setValidationErrors([]);
+                      } else {
+                        setShowForm(false);
+                        setWizardStep(1);
+                      }
                     }}
                     className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
                   >
                     <ArrowLeft size={16} />
-                    Voltar às matrículas
+                    {wizardStep === 2 ? "Voltar ao passo anterior" : "Voltar às matrículas"}
                   </button>
 
                   <h2 className="font-heading text-xl font-semibold text-foreground mb-2">
                     Nova Matrícula
                   </h2>
 
-
-                  <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} initialData={guardianRef.current} />
-                  <div className="mt-6">
-                    <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} guardianAddress={guardianRef.current.guardianAddress} />
+                  {/* Wizard step indicator */}
+                  <div className="flex items-center gap-2 mb-6 text-sm">
+                    <span className={`flex items-center gap-1.5 ${wizardStep === 1 ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
+                      <span className={`flex items-center justify-center w-6 h-6 rounded-full text-xs ${wizardStep === 1 ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>1</span>
+                      Dados do Aluno
+                    </span>
+                    <span className="text-muted-foreground">→</span>
+                    <span className={`flex items-center gap-1.5 ${wizardStep === 2 ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
+                      <span className={`flex items-center justify-center w-6 h-6 rounded-full text-xs ${wizardStep === 2 ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>2</span>
+                      Responsável do Contrato
+                    </span>
                   </div>
 
-                  {/* Serviços contratados */}
-                  <div className="mt-8">
-                    <h3 className="font-heading text-lg font-semibold text-foreground mb-1">Serviços contratados</h3>
-                    <p className="text-sm text-muted-foreground mb-4">Selecione os serviços que pretende contratar. Pode escolher um ou ambos.</p>
-                    <div className="space-y-3">
-                      <div
-                        className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.plataforma ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
-                        onClick={() => setSelectedServices((prev) => ({ ...prev, plataforma: !prev.plataforma }))}
-                      >
-                        <Checkbox checked={selectedServices.plataforma} onCheckedChange={() => {}} className="h-5 w-5 rounded-[3px]" />
-                        <div>
-                          <p className="font-semibold text-foreground">Plataforma Online</p>
-                          <p className="text-xs text-muted-foreground">Acesso à plataforma digital do programa Dual Diploma</p>
+                  {wizardStep === 1 && (
+                    <>
+                      <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} guardianAddress={guardianRef.current.guardianAddress} />
+
+                      {/* Serviços contratados */}
+                      <div className="mt-8">
+                        <h3 className="font-heading text-lg font-semibold text-foreground mb-1">Serviços contratados</h3>
+                        <p className="text-sm text-muted-foreground mb-4">Selecione os serviços que pretende contratar. Pode escolher um ou ambos.</p>
+                        <div className="space-y-3">
+                          <div
+                            className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.plataforma ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
+                            onClick={() => setSelectedServices((prev) => ({ ...prev, plataforma: !prev.plataforma }))}
+                          >
+                            <Checkbox checked={selectedServices.plataforma} onCheckedChange={() => {}} className="h-5 w-5 rounded-[3px]" />
+                            <div>
+                              <p className="font-semibold text-foreground">Plataforma Online</p>
+                              <p className="text-xs text-muted-foreground">Acesso à plataforma digital do programa Dual Diploma</p>
+                            </div>
+                          </div>
+                          <div
+                            className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.summercamp ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
+                            onClick={() => setSelectedServices((prev) => ({ ...prev, summercamp: !prev.summercamp }))}
+                          >
+                            <Checkbox checked={selectedServices.summercamp} onCheckedChange={() => {}} className="h-5 w-5 rounded-[3px]" />
+                            <div>
+                              <p className="font-semibold text-foreground">Summer Camp</p>
+                              <p className="text-xs text-muted-foreground">Programa presencial de imersão durante o verão</p>
+                            </div>
+                          </div>
                         </div>
+                        {validationErrors.includes("services") && (
+                          <p className="text-destructive text-sm mt-2">Selecione pelo menos um serviço.</p>
+                        )}
                       </div>
-                      <div
-                        className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.summercamp ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
-                        onClick={() => setSelectedServices((prev) => ({ ...prev, summercamp: !prev.summercamp }))}
-                      >
-                        <Checkbox checked={selectedServices.summercamp} onCheckedChange={() => {}} className="h-5 w-5 rounded-[3px]" />
-                        <div>
-                          <p className="font-semibold text-foreground">Summer Camp</p>
-                          <p className="text-xs text-muted-foreground">Programa presencial de imersão durante o verão</p>
-                        </div>
+
+                      <div className="mt-8">
+                        <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
                       </div>
-                    </div>
-                    {validationErrors.includes("services") && (
-                      <p className="text-destructive text-sm mt-2">Selecione pelo menos um serviço.</p>
-                    )}
-                  </div>
 
-                  <div className="mt-8">
-                    <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
-                  </div>
+                      <div className="mt-8">
+                        <button
+                          onClick={async () => {
+                            const valid = await validateStep1();
+                            if (valid) {
+                              // Pre-fill contract guardian with the parent profile data the first time
+                              if (!contractGuardianRef.current.fullName && !contractGuardianRef.current.email) {
+                                const initial = { ...guardianRef.current };
+                                contractGuardianRef.current = initial;
+                                setContractGuardianInitial(initial);
+                              }
+                              setWizardStep(2);
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            }
+                          }}
+                          disabled={paying}
+                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Continuar
+                        </button>
+                      </div>
+                    </>
+                  )}
 
-                  <div className="mt-8">
-                    <button
-                      onClick={async () => {
-                        const valid = await validateStep1();
-                        if (valid) {
-                          await handleSubmitEnrollment();
-                        }
-                      }}
-                      disabled={paying}
-                      className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {paying ? "Processando..." : "Confirmar matrícula"}
-                    </button>
-                  </div>
+                  {wizardStep === 2 && (
+                    <>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Os dados do responsável que assinará o contrato podem ser diferentes dos dados do pai/mãe registados na sua conta. Pode editar os campos abaixo.
+                      </p>
+                      <GuardianDataSection
+                        mode="memory"
+                        title="Responsável pelo Contrato"
+                        alwaysExpanded
+                        errorPrefix="contractGuardian"
+                        onChange={handleContractGuardianChange}
+                        validationErrors={validationErrors}
+                        initialData={contractGuardianInitial}
+                      />
+
+                      <div className="mt-8">
+                        <button
+                          onClick={async () => {
+                            if (!validateStep2()) return;
+                            await handleSubmitEnrollment();
+                          }}
+                          disabled={paying}
+                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {paying ? "Processando..." : "Confirmar matrícula"}
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </>
               )}
             </div>
