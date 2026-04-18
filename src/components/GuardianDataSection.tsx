@@ -416,6 +416,7 @@ const GuardianDataSection = ({
                   className={`${inputClass(errKey("Cpf"))} pl-10`}
                   placeholder="000.000.000-00"
                   maxLength={14}
+                  disabled={isReadOnly}
                 />
               </div>
             </div>
