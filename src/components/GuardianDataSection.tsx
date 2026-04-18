@@ -432,6 +432,7 @@ const GuardianDataSection = ({
                   onBlur={() => saveProfile({ rg_number: rgNumber.trim() })}
                   className={`${inputClass(errKey("RgNumber"))} pl-10`}
                   placeholder="Número do RG"
+                  disabled={isReadOnly}
                 />
               </div>
             </div>
@@ -447,6 +448,7 @@ const GuardianDataSection = ({
                   onBlur={() => saveProfile({ guardian_address: guardianAddress.trim() })}
                   className={`${inputClass(errKey("Address"))} pl-10`}
                   placeholder="Endereço completo"
+                  disabled={isReadOnly}
                 />
               </div>
             </div>
