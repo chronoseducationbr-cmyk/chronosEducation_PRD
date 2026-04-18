@@ -329,6 +329,7 @@ const GuardianDataSection = ({
                 onBlur={() => saveProfile({ full_name: fullName.trim() })}
                 className={inputClass(errKey("FullName"))}
                 placeholder="Nome completo do responsável"
+                disabled={isReadOnly}
               />
             </div>
             <div>
