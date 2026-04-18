@@ -59,6 +59,7 @@ const GuardianDataSection = ({
   alwaysExpanded = false,
   errorPrefix = "guardian",
   requireExplicitSave = false,
+  simplified = false,
 }: Props) => {
   const { user } = useAuth();
   const { toast } = useToast();
