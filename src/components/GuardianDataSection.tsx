@@ -384,6 +384,7 @@ const GuardianDataSection = ({
                   onBlur={() => saveProfile({ email: email.trim() })}
                   className={`${inputClass(errKey("Email"))} pl-10`}
                   placeholder="email@exemplo.com"
+                  disabled={isReadOnly}
                 />
               </div>
             </div>
