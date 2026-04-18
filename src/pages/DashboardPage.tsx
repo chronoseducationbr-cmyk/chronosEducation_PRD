@@ -109,7 +109,12 @@ const DashboardPage = () => {
       ]);
 
       if (existingEnrollment) {
-        toast({ title: "Email já inscrito", description: "Já existe uma matrícula com este email de aluno.", variant: "destructive" });
+        toast({
+          title: "Email do aluno já inscrito",
+          description: `Já existe uma matrícula com o email de aluno "${s.studentEmail.trim()}". Volte ao passo 1 e use um email de aluno diferente.`,
+          variant: "destructive",
+        });
+        setWizardStep(1);
         setPaying(false);
         return;
       }
