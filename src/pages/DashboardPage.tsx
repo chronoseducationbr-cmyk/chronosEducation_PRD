@@ -559,6 +559,7 @@ const DashboardPage = () => {
                         onChange={handleContractGuardianChange}
                         validationErrors={validationErrors}
                         initialData={contractGuardianInitial}
+                        clearOnFullNameChange
                       />
 
                       <div className="mt-8">

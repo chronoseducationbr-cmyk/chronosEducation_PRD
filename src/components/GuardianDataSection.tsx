@@ -47,6 +47,12 @@ interface Props {
    * via the contract guardian step.
    */
   simplified?: boolean;
+  /**
+   * When true (only in "memory" mode): the first time the user changes the
+   * full name field (away from the pre-filled default), all other fields are
+   * cleared so the user is forced to fill the contract guardian's actual data.
+   */
+  clearOnFullNameChange?: boolean;
 }
 
 const GuardianDataSection = ({
@@ -60,6 +66,7 @@ const GuardianDataSection = ({
   errorPrefix = "guardian",
   requireExplicitSave = false,
   simplified = false,
+  clearOnFullNameChange = false,
 }: Props) => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -91,6 +98,12 @@ const GuardianDataSection = ({
     rgNumber: initialData?.rgNumber || "",
     guardianAddress: initialData?.guardianAddress || "",
   });
+
+  // One-shot tracking: when clearOnFullNameChange is enabled, the first time
+  // the user edits fullName away from the initial pre-filled value, clear all
+  // other fields. Tracked via refs so it survives re-renders without retriggering.
+  const initialFullNameRef = useRef(initialData?.fullName || "");
+  const hasClearedRef = useRef(false);
 
   useEffect(() => {
     if (mode === "memory") {
@@ -332,7 +345,25 @@ const GuardianDataSection = ({
                 type="text"
                 maxLength={100}
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                onChange={(e) => {
+                  const newVal = e.target.value;
+                  setFullName(newVal);
+                  if (
+                    clearOnFullNameChange &&
+                    !hasClearedRef.current &&
+                    newVal.trim() !== initialFullNameRef.current.trim()
+                  ) {
+                    hasClearedRef.current = true;
+                    setEmail("");
+                    setPhone("");
+                    setCpf("");
+                    setNationality("");
+                    setCivilStatus("");
+                    setProfession("");
+                    setRgNumber("");
+                    setGuardianAddress("");
+                  }
+                }}
                 onBlur={() => saveProfile({ full_name: fullName.trim() })}
                 className={inputClass(errKey("FullName"))}
                 placeholder="Nome completo do responsável"
