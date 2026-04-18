@@ -35,6 +35,12 @@ interface Props {
   alwaysExpanded?: boolean;
   /** Custom prefix used to build validation error keys (e.g. "contractGuardian"). Defaults to "guardian". */
   errorPrefix?: string;
+  /**
+   * When true (only in "profile" mode): fields are read-only until the user clicks "Editar".
+   * Changes are buffered locally and only persisted when the user clicks "Guardar".
+   * "Cancelar" reverts to the last saved values.
+   */
+  requireExplicitSave?: boolean;
 }
 
 const GuardianDataSection = ({
@@ -46,11 +52,15 @@ const GuardianDataSection = ({
   hideHeading = false,
   alwaysExpanded = false,
   errorPrefix = "guardian",
+  requireExplicitSave = false,
 }: Props) => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(mode === "profile");
   const [hasEnrollments, setHasEnrollments] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [editing, setEditing] = useState(!requireExplicitSave);
+  const [saving, setSaving] = useState(false);
 
   const [fullName, setFullName] = useState(initialData?.fullName || "");
   const [email, setEmail] = useState(initialData?.email || "");
@@ -61,6 +71,19 @@ const GuardianDataSection = ({
   const [profession, setProfession] = useState(initialData?.profession || "");
   const [rgNumber, setRgNumber] = useState(initialData?.rgNumber || "");
   const [guardianAddress, setGuardianAddress] = useState(initialData?.guardianAddress || "");
+
+  // Snapshot of last saved values, used to revert on Cancel
+  const savedRef = useRef<GuardianData>({
+    fullName: initialData?.fullName || "",
+    email: initialData?.email || "",
+    phone: initialData?.phone || "",
+    cpf: initialData?.cpf || "",
+    nationality: initialData?.nationality || "Brasileira",
+    civilStatus: initialData?.civilStatus || "Casado(a)",
+    profession: initialData?.profession || "",
+    rgNumber: initialData?.rgNumber || "",
+    guardianAddress: initialData?.guardianAddress || "",
+  });
 
   useEffect(() => {
     if (mode === "memory") {
