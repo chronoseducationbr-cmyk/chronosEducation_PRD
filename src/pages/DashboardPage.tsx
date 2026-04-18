@@ -425,7 +425,7 @@ const DashboardPage = () => {
             <div className="max-w-2xl">
               {!showForm ? (
                 <>
-                  <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} />
+                  <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} requireExplicitSave />
                   <div className="mt-8">
                     <EnrollmentsList
                       onNewEnrollment={() => {
