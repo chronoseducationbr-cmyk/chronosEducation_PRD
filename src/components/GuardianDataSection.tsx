@@ -41,6 +41,12 @@ interface Props {
    * "Cancelar" reverts to the last saved values.
    */
   requireExplicitSave?: boolean;
+  /**
+   * When true: hides Nationality, Civil Status, Profession, CPF, and RG fields.
+   * Used for the parent/guardian profile, where this data is only collected per-enrollment
+   * via the contract guardian step.
+   */
+  simplified?: boolean;
 }
 
 const GuardianDataSection = ({
