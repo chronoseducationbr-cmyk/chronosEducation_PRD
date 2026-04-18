@@ -142,6 +142,15 @@ export type Database = {
       }
       enrollments: {
         Row: {
+          contract_guardian_address: string | null
+          contract_guardian_civil_status: string | null
+          contract_guardian_cpf: string | null
+          contract_guardian_email: string | null
+          contract_guardian_full_name: string | null
+          contract_guardian_nationality: string | null
+          contract_guardian_phone: string | null
+          contract_guardian_profession: string | null
+          contract_guardian_rg: string | null
           contract_sent_at_platform: string | null
           contract_sent_at_summercamp: string | null
           contract_signed_at_platform: string | null
@@ -173,6 +182,15 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          contract_guardian_address?: string | null
+          contract_guardian_civil_status?: string | null
+          contract_guardian_cpf?: string | null
+          contract_guardian_email?: string | null
+          contract_guardian_full_name?: string | null
+          contract_guardian_nationality?: string | null
+          contract_guardian_phone?: string | null
+          contract_guardian_profession?: string | null
+          contract_guardian_rg?: string | null
           contract_sent_at_platform?: string | null
           contract_sent_at_summercamp?: string | null
           contract_signed_at_platform?: string | null
@@ -204,6 +222,15 @@ export type Database = {
           user_id: string
         }
         Update: {
+          contract_guardian_address?: string | null
+          contract_guardian_civil_status?: string | null
+          contract_guardian_cpf?: string | null
+          contract_guardian_email?: string | null
+          contract_guardian_full_name?: string | null
+          contract_guardian_nationality?: string | null
+          contract_guardian_phone?: string | null
+          contract_guardian_profession?: string | null
+          contract_guardian_rg?: string | null
           contract_sent_at_platform?: string | null
           contract_sent_at_summercamp?: string | null
           contract_signed_at_platform?: string | null
