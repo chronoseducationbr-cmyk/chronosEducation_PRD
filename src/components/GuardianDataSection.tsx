@@ -239,7 +239,8 @@ const GuardianDataSection = ({
   };
 
   const errKey = (suffix: string) => `${errorPrefix}${suffix}`;
-  const inputClass = (field?: string) => `w-full px-4 py-3 rounded-lg border ${field && validationErrors.includes(field) ? "border-destructive" : "border-border"} bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition`;
+  const isReadOnly = requireExplicitSave && !editing;
+  const inputClass = (field?: string) => `w-full px-4 py-3 rounded-lg border ${field && validationErrors.includes(field) ? "border-destructive" : "border-border"} bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition ${isReadOnly ? "opacity-70 cursor-not-allowed bg-muted/30" : ""}`;
 
   if (loading) {
     return (
