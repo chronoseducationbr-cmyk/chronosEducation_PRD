@@ -66,11 +66,15 @@ const DashboardPage = () => {
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [selectedServices, setSelectedServices] = useState<{ plataforma: boolean; summercamp: boolean }>({ plataforma: false, summercamp: false });
 
-  const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "", nationality: "", civilStatus: "", profession: "", rgNumber: "", guardianAddress: "" });
+  const emptyGuardian: GuardianData = { fullName: "", email: "", phone: "", cpf: "", nationality: "", civilStatus: "", profession: "", rgNumber: "", guardianAddress: "" };
+  const guardianRef = useRef<GuardianData>({ ...emptyGuardian });
+  const contractGuardianRef = useRef<GuardianData>({ ...emptyGuardian });
+  const [contractGuardianInitial, setContractGuardianInitial] = useState<GuardianData>({ ...emptyGuardian });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
   const referralRef = useRef("");
 
   const handleGuardianChange = useCallback((data: GuardianData) => { guardianRef.current = data; }, []);
+  const handleContractGuardianChange = useCallback((data: GuardianData) => { contractGuardianRef.current = data; }, []);
   const handleStudentChange = useCallback((data: StudentData) => { studentRef.current = data; }, []);
   const handleReferralChange = useCallback((email: string) => { referralRef.current = email; }, []);
 
