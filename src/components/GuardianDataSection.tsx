@@ -400,6 +400,7 @@ const GuardianDataSection = ({
                   onBlur={() => saveProfile({ phone: phone.trim() })}
                   className={`${inputClass(errKey("Phone"))} pl-10`}
                   placeholder="(11) 99999-9999"
+                  disabled={isReadOnly}
                 />
               </div>
             </div>
