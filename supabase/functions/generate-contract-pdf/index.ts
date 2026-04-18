@@ -498,18 +498,28 @@ serve(async (req) => {
         supabase.auth.admin.getUserById(enrollment.user_id),
       ]);
 
-      const guardianEmail = enrollment.guardian_email || profile?.email || authUser?.user?.email || "";
-      const guardianName = profile?.full_name || authUser?.user?.user_metadata?.full_name || "";
+      // Prefer the contract guardian saved on the enrollment (signatário do contrato)
+      // and fall back to the account profile (pai/mãe) when not provided.
+      const cgFullName = enrollment.contract_guardian_full_name?.trim();
+      const useContractGuardian = !!cgFullName;
+
+      const guardianEmail = useContractGuardian
+        ? (enrollment.contract_guardian_email || enrollment.guardian_email || profile?.email || authUser?.user?.email || "")
+        : (enrollment.guardian_email || profile?.email || authUser?.user?.email || "");
+      const guardianName = useContractGuardian
+        ? cgFullName
+        : (profile?.full_name || authUser?.user?.user_metadata?.full_name || "");
 
       guardianData = guardianData || {
         fullName: guardianName,
         email: guardianEmail,
-        phone: profile?.phone || "",
-        nationality: profile?.nationality || "",
-        civilStatus: profile?.civil_status || "",
-        profession: profile?.profession || "",
-        cpf: profile?.cpf || "",
-        rg: profile?.rg_number || "",
+        phone: useContractGuardian ? (enrollment.contract_guardian_phone || "") : (profile?.phone || ""),
+        nationality: useContractGuardian ? (enrollment.contract_guardian_nationality || "") : (profile?.nationality || ""),
+        civilStatus: useContractGuardian ? (enrollment.contract_guardian_civil_status || "") : (profile?.civil_status || ""),
+        profession: useContractGuardian ? (enrollment.contract_guardian_profession || "") : (profile?.profession || ""),
+        cpf: useContractGuardian ? (enrollment.contract_guardian_cpf || "") : (profile?.cpf || ""),
+        rg: useContractGuardian ? (enrollment.contract_guardian_rg || "") : (profile?.rg_number || ""),
+        address: useContractGuardian ? (enrollment.contract_guardian_address || "") : "",
       };
 
       studentData = studentData || {

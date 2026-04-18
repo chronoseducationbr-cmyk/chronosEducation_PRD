@@ -66,11 +66,15 @@ const DashboardPage = () => {
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [selectedServices, setSelectedServices] = useState<{ plataforma: boolean; summercamp: boolean }>({ plataforma: false, summercamp: false });
 
-  const guardianRef = useRef<GuardianData>({ fullName: "", email: "", phone: "", cpf: "", nationality: "", civilStatus: "", profession: "", rgNumber: "", guardianAddress: "" });
+  const emptyGuardian: GuardianData = { fullName: "", email: "", phone: "", cpf: "", nationality: "", civilStatus: "", profession: "", rgNumber: "", guardianAddress: "" };
+  const guardianRef = useRef<GuardianData>({ ...emptyGuardian });
+  const contractGuardianRef = useRef<GuardianData>({ ...emptyGuardian });
+  const [contractGuardianInitial, setContractGuardianInitial] = useState<GuardianData>({ ...emptyGuardian });
   const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
   const referralRef = useRef("");
 
   const handleGuardianChange = useCallback((data: GuardianData) => { guardianRef.current = data; }, []);
+  const handleContractGuardianChange = useCallback((data: GuardianData) => { contractGuardianRef.current = data; }, []);
   const handleStudentChange = useCallback((data: StudentData) => { studentRef.current = data; }, []);
   const handleReferralChange = useCallback((email: string) => { referralRef.current = email; }, []);
 
@@ -78,71 +82,18 @@ const DashboardPage = () => {
 
   const handleSubmitEnrollment = async () => {
     const g = guardianRef.current;
+    const cg = contractGuardianRef.current;
     const s = studentRef.current;
     if (!user) return;
 
-    const missingFields: string[] = [];
-    if (!s.studentName.trim()) missingFields.push("Nome do aluno");
-    if (!s.studentBirthDate) missingFields.push("Data de nascimento");
-    if (!s.studentEmail.trim()) missingFields.push("Email do aluno");
-    if (!s.studentAddress.trim()) missingFields.push("Endereço");
-    if (!s.studentSchool.trim()) missingFields.push("Escola atual");
-    if (!s.studentGraduationYear) missingFields.push("Ano de conclusão");
-
-    if (missingFields.length > 0) {
-      toast({ title: "Campos obrigatórios em falta", description: missingFields.join(", "), variant: "destructive" });
-      return;
-    }
-
-    // Validate email formats
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(g.email.trim())) {
-      toast({ title: "Email inválido", description: "O email do responsável não tem um formato válido.", variant: "destructive" });
-      return;
-    }
-    if (!emailRegex.test(s.studentEmail.trim())) {
-      toast({ title: "Email inválido", description: "O email do aluno não tem um formato válido.", variant: "destructive" });
-      return;
-    }
-
-    // Validate student age
-    if (s.studentBirthDate) {
-      const birthDate = new Date(s.studentBirthDate);
-      const today = new Date();
-      if (birthDate > today) {
-        toast({ title: "Data de nascimento inválida", description: "A data de nascimento não pode ser superior à data atual.", variant: "destructive" });
-        return;
-      }
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-      if (age < 13) {
-        toast({ title: "Idade inválida", description: "O aluno deve ter pelo menos 13 anos na data da inscrição.", variant: "destructive" });
-        return;
-      }
-    }
-
-    // Validate graduation year: must be greater than current year
-    if (s.studentGraduationYear) {
-      const gradYear = parseInt(s.studentGraduationYear, 10);
-      const currentYear = new Date().getFullYear();
-      if (gradYear <= currentYear) {
-        toast({ title: "Ano de conclusão inválido", description: `O ano previsto deve ser superior a ${currentYear}.`, variant: "destructive" });
-        return;
-      }
-    }
-
-    const targetEmail = g.email?.trim() || user?.email;
+    const targetEmail = cg.email?.trim() || g.email?.trim() || user?.email;
     if (!targetEmail) {
-      toast({ title: "Preencha o email do responsável", variant: "destructive" });
+      toast({ title: "Preencha o email do responsável do contrato", variant: "destructive" });
       return;
     }
 
     setPaying(true);
     try {
-      // Check if student email is already enrolled
       const [{ data: existingEnrollment }, { data: activeTest }] = await Promise.all([
         supabase
           .from("enrollments")
@@ -163,22 +114,7 @@ const DashboardPage = () => {
         return;
       }
 
-      // Validate referral email if provided
-      const referral = referralRef.current.trim();
-      if (referral) {
-        const { data: referredEnrollment } = await supabase
-          .from("enrollments")
-          .select("id")
-          .eq("student_email", referral)
-          .maybeSingle();
-
-        if (!referredEnrollment) {
-          toast({ title: "Email de indicação inválido", description: "O email indicado não corresponde a nenhum aluno inscrito.", variant: "destructive" });
-          setPaying(false);
-          return;
-        }
-      }
-      // Save guardian profile data
+      // Save guardian profile data (pai/mãe da conta)
       await supabase
         .from("profiles")
         .update({
@@ -194,7 +130,7 @@ const DashboardPage = () => {
         } as any)
         .eq("user_id", user.id);
 
-      // Create enrollment record
+      // Create enrollment record (with contract guardian data)
       const insertData: any = {
         user_id: user.id,
         student_name: s.studentName.trim(),
@@ -205,7 +141,16 @@ const DashboardPage = () => {
         student_photo_url: s.studentPhotoUrl?.trim() || null,
         student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
         referred_by_email: referralRef.current.trim(),
-        guardian_email: g.email?.trim() || user?.email || "",
+        guardian_email: cg.email?.trim() || g.email?.trim() || user?.email || "",
+        contract_guardian_full_name: cg.fullName.trim(),
+        contract_guardian_email: cg.email.trim(),
+        contract_guardian_phone: cg.phone.trim(),
+        contract_guardian_cpf: cg.cpf.trim(),
+        contract_guardian_rg: cg.rgNumber.trim(),
+        contract_guardian_nationality: cg.nationality.trim(),
+        contract_guardian_civil_status: cg.civilStatus.trim(),
+        contract_guardian_profession: cg.profession.trim(),
+        contract_guardian_address: cg.guardianAddress.trim(),
         status: "Matrícula submetida",
         inscription_fee_cents: 0,
         tuition_installments: selectedServices.plataforma ? 16 : 0,
@@ -224,7 +169,7 @@ const DashboardPage = () => {
         .single();
       if (enrollError) throw enrollError;
 
-      // Track referral if a referral email was provided
+      const referral = referralRef.current.trim();
       if (referral && newEnrollment) {
         const { data: referrerEnrollment } = await supabase
           .from("enrollments")
@@ -242,9 +187,8 @@ const DashboardPage = () => {
         }
       }
 
-      const guardianName = g.fullName?.trim() || userName;
+      const guardianName = cg.fullName?.trim() || g.fullName?.trim() || userName;
 
-      // Send both emails
       const [enrollmentResult, notificationResult] = await Promise.all([
         supabase.functions.invoke("send-enrollment-email", {
           body: {
@@ -256,10 +200,10 @@ const DashboardPage = () => {
         supabase.functions.invoke("send-purchase-notification", {
           body: {
             guardian: {
-              full_name: g.fullName,
-              email: g.email || user?.email || "",
-              phone: g.phone,
-              cpf: g.cpf,
+              full_name: cg.fullName,
+              email: cg.email || user?.email || "",
+              phone: cg.phone,
+              cpf: cg.cpf,
             },
             student: {
               student_name: s.studentName,
@@ -281,8 +225,9 @@ const DashboardPage = () => {
       setShowForm(false);
       setWizardStep(1);
       setRefreshKey((k) => k + 1);
-      setRefreshKey((k) => k + 1);
       studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
+      contractGuardianRef.current = { ...emptyGuardian };
+      setContractGuardianInitial({ ...emptyGuardian });
       referralRef.current = "";
       setSelectedServices({ plataforma: false, summercamp: false });
     } catch (err: any) {
@@ -293,24 +238,12 @@ const DashboardPage = () => {
     }
   };
 
+  // Step 1: Student data + services + referral
   const validateStep1 = async (): Promise<boolean> => {
-    const g = guardianRef.current;
     const s = studentRef.current;
     const errors: string[] = [];
     const missingFields: string[] = [];
 
-    // Guardian fields
-    if (!g.fullName.trim()) { missingFields.push("Nome do responsável"); errors.push("guardianFullName"); }
-    if (!g.email.trim()) { missingFields.push("Email do responsável"); errors.push("guardianEmail"); }
-    if (!g.phone.trim()) { missingFields.push("Celular do responsável"); errors.push("guardianPhone"); }
-    if (!g.nationality.trim()) { missingFields.push("Nacionalidade"); errors.push("guardianNationality"); }
-    if (!g.civilStatus.trim()) { missingFields.push("Estado Civil"); errors.push("guardianCivilStatus"); }
-    if (!g.profession.trim()) { missingFields.push("Profissão"); errors.push("guardianProfession"); }
-    if (!g.cpf.trim()) { missingFields.push("CPF"); errors.push("guardianCpf"); }
-    if (!g.rgNumber.trim()) { missingFields.push("Nº RG"); errors.push("guardianRgNumber"); }
-    if (!g.guardianAddress.trim()) { missingFields.push("Endereço do responsável"); errors.push("guardianAddress"); }
-
-    // Student fields
     if (!s.studentName.trim()) { missingFields.push("Nome do aluno"); errors.push("studentName"); }
     if (!s.studentPhotoUrl) { missingFields.push("Foto do aluno"); errors.push("studentPhoto"); }
     if (!s.studentBirthDate) { missingFields.push("Data de nascimento"); errors.push("studentBirthDate"); }
@@ -325,13 +258,7 @@ const DashboardPage = () => {
       return false;
     }
 
-    // Validate email formats
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (g.email.trim() && !emailRegex.test(g.email.trim())) {
-      setValidationErrors(["guardianEmail"]);
-      toast({ title: "Email inválido", description: "O email do responsável não tem um formato válido.", variant: "destructive" });
-      return false;
-    }
     if (s.studentEmail.trim() && !emailRegex.test(s.studentEmail.trim())) {
       setValidationErrors(["studentEmail"]);
       toast({ title: "Email inválido", description: "O email do aluno não tem um formato válido.", variant: "destructive" });
@@ -366,7 +293,6 @@ const DashboardPage = () => {
       }
     }
 
-    // Validate referral email if provided
     const referralEmail = referralRef.current?.trim();
     if (referralEmail) {
       const { data: referralEnrollment } = await supabase
@@ -388,10 +314,42 @@ const DashboardPage = () => {
       }
     }
 
-    // Validate services selection
     if (!selectedServices.plataforma && !selectedServices.summercamp) {
       setValidationErrors(["services"]);
       toast({ title: "Serviço obrigatório", description: "Selecione pelo menos um serviço (Plataforma Online ou Summer Camp).", variant: "destructive" });
+      return false;
+    }
+
+    setValidationErrors([]);
+    return true;
+  };
+
+  // Step 2: Contract guardian data
+  const validateStep2 = (): boolean => {
+    const cg = contractGuardianRef.current;
+    const errors: string[] = [];
+    const missingFields: string[] = [];
+
+    if (!cg.fullName.trim()) { missingFields.push("Nome do responsável"); errors.push("contractGuardianFullName"); }
+    if (!cg.email.trim()) { missingFields.push("Email"); errors.push("contractGuardianEmail"); }
+    if (!cg.phone.trim()) { missingFields.push("Celular"); errors.push("contractGuardianPhone"); }
+    if (!cg.nationality.trim()) { missingFields.push("Nacionalidade"); errors.push("contractGuardianNationality"); }
+    if (!cg.civilStatus.trim()) { missingFields.push("Estado Civil"); errors.push("contractGuardianCivilStatus"); }
+    if (!cg.profession.trim()) { missingFields.push("Profissão"); errors.push("contractGuardianProfession"); }
+    if (!cg.cpf.trim()) { missingFields.push("CPF"); errors.push("contractGuardianCpf"); }
+    if (!cg.rgNumber.trim()) { missingFields.push("Nº RG"); errors.push("contractGuardianRgNumber"); }
+    if (!cg.guardianAddress.trim()) { missingFields.push("Endereço"); errors.push("contractGuardianAddress"); }
+
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      toast({ title: "Campos obrigatórios em falta", description: missingFields.join(", "), variant: "destructive" });
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cg.email.trim())) {
+      setValidationErrors(["contractGuardianEmail"]);
+      toast({ title: "Email inválido", description: "O email do responsável do contrato não tem um formato válido.", variant: "destructive" });
       return false;
     }
 
@@ -486,74 +444,129 @@ const DashboardPage = () => {
                 <>
                   <button
                     onClick={() => {
-                      setShowForm(false);
-                      setWizardStep(1);
+                      if (wizardStep === 2) {
+                        setWizardStep(1);
+                        setValidationErrors([]);
+                      } else {
+                        setShowForm(false);
+                        setWizardStep(1);
+                      }
                     }}
                     className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-4"
                   >
                     <ArrowLeft size={16} />
-                    Voltar às matrículas
+                    {wizardStep === 2 ? "Voltar ao passo anterior" : "Voltar às matrículas"}
                   </button>
 
                   <h2 className="font-heading text-xl font-semibold text-foreground mb-2">
                     Nova Matrícula
                   </h2>
 
-
-                  <GuardianDataSection onChange={handleGuardianChange} validationErrors={validationErrors} initialData={guardianRef.current} />
-                  <div className="mt-6">
-                    <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} guardianAddress={guardianRef.current.guardianAddress} />
+                  {/* Wizard step indicator */}
+                  <div className="flex items-center gap-2 mb-6 text-sm">
+                    <span className={`flex items-center gap-1.5 ${wizardStep === 1 ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
+                      <span className={`flex items-center justify-center w-6 h-6 rounded-full text-xs ${wizardStep === 1 ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>1</span>
+                      Dados do Aluno
+                    </span>
+                    <span className="text-muted-foreground">→</span>
+                    <span className={`flex items-center gap-1.5 ${wizardStep === 2 ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
+                      <span className={`flex items-center justify-center w-6 h-6 rounded-full text-xs ${wizardStep === 2 ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"}`}>2</span>
+                      Responsável do Contrato
+                    </span>
                   </div>
 
-                  {/* Serviços contratados */}
-                  <div className="mt-8">
-                    <h3 className="font-heading text-lg font-semibold text-foreground mb-1">Serviços contratados</h3>
-                    <p className="text-sm text-muted-foreground mb-4">Selecione os serviços que pretende contratar. Pode escolher um ou ambos.</p>
-                    <div className="space-y-3">
-                      <div
-                        className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.plataforma ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
-                        onClick={() => setSelectedServices((prev) => ({ ...prev, plataforma: !prev.plataforma }))}
-                      >
-                        <Checkbox checked={selectedServices.plataforma} onCheckedChange={() => {}} className="h-5 w-5 rounded-[3px]" />
-                        <div>
-                          <p className="font-semibold text-foreground">Plataforma Online</p>
-                          <p className="text-xs text-muted-foreground">Acesso à plataforma digital do programa Dual Diploma</p>
+                  {wizardStep === 1 && (
+                    <>
+                      <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} guardianAddress={guardianRef.current.guardianAddress} />
+
+                      {/* Serviços contratados */}
+                      <div className="mt-8">
+                        <h3 className="font-heading text-lg font-semibold text-foreground mb-1">Serviços contratados</h3>
+                        <p className="text-sm text-muted-foreground mb-4">Selecione os serviços que pretende contratar. Pode escolher um ou ambos.</p>
+                        <div className="space-y-3">
+                          <div
+                            className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.plataforma ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
+                            onClick={() => setSelectedServices((prev) => ({ ...prev, plataforma: !prev.plataforma }))}
+                          >
+                            <Checkbox checked={selectedServices.plataforma} onCheckedChange={() => {}} className="h-5 w-5 rounded-[3px]" />
+                            <div>
+                              <p className="font-semibold text-foreground">Plataforma Online</p>
+                              <p className="text-xs text-muted-foreground">Acesso à plataforma digital do programa Dual Diploma</p>
+                            </div>
+                          </div>
+                          <div
+                            className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.summercamp ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
+                            onClick={() => setSelectedServices((prev) => ({ ...prev, summercamp: !prev.summercamp }))}
+                          >
+                            <Checkbox checked={selectedServices.summercamp} onCheckedChange={() => {}} className="h-5 w-5 rounded-[3px]" />
+                            <div>
+                              <p className="font-semibold text-foreground">Summer Camp</p>
+                              <p className="text-xs text-muted-foreground">Programa presencial de imersão durante o verão</p>
+                            </div>
+                          </div>
                         </div>
+                        {validationErrors.includes("services") && (
+                          <p className="text-destructive text-sm mt-2">Selecione pelo menos um serviço.</p>
+                        )}
                       </div>
-                      <div
-                        className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServices.summercamp ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-muted-foreground/30"}`}
-                        onClick={() => setSelectedServices((prev) => ({ ...prev, summercamp: !prev.summercamp }))}
-                      >
-                        <Checkbox checked={selectedServices.summercamp} onCheckedChange={() => {}} className="h-5 w-5 rounded-[3px]" />
-                        <div>
-                          <p className="font-semibold text-foreground">Summer Camp</p>
-                          <p className="text-xs text-muted-foreground">Programa presencial de imersão durante o verão</p>
-                        </div>
+
+                      <div className="mt-8">
+                        <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
                       </div>
-                    </div>
-                    {validationErrors.includes("services") && (
-                      <p className="text-destructive text-sm mt-2">Selecione pelo menos um serviço.</p>
-                    )}
-                  </div>
 
-                  <div className="mt-8">
-                    <ReferralSection onChange={handleReferralChange} validationErrors={validationErrors} />
-                  </div>
+                      <div className="mt-8">
+                        <button
+                          onClick={async () => {
+                            const valid = await validateStep1();
+                            if (valid) {
+                              // Pre-fill contract guardian with the parent profile data the first time
+                              if (!contractGuardianRef.current.fullName && !contractGuardianRef.current.email) {
+                                const initial = { ...guardianRef.current };
+                                contractGuardianRef.current = initial;
+                                setContractGuardianInitial(initial);
+                              }
+                              setWizardStep(2);
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            }
+                          }}
+                          disabled={paying}
+                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Continuar
+                        </button>
+                      </div>
+                    </>
+                  )}
 
-                  <div className="mt-8">
-                    <button
-                      onClick={async () => {
-                        const valid = await validateStep1();
-                        if (valid) {
-                          await handleSubmitEnrollment();
-                        }
-                      }}
-                      disabled={paying}
-                      className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {paying ? "Processando..." : "Confirmar matrícula"}
-                    </button>
-                  </div>
+                  {wizardStep === 2 && (
+                    <>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Os dados do responsável que assinará o contrato podem ser diferentes dos dados do pai/mãe registados na sua conta. Pode editar os campos abaixo.
+                      </p>
+                      <GuardianDataSection
+                        mode="memory"
+                        title="Responsável pelo Contrato"
+                        alwaysExpanded
+                        errorPrefix="contractGuardian"
+                        onChange={handleContractGuardianChange}
+                        validationErrors={validationErrors}
+                        initialData={contractGuardianInitial}
+                      />
+
+                      <div className="mt-8">
+                        <button
+                          onClick={async () => {
+                            if (!validateStep2()) return;
+                            await handleSubmitEnrollment();
+                          }}
+                          disabled={paying}
+                          className="w-full bg-secondary text-secondary-foreground font-semibold py-3.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {paying ? "Processando..." : "Confirmar matrícula"}
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </>
               )}
             </div>
