@@ -41,6 +41,12 @@ interface Props {
    * "Cancelar" reverts to the last saved values.
    */
   requireExplicitSave?: boolean;
+  /**
+   * When true: hides Nationality, Civil Status, Profession, CPF, and RG fields.
+   * Used for the parent/guardian profile, where this data is only collected per-enrollment
+   * via the contract guardian step.
+   */
+  simplified?: boolean;
 }
 
 const GuardianDataSection = ({
@@ -53,6 +59,7 @@ const GuardianDataSection = ({
   alwaysExpanded = false,
   errorPrefix = "guardian",
   requireExplicitSave = false,
+  simplified = false,
 }: Props) => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -332,46 +339,50 @@ const GuardianDataSection = ({
                 disabled={isReadOnly}
               />
             </div>
-            <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Nacionalidade <span className="text-[#F9B91D]">*</span></label>
-              <div className={isReadOnly ? "pointer-events-none opacity-70" : ""}>
-                <NationalityCombobox
-                  value={nationality}
-                  onChange={(val) => {
-                    setNationality(val);
-                    if (val) saveProfile({ nationality: val.trim() });
-                  }}
-                  className={inputClass(errKey("Nationality"))}
-                  placeholder="Ex: Brasileira"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Estado Civil <span className="text-[#F9B91D]">*</span></label>
-              <div className={isReadOnly ? "pointer-events-none opacity-70" : ""}>
-                <CivilStatusCombobox
-                  value={civilStatus}
-                  onChange={(val) => {
-                    setCivilStatus(val);
-                    if (val) saveProfile({ civil_status: val });
-                  }}
-                  className={inputClass(errKey("CivilStatus"))}
-                />
-              </div>
-            </div>
-            <div className="sm:col-span-2">
-              <label className="text-sm font-medium text-foreground block mb-1.5">Profissão <span className="text-[#F9B91D]">*</span></label>
-              <input
-                type="text"
-                maxLength={60}
-                value={profession}
-                onChange={(e) => setProfession(e.target.value)}
-                onBlur={() => saveProfile({ profession: profession.trim() })}
-                className={inputClass(errKey("Profession"))}
-                placeholder="Ex: Engenheiro(a)"
-                disabled={isReadOnly}
-              />
-            </div>
+            {!simplified && (
+              <>
+                <div>
+                  <label className="text-sm font-medium text-foreground block mb-1.5">Nacionalidade <span className="text-[#F9B91D]">*</span></label>
+                  <div className={isReadOnly ? "pointer-events-none opacity-70" : ""}>
+                    <NationalityCombobox
+                      value={nationality}
+                      onChange={(val) => {
+                        setNationality(val);
+                        if (val) saveProfile({ nationality: val.trim() });
+                      }}
+                      className={inputClass(errKey("Nationality"))}
+                      placeholder="Ex: Brasileira"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground block mb-1.5">Estado Civil <span className="text-[#F9B91D]">*</span></label>
+                  <div className={isReadOnly ? "pointer-events-none opacity-70" : ""}>
+                    <CivilStatusCombobox
+                      value={civilStatus}
+                      onChange={(val) => {
+                        setCivilStatus(val);
+                        if (val) saveProfile({ civil_status: val });
+                      }}
+                      className={inputClass(errKey("CivilStatus"))}
+                    />
+                  </div>
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="text-sm font-medium text-foreground block mb-1.5">Profissão <span className="text-[#F9B91D]">*</span></label>
+                  <input
+                    type="text"
+                    maxLength={60}
+                    value={profession}
+                    onChange={(e) => setProfession(e.target.value)}
+                    onBlur={() => saveProfile({ profession: profession.trim() })}
+                    className={inputClass(errKey("Profession"))}
+                    placeholder="Ex: Engenheiro(a)"
+                    disabled={isReadOnly}
+                  />
+                </div>
+              </>
+            )}
             <div className="sm:col-span-2">
               <label className="text-sm font-medium text-foreground block mb-1.5">Email <span className="text-[#F9B91D]">*</span></label>
               <div className="relative">
@@ -404,38 +415,42 @@ const GuardianDataSection = ({
                 />
               </div>
             </div>
-            <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">CPF <span className="text-[#F9B91D]">*</span></label>
-              <div className="relative">
-                <FileText size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type="text"
-                  value={cpf}
-                  onChange={(e) => setCpf(formatCpf(e.target.value))}
-                  onBlur={() => saveProfile({ cpf: cpf.trim() })}
-                  className={`${inputClass(errKey("Cpf"))} pl-10`}
-                  placeholder="000.000.000-00"
-                  maxLength={14}
-                  disabled={isReadOnly}
-                />
-              </div>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Nº RG <span className="text-[#F9B91D]">*</span></label>
-              <div className="relative">
-                <FileText size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type="text"
-                  maxLength={20}
-                  value={rgNumber}
-                  onChange={(e) => setRgNumber(e.target.value)}
-                  onBlur={() => saveProfile({ rg_number: rgNumber.trim() })}
-                  className={`${inputClass(errKey("RgNumber"))} pl-10`}
-                  placeholder="Número do RG"
-                  disabled={isReadOnly}
-                />
-              </div>
-            </div>
+            {!simplified && (
+              <>
+                <div>
+                  <label className="text-sm font-medium text-foreground block mb-1.5">CPF <span className="text-[#F9B91D]">*</span></label>
+                  <div className="relative">
+                    <FileText size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                    <input
+                      type="text"
+                      value={cpf}
+                      onChange={(e) => setCpf(formatCpf(e.target.value))}
+                      onBlur={() => saveProfile({ cpf: cpf.trim() })}
+                      className={`${inputClass(errKey("Cpf"))} pl-10`}
+                      placeholder="000.000.000-00"
+                      maxLength={14}
+                      disabled={isReadOnly}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground block mb-1.5">Nº RG <span className="text-[#F9B91D]">*</span></label>
+                  <div className="relative">
+                    <FileText size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                    <input
+                      type="text"
+                      maxLength={20}
+                      value={rgNumber}
+                      onChange={(e) => setRgNumber(e.target.value)}
+                      onBlur={() => saveProfile({ rg_number: rgNumber.trim() })}
+                      className={`${inputClass(errKey("RgNumber"))} pl-10`}
+                      placeholder="Número do RG"
+                      disabled={isReadOnly}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
             <div className="sm:col-span-2">
               <label className="text-sm font-medium text-foreground block mb-1.5">Endereço <span className="text-[#F9B91D]">*</span></label>
               <div className="relative">
