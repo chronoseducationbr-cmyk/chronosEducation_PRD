@@ -21,11 +21,33 @@ interface Props {
   onChange?: (data: GuardianData) => void;
   validationErrors?: string[];
   initialData?: GuardianData;
+  /**
+   * "profile" (default): persists to public.profiles (pai/mãe da conta).
+   * "memory": only reports changes via onChange, does NOT persist anywhere.
+   */
+  mode?: "profile" | "memory";
+  /** Custom heading title. Defaults to "Dados Pai/Mãe ou Responsável". */
+  title?: string;
+  /** Hide the section heading entirely. */
+  hideHeading?: boolean;
+  /** Disable collapsed/expanded behaviour and always show the form. */
+  alwaysExpanded?: boolean;
+  /** Custom prefix used to build validation error keys (e.g. "contractGuardian"). Defaults to "guardian". */
+  errorPrefix?: string;
 }
 
-const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: Props) => {
+const GuardianDataSection = ({
+  onChange,
+  validationErrors = [],
+  initialData,
+  mode = "profile",
+  title = "Dados Pai/Mãe ou Responsável",
+  hideHeading = false,
+  alwaysExpanded = false,
+  errorPrefix = "guardian",
+}: Props) => {
   const { user } = useAuth();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(mode === "profile");
   const [hasEnrollments, setHasEnrollments] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -40,6 +62,10 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
   const [guardianAddress, setGuardianAddress] = useState(initialData?.guardianAddress || "");
 
   useEffect(() => {
+    if (mode === "memory") {
+      setLoading(false);
+      return;
+    }
     if (initialData && (initialData.fullName || initialData.email)) {
       setLoading(false);
       return;
@@ -82,9 +108,9 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
       setLoading(false);
     };
     fetchData();
-  }, [user]);
+  }, [user, mode]);
 
-  // Save all unsaved fields on unmount (e.g. when switching tabs without blurring)
+  // Save all unsaved fields on unmount (only in profile mode)
   const latestRef = useRef({ fullName, email, phone, cpf, nationality, civilStatus, profession, rgNumber, guardianAddress });
   useEffect(() => {
     latestRef.current = { fullName, email, phone, cpf, nationality, civilStatus, profession, rgNumber, guardianAddress };
@@ -92,6 +118,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
 
   useEffect(() => {
     return () => {
+      if (mode !== "profile") return;
       if (!user) return;
       const d = latestRef.current;
       supabase.from("profiles").update({
@@ -106,9 +133,10 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
         guardian_address: d.guardianAddress.trim(),
       } as any).eq("user_id", user.id).then(() => {});
     };
-  }, [user]);
+  }, [user, mode]);
 
   const saveProfile = async (fields: Record<string, string>) => {
+    if (mode !== "profile") return;
     if (!user) return;
     await supabase.from("profiles").update(fields as any).eq("user_id", user.id);
   };
@@ -132,6 +160,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
     return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
   };
 
+  const errKey = (suffix: string) => `${errorPrefix}${suffix}`;
   const inputClass = (field?: string) => `w-full px-4 py-3 rounded-lg border ${field && validationErrors.includes(field) ? "border-destructive" : "border-border"} bg-background text-foreground text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition`;
 
   if (loading) {
@@ -142,14 +171,16 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
     );
   }
 
-  const isCollapsed = hasEnrollments && !expanded;
+  const isCollapsed = !alwaysExpanded && hasEnrollments && !expanded;
 
   return (
     <div>
-      <h2 className="font-heading text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-        <Users size={20} className="text-secondary" />
-        Dados Pai/Mãe ou Responsável
-      </h2>
+      {!hideHeading && (
+        <h2 className="font-heading text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+          <Users size={20} className="text-secondary" />
+          {title}
+        </h2>
+      )}
 
       {isCollapsed ? (
         <button
@@ -164,7 +195,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
         </button>
       ) : (
         <div className="bg-card rounded-xl border border-border shadow-card p-5">
-          {hasEnrollments && (
+          {!alwaysExpanded && hasEnrollments && (
             <div className="flex justify-end mb-4">
               <button
                 onClick={() => setExpanded(false)}
@@ -183,7 +214,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 onBlur={() => saveProfile({ full_name: fullName.trim() })}
-                className={inputClass("guardianFullName")}
+                className={inputClass(errKey("FullName"))}
                 placeholder="Nome completo do responsável"
               />
             </div>
@@ -195,7 +226,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                   setNationality(val);
                   if (val) saveProfile({ nationality: val.trim() });
                 }}
-                className={inputClass("guardianNationality")}
+                className={inputClass(errKey("Nationality"))}
                 placeholder="Ex: Brasileira"
               />
             </div>
@@ -207,7 +238,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                   setCivilStatus(val);
                   if (val) saveProfile({ civil_status: val });
                 }}
-                className={inputClass("guardianCivilStatus")}
+                className={inputClass(errKey("CivilStatus"))}
               />
             </div>
             <div className="sm:col-span-2">
@@ -218,7 +249,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                 value={profession}
                 onChange={(e) => setProfession(e.target.value)}
                 onBlur={() => saveProfile({ profession: profession.trim() })}
-                className={inputClass("guardianProfession")}
+                className={inputClass(errKey("Profession"))}
                 placeholder="Ex: Engenheiro(a)"
               />
             </div>
@@ -232,7 +263,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   onBlur={() => saveProfile({ email: email.trim() })}
-                  className={`${inputClass("guardianEmail")} pl-10`}
+                  className={`${inputClass(errKey("Email"))} pl-10`}
                   placeholder="email@exemplo.com"
                 />
               </div>
@@ -247,7 +278,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                   value={phone}
                   onChange={(e) => setPhone(formatPhone(e.target.value))}
                   onBlur={() => saveProfile({ phone: phone.trim() })}
-                  className={`${inputClass("guardianPhone")} pl-10`}
+                  className={`${inputClass(errKey("Phone"))} pl-10`}
                   placeholder="(11) 99999-9999"
                 />
               </div>
@@ -261,7 +292,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                   value={cpf}
                   onChange={(e) => setCpf(formatCpf(e.target.value))}
                   onBlur={() => saveProfile({ cpf: cpf.trim() })}
-                  className={`${inputClass("guardianCpf")} pl-10`}
+                  className={`${inputClass(errKey("Cpf"))} pl-10`}
                   placeholder="000.000.000-00"
                   maxLength={14}
                 />
@@ -277,7 +308,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                   value={rgNumber}
                   onChange={(e) => setRgNumber(e.target.value)}
                   onBlur={() => saveProfile({ rg_number: rgNumber.trim() })}
-                  className={`${inputClass("guardianRgNumber")} pl-10`}
+                  className={`${inputClass(errKey("RgNumber"))} pl-10`}
                   placeholder="Número do RG"
                 />
               </div>
@@ -292,7 +323,7 @@ const GuardianDataSection = ({ onChange, validationErrors = [], initialData }: P
                   value={guardianAddress}
                   onChange={(e) => setGuardianAddress(e.target.value)}
                   onBlur={() => saveProfile({ guardian_address: guardianAddress.trim() })}
-                  className={`${inputClass("guardianAddress")} pl-10`}
+                  className={`${inputClass(errKey("Address"))} pl-10`}
                   placeholder="Endereço completo"
                 />
               </div>
