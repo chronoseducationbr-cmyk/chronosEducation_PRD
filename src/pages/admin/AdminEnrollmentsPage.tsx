@@ -64,6 +64,8 @@ interface Enrollment {
   contract_signed_at_summercamp: string | null;
   tuition_start_date: string | null;
   summercamp_start_date: string | null;
+  contract_guardian_full_name: string | null;
+  contract_guardian_email: string | null;
   quiz_test_id: string | null;
   guardian?: Guardian;
   has_installments?: boolean;
@@ -457,6 +459,15 @@ const AdminEnrollmentsPage = () => {
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
                           <div>
+                            <p className="text-muted-foreground text-xs">Responsável do contrato</p>
+                            <p className="text-foreground font-medium">{e.contract_guardian_full_name || "—"}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground text-xs">Email do responsável</p>
+                            <p className="text-foreground font-medium break-all">{e.contract_guardian_email || "—"}</p>
+                          </div>
+                          <div className="hidden md:block" />
+                          <div>
                             <p className="text-muted-foreground text-xs">Enviado em</p>
                             <p className="text-foreground font-medium">{e.contract_url ? formatDate(e.contract_sent_at_platform) : "—"}</p>
                           </div>
@@ -507,6 +518,15 @@ const AdminEnrollmentsPage = () => {
                           <PlaneTakeoff size={12} /> Contrato Summer Camp
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">
+                          <div>
+                            <p className="text-muted-foreground text-xs">Responsável do contrato</p>
+                            <p className="text-foreground font-medium">{e.contract_guardian_full_name || "—"}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground text-xs">Email do responsável</p>
+                            <p className="text-foreground font-medium break-all">{e.contract_guardian_email || "—"}</p>
+                          </div>
+                          <div className="hidden md:block" />
                           <div>
                             <p className="text-muted-foreground text-xs">Enviado em</p>
                             <p className="text-foreground font-medium">{e.contract_url_summercamp ? formatDate(e.contract_sent_at_summercamp) : "—"}</p>
