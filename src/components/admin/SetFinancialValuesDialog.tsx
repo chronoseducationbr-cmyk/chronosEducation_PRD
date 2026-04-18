@@ -283,13 +283,24 @@ const SetFinancialValuesDialog = ({ enrollmentId, studentName, contractSignedAt,
           updates[sentField] = new Date().toISOString();
           updates[signedField] = null;
 
-          // Send email to guardian
-          if (pdfResult.guardianEmail) {
+          // Send email to the contract guardian (responsável do contrato) registered on the enrollment.
+          // Falls back to the parent/guardian profile email returned by the PDF function if the contract
+          // guardian email is missing.
+          const { data: enrollmentRow } = await supabase
+            .from("enrollments")
+            .select("contract_guardian_email, contract_guardian_full_name")
+            .eq("id", enrollmentId)
+            .maybeSingle();
+
+          const targetEmail = (enrollmentRow?.contract_guardian_email || "").trim() || pdfResult.guardianEmail;
+          const targetName = (enrollmentRow?.contract_guardian_full_name || "").trim() || pdfResult.guardianName;
+
+          if (targetEmail) {
             try {
               const { error: emailError } = await supabase.functions.invoke("send-contract-email", {
                 body: {
-                  email: pdfResult.guardianEmail,
-                  guardianName: pdfResult.guardianName,
+                  email: targetEmail,
+                  guardianName: targetName,
                   studentName: pdfResult.studentName || studentName,
                   contractUrl: pdfResult.contractUrl,
                   contractType,
