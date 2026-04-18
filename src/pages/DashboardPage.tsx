@@ -192,7 +192,7 @@ const DashboardPage = () => {
         }
       }
 
-      const guardianName = cg.fullName?.trim() || g.fullName?.trim() || userName;
+      const guardianName = g.fullName?.trim() || userName;
 
       const [enrollmentResult, notificationResult] = await Promise.all([
         supabase.functions.invoke("send-enrollment-email", {
