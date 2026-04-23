@@ -279,7 +279,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Pr
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-foreground block mb-1.5">CPF do aluno</label>
+            <label className="text-sm font-medium text-foreground block mb-1.5">CPF</label>
             <input
               type="text"
               maxLength={14}
