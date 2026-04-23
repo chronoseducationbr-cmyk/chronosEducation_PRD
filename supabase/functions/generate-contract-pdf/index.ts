@@ -733,8 +733,10 @@ serve(async (req) => {
   } catch (error: unknown) {
     console.error("Error generating contract:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    // Validation errors (missing student data / leftover placeholders) → 400
+    const isValidation = /Não é possível gerar o contrato/i.test(errorMessage);
     return new Response(JSON.stringify({ error: errorMessage }), {
-      status: 500,
+      status: isValidation ? 400 : 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
