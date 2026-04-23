@@ -1,4 +1,4 @@
-import { GraduationCap, CreditCard, Users, LogOut, LayoutDashboard, Settings } from "lucide-react";
+import { GraduationCap, CreditCard, Users, LogOut, LayoutDashboard, Settings, FileText } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,6 +12,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar";
@@ -20,7 +23,11 @@ const items = [
   { title: "Matrículas", url: "/admin/inscricoes", icon: GraduationCap },
   { title: "Pagamentos", url: "/admin/pagamentos", icon: CreditCard },
   { title: "Usuários", url: "/admin/utilizadores", icon: Users },
-  { title: "Configurações", url: "/admin/configuracoes", icon: Settings },
+];
+
+const contractSubItems = [
+  { title: "Knox School", url: "/admin/contratos/knox" },
+  { title: "Wayland Academy", url: "/admin/contratos/wayland" },
 ];
 
 export function AdminSidebar() {
@@ -63,6 +70,52 @@ export function AdminSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
+              {/* Contratos with sub-items */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/admin/contratos"
+                    className="hover:bg-muted/50"
+                    activeClassName="bg-secondary/10 text-secondary font-semibold"
+                  >
+                    <FileText className="mr-2 h-4 w-4" />
+                    {!collapsed && <span>Contratos</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+                {!collapsed && (
+                  <SidebarMenuSub>
+                    {contractSubItems.map((sub) => (
+                      <SidebarMenuSubItem key={sub.title}>
+                        <SidebarMenuSubButton asChild>
+                          <NavLink
+                            to={sub.url}
+                            className="hover:bg-muted/50"
+                            activeClassName="bg-secondary/10 text-secondary font-semibold"
+                          >
+                            <span>{sub.title}</span>
+                          </NavLink>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    ))}
+                  </SidebarMenuSub>
+                )}
+              </SidebarMenuItem>
+
+              {/* Configurações */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/admin/configuracoes"
+                    end
+                    className="hover:bg-muted/50"
+                    activeClassName="bg-secondary/10 text-secondary font-semibold"
+                  >
+                    <Settings className="mr-2 h-4 w-4" />
+                    {!collapsed && <span>Configurações</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

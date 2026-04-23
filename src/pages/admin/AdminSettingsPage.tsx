@@ -335,7 +335,7 @@ const AdminSettingsPage = () => {
   return (
     <div>
       <h1 className="font-heading text-2xl font-bold text-foreground mb-1">Configurações</h1>
-      <p className="text-muted-foreground mb-6">Gerir provas de inglês e contrato.</p>
+      <p className="text-muted-foreground mb-6">Gerir provas de inglês.</p>
 
       <Tabs defaultValue="provas" className="w-full">
         <TabsList className="mb-8 bg-transparent border-0 border-b border-border p-0 gap-10 pb-0">
@@ -344,13 +344,6 @@ const AdminSettingsPage = () => {
             Provas
             <span className={`ml-2 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full ${quizEnabled ? "bg-secondary/20 text-secondary" : "bg-muted text-muted-foreground"}`}>
               {quizEnabled ? "ON" : "OFF"}
-            </span>
-          </TabsTrigger>
-          <TabsTrigger value="contrato" className={tabTriggerClass}>
-            <FileText size={18} className="mr-2" />
-            Contrato
-            <span className={`ml-2 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full ${settings.contract_enabled ? "bg-secondary/20 text-secondary" : "bg-muted text-muted-foreground"}`}>
-              {settings.contract_enabled ? "ON" : "OFF"}
             </span>
           </TabsTrigger>
         </TabsList>
@@ -489,82 +482,7 @@ const AdminSettingsPage = () => {
           </div>
         </TabsContent>
 
-        {/* ─── Contrato ─── */}
-        <TabsContent value="contrato">
-          <div className="max-w-2xl">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-heading text-lg font-semibold text-foreground">Contrato</h2>
-              {!loadingSettings && (
-                <Switch checked={settings.contract_enabled} onCheckedChange={handleContractToggle} disabled={savingSettings} />
-              )}
-            </div>
 
-            {loadingSettings ? (
-              <div className="animate-pulse h-20 bg-muted rounded-xl" />
-            ) : !settings.contract_enabled ? (
-              <p className="text-sm text-muted-foreground italic">Contrato desativado. Os alunos não precisarão assinar contrato na matrícula.</p>
-            ) : (
-              <div className="space-y-6">
-
-                {/* School selector */}
-                <Tabs defaultValue="knox" className="w-full">
-                  <TabsList className="bg-muted/50 border border-border p-1 rounded-lg">
-                    <TabsTrigger value="knox" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium">
-                      Knox School
-                    </TabsTrigger>
-                    <TabsTrigger value="wayland" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium">
-                      Wayland Academy
-                    </TabsTrigger>
-                  </TabsList>
-
-                  {/* Knox School */}
-                  <TabsContent value="knox" className="mt-4">
-                    <Tabs defaultValue="plataforma" className="w-full">
-                      <TabsList className="bg-muted/50 border border-border p-1 rounded-lg">
-                        <TabsTrigger value="plataforma" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
-                          <Monitor size={14} />
-                          Plataforma Online
-                        </TabsTrigger>
-                        <TabsTrigger value="summercamp" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
-                          <PlaneTakeoff size={14} />
-                          Summer Camp
-                        </TabsTrigger>
-                      </TabsList>
-                      <TabsContent value="plataforma" className="mt-4">
-                        {renderContractEditor("plataforma", "Texto do Contrato — Knox · Plataforma Online", settings.contract_text)}
-                      </TabsContent>
-                      <TabsContent value="summercamp" className="mt-4">
-                        {renderContractEditor("summercamp", "Texto do Contrato — Knox · Summer Camp", settings.contract_text_summercamp)}
-                      </TabsContent>
-                    </Tabs>
-                  </TabsContent>
-
-                  {/* Wayland Academy */}
-                  <TabsContent value="wayland" className="mt-4">
-                    <Tabs defaultValue="plataforma" className="w-full">
-                      <TabsList className="bg-muted/50 border border-border p-1 rounded-lg">
-                        <TabsTrigger value="plataforma" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
-                          <Monitor size={14} />
-                          Plataforma Online
-                        </TabsTrigger>
-                        <TabsTrigger value="summercamp" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
-                          <PlaneTakeoff size={14} />
-                          Summer Camp
-                        </TabsTrigger>
-                      </TabsList>
-                      <TabsContent value="plataforma" className="mt-4">
-                        {renderContractEditor("plataforma_wayland", "Texto do Contrato — Wayland · Plataforma Online", settings.contract_text_wayland)}
-                      </TabsContent>
-                      <TabsContent value="summercamp" className="mt-4">
-                        {renderContractEditor("summercamp_wayland", "Texto do Contrato — Wayland · Summer Camp", settings.contract_text_summercamp_wayland)}
-                      </TabsContent>
-                    </Tabs>
-                  </TabsContent>
-                </Tabs>
-              </div>
-            )}
-          </div>
-        </TabsContent>
 
       </Tabs>
     </div>

@@ -23,6 +23,7 @@ import AdminEnrollmentsPage from "./pages/admin/AdminEnrollmentsPage";
 import AdminPaymentsPage from "./pages/admin/AdminPaymentsPage";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
+import AdminContractsPage from "./pages/admin/AdminContractsPage";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,8 @@ const App = () => (
               <Route path="pagamentos" element={<AdminPaymentsPage />} />
               <Route path="utilizadores" element={<AdminUsersPage />} />
               <Route path="configuracoes" element={<AdminSettingsPage />} />
+              <Route path="contratos" element={<Navigate to="/admin/contratos/knox" replace />} />
+              <Route path="contratos/:school" element={<AdminContractsPage />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
