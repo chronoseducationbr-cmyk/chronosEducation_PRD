@@ -57,8 +57,8 @@ function drawSectionTitle(ctx: DrawCtx, text: string) {
 function sanitize(text: string): string {
   return text
     .replace(/[\t\r]/g, " ")
-    .replace(/[\u2022\u2023\u25E6\u2043\u25CF\u2219]/g, "\u2219") // bullets → WinAnsi bullet (•, U+2219 is in WinAnsi as 0x95? use ASCII fallback)
-    .replace(/[\u2022\u2023\u25E6\u2043\u25CF\u2219]/g, String.fromCharCode(0x95)) // WinAnsi bullet 0x95
+    // Bullets → middle dot (·, 0xB7) which IS in the WinAnsi range \xA0-\xFF
+    .replace(/[\u2022\u2023\u25E6\u2043\u25CF\u2219]/g, "\u00B7")
     .replace(/[\u2013\u2014]/g, "-") // en/em dash → hyphen
     .replace(/[\u2018\u2019]/g, "'") // smart single quotes
     .replace(/[\u201C\u201D]/g, '"') // smart double quotes
