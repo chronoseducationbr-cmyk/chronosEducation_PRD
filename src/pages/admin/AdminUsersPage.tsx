@@ -33,6 +33,7 @@ interface Invitation {
   created_at: string;
   expires_at: string;
   used_at: string | null;
+  school: string | null;
 }
 
 const AdminUsersPage = () => {
@@ -43,6 +44,7 @@ const AdminUsersPage = () => {
   const [search, setSearch] = useState("");
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteSchool, setInviteSchool] = useState<"Knox School" | "Wayland Academy">("Knox School");
   const [sending, setSending] = useState(false);
   const [resendingId, setResendingId] = useState<string | null>(null);
   const [resendingConfirmId, setResendingConfirmId] = useState<string | null>(null);
@@ -94,11 +96,12 @@ const AdminUsersPage = () => {
     setSending(true);
     try {
       const { error } = await supabase.functions.invoke("create-invite", {
-        body: { email: inviteEmail.trim() },
+        body: { email: inviteEmail.trim(), school: inviteSchool },
       });
       if (error) throw error;
       toast({ title: "Convite enviado com sucesso", description: `Email enviado para ${inviteEmail}` });
       setInviteEmail("");
+      setInviteSchool("Knox School");
       setShowInviteDialog(false);
       load();
     } catch (err: any) {
@@ -108,11 +111,11 @@ const AdminUsersPage = () => {
     }
   };
 
-  const handleResendInvite = async (email: string, invitationId: string) => {
+  const handleResendInvite = async (email: string, invitationId: string, school: string | null) => {
     setResendingId(invitationId);
     try {
       const { error } = await supabase.functions.invoke("create-invite", {
-        body: { email },
+        body: { email, school },
       });
       if (error) throw error;
       toast({ title: "Novo convite enviado", description: `Email reenviado para ${email}` });
@@ -273,11 +276,16 @@ const AdminUsersPage = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-foreground truncate">{inv.email}</p>
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
                         <span className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${st.color}`}>
                           <StatusIcon size={10} />
                           {st.label}
                         </span>
+                        {inv.school && (
+                          <span className="inline-flex items-center text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                            {inv.school}
+                          </span>
+                        )}
                         <span className="text-[10px] text-muted-foreground">
                           Enviado em {formatDate(inv.created_at)} · Expira em {formatDate(inv.expires_at)}
                         </span>
@@ -303,7 +311,7 @@ const AdminUsersPage = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleResendInvite(inv.email, inv.id)}
+                          onClick={() => handleResendInvite(inv.email, inv.id, inv.school)}
                           disabled={resendingId === inv.id}
                           className="flex items-center gap-1.5 text-xs"
                         >
@@ -328,7 +336,7 @@ const AdminUsersPage = () => {
           <DialogHeader>
             <DialogTitle>Enviar Convite</DialogTitle>
           </DialogHeader>
-          <div className="space-y-3 py-2">
+          <div className="space-y-4 py-2">
             <p className="text-sm text-muted-foreground">
               Introduza o email do usuário que pretende convidar para a plataforma.
             </p>
@@ -339,6 +347,27 @@ const AdminUsersPage = () => {
               onChange={(e) => setInviteEmail(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSendInvite()}
             />
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-foreground">
+                Escola <span className="text-[#F9B91D]">*</span>
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {(["Knox School", "Wayland Academy"] as const).map((opt) => (
+                  <button
+                    key={opt}
+                    type="button"
+                    onClick={() => setInviteSchool(opt)}
+                    className={`text-sm rounded-lg border px-3 py-2 text-left transition-colors ${
+                      inviteSchool === opt
+                        ? "border-primary bg-primary/5 text-foreground font-semibold"
+                        : "border-border bg-background text-muted-foreground hover:border-primary/50"
+                    }`}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowInviteDialog(false)} disabled={sending}>

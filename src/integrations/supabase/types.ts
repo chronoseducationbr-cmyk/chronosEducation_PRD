@@ -335,6 +335,7 @@ export type Database = {
           id: string
           invite_code: string
           invited_by: string | null
+          school: string | null
           status: string
           used_at: string | null
         }
@@ -345,6 +346,7 @@ export type Database = {
           id?: string
           invite_code: string
           invited_by?: string | null
+          school?: string | null
           status?: string
           used_at?: string | null
         }
@@ -355,6 +357,7 @@ export type Database = {
           id?: string
           invite_code?: string
           invited_by?: string | null
+          school?: string | null
           status?: string
           used_at?: string | null
         }
@@ -433,6 +436,7 @@ export type Database = {
           profession: string | null
           referred_by_email: string | null
           rg_number: string | null
+          school: string | null
           student_address: string | null
           student_age: number | null
           student_birth_date: string | null
@@ -457,6 +461,7 @@ export type Database = {
           profession?: string | null
           referred_by_email?: string | null
           rg_number?: string | null
+          school?: string | null
           student_address?: string | null
           student_age?: number | null
           student_birth_date?: string | null
@@ -481,6 +486,7 @@ export type Database = {
           profession?: string | null
           referred_by_email?: string | null
           rg_number?: string | null
+          school?: string | null
           student_address?: string | null
           student_age?: number | null
           student_birth_date?: string | null
@@ -667,6 +673,7 @@ export type Database = {
           expires_at: string
           id: string
           invite_code: string
+          school: string
           status: string
           used_at: string
         }[]

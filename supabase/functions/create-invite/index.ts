@@ -49,13 +49,16 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { email } = await req.json()
+    const { email, school } = await req.json()
     if (!email) {
       return new Response(JSON.stringify({ error: 'Email é obrigatório' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       })
     }
+
+    const ALLOWED_SCHOOLS = ['Knox School', 'Wayland Academy']
+    const schoolValue = typeof school === 'string' && ALLOWED_SCHOOLS.includes(school) ? school : null
 
     // Cancel any existing pending invitations for this email
     await supabaseAdmin
@@ -77,6 +80,7 @@ Deno.serve(async (req) => {
         invite_code: inviteCode,
         status: 'pending',
         invited_by: user.id,
+        school: schoolValue,
       })
 
     if (insertError) {
