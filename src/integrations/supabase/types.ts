@@ -164,6 +164,7 @@ export type Database = {
           inscription_fee_cents: number
           quiz_test_id: string | null
           referred_by_email: string | null
+          school: string | null
           status: string
           student_address: string | null
           student_birth_date: string | null
@@ -204,6 +205,7 @@ export type Database = {
           inscription_fee_cents?: number
           quiz_test_id?: string | null
           referred_by_email?: string | null
+          school?: string | null
           status?: string
           student_address?: string | null
           student_birth_date?: string | null
@@ -244,6 +246,7 @@ export type Database = {
           inscription_fee_cents?: number
           quiz_test_id?: string | null
           referred_by_email?: string | null
+          school?: string | null
           status?: string
           student_address?: string | null
           student_birth_date?: string | null
