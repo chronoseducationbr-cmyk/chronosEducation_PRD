@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, Fragment } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info, FileText, Monitor, PlaneTakeoff } from "lucide-react";
+import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info, FileText, Monitor, PlaneTakeoff, AlertTriangle, Wand2 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { scoringConfigs } from "@/lib/quizScoring";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { findSpellingIssues, applySpellingFixes, type SpellIssue } from "@/lib/contractSpellCheck";
 
 interface QuizTest {
   id: string;
