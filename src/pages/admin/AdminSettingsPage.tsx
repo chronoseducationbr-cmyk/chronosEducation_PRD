@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, Fragment } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info, FileText, Monitor, PlaneTakeoff } from "lucide-react";
+import { BookOpen, Pencil, Check, X, ChevronDown, ChevronUp, Info, FileText, Monitor, PlaneTakeoff, AlertTriangle, Wand2 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { scoringConfigs } from "@/lib/quizScoring";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { findSpellingIssues, applySpellingFixes, type SpellIssue } from "@/lib/contractSpellCheck";
 
 interface QuizTest {
   id: string;
@@ -172,9 +173,28 @@ const AdminSettingsPage = () => {
   };
 
   const handleSaveContractText = (type: ContractEditorKey) => {
+    const issues = findSpellingIssues(contractDraft);
+    if (issues.length > 0) {
+      toast({
+        title: "Possíveis erros ortográficos detetados",
+        description: `Foram encontradas ${issues.length} palavra(s) sem acento. Corrige ou usa "Corrigir tudo" antes de guardar.`,
+        variant: "destructive",
+      });
+      return;
+    }
     const field = editorFieldMap[type];
     updateSettings({ [field]: contractDraft } as Partial<AppSettings>);
     setEditingContract(null);
+  };
+
+  const handleAutoFix = () => {
+    const issues = findSpellingIssues(contractDraft);
+    if (issues.length === 0) {
+      toast({ title: "Nenhum erro ortográfico detetado" });
+      return;
+    }
+    setContractDraft((prev) => applySpellingFixes(prev, findSpellingIssues(prev)));
+    toast({ title: "Ortografia corrigida", description: `${issues.length} palavra(s) atualizada(s).` });
   };
 
   const levelDescriptions: Record<string, string> = {
@@ -187,8 +207,44 @@ const AdminSettingsPage = () => {
     "C2": "Os alunos que atingem o nível C2 conseguem facilmente compreender quase tudo o que ouvem ou escrevem. Conseguem expressar-se de forma fluente e espontânea com precisão em situações complexas.",
   };
 
+  const renderHighlightedText = (text: string, issues: SpellIssue[]) => {
+    if (issues.length === 0) {
+      return <span>{text}</span>;
+    }
+    const parts: React.ReactNode[] = [];
+    let cursor = 0;
+    issues.forEach((issue, idx) => {
+      if (issue.start > cursor) {
+        parts.push(<Fragment key={`t-${idx}`}>{text.slice(cursor, issue.start)}</Fragment>);
+      }
+      parts.push(
+        <TooltipProvider key={`m-${idx}`} delayDuration={150}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <mark className="bg-[#F9B91D]/30 text-foreground underline decoration-wavy decoration-[#F9B91D] underline-offset-4 cursor-help rounded px-0.5">
+                {text.slice(issue.start, issue.end)}
+              </mark>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="text-xs">
+              Sugestão: <strong>{issue.suggestion}</strong>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+      cursor = issue.end;
+    });
+    if (cursor < text.length) {
+      parts.push(<Fragment key="t-end">{text.slice(cursor)}</Fragment>);
+    }
+    return <>{parts}</>;
+  };
+
   const renderContractEditor = (type: ContractEditorKey, title: string, text: string) => {
     const isEditing = editingContract === type;
+    const sourceText = isEditing ? contractDraft : text;
+    const issues = findSpellingIssues(sourceText);
+    const hasIssues = issues.length > 0;
+
     return (
       <div className="bg-card border border-border rounded-xl p-4">
         <div className="flex items-center justify-between mb-2">
@@ -202,12 +258,38 @@ const AdminSettingsPage = () => {
             </button>
           )}
         </div>
+
+        {hasIssues && (
+          <div className="mb-3 flex items-start gap-2 rounded-lg border border-[#F9B91D]/40 bg-[#F9B91D]/10 p-3 text-xs">
+            <AlertTriangle size={16} className="text-[#F9B91D] shrink-0 mt-0.5" />
+            <div className="flex-1 space-y-1">
+              <p className="font-semibold text-foreground">
+                {issues.length} possível{issues.length === 1 ? "" : "s"} erro{issues.length === 1 ? "" : "s"} ortográfico{issues.length === 1 ? "" : "s"} detetado{issues.length === 1 ? "" : "s"}
+              </p>
+              <p className="text-muted-foreground">
+                Palavras sem acento esperado:{" "}
+                {Array.from(new Set(issues.map((i) => `${i.word} → ${i.suggestion}`))).slice(0, 5).join(", ")}
+                {issues.length > 5 ? "…" : ""}
+              </p>
+            </div>
+            {isEditing && (
+              <button
+                onClick={handleAutoFix}
+                className="inline-flex items-center gap-1.5 bg-[#F9B91D] text-black font-semibold py-1.5 px-3 rounded-md hover:opacity-90 text-xs shrink-0"
+              >
+                <Wand2 size={12} />
+                Corrigir tudo
+              </button>
+            )}
+          </div>
+        )}
+
         {isEditing ? (
           <div className="space-y-3">
             <textarea
               value={contractDraft}
               onChange={(e) => setContractDraft(e.target.value)}
-              className="w-full text-sm rounded-lg border border-border bg-background p-3 text-foreground resize-vertical focus:outline-none focus:ring-1 focus:ring-secondary min-h-[200px]"
+              className={`w-full text-sm rounded-lg border bg-background p-3 text-foreground resize-vertical focus:outline-none focus:ring-1 min-h-[200px] ${hasIssues ? "border-[#F9B91D] focus:ring-[#F9B91D]" : "border-border focus:ring-secondary"}`}
               rows={10}
               placeholder="Insira o texto do contrato aqui..."
             />
@@ -217,8 +299,9 @@ const AdminSettingsPage = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => handleSaveContractText(type)}
-                disabled={savingSettings}
-                className="inline-flex items-center gap-1.5 bg-secondary text-secondary-foreground font-semibold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity text-sm disabled:opacity-50"
+                disabled={savingSettings || hasIssues}
+                title={hasIssues ? "Corrige os erros ortográficos antes de guardar" : undefined}
+                className="inline-flex items-center gap-1.5 bg-secondary text-secondary-foreground font-semibold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Check size={14} />
                 Guardar
@@ -235,7 +318,9 @@ const AdminSettingsPage = () => {
         ) : (
           <div className="bg-muted/30 border border-border rounded-lg p-4">
             {text ? (
-              <div className="text-sm text-foreground whitespace-pre-wrap leading-relaxed font-sans break-words">{text}</div>
+              <div className="text-sm text-foreground whitespace-pre-wrap leading-relaxed font-sans break-words">
+                {renderHighlightedText(text, issues)}
+              </div>
             ) : (
               <p className="text-sm text-muted-foreground italic">Nenhum texto de contrato definido.</p>
             )}
