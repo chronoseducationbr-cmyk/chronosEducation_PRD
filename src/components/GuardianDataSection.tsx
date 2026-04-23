@@ -53,6 +53,12 @@ interface Props {
    * cleared so the user is forced to fill the contract guardian's actual data.
    */
   clearOnFullNameChange?: boolean;
+  /**
+   * Optional student address used to render the "Same as student address /
+   * Other address" radio group above the guardian address input. When the
+   * radio is set to "same as student", the student's address is used.
+   */
+  studentAddress?: string;
 }
 
 const GuardianDataSection = ({
@@ -67,6 +73,7 @@ const GuardianDataSection = ({
   requireExplicitSave = false,
   simplified = false,
   clearOnFullNameChange = false,
+  studentAddress,
 }: Props) => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -75,6 +82,16 @@ const GuardianDataSection = ({
   const [expanded, setExpanded] = useState(false);
   const [editing, setEditing] = useState(!requireExplicitSave);
   const [saving, setSaving] = useState(false);
+  const showStudentAddressOption = studentAddress !== undefined;
+  const [addressSameAsStudent, setAddressSameAsStudent] = useState(showStudentAddressOption);
+
+  // When the "same as student" option is active, mirror the student's address
+  // into the guardian address state so it's submitted/validated correctly.
+  useEffect(() => {
+    if (showStudentAddressOption && addressSameAsStudent) {
+      setGuardianAddress(studentAddress || "");
+    }
+  }, [showStudentAddressOption, addressSameAsStudent, studentAddress]);
 
   const [fullName, setFullName] = useState(initialData?.fullName || "");
   const [email, setEmail] = useState(initialData?.email || "");
@@ -484,19 +501,57 @@ const GuardianDataSection = ({
             )}
             <div className="sm:col-span-2">
               <label className="text-sm font-medium text-foreground block mb-1.5">Endereço <span className="text-[#F9B91D]">*</span></label>
-              <div className="relative">
-                <MapPin size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type="text"
-                  maxLength={200}
-                  value={guardianAddress}
-                  onChange={(e) => setGuardianAddress(e.target.value)}
-                  onBlur={() => saveProfile({ guardian_address: guardianAddress.trim() })}
-                  className={`${inputClass(errKey("Address"))} pl-10`}
-                  placeholder="Endereço completo"
-                  disabled={isReadOnly}
-                />
-              </div>
+              {showStudentAddressOption && (
+                <div className="flex flex-wrap items-center gap-3 mb-2">
+                  <label className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
+                    <input
+                      type="radio"
+                      name={`${errorPrefix}-addressOption`}
+                      checked={addressSameAsStudent}
+                      onChange={() => {
+                        setAddressSameAsStudent(true);
+                        setGuardianAddress(studentAddress || "");
+                      }}
+                      className="accent-secondary"
+                      disabled={isReadOnly}
+                    />
+                    Igual ao endereço do aluno
+                  </label>
+                  <label className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
+                    <input
+                      type="radio"
+                      name={`${errorPrefix}-addressOption`}
+                      checked={!addressSameAsStudent}
+                      onChange={() => {
+                        setAddressSameAsStudent(false);
+                        setGuardianAddress("");
+                      }}
+                      className="accent-secondary"
+                      disabled={isReadOnly}
+                    />
+                    Outro endereço
+                  </label>
+                </div>
+              )}
+              {showStudentAddressOption && addressSameAsStudent ? (
+                <div className="px-4 py-3 rounded-lg border border-border bg-muted/30 text-sm text-foreground">
+                  {studentAddress || <span className="text-muted-foreground italic">Endereço do aluno não preenchido</span>}
+                </div>
+              ) : (
+                <div className="relative">
+                  <MapPin size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <input
+                    type="text"
+                    maxLength={200}
+                    value={guardianAddress}
+                    onChange={(e) => setGuardianAddress(e.target.value)}
+                    onBlur={() => saveProfile({ guardian_address: guardianAddress.trim() })}
+                    className={`${inputClass(errKey("Address"))} pl-10`}
+                    placeholder="Endereço completo"
+                    disabled={isReadOnly}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

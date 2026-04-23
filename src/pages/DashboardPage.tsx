@@ -491,7 +491,7 @@ const DashboardPage = () => {
 
                   {wizardStep === 1 && (
                     <>
-                      <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} guardianAddress={guardianRef.current.guardianAddress} />
+                      <StudentDataSection onChange={handleStudentChange} validationErrors={validationErrors} initialData={studentRef.current} />
 
                       {/* Serviços contratados */}
                       <div className="mt-8">
@@ -569,6 +569,7 @@ const DashboardPage = () => {
                         validationErrors={validationErrors}
                         initialData={contractGuardianInitial}
                         clearOnFullNameChange
+                        studentAddress={studentRef.current.studentAddress}
                       />
 
                       <div className="mt-8">
