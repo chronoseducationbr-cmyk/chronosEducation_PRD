@@ -94,7 +94,7 @@ const DashboardPage = () => {
 
     setPaying(true);
     try {
-      const [{ data: existingEnrollment }, { data: activeTest }] = await Promise.all([
+      const [{ data: existingEnrollment }, { data: activeTest }, { data: parentProfile }] = await Promise.all([
         supabase
           .from("enrollments")
           .select("id")
@@ -105,6 +105,11 @@ const DashboardPage = () => {
           .select("id")
           .eq("is_active", true)
           .limit(1)
+          .maybeSingle(),
+        supabase
+          .from("profiles")
+          .select("school")
+          .eq("user_id", user.id)
           .maybeSingle(),
       ]);
 
@@ -162,6 +167,7 @@ const DashboardPage = () => {
         summercamp_installments: selectedServices.summercamp ? 6 : 0,
         tuition_installment_cents: 0,
         summercamp_installment_cents: 0,
+        school: ((parentProfile as any)?.school as string | null) || null,
       };
       if (activeTest) {
         insertData.quiz_test_id = (activeTest as any).id;
