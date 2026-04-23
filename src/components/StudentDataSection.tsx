@@ -22,10 +22,9 @@ interface Props {
   onChange?: (data: StudentData) => void;
   validationErrors?: string[];
   initialData?: StudentData;
-  guardianAddress?: string;
 }
 
-const StudentDataSection = ({ onChange, validationErrors = [], initialData, guardianAddress = "" }: Props) => {
+const StudentDataSection = ({ onChange, validationErrors = [], initialData }: Props) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
 
@@ -43,14 +42,7 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData, guar
   const [uploading, setUploading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [birthDateError, setBirthDateError] = useState("");
-  const [addressSameAsGuardian, setAddressSameAsGuardian] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (addressSameAsGuardian && guardianAddress) {
-      setStudentAddress(guardianAddress);
-    }
-  }, [addressSameAsGuardian, guardianAddress]);
 
   const validateEmail = (email: string) => {
     if (!email.trim()) {
