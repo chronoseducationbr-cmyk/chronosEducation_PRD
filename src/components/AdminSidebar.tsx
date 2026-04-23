@@ -1,4 +1,4 @@
-import { GraduationCap, CreditCard, Users, LogOut, LayoutDashboard, Settings } from "lucide-react";
+import { GraduationCap, CreditCard, Users, LogOut, LayoutDashboard, Settings, FileText } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,6 +12,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar";
@@ -20,7 +23,11 @@ const items = [
   { title: "Matrículas", url: "/admin/inscricoes", icon: GraduationCap },
   { title: "Pagamentos", url: "/admin/pagamentos", icon: CreditCard },
   { title: "Usuários", url: "/admin/utilizadores", icon: Users },
-  { title: "Configurações", url: "/admin/configuracoes", icon: Settings },
+];
+
+const contractSubItems = [
+  { title: "Knox School", url: "/admin/contratos/knox" },
+  { title: "Wayland Academy", url: "/admin/contratos/wayland" },
 ];
 
 export function AdminSidebar() {
