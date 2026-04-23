@@ -19,6 +19,8 @@ export type Database = {
           contract_enabled: boolean
           contract_text: string
           contract_text_summercamp: string
+          contract_text_summercamp_wayland: string
+          contract_text_wayland: string
           default_inscription_fee_cents: number
           default_summercamp_installment_cents: number
           default_summercamp_installments: number
@@ -31,6 +33,8 @@ export type Database = {
           contract_enabled?: boolean
           contract_text?: string
           contract_text_summercamp?: string
+          contract_text_summercamp_wayland?: string
+          contract_text_wayland?: string
           default_inscription_fee_cents?: number
           default_summercamp_installment_cents?: number
           default_summercamp_installments?: number
@@ -43,6 +47,8 @@ export type Database = {
           contract_enabled?: boolean
           contract_text?: string
           contract_text_summercamp?: string
+          contract_text_summercamp_wayland?: string
+          contract_text_wayland?: string
           default_inscription_fee_cents?: number
           default_summercamp_installment_cents?: number
           default_summercamp_installments?: number
