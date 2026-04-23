@@ -351,20 +351,22 @@ const AdminUsersPage = () => {
               <p className="text-sm font-medium text-foreground">
                 Escola <span className="text-[#F9B91D]">*</span>
               </p>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="flex flex-col gap-2">
                 {(["Knox School", "Wayland Academy"] as const).map((opt) => (
-                  <button
+                  <label
                     key={opt}
-                    type="button"
-                    onClick={() => setInviteSchool(opt)}
-                    className={`text-sm rounded-lg border px-3 py-2 text-left transition-colors ${
-                      inviteSchool === opt
-                        ? "border-primary bg-primary/5 text-foreground font-semibold"
-                        : "border-border bg-background text-muted-foreground hover:border-primary/50"
-                    }`}
+                    className="flex items-center gap-2 cursor-pointer text-sm text-foreground"
                   >
+                    <input
+                      type="radio"
+                      name="invite-school"
+                      value={opt}
+                      checked={inviteSchool === opt}
+                      onChange={() => setInviteSchool(opt)}
+                      className="h-4 w-4 accent-primary cursor-pointer"
+                    />
                     {opt}
-                  </button>
+                  </label>
                 ))}
               </div>
             </div>
