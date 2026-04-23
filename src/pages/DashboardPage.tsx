@@ -70,7 +70,7 @@ const DashboardPage = () => {
   const guardianRef = useRef<GuardianData>({ ...emptyGuardian });
   const contractGuardianRef = useRef<GuardianData>({ ...emptyGuardian });
   const [contractGuardianInitial, setContractGuardianInitial] = useState<GuardianData>({ ...emptyGuardian });
-  const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
+  const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "", studentNationality: "Brasileira", studentCpf: "" });
   const referralRef = useRef("");
 
   const handleGuardianChange = useCallback((data: GuardianData) => { guardianRef.current = data; }, []);
@@ -150,6 +150,8 @@ const DashboardPage = () => {
         student_school: s.studentSchool.trim(),
         student_photo_url: s.studentPhotoUrl?.trim() || null,
         student_graduation_year: s.studentGraduationYear ? parseInt(s.studentGraduationYear, 10) : null,
+        student_nationality: s.studentNationality?.trim() || null,
+        student_cpf: s.studentCpf?.trim() || null,
         referred_by_email: referralRef.current.trim(),
         guardian_email: cg.email?.trim() || g.email?.trim() || user?.email || "",
         contract_guardian_full_name: cg.fullName.trim(),
@@ -236,7 +238,7 @@ const DashboardPage = () => {
       setShowForm(false);
       setWizardStep(1);
       setRefreshKey((k) => k + 1);
-      studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
+      studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "", studentNationality: "Brasileira", studentCpf: "" };
       contractGuardianRef.current = { ...emptyGuardian };
       setContractGuardianInitial({ ...emptyGuardian });
       referralRef.current = "";
@@ -258,6 +260,7 @@ const DashboardPage = () => {
     if (!s.studentName.trim()) { missingFields.push("Nome do aluno"); errors.push("studentName"); }
     if (!s.studentPhotoUrl) { missingFields.push("Foto do aluno"); errors.push("studentPhoto"); }
     if (!s.studentBirthDate) { missingFields.push("Data de nascimento"); errors.push("studentBirthDate"); }
+    if (!s.studentNationality?.trim()) { missingFields.push("Nacionalidade do aluno"); errors.push("studentNationality"); }
     if (!s.studentEmail.trim()) { missingFields.push("Email do aluno"); errors.push("studentEmail"); }
     if (!s.studentAddress.trim()) { missingFields.push("Endereço"); errors.push("studentAddress"); }
     if (!s.studentSchool.trim()) { missingFields.push("Escola atual"); errors.push("studentSchool"); }
@@ -440,7 +443,7 @@ const DashboardPage = () => {
                   <div className="mt-8">
                     <EnrollmentsList
                       onNewEnrollment={() => {
-                        studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" };
+                        studentRef.current = { studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "", studentNationality: "Brasileira", studentCpf: "" };
                         referralRef.current = "";
                         setValidationErrors([]);
                         setSelectedServices({ plataforma: false, summercamp: false });

@@ -168,9 +168,11 @@ export type Database = {
           status: string
           student_address: string | null
           student_birth_date: string | null
+          student_cpf: string | null
           student_email: string | null
           student_graduation_year: number | null
           student_name: string
+          student_nationality: string | null
           student_photo_url: string | null
           student_school: string | null
           summercamp_installment_cents: number
@@ -209,9 +211,11 @@ export type Database = {
           status?: string
           student_address?: string | null
           student_birth_date?: string | null
+          student_cpf?: string | null
           student_email?: string | null
           student_graduation_year?: number | null
           student_name?: string
+          student_nationality?: string | null
           student_photo_url?: string | null
           student_school?: string | null
           summercamp_installment_cents?: number
@@ -250,9 +254,11 @@ export type Database = {
           status?: string
           student_address?: string | null
           student_birth_date?: string | null
+          student_cpf?: string | null
           student_email?: string | null
           student_graduation_year?: number | null
           student_name?: string
+          student_nationality?: string | null
           student_photo_url?: string | null
           student_school?: string | null
           summercamp_installment_cents?: number

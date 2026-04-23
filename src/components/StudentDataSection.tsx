@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { GraduationCap, Mail, MapPin, Calendar, Camera, X } from "lucide-react";
 import GenderCombobox from "./GenderCombobox";
+import NationalityCombobox from "./NationalityCombobox";
 
 export interface StudentData {
   studentName: string;
@@ -13,6 +14,8 @@ export interface StudentData {
   studentSchool: string;
   studentGraduationYear: string;
   studentPhotoUrl: string;
+  studentNationality: string;
+  studentCpf: string;
 }
 
 interface Props {
@@ -34,6 +37,8 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData, guar
   const [studentSchool, setStudentSchool] = useState(initialData?.studentSchool || "");
   const [studentGraduationYear, setStudentGraduationYear] = useState(initialData?.studentGraduationYear || String(new Date().getFullYear() + 3));
   const [studentPhotoUrl, setStudentPhotoUrl] = useState(initialData?.studentPhotoUrl || "");
+  const [studentNationality, setStudentNationality] = useState(initialData?.studentNationality || "Brasileira");
+  const [studentCpf, setStudentCpf] = useState(initialData?.studentCpf || "");
   const [photoPreview, setPhotoPreview] = useState<string | null>(initialData?.studentPhotoUrl || null);
   const [uploading, setUploading] = useState(false);
   const [emailError, setEmailError] = useState("");
@@ -100,8 +105,16 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData, guar
   }, []);
 
   useEffect(() => {
-    onChange?.({ studentName, studentBirthDate, studentGender, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl });
-  }, [studentName, studentBirthDate, studentGender, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl]);
+    onChange?.({ studentName, studentBirthDate, studentGender, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl, studentNationality, studentCpf });
+  }, [studentName, studentBirthDate, studentGender, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl, studentNationality, studentCpf]);
+
+  const formatCpf = (value: string) => {
+    const digits = value.replace(/\D/g, "").slice(0, 11);
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`;
+    if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`;
+    return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
+  };
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -262,6 +275,26 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData, guar
               value={studentGender}
               onChange={setStudentGender}
               className={inputClasses("studentGender")}
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Nacionalidade <span className="text-[#F9B91D]">*</span></label>
+            <NationalityCombobox
+              value={studentNationality}
+              onChange={setStudentNationality}
+              className={inputClasses("studentNationality")}
+              placeholder="Pesquisar nacionalidade..."
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-1.5">CPF do aluno</label>
+            <input
+              type="text"
+              maxLength={14}
+              value={studentCpf}
+              onChange={(e) => setStudentCpf(formatCpf(e.target.value))}
+              className={inputClasses("studentCpf")}
+              placeholder="000.000.000-00"
             />
           </div>
           <div className="sm:col-span-2">
