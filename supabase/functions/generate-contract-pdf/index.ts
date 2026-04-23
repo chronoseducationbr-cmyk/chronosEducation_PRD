@@ -361,55 +361,29 @@ async function buildContractPdf(
   ctx.page.drawText(dateStr, { x: (595.28 - dateW) / 2, y: ctx.y, size: 9, font, color: GRAY });
   ctx.y -= 24;
 
-  // Section 1 - PARTES (always dynamic from enrollment data)
-  drawSectionTitle(ctx, "1. PARTES");
-  drawParagraph(ctx, "Pelo presente instrumento particular, de um lado:");
-  ctx.y -= 4;
-  const capitalizeProfession = (text: string): string => {
-    if (!text) return "[profissao]";
-    return text.charAt(0).toUpperCase() + text.slice(1);
-  };
-  const contratanteParts = [
-    guardian.fullName || "[Nome completo]",
-    `de nacionalidade ${guardian.nationality || "[nacionalidade]"}`,
-    guardian.civilStatus || "[estado civil]",
-    capitalizeProfession(guardian.profession || ""),
-    `inscrito(a) no CPF sob o n\u00BA ${guardian.cpf || "[CPF]"} e RG n\u00BA ${guardian.rg || "[RG]"}`,
-    `residente e domiciliado(a) em ${student.studentAddress || "[endereco completo]"}`,
-  ];
-  drawParagraph(ctx, `CONTRATANTE: ${contratanteParts.join(", ")};`);
-  ctx.y -= 8;
-
-  // Student info block
-  ctx.page.drawText("Aluno(a) Beneficiario(a)", { x: 60, y: ctx.y, size: 9, font: fontBold, color: GRAY });
-  ctx.y -= 16;
-  drawField(ctx, "Nome:", student.studentName, 60);
-  drawField(ctx, "Data de nascimento:", formatDate(student.studentBirthDate), 60);
-  drawField(ctx, "Nacionalidade:", student.studentNationality || "\u2014", 60);
-  if (student.studentCpf) {
-    drawField(ctx, "CPF:", student.studentCpf, 60);
-  }
-  drawField(ctx, "Email:", student.studentEmail, 60);
-  drawField(ctx, "Endereco:", student.studentAddress, 60);
-  drawField(ctx, "Escola atual:", student.studentSchool, 60);
-  drawField(ctx, "Ano de conclusao do Ensino Medio:", student.studentGraduationYear || "\u2014", 60);
-  ctx.y -= 8;
-
-  drawParagraph(ctx, "E, de outro lado:");
-  ctx.y -= 4;
-  drawParagraph(ctx, "CONTRATADA: Chronos8 Consultoria de Negocios Ltda., inscrita no CNPJ sob o n\u00BA 12.004.589/0001-85, com endereco em Rua Alberto Willo, n\u00BA 419 - Casa 3 - CEP 04067-041, Sao Paulo/SP, neste ato representada por Mario Miguel Guallar Galvez Reis e Sa;");
-  ctx.y -= 4;
-  drawParagraph(ctx, "Tem entre si justo e contratado:");
-  ctx.y -= 8;
-
   // Currency formatter - plain number (no currency symbol, used inside "USD $ ..." text)
   const fmtNumber = (cents: number) => {
     if (!cents || cents <= 0) return "0,00";
     return (cents / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
+  const capitalizeProfession = (text: string): string => {
+    if (!text) return "[profissão]";
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
+
   // Replace placeholders in contract text
   let filledContractText = contractText.replace(/\[Data\]/gi, dateLabel);
+
+  // Guardian / contract signatory placeholders
+  filledContractText = filledContractText
+    .replace(/\[Nome completo\]/gi, guardian.fullName?.trim() || "[Nome completo]")
+    .replace(/\[nacionalidade\]/gi, guardian.nationality?.trim() || "[nacionalidade]")
+    .replace(/\[estado civil\]/gi, guardian.civilStatus?.trim() || "[estado civil]")
+    .replace(/\[profiss[aã]o\]/gi, capitalizeProfession(guardian.profession?.trim() || ""))
+    .replace(/\[CPF\]/gi, guardian.cpf?.trim() || "[CPF]")
+    .replace(/\[RG\]/gi, guardian.rg?.trim() || "[RG]")
+    .replace(/\[endere[cç]o completo\]/gi, ((guardian as { address?: string }).address || student.studentAddress || "").trim() || "[endereço completo]");
 
   // ─── Validate mandatory student data BEFORE substitution ───
   const missingStudentFields: string[] = [];
@@ -428,8 +402,6 @@ async function buildContractPdf(
   const studentCpfVal = (student.studentCpf || "").trim();
 
   // Special handling for "1.2. ALUNO" — if no CPF, remove the CPF clause entirely.
-  // Matches lines like:
-  //   1.2. ALUNO (Dependente): [Nome do aluno], [dataNascimentoAluno], de [nacionalidadeAluno], inscrito(a) no CPF nº [CPF_Aluno] (se aplicável), filho(a) ou dependente do CONTRATANTE.
   filledContractText = filledContractText.replace(
     /(1\.2\.\s*ALUNO[^\n]*?)(,\s*inscrito\(a\)\s+no\s+CPF\s+n[ºo°]?\s*\[CPF_Aluno\](?:\s*\(se aplic[áa]vel\))?)([^\n]*)/gi,
     (_full, prefix: string, cpfClause: string, suffix: string) => {
@@ -446,10 +418,6 @@ async function buildContractPdf(
     .replace(/\[dataNascimentoAluno\]/gi, studentBirthVal)
     .replace(/\[nacionalidadeAluno\]/gi, studentNatVal);
 
-  // CPF: replace remaining occurrences only if we have a value.
-  // If we don't have a CPF and one still remains, that's a hard error
-  // (the 1.2 clause was already stripped above; any leftover means the
-  // template references CPF in a place we cannot safely remove).
   if (studentCpfVal) {
     filledContractText = filledContractText.replace(/\[CPF_Aluno\]/gi, studentCpfVal);
   }
@@ -465,12 +433,8 @@ async function buildContractPdf(
 
   // Parse and render contract text sections
   const { sections: parsedSections, closingItems } = parseContractSections(filledContractText);
+  const sections = parsedSections;
 
-  // Skip section "1." (PARTES / DAS PARTES) from the template, since it is
-  // already rendered above with dynamic enrollment data — avoids duplication.
-  const sections = parsedSections.filter(
-    (s) => !/^1\.\s/.test(s.title.trim())
-  );
 
   for (const section of sections) {
     drawSectionTitle(ctx, section.title);
