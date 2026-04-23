@@ -106,7 +106,10 @@ type SectionItem = ParagraphItem | ListItem;
 function drawListItem(ctx: DrawCtx, item: ListItem) {
   const marker = sanitize(item.listStyle === "ordered" ? item.marker : "\u2022");
   const safeText = sanitize(item.text);
-  const markerX = 65 + item.level * 18;
+
+  // Ordered markers must stay flush-left across all levels.
+  // Only unordered bullets may keep a visual nested indent.
+  const markerX = item.listStyle === "ordered" ? 65 : 65 + item.level * 18;
   const markerFont = item.listStyle === "ordered" ? ctx.fontBold : ctx.font;
   const markerWidth = Math.max(10, markerFont.widthOfTextAtSize(marker + " ", 10));
   const textX = markerX + markerWidth + 4;
