@@ -110,7 +110,8 @@ interface ListItem {
   marker: string;
   level: number;
 }
-type SectionItem = ParagraphItem | ListItem;
+interface SpacerItem { type: "spacer"; height: number }
+type SectionItem = ParagraphItem | ListItem | SpacerItem;
 
 function drawListItem(ctx: DrawCtx, item: ListItem) {
   // Bullets use middle dot (·, 0xB7) which renders correctly in WinAnsi.
