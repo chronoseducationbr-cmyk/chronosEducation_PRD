@@ -53,8 +53,17 @@ function drawSectionTitle(ctx: DrawCtx, text: string) {
 }
 
 // Sanitize text to remove characters unsupported by WinAnsi encoding (e.g. tabs)
+// Replace common Unicode punctuation with WinAnsi-safe equivalents before stripping
 function sanitize(text: string): string {
-  return text.replace(/[\t\r]/g, " ").replace(/[^\x20-\x7E\xA0-\xFF\n]/g, " ");
+  return text
+    .replace(/[\t\r]/g, " ")
+    .replace(/[\u2022\u2023\u25E6\u2043\u25CF\u2219]/g, "\u2219") // bullets → WinAnsi bullet (•, U+2219 is in WinAnsi as 0x95? use ASCII fallback)
+    .replace(/[\u2022\u2023\u25E6\u2043\u25CF\u2219]/g, String.fromCharCode(0x95)) // WinAnsi bullet 0x95
+    .replace(/[\u2013\u2014]/g, "-") // en/em dash → hyphen
+    .replace(/[\u2018\u2019]/g, "'") // smart single quotes
+    .replace(/[\u201C\u201D]/g, '"') // smart double quotes
+    .replace(/[\u2026]/g, "...") // ellipsis
+    .replace(/[^\x20-\x7E\xA0-\xFF\n]/g, " ");
 }
 
 function wrapText(text: string, font: DrawCtx["font"], size: number, maxWidth: number): string[] {
@@ -104,12 +113,14 @@ interface ListItem {
 type SectionItem = ParagraphItem | ListItem;
 
 function drawListItem(ctx: DrawCtx, item: ListItem) {
-  const marker = sanitize(item.listStyle === "ordered" ? item.marker : "\u2022");
+  // Use ASCII bullet replacement (WinAnsi 0x95 = •)
+  const rawMarker = item.listStyle === "ordered" ? item.marker : String.fromCharCode(0x95);
+  const marker = sanitize(rawMarker);
   const safeText = sanitize(item.text);
 
-  // Ordered markers must stay flush-left across all levels.
-  // Only unordered bullets may keep a visual nested indent.
-  const markerX = item.listStyle === "ordered" ? 65 : 65 + item.level * 18;
+  // Both ordered and unordered markers stay flush-left, aligned with the parent
+  // numbering (e.g. bullets under "5.1." line up at the same X as "5.1.").
+  const markerX = 65;
   const markerFont = item.listStyle === "ordered" ? ctx.fontBold : ctx.font;
   const markerWidth = Math.max(10, markerFont.widthOfTextAtSize(marker + " ", 10));
   const textX = markerX + markerWidth + 4;
