@@ -451,12 +451,20 @@ async function buildContractPdf(
       };
 
       for (const item of section.items) {
+        if (item.type === "spacer") {
+          ctx.y -= item.height;
+          continue;
+        }
         const text = replacePlaceholders(item.text);
         if (item.type === "list") drawListItem(ctx, { ...item, text });
         else drawParagraph(ctx, text);
       }
     } else {
       for (const item of section.items) {
+        if (item.type === "spacer") {
+          ctx.y -= item.height;
+          continue;
+        }
         if (item.type === "list") drawListItem(ctx, item);
         else drawParagraph(ctx, item.text);
       }
@@ -467,7 +475,8 @@ async function buildContractPdf(
   if (closingItems.length > 0) {
     ctx.y -= 12;
     for (const item of closingItems) {
-      if (item.type === "paragraph") drawParagraph(ctx, item.text, 50);
+      if (item.type === "spacer") ctx.y -= item.height;
+      else if (item.type === "paragraph") drawParagraph(ctx, item.text, 50);
       else if (item.type === "list") drawListItem(ctx, item);
     }
   }
