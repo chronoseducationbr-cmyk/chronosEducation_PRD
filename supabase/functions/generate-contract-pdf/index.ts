@@ -438,7 +438,13 @@ async function buildContractPdf(
   }
 
   // Parse and render contract text sections
-  const { sections, closingItems } = parseContractSections(filledContractText);
+  const { sections: parsedSections, closingItems } = parseContractSections(filledContractText);
+
+  // Skip section "1." (PARTES / DAS PARTES) from the template, since it is
+  // already rendered above with dynamic enrollment data — avoids duplication.
+  const sections = parsedSections.filter(
+    (s) => !/^1\.\s/.test(s.title.trim())
+  );
 
   for (const section of sections) {
     drawSectionTitle(ctx, section.title);
