@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { GraduationCap, Mail, MapPin, Calendar, Camera, X } from "lucide-react";
 import GenderCombobox from "./GenderCombobox";
+import NationalityCombobox from "./NationalityCombobox";
 
 export interface StudentData {
   studentName: string;
@@ -13,6 +14,8 @@ export interface StudentData {
   studentSchool: string;
   studentGraduationYear: string;
   studentPhotoUrl: string;
+  studentNationality: string;
+  studentCpf: string;
 }
 
 interface Props {
