@@ -20,12 +20,25 @@ interface AppSettings {
   contract_enabled: boolean;
   contract_text: string;
   contract_text_summercamp: string;
+  contract_text_wayland: string;
+  contract_text_summercamp_wayland: string;
 }
 
 const defaultSettings: AppSettings = {
   contract_enabled: true,
   contract_text: "",
   contract_text_summercamp: "",
+  contract_text_wayland: "",
+  contract_text_summercamp_wayland: "",
+};
+
+type ContractEditorKey = "plataforma" | "summercamp" | "plataforma_wayland" | "summercamp_wayland";
+
+const editorFieldMap: Record<ContractEditorKey, keyof AppSettings> = {
+  plataforma: "contract_text",
+  summercamp: "contract_text_summercamp",
+  plataforma_wayland: "contract_text_wayland",
+  summercamp_wayland: "contract_text_summercamp_wayland",
 };
 
 const AdminSettingsPage = () => {
@@ -40,7 +53,7 @@ const AdminSettingsPage = () => {
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
   const [loadingSettings, setLoadingSettings] = useState(true);
   const [savingSettings, setSavingSettings] = useState(false);
-  const [editingContract, setEditingContract] = useState<"plataforma" | "summercamp" | null>(null);
+  const [editingContract, setEditingContract] = useState<ContractEditorKey | null>(null);
   const [contractDraft, setContractDraft] = useState("");
 
   useEffect(() => {
@@ -76,6 +89,8 @@ const AdminSettingsPage = () => {
         contract_enabled: s.contract_enabled,
         contract_text: s.contract_text || "",
         contract_text_summercamp: s.contract_text_summercamp || "",
+        contract_text_wayland: s.contract_text_wayland || "",
+        contract_text_summercamp_wayland: s.contract_text_summercamp_wayland || "",
       });
     }
     setLoadingSettings(false);
@@ -156,8 +171,8 @@ const AdminSettingsPage = () => {
     updateSettings({ contract_enabled: !settings.contract_enabled });
   };
 
-  const handleSaveContractText = (type: "plataforma" | "summercamp") => {
-    const field = type === "plataforma" ? "contract_text" : "contract_text_summercamp";
+  const handleSaveContractText = (type: ContractEditorKey) => {
+    const field = editorFieldMap[type];
     updateSettings({ [field]: contractDraft } as Partial<AppSettings>);
     setEditingContract(null);
   };
@@ -172,7 +187,7 @@ const AdminSettingsPage = () => {
     "C2": "Os alunos que atingem o nível C2 conseguem facilmente compreender quase tudo o que ouvem ou escrevem. Conseguem expressar-se de forma fluente e espontânea com precisão em situações complexas.",
   };
 
-  const renderContractEditor = (type: "plataforma" | "summercamp", title: string, text: string) => {
+  const renderContractEditor = (type: ContractEditorKey, title: string, text: string) => {
     const isEditing = editingContract === type;
     return (
       <div className="bg-card border border-border rounded-xl p-4">
