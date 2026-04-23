@@ -105,8 +105,16 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData, guar
   }, []);
 
   useEffect(() => {
-    onChange?.({ studentName, studentBirthDate, studentGender, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl });
-  }, [studentName, studentBirthDate, studentGender, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl]);
+    onChange?.({ studentName, studentBirthDate, studentGender, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl, studentNationality, studentCpf });
+  }, [studentName, studentBirthDate, studentGender, studentEmail, studentAddress, studentSchool, studentGraduationYear, studentPhotoUrl, studentNationality, studentCpf]);
+
+  const formatCpf = (value: string) => {
+    const digits = value.replace(/\D/g, "").slice(0, 11);
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`;
+    if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`;
+    return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
+  };
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
