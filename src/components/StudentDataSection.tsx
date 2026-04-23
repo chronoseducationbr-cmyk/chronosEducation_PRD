@@ -37,6 +37,8 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData, guar
   const [studentSchool, setStudentSchool] = useState(initialData?.studentSchool || "");
   const [studentGraduationYear, setStudentGraduationYear] = useState(initialData?.studentGraduationYear || String(new Date().getFullYear() + 3));
   const [studentPhotoUrl, setStudentPhotoUrl] = useState(initialData?.studentPhotoUrl || "");
+  const [studentNationality, setStudentNationality] = useState(initialData?.studentNationality || "Brasileira");
+  const [studentCpf, setStudentCpf] = useState(initialData?.studentCpf || "");
   const [photoPreview, setPhotoPreview] = useState<string | null>(initialData?.studentPhotoUrl || null);
   const [uploading, setUploading] = useState(false);
   const [emailError, setEmailError] = useState("");
