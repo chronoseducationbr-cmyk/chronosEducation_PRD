@@ -276,11 +276,16 @@ const AdminUsersPage = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-foreground truncate">{inv.email}</p>
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
                         <span className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${st.color}`}>
                           <StatusIcon size={10} />
                           {st.label}
                         </span>
+                        {inv.school && (
+                          <span className="inline-flex items-center text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                            {inv.school}
+                          </span>
+                        )}
                         <span className="text-[10px] text-muted-foreground">
                           Enviado em {formatDate(inv.created_at)} · Expira em {formatDate(inv.expires_at)}
                         </span>
