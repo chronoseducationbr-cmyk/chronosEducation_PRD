@@ -110,7 +110,8 @@ interface ListItem {
   marker: string;
   level: number;
 }
-type SectionItem = ParagraphItem | ListItem;
+interface SpacerItem { type: "spacer"; height: number }
+type SectionItem = ParagraphItem | ListItem | SpacerItem;
 
 function drawListItem(ctx: DrawCtx, item: ListItem) {
   // Bullets use middle dot (·, 0xB7) which renders correctly in WinAnsi.
@@ -244,7 +245,15 @@ function parseContractSections(text: string): ParseResult {
     if (!current) continue;
     const trimmedLine = line.trim();
     if (!trimmedLine) {
-      previousItem = null;
+      // Preserve blank lines from the template as visible vertical spacing
+      if (previousItem && previousItem.type !== "spacer") {
+        const spacer: SpacerItem = { type: "spacer", height: 8 };
+        current.items.push(spacer);
+        previousItem = spacer;
+      } else if (previousItem?.type === "spacer") {
+        // Stack consecutive blank lines for larger gaps
+        previousItem.height += 8;
+      }
       continue;
     }
 
@@ -442,12 +451,20 @@ async function buildContractPdf(
       };
 
       for (const item of section.items) {
+        if (item.type === "spacer") {
+          ctx.y -= item.height;
+          continue;
+        }
         const text = replacePlaceholders(item.text);
         if (item.type === "list") drawListItem(ctx, { ...item, text });
         else drawParagraph(ctx, text);
       }
     } else {
       for (const item of section.items) {
+        if (item.type === "spacer") {
+          ctx.y -= item.height;
+          continue;
+        }
         if (item.type === "list") drawListItem(ctx, item);
         else drawParagraph(ctx, item.text);
       }
@@ -458,7 +475,8 @@ async function buildContractPdf(
   if (closingItems.length > 0) {
     ctx.y -= 12;
     for (const item of closingItems) {
-      if (item.type === "paragraph") drawParagraph(ctx, item.text, 50);
+      if (item.type === "spacer") ctx.y -= item.height;
+      else if (item.type === "paragraph") drawParagraph(ctx, item.text, 50);
       else if (item.type === "list") drawListItem(ctx, item);
     }
   }
