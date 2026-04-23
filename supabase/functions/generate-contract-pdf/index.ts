@@ -279,6 +279,8 @@ async function buildContractPdf(
     studentAddress: string;
     studentSchool: string;
     studentGraduationYear: string;
+    studentNationality?: string;
+    studentCpf?: string;
   },
   financial: {
     inscriptionFeeCents: number;
@@ -357,6 +359,10 @@ async function buildContractPdf(
   ctx.y -= 16;
   drawField(ctx, "Nome:", student.studentName, 60);
   drawField(ctx, "Data de nascimento:", formatDate(student.studentBirthDate), 60);
+  drawField(ctx, "Nacionalidade:", student.studentNationality || "\u2014", 60);
+  if (student.studentCpf) {
+    drawField(ctx, "CPF:", student.studentCpf, 60);
+  }
   drawField(ctx, "Email:", student.studentEmail, 60);
   drawField(ctx, "Endereco:", student.studentAddress, 60);
   drawField(ctx, "Escola atual:", student.studentSchool, 60);
@@ -529,6 +535,8 @@ serve(async (req) => {
         studentAddress: enrollment.student_address || "",
         studentSchool: enrollment.student_school || "",
         studentGraduationYear: enrollment.student_graduation_year?.toString() || "",
+        studentNationality: enrollment.student_nationality || "",
+        studentCpf: enrollment.student_cpf || "",
       };
     }
 
