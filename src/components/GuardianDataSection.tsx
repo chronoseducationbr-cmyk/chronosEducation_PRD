@@ -53,6 +53,12 @@ interface Props {
    * cleared so the user is forced to fill the contract guardian's actual data.
    */
   clearOnFullNameChange?: boolean;
+  /**
+   * Optional student address used to render the "Same as student address /
+   * Other address" radio group above the guardian address input. When the
+   * radio is set to "same as student", the student's address is used.
+   */
+  studentAddress?: string;
 }
 
 const GuardianDataSection = ({
