@@ -113,14 +113,15 @@ interface ListItem {
 type SectionItem = ParagraphItem | ListItem;
 
 function drawListItem(ctx: DrawCtx, item: ListItem) {
-  // Use ASCII bullet replacement (WinAnsi 0x95 = •)
-  const rawMarker = item.listStyle === "ordered" ? item.marker : String.fromCharCode(0x95);
+  // Bullets use middle dot (·, 0xB7) which renders correctly in WinAnsi.
+  const rawMarker = item.listStyle === "ordered" ? item.marker : "\u00B7";
   const marker = sanitize(rawMarker);
   const safeText = sanitize(item.text);
 
-  // Both ordered and unordered markers stay flush-left, aligned with the parent
-  // numbering (e.g. bullets under "5.1." line up at the same X as "5.1.").
-  const markerX = 65;
+  // Ordered markers (1., 9.3., etc.) stay flush-left at x=65.
+  // Bullets are indented further so they sit visually nested under the parent
+  // numbered item (e.g. bullets under "9.3." appear inset to the right).
+  const markerX = item.listStyle === "ordered" ? 65 : 80;
   const markerFont = item.listStyle === "ordered" ? ctx.fontBold : ctx.font;
   const markerWidth = Math.max(10, markerFont.widthOfTextAtSize(marker + " ", 10));
   const textX = markerX + markerWidth + 4;
