@@ -129,10 +129,18 @@ function drawListItem(ctx: DrawCtx, item: ListItem) {
 interface ContractSection { title: string; items: SectionItem[] }
 
 function getNestedListLevel(previousItem: SectionItem | null): number {
-  if (previousItem?.type === "list" && previousItem.listStyle === "ordered" && /:\s*$/.test(previousItem.text)) {
+  // If the previous list item ends with ":" (introducing a sub-list), nest one level deeper
+  if (previousItem?.type === "list" && /:\s*$/.test(previousItem.text)) {
     return previousItem.level + 1;
   }
 
+  // If the previous item is a paragraph ending in ":" (e.g. "12.2. ... em caso de:"),
+  // start the bullets at level 1 so they're visually indented under the parent clause
+  if (previousItem?.type === "paragraph" && /:\s*$/.test(previousItem.text)) {
+    return 1;
+  }
+
+  // Continue at the same level for consecutive bullets
   if (previousItem?.type === "list" && previousItem.listStyle === "unordered" && previousItem.level > 0) {
     return previousItem.level;
   }
@@ -183,6 +191,20 @@ function parseListItem(line: string, previousItem: SectionItem | null): ListItem
       listStyle: "unordered",
       marker: "\u2022",
       level: getNestedListLevel(previousItem),
+    };
+  }
+
+  // Multi-level numbered markers like "12.1.", "12.1.3." — treat the whole prefix as a single marker.
+  // The depth corresponds to the number of dot-separated segments minus one (e.g. "12.1." → level 1).
+  const multiNumberedMatch = line.match(/^(\d+(?:\.\d+){1,})\.?\)?\s+(.+)$/);
+  if (multiNumberedMatch) {
+    const segments = multiNumberedMatch[1].split(".").filter(Boolean);
+    return {
+      type: "list",
+      text: multiNumberedMatch[2].trim(),
+      listStyle: "ordered",
+      marker: `${multiNumberedMatch[1]}${multiNumberedMatch[1].endsWith(".") ? "" : "."}`,
+      level: Math.max(0, segments.length - 1),
     };
   }
 
