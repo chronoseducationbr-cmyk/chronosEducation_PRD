@@ -73,6 +73,7 @@ const GuardianDataSection = ({
   requireExplicitSave = false,
   simplified = false,
   clearOnFullNameChange = false,
+  studentAddress,
 }: Props) => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -81,6 +82,8 @@ const GuardianDataSection = ({
   const [expanded, setExpanded] = useState(false);
   const [editing, setEditing] = useState(!requireExplicitSave);
   const [saving, setSaving] = useState(false);
+  const showStudentAddressOption = studentAddress !== undefined;
+  const [addressSameAsStudent, setAddressSameAsStudent] = useState(showStudentAddressOption);
 
   const [fullName, setFullName] = useState(initialData?.fullName || "");
   const [email, setEmail] = useState(initialData?.email || "");
