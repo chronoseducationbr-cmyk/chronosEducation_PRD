@@ -33,6 +33,7 @@ interface Invitation {
   created_at: string;
   expires_at: string;
   used_at: string | null;
+  school: string | null;
 }
 
 const AdminUsersPage = () => {
@@ -110,11 +111,11 @@ const AdminUsersPage = () => {
     }
   };
 
-  const handleResendInvite = async (email: string, invitationId: string) => {
+  const handleResendInvite = async (email: string, invitationId: string, school: string | null) => {
     setResendingId(invitationId);
     try {
       const { error } = await supabase.functions.invoke("create-invite", {
-        body: { email },
+        body: { email, school },
       });
       if (error) throw error;
       toast({ title: "Novo convite enviado", description: `Email reenviado para ${email}` });
