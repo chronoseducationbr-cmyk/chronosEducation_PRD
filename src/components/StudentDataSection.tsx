@@ -277,6 +277,26 @@ const StudentDataSection = ({ onChange, validationErrors = [], initialData, guar
               className={inputClasses("studentGender")}
             />
           </div>
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-1.5">Nacionalidade <span className="text-[#F9B91D]">*</span></label>
+            <NationalityCombobox
+              value={studentNationality}
+              onChange={setStudentNationality}
+              className={inputClasses("studentNationality")}
+              placeholder="Pesquisar nacionalidade..."
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-1.5">CPF do aluno</label>
+            <input
+              type="text"
+              maxLength={14}
+              value={studentCpf}
+              onChange={(e) => setStudentCpf(formatCpf(e.target.value))}
+              className={inputClasses("studentCpf")}
+              placeholder="000.000.000-00"
+            />
+          </div>
           <div className="sm:col-span-2">
             <label className="text-sm font-medium text-foreground block mb-1.5">Email do aluno <span className="text-[#F9B91D]">*</span></label>
             <div className="relative">
