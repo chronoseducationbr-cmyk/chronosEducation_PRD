@@ -20,12 +20,25 @@ interface AppSettings {
   contract_enabled: boolean;
   contract_text: string;
   contract_text_summercamp: string;
+  contract_text_wayland: string;
+  contract_text_summercamp_wayland: string;
 }
 
 const defaultSettings: AppSettings = {
   contract_enabled: true,
   contract_text: "",
   contract_text_summercamp: "",
+  contract_text_wayland: "",
+  contract_text_summercamp_wayland: "",
+};
+
+type ContractEditorKey = "plataforma" | "summercamp" | "plataforma_wayland" | "summercamp_wayland";
+
+const editorFieldMap: Record<ContractEditorKey, keyof AppSettings> = {
+  plataforma: "contract_text",
+  summercamp: "contract_text_summercamp",
+  plataforma_wayland: "contract_text_wayland",
+  summercamp_wayland: "contract_text_summercamp_wayland",
 };
 
 const AdminSettingsPage = () => {
@@ -40,7 +53,7 @@ const AdminSettingsPage = () => {
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
   const [loadingSettings, setLoadingSettings] = useState(true);
   const [savingSettings, setSavingSettings] = useState(false);
-  const [editingContract, setEditingContract] = useState<"plataforma" | "summercamp" | null>(null);
+  const [editingContract, setEditingContract] = useState<ContractEditorKey | null>(null);
   const [contractDraft, setContractDraft] = useState("");
 
   useEffect(() => {
@@ -76,6 +89,8 @@ const AdminSettingsPage = () => {
         contract_enabled: s.contract_enabled,
         contract_text: s.contract_text || "",
         contract_text_summercamp: s.contract_text_summercamp || "",
+        contract_text_wayland: s.contract_text_wayland || "",
+        contract_text_summercamp_wayland: s.contract_text_summercamp_wayland || "",
       });
     }
     setLoadingSettings(false);
@@ -156,8 +171,8 @@ const AdminSettingsPage = () => {
     updateSettings({ contract_enabled: !settings.contract_enabled });
   };
 
-  const handleSaveContractText = (type: "plataforma" | "summercamp") => {
-    const field = type === "plataforma" ? "contract_text" : "contract_text_summercamp";
+  const handleSaveContractText = (type: ContractEditorKey) => {
+    const field = editorFieldMap[type];
     updateSettings({ [field]: contractDraft } as Partial<AppSettings>);
     setEditingContract(null);
   };
@@ -172,7 +187,7 @@ const AdminSettingsPage = () => {
     "C2": "Os alunos que atingem o nível C2 conseguem facilmente compreender quase tudo o que ouvem ou escrevem. Conseguem expressar-se de forma fluente e espontânea com precisão em situações complexas.",
   };
 
-  const renderContractEditor = (type: "plataforma" | "summercamp", title: string, text: string) => {
+  const renderContractEditor = (type: ContractEditorKey, title: string, text: string) => {
     const isEditing = editingContract === type;
     return (
       <div className="bg-card border border-border rounded-xl p-4">
@@ -406,25 +421,59 @@ const AdminSettingsPage = () => {
             ) : (
               <div className="space-y-6">
 
-                {/* Sub-tabs for Plataforma / Summer Camp */}
-                <Tabs defaultValue="plataforma" className="w-full">
+                {/* School selector */}
+                <Tabs defaultValue="knox" className="w-full">
                   <TabsList className="bg-muted/50 border border-border p-1 rounded-lg">
-                    <TabsTrigger value="plataforma" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
-                      <Monitor size={14} />
-                      Plataforma Online
+                    <TabsTrigger value="knox" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium">
+                      Knox School
                     </TabsTrigger>
-                    <TabsTrigger value="summercamp" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
-                      <PlaneTakeoff size={14} />
-                      Summer Camp
+                    <TabsTrigger value="wayland" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium">
+                      Wayland Academy
                     </TabsTrigger>
                   </TabsList>
 
-                  <TabsContent value="plataforma" className="mt-4">
-                    {renderContractEditor("plataforma", "Texto do Contrato — Plataforma Online", settings.contract_text)}
+                  {/* Knox School */}
+                  <TabsContent value="knox" className="mt-4">
+                    <Tabs defaultValue="plataforma" className="w-full">
+                      <TabsList className="bg-muted/50 border border-border p-1 rounded-lg">
+                        <TabsTrigger value="plataforma" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
+                          <Monitor size={14} />
+                          Plataforma Online
+                        </TabsTrigger>
+                        <TabsTrigger value="summercamp" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
+                          <PlaneTakeoff size={14} />
+                          Summer Camp
+                        </TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="plataforma" className="mt-4">
+                        {renderContractEditor("plataforma", "Texto do Contrato — Knox · Plataforma Online", settings.contract_text)}
+                      </TabsContent>
+                      <TabsContent value="summercamp" className="mt-4">
+                        {renderContractEditor("summercamp", "Texto do Contrato — Knox · Summer Camp", settings.contract_text_summercamp)}
+                      </TabsContent>
+                    </Tabs>
                   </TabsContent>
 
-                  <TabsContent value="summercamp" className="mt-4">
-                    {renderContractEditor("summercamp", "Texto do Contrato — Summer Camp", settings.contract_text_summercamp)}
+                  {/* Wayland Academy */}
+                  <TabsContent value="wayland" className="mt-4">
+                    <Tabs defaultValue="plataforma" className="w-full">
+                      <TabsList className="bg-muted/50 border border-border p-1 rounded-lg">
+                        <TabsTrigger value="plataforma" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
+                          <Monitor size={14} />
+                          Plataforma Online
+                        </TabsTrigger>
+                        <TabsTrigger value="summercamp" className="data-[state=active]:bg-[#ABFE0E] data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-sm rounded-md px-4 py-2 text-sm font-medium gap-1.5">
+                          <PlaneTakeoff size={14} />
+                          Summer Camp
+                        </TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="plataforma" className="mt-4">
+                        {renderContractEditor("plataforma_wayland", "Texto do Contrato — Wayland · Plataforma Online", settings.contract_text_wayland)}
+                      </TabsContent>
+                      <TabsContent value="summercamp" className="mt-4">
+                        {renderContractEditor("summercamp_wayland", "Texto do Contrato — Wayland · Summer Camp", settings.contract_text_summercamp_wayland)}
+                      </TabsContent>
+                    </Tabs>
                   </TabsContent>
                 </Tabs>
               </div>

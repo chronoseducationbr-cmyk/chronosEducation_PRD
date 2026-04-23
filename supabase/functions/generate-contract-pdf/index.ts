@@ -548,16 +548,35 @@ serve(async (req) => {
       summercampInstallments: enrollment.summercamp_installments ?? 0,
     };
 
-    // Fetch contract text from app_settings
+    // Fetch contract text from app_settings (per school)
     const { data: appSettings } = await supabase
       .from("app_settings")
-      .select("contract_text, contract_text_summercamp")
+      .select("contract_text, contract_text_summercamp, contract_text_wayland, contract_text_summercamp_wayland")
       .eq("id", 1)
       .single();
 
-    const contractText = resolvedContractType === "summercamp"
-      ? (appSettings?.contract_text_summercamp || "")
-      : (appSettings?.contract_text || "");
+    // Resolve school: prefer enrollment.school, fallback to profile.school
+    let schoolName = (enrollment as any).school as string | null;
+    if (!schoolName) {
+      const { data: profileSchool } = await supabase
+        .from("profiles")
+        .select("school")
+        .eq("user_id", enrollment.user_id)
+        .maybeSingle();
+      schoolName = profileSchool?.school || null;
+    }
+    const isWayland = (schoolName || "").toLowerCase().includes("wayland");
+
+    let contractText = "";
+    if (resolvedContractType === "summercamp") {
+      contractText = isWayland
+        ? (appSettings?.contract_text_summercamp_wayland || appSettings?.contract_text_summercamp || "")
+        : (appSettings?.contract_text_summercamp || "");
+    } else {
+      contractText = isWayland
+        ? (appSettings?.contract_text_wayland || appSettings?.contract_text || "")
+        : (appSettings?.contract_text || "");
+    }
 
     const now = new Date();
     const dateLabel = now.toLocaleDateString("pt-BR", {
