@@ -178,13 +178,8 @@ function parseListItem(line: string, previousItem: SectionItem | null): ListItem
       };
     }
 
-    return {
-      type: "list",
-      text: singleLetterTabMatch[2].trim(),
-      listStyle: "ordered",
-      marker: `${singleLetterTabMatch[1]})`,
-      level: 1,
-    };
+    // Preserve non-bullet tabbed markers literally as contract text.
+    return null;
   }
 
   const bulletMatch = line.match(/^[\u2022\u2023\u25E6\u2043\u25CF\u2219]\s*(.+)$/);
@@ -198,7 +193,8 @@ function parseListItem(line: string, previousItem: SectionItem | null): ListItem
     };
   }
 
-  // Match lines starting with hyphen, en-dash or em-dash followed by space → render as bullet
+  // Only lines that explicitly start with -, – or — become bullets.
+  // All numbered clauses must stay literal so the PDF matches the saved template exactly.
   const dashMatch = line.match(/^[\-\u2013\u2014]\s+(.+)$/);
   if (dashMatch) {
     return {
@@ -207,31 +203,6 @@ function parseListItem(line: string, previousItem: SectionItem | null): ListItem
       listStyle: "unordered",
       marker: "\u2022",
       level: getNestedListLevel(previousItem),
-    };
-  }
-
-  // Multi-level numbered markers like "12.1.", "12.1.3." — treat the whole prefix as a single marker.
-  // The depth corresponds to the number of dot-separated segments minus one (e.g. "12.1." → level 1).
-  const multiNumberedMatch = line.match(/^(\d+(?:\.\d+){1,})\.?\)?\s+(.+)$/);
-  if (multiNumberedMatch) {
-    const segments = multiNumberedMatch[1].split(".").filter(Boolean);
-    return {
-      type: "list",
-      text: multiNumberedMatch[2].trim(),
-      listStyle: "ordered",
-      marker: `${multiNumberedMatch[1]}${multiNumberedMatch[1].endsWith(".") ? "" : "."}`,
-      level: Math.max(0, segments.length - 1),
-    };
-  }
-
-  const orderedMatch = line.match(/^((?:\d+[ºª]?[\.)]|[IVX]+[\.)]|[a-z][\.)]))\s*(.+)$/i);
-  if (orderedMatch) {
-    return {
-      type: "list",
-      text: orderedMatch[2].trim(),
-      listStyle: "ordered",
-      marker: orderedMatch[1],
-      level: 0,
     };
   }
 
