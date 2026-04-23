@@ -173,9 +173,28 @@ const AdminSettingsPage = () => {
   };
 
   const handleSaveContractText = (type: ContractEditorKey) => {
+    const issues = findSpellingIssues(contractDraft);
+    if (issues.length > 0) {
+      toast({
+        title: "Possíveis erros ortográficos detetados",
+        description: `Foram encontradas ${issues.length} palavra(s) sem acento. Corrige ou usa "Corrigir tudo" antes de guardar.`,
+        variant: "destructive",
+      });
+      return;
+    }
     const field = editorFieldMap[type];
     updateSettings({ [field]: contractDraft } as Partial<AppSettings>);
     setEditingContract(null);
+  };
+
+  const handleAutoFix = () => {
+    const issues = findSpellingIssues(contractDraft);
+    if (issues.length === 0) {
+      toast({ title: "Nenhum erro ortográfico detetado" });
+      return;
+    }
+    setContractDraft((prev) => applySpellingFixes(prev, findSpellingIssues(prev)));
+    toast({ title: "Ortografia corrigida", description: `${issues.length} palavra(s) atualizada(s).` });
   };
 
   const levelDescriptions: Record<string, string> = {
