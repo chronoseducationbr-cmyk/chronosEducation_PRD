@@ -569,6 +569,7 @@ const DashboardPage = () => {
                         validationErrors={validationErrors}
                         initialData={contractGuardianInitial}
                         clearOnFullNameChange
+                        studentAddress={studentRef.current.studentAddress}
                       />
 
                       <div className="mt-8">
