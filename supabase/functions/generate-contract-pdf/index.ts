@@ -245,7 +245,15 @@ function parseContractSections(text: string): ParseResult {
     if (!current) continue;
     const trimmedLine = line.trim();
     if (!trimmedLine) {
-      previousItem = null;
+      // Preserve blank lines from the template as visible vertical spacing
+      if (previousItem && previousItem.type !== "spacer") {
+        const spacer: SpacerItem = { type: "spacer", height: 8 };
+        current.items.push(spacer);
+        previousItem = spacer;
+      } else if (previousItem?.type === "spacer") {
+        // Stack consecutive blank lines for larger gaps
+        previousItem.height += 8;
+      }
       continue;
     }
 
