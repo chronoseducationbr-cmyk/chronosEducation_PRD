@@ -306,7 +306,7 @@ const AdminUsersPage = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleResendInvite(inv.email, inv.id)}
+                          onClick={() => handleResendInvite(inv.email, inv.id, inv.school)}
                           disabled={resendingId === inv.id}
                           className="flex items-center gap-1.5 text-xs"
                         >
