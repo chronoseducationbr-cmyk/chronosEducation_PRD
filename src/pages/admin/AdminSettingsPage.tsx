@@ -335,7 +335,7 @@ const AdminSettingsPage = () => {
   return (
     <div>
       <h1 className="font-heading text-2xl font-bold text-foreground mb-1">Configurações</h1>
-      <p className="text-muted-foreground mb-6">Gerir provas de inglês e contrato.</p>
+      <p className="text-muted-foreground mb-6">Gerir provas de inglês.</p>
 
       <Tabs defaultValue="provas" className="w-full">
         <TabsList className="mb-8 bg-transparent border-0 border-b border-border p-0 gap-10 pb-0">
@@ -344,13 +344,6 @@ const AdminSettingsPage = () => {
             Provas
             <span className={`ml-2 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full ${quizEnabled ? "bg-secondary/20 text-secondary" : "bg-muted text-muted-foreground"}`}>
               {quizEnabled ? "ON" : "OFF"}
-            </span>
-          </TabsTrigger>
-          <TabsTrigger value="contrato" className={tabTriggerClass}>
-            <FileText size={18} className="mr-2" />
-            Contrato
-            <span className={`ml-2 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full ${settings.contract_enabled ? "bg-secondary/20 text-secondary" : "bg-muted text-muted-foreground"}`}>
-              {settings.contract_enabled ? "ON" : "OFF"}
             </span>
           </TabsTrigger>
         </TabsList>
