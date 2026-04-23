@@ -70,7 +70,7 @@ const DashboardPage = () => {
   const guardianRef = useRef<GuardianData>({ ...emptyGuardian });
   const contractGuardianRef = useRef<GuardianData>({ ...emptyGuardian });
   const [contractGuardianInitial, setContractGuardianInitial] = useState<GuardianData>({ ...emptyGuardian });
-  const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "" });
+  const studentRef = useRef<StudentData>({ studentName: "", studentBirthDate: "", studentGender: "", studentEmail: "", studentAddress: "", studentSchool: "", studentGraduationYear: "", studentPhotoUrl: "", studentNationality: "Brasileira", studentCpf: "" });
   const referralRef = useRef("");
 
   const handleGuardianChange = useCallback((data: GuardianData) => { guardianRef.current = data; }, []);
