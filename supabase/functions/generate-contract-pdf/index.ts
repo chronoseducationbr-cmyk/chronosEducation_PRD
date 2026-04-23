@@ -383,7 +383,35 @@ async function buildContractPdf(
   };
 
   // Replace placeholders in contract text
-  const filledContractText = contractText.replace(/\[Data\]/gi, dateLabel);
+  let filledContractText = contractText.replace(/\[Data\]/gi, dateLabel);
+
+  // Student placeholders
+  const studentNameVal = student.studentName || "[Nome do aluno]";
+  const studentBirthVal = student.studentBirthDate ? formatDate(student.studentBirthDate) : "[dataNascimentoAluno]";
+  const studentNatVal = student.studentNationality || "[nacionalidadeAluno]";
+  const studentCpfVal = (student.studentCpf || "").trim();
+
+  // Special handling for "1.2. ALUNO" — if no CPF, remove the CPF clause entirely.
+  // Matches lines like:
+  //   1.2. ALUNO (Dependente): [Nome do aluno], [dataNascimentoAluno], de [nacionalidadeAluno], inscrito(a) no CPF nº [CPF_Aluno] (se aplicável), filho(a) ou dependente do CONTRATANTE.
+  filledContractText = filledContractText.replace(
+    /(1\.2\.\s*ALUNO[^\n]*?)(,\s*inscrito\(a\)\s+no\s+CPF\s+n[ºo°]?\s*\[CPF_Aluno\](?:\s*\(se aplic[áa]vel\))?)([^\n]*)/gi,
+    (_full, prefix: string, cpfClause: string, suffix: string) => {
+      if (studentCpfVal) {
+        // Keep clause, replace placeholder with actual CPF
+        return prefix + cpfClause.replace(/\[CPF_Aluno\]/gi, studentCpfVal) + suffix;
+      }
+      // Drop the entire CPF clause — keep prefix and suffix joined cleanly
+      return prefix + suffix;
+    }
+  );
+
+  // Generic student placeholder replacements (anywhere else in the contract)
+  filledContractText = filledContractText
+    .replace(/\[Nome do aluno\]/gi, studentNameVal)
+    .replace(/\[dataNascimentoAluno\]/gi, studentBirthVal)
+    .replace(/\[nacionalidadeAluno\]/gi, studentNatVal)
+    .replace(/\[CPF_Aluno\]/gi, studentCpfVal || "[CPF_Aluno]");
 
   // Parse and render contract text sections
   const { sections, closingItems } = parseContractSections(filledContractText);
