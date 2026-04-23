@@ -70,6 +70,52 @@ export function AdminSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
+              {/* Contratos with sub-items */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/admin/contratos"
+                    className="hover:bg-muted/50"
+                    activeClassName="bg-secondary/10 text-secondary font-semibold"
+                  >
+                    <FileText className="mr-2 h-4 w-4" />
+                    {!collapsed && <span>Contratos</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+                {!collapsed && (
+                  <SidebarMenuSub>
+                    {contractSubItems.map((sub) => (
+                      <SidebarMenuSubItem key={sub.title}>
+                        <SidebarMenuSubButton asChild>
+                          <NavLink
+                            to={sub.url}
+                            className="hover:bg-muted/50"
+                            activeClassName="bg-secondary/10 text-secondary font-semibold"
+                          >
+                            <span>{sub.title}</span>
+                          </NavLink>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    ))}
+                  </SidebarMenuSub>
+                )}
+              </SidebarMenuItem>
+
+              {/* Configurações */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/admin/configuracoes"
+                    end
+                    className="hover:bg-muted/50"
+                    activeClassName="bg-secondary/10 text-secondary font-semibold"
+                  >
+                    <Settings className="mr-2 h-4 w-4" />
+                    {!collapsed && <span>Configurações</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
