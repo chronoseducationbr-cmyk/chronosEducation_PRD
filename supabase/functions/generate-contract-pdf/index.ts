@@ -183,7 +183,8 @@ function parseListItem(line: string, previousItem: SectionItem | null): ListItem
     };
   }
 
-  const dashMatch = line.match(/^\-\s+(.+)$/);
+  // Match lines starting with hyphen, en-dash or em-dash followed by space → render as bullet
+  const dashMatch = line.match(/^[\-\u2013\u2014]\s+(.+)$/);
   if (dashMatch) {
     return {
       type: "list",
