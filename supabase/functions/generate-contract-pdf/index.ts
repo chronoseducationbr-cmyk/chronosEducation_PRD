@@ -385,10 +385,20 @@ async function buildContractPdf(
   // Replace placeholders in contract text
   let filledContractText = contractText.replace(/\[Data\]/gi, dateLabel);
 
-  // Student placeholders
-  const studentNameVal = student.studentName || "[Nome do aluno]";
-  const studentBirthVal = student.studentBirthDate ? formatDate(student.studentBirthDate) : "[dataNascimentoAluno]";
-  const studentNatVal = student.studentNationality || "[nacionalidadeAluno]";
+  // ─── Validate mandatory student data BEFORE substitution ───
+  const missingStudentFields: string[] = [];
+  if (!student.studentName?.trim()) missingStudentFields.push("Nome do aluno");
+  if (!student.studentBirthDate?.trim()) missingStudentFields.push("Data de nascimento do aluno");
+  if (!student.studentNationality?.trim()) missingStudentFields.push("Nacionalidade do aluno");
+  if (missingStudentFields.length > 0) {
+    throw new Error(
+      `Não é possível gerar o contrato: dados obrigatórios do aluno em falta — ${missingStudentFields.join(", ")}.`
+    );
+  }
+
+  const studentNameVal = student.studentName!.trim();
+  const studentBirthVal = formatDate(student.studentBirthDate);
+  const studentNatVal = student.studentNationality!.trim();
   const studentCpfVal = (student.studentCpf || "").trim();
 
   // Special handling for "1.2. ALUNO" — if no CPF, remove the CPF clause entirely.
@@ -398,10 +408,8 @@ async function buildContractPdf(
     /(1\.2\.\s*ALUNO[^\n]*?)(,\s*inscrito\(a\)\s+no\s+CPF\s+n[ºo°]?\s*\[CPF_Aluno\](?:\s*\(se aplic[áa]vel\))?)([^\n]*)/gi,
     (_full, prefix: string, cpfClause: string, suffix: string) => {
       if (studentCpfVal) {
-        // Keep clause, replace placeholder with actual CPF
         return prefix + cpfClause.replace(/\[CPF_Aluno\]/gi, studentCpfVal) + suffix;
       }
-      // Drop the entire CPF clause — keep prefix and suffix joined cleanly
       return prefix + suffix;
     }
   );
@@ -410,8 +418,24 @@ async function buildContractPdf(
   filledContractText = filledContractText
     .replace(/\[Nome do aluno\]/gi, studentNameVal)
     .replace(/\[dataNascimentoAluno\]/gi, studentBirthVal)
-    .replace(/\[nacionalidadeAluno\]/gi, studentNatVal)
-    .replace(/\[CPF_Aluno\]/gi, studentCpfVal || "[CPF_Aluno]");
+    .replace(/\[nacionalidadeAluno\]/gi, studentNatVal);
+
+  // CPF: replace remaining occurrences only if we have a value.
+  // If we don't have a CPF and one still remains, that's a hard error
+  // (the 1.2 clause was already stripped above; any leftover means the
+  // template references CPF in a place we cannot safely remove).
+  if (studentCpfVal) {
+    filledContractText = filledContractText.replace(/\[CPF_Aluno\]/gi, studentCpfVal);
+  }
+
+  // ─── Final guard: ensure no student placeholder slipped through ───
+  const studentPlaceholderRegex = /\[(?:Nome do aluno|dataNascimentoAluno|nacionalidadeAluno|CPF_Aluno)\]/gi;
+  const leftovers = Array.from(new Set(filledContractText.match(studentPlaceholderRegex) || []));
+  if (leftovers.length > 0) {
+    throw new Error(
+      `Não é possível gerar o contrato: os seguintes campos do aluno não foram preenchidos e ainda aparecem no texto — ${leftovers.join(", ")}.`
+    );
+  }
 
   // Parse and render contract text sections
   const { sections, closingItems } = parseContractSections(filledContractText);
@@ -709,8 +733,10 @@ serve(async (req) => {
   } catch (error: unknown) {
     console.error("Error generating contract:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    // Validation errors (missing student data / leftover placeholders) → 400
+    const isValidation = /Não é possível gerar o contrato/i.test(errorMessage);
     return new Response(JSON.stringify({ error: errorMessage }), {
-      status: 500,
+      status: isValidation ? 400 : 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
