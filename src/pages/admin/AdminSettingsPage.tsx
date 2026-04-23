@@ -233,9 +233,9 @@ const AdminSettingsPage = () => {
             </div>
           </div>
         ) : (
-          <div className="bg-muted/30 border border-border rounded-lg p-3 max-h-[300px] overflow-y-auto">
+          <div className="bg-muted/30 border border-border rounded-lg p-3 max-h-[70vh] overflow-y-auto">
             {text ? (
-              <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">{text}</p>
+              <div className="text-sm text-foreground whitespace-pre-wrap leading-relaxed font-sans">{text}</div>
             ) : (
               <p className="text-sm text-muted-foreground italic">Nenhum texto de contrato definido.</p>
             )}
